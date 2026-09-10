@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `owner_address` varchar(255) DEFAULT NULL,
   `admin_email` varchar(255) DEFAULT NULL,
   `admin_password` varchar(255) DEFAULT NULL,
+  `admin_two_fa_secret` varchar(255) DEFAULT NULL,
+  `admin_two_fa_enabled` tinyint(1) DEFAULT 0,
   `token_name` varchar(100) DEFAULT 'Trustive',
   `token_symbol` varchar(20) DEFAULT 'Trustive',
   `chain` varchar(50) DEFAULT 'Base Sepolia',

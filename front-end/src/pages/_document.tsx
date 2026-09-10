@@ -13,10 +13,11 @@ export default function Document() {
             __html: `(function(){try{var w=window.screen&&window.screen.width||0;var d=w>=5120?"5k":w>=3840?"4k":w>=2560?"qhd":w>=1920?"fhd":"";if(d)document.documentElement.setAttribute("data-display",d);}catch(e){}})();`,
           }}
         />
-        {/* The diamond mark, matching the admin console. Declared once and
-            only here — having a second rel="icon" in _app made the tab swap
-            icons on hydration. */}
-        <link rel="icon" href="/favicon.ico" />
+        {/* Favicon & App Icons */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="apple-touch-icon" href="/icon.png" />
       </Head>
       <body className="antialiased">

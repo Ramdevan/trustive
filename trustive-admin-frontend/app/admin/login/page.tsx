@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
@@ -11,6 +11,15 @@ export default function AdminLogin() {
         email: "",
         password: "",
     });
+
+    useEffect(() => {
+        try {
+            const token = localStorage.getItem("admin_token");
+            if (token) {
+                router.replace("/admin/dashboard");
+            }
+        } catch {}
+    }, [router]);
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);

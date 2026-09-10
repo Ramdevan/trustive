@@ -79,7 +79,7 @@ const ForgotPasswordForm: React.FC = () => {
         </div>
 
         {/* Form Section */}
-        <div className="flex flex-col justify-center p-8 md:p-16 space-y-6 bg-[#141312] rounded-[1.25rem]">
+        <div className="flex flex-col justify-center p-8 md:p-16 space-y-6 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-zinc-200/80 rounded-[1.25rem]">
           <div className="space-y-4 text-center">
             {/* Mobile Logo */}
             <div className="flex justify-center md:hidden mb-4">
@@ -91,20 +91,20 @@ const ForgotPasswordForm: React.FC = () => {
                 className="object-contain"
               />
             </div>
-            <h1 className="text-[1.5rem] md:text-[2rem] font-normal text-[#FAF7F2]">Forgot Password</h1>
-            <p className="text-[0.875rem] font-normal text-[#FAF7F2]/70 max-w-sm mx-auto">
+            <h1 className="text-[1.5rem] md:text-[2rem] font-bold text-zinc-900">Forgot Password</h1>
+            <p className="text-[0.875rem] font-medium text-zinc-500 max-w-sm mx-auto">
               Enter your registered email address and we will send you a verification link to reset your password.
             </p>
 
             {success && (
-              <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl text-xs font-semibold leading-relaxed text-center flex items-center gap-3">
-                <LuCircleCheck className="w-5 h-5 shrink-0 text-green-400" />
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl text-xs font-semibold leading-relaxed text-center flex items-center gap-3">
+                <LuCircleCheck className="w-5 h-5 shrink-0 text-emerald-600" />
                 <span>{success}</span>
               </div>
             )}
 
             {error && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-center animate-shake">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-center animate-shake">
                 {error}
               </div>
             )}
@@ -113,16 +113,16 @@ const ForgotPasswordForm: React.FC = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Email */}
             <div className="space-y-2">
-              <label className="block text-[1rem] font-normal text-[#FAF7F2] ml-1">Email Address</label>
+              <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Email Address</label>
               <div className="relative group">
-                <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-[#FAF7F2] group-focus-within:text-accent transition-colors" />
+                <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
                 <input
                   type="email"
                   required
                   placeholder="Enter your registered email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#0A0908] border border-white/5 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-[#FAF7F2] focus:outline-none focus:border-accent/40 transition-all placeholder:text-zinc-700"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium"
                 />
               </div>
             </div>
@@ -130,7 +130,7 @@ const ForgotPasswordForm: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-accent hover:bg-accent/90 text-black font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-accent/5 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50"
+              className="w-full bg-[#212E73] hover:bg-[#16225B] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#212E73]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50"
             >
               {loading ? 'Sending Verification Email...' : 'Send Reset Link'}
             </button>
@@ -139,7 +139,7 @@ const ForgotPasswordForm: React.FC = () => {
           <div className="pt-2 text-center">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 text-[0.875rem] md:text-[1rem] font-normal text-zinc-400 hover:text-accent transition-colors"
+              className="inline-flex items-center gap-2 text-[0.875rem] md:text-[1rem] font-medium text-zinc-600 hover:text-[#212E73] transition-colors"
             >
               <LuArrowLeft className="w-4 h-4" />
               <span>Back to Login</span>
