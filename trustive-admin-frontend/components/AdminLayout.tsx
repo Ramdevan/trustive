@@ -161,7 +161,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
         { name: "Users", href: "/admin/users", icon: Users },
         { name: "Transactions", href: "/admin/transactions", icon: CreditCard },
         { name: "Admin Wallet", href: "/admin/admin-wallet", icon: Wallet },
-        { name: "Staking Transactions", href: "/admin/staking-transactions", icon: Coins },
+        // { name: "Staking Transactions", href: "/admin/staking-transactions", icon: Coins },
         { name: "Vesting", href: "/admin/vesting", icon: ShieldCheck },
         { name: "Security & Profile", href: "/admin/security-profile", icon: Lock },
         { name: "Payment Settings", href: "/admin/payment-settings", icon: Settings },

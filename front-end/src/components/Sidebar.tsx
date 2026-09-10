@@ -9,7 +9,7 @@ import { ethers } from 'ethers';
 const menuItems = [
   { name: 'Dashboard', icon: LuLayoutDashboard, path: '/dashboard' },
   { name: 'ICO', icon: LuTarget, path: '/ico' },
-  { name: 'Stake', icon: LuCoins, path: '/staking' },
+  // { name: 'Stake', icon: LuCoins, path: '/staking' },
   { name: 'Transactions', icon: LuArrowRightLeft, path: '/transactions' },
   { name: 'Vesting Claim', icon: LuRocket, path: '/vesting' },
 ];
@@ -56,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             contract.decimals(),
             contract.symbol().catch(() => 'Trustive')
           ]);
-          
+
           const formatted = parseFloat(ethers.formatUnits(val, decimals)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
           setBalance(`${formatted} ${sanitizeTokenSymbol(symbol)}`);
           setLoading(false);

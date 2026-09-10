@@ -69,7 +69,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ onClose, onSuccess }) => {
         }
       })
       .catch(err => console.error('Plans fetch error:', err));
-    
+
     fetchBalance();
   }, [account, signer]);
 
