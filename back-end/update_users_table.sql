@@ -1,0 +1,6 @@
+ALTER TABLE users
+ADD COLUMN name VARCHAR(255) AFTER id,
+ADD COLUMN email VARCHAR(255) UNIQUE AFTER name,
+ADD COLUMN password VARCHAR(255) AFTER email,
+ADD COLUMN is_verified TINYINT(1) DEFAULT 0 AFTER password,
+ADD COLUMN verification_token VARCHAR(255) AFTER is_verified;

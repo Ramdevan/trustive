@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0A0908;
+  --foreground: #ffffff;
+  --sidebar-bg: #141312;
+  --card-bg: #141312;
+  --accent: #E5B258;
+  --accent-foreground: #141312;
+  --muted: #A1A1AA;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar: var(--sidebar-bg);
+  --color-card: var(--card-bg);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui;
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+
+/* Root font-size scaling for very large displays.
+ *
+ * This deliberately does NOT use width media queries. Browser zoom works by
+ * changing the CSS-pixel size of the viewport, so `min-width: 2560px` also
+ * fires at 75% zoom on a 1920px screen -- zooming out would push the root
+ * font UP while the browser scaled everything down, and the page grew instead
+ * of shrinking.
+ *
+ * The bracket is chosen instead from `screen.width` (see _document.tsx), which
+ * reports the physical display and is unaffected by page zoom. The root size
+ * is therefore constant across the whole zoom range on any given monitor, and
+ * zooming out always shrinks the page.
+ */
+html { font-size: 14px; }
+
+html[data-display="fhd"] { font-size: 16px; }
+html[data-display="qhd"] { font-size: 18px; }
+html[data-display="4k"] { font-size: 24px; }
+html[data-display="5k"] { font-size: 28px; }
+
+/* Hide number input spinners */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Prevent browser autofill from turning inputs white/light blue */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #FAF7F2 !important;
+  box-shadow: 0 0 0 1000px #0A0908 inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #0A0908 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #FAF7F2;
+}
+
+input:-moz-autofill,
+input:-moz-autofill-preview {
+  background-color: #0A0908 !important;
+  color: #FAF7F2 !important;
+}

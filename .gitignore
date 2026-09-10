@@ -1,0 +1,104 @@
+# ==========================================
+# Root-level ignores (applies everywhere)
+# ==========================================
+
+# Node
+node_modules/
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.idea/
+
+# Large media files
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+# Compiled files
+*.class
+*.py[cod]
+*.jar
+*.app
+*.exe
+*.war
+
+# Test reports
+TEST*.xml
+
+# ==========================================
+# Solidity sources (kept out of the repo)
+# ==========================================
+contract/
+
+# ==========================================
+# Back-end (back-end/)
+# ==========================================
+back-end/.env
+back-end/*.out
+back-end/nohup.out
+
+# ==========================================
+# Front-end (front-end/)
+# ==========================================
+front-end/.next/
+front-end/out/
+front-end/build/
+front-end/.pnp
+front-end/.pnp.*
+front-end/.yarn/*
+!front-end/.yarn/patches
+!front-end/.yarn/plugins
+!front-end/.yarn/releases
+!front-end/.yarn/versions
+front-end/coverage/
+front-end/*.pem
+front-end/.env*
+front-end/.vercel
+front-end/*.tsbuildinfo
+front-end/next-env.d.ts
+
+# ==========================================
+# Trustive Admin Frontend (trustive-admin-frontend/)
+# ==========================================
+trustive-admin-frontend/.next/
+trustive-admin-frontend/out/
+trustive-admin-frontend/build/
+trustive-admin-frontend/.pnp
+trustive-admin-frontend/.pnp.*
+trustive-admin-frontend/.yarn/*
+!trustive-admin-frontend/.yarn/patches
+!trustive-admin-frontend/.yarn/plugins
+!trustive-admin-frontend/.yarn/releases
+!trustive-admin-frontend/.yarn/versions
+trustive-admin-frontend/coverage/
+trustive-admin-frontend/*.pem
+trustive-admin-frontend/.env*
+trustive-admin-frontend/.vercel
+trustive-admin-frontend/*.tsbuildinfo
+trustive-admin-frontend/next-env.d.ts
+
+# ==========================================
+# Landing (landing/)
+# ==========================================
+landing/.next/
+landing/out/
+landing/build/
+landing/.env*
+landing/*.tsbuildinfo
+landing/next-env.d.ts
+
+
+

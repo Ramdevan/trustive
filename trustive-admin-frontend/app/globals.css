@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0A0908;
+  --foreground: #ffffff;
+  --sidebar-bg: #141312;
+  --card-bg: #141312;
+  --accent: #E5B258;
+  --accent-foreground: #141312;
+  --muted: #A1A1AA;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar: var(--sidebar-bg);
+  --color-card: var(--card-bg);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Root font-size scaling for very large displays (matches user panel).
+ *
+ * Browser zoom works by changing the CSS-pixel size of the viewport, so any
+ * media query on width is also a query on zoom level. The previous ladder had
+ * 18 brackets between 960px and 7067px, several of them inside the range an
+ * ordinary laptop passes through while zooming, so zooming in shrank the root
+ * font while the browser enlarged everything else and the two fought.
+ *
+ * Only genuinely large displays are scaled up now, so normal screens keep one
+ * stable root size across the whole usable zoom range.
+ */
+@media screen and (min-width: 5120px) {
+  html { font-size: 28px; }
+}
+
+@media screen and (min-width: 3840px) and (max-width: 5119px) {
+  html { font-size: 24px; }
+}
+
+@media screen and (min-width: 2560px) and (max-width: 3839px) {
+  html { font-size: 18px; }
+}
+
+@media screen and (min-width: 1920px) and (max-width: 2559px) {
+  html { font-size: 16px; }
+}
+
+@media screen and (max-width: 1919px) {
+  html { font-size: 14px; }
+}
+
+/* Custom Scrollbar like Trustive */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(229, 178, 88, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(229, 178, 88, 0.4);
+}
+
+.font-space-grotesk {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+/* Hide number input spinners */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Custom Toastify dark theme styling */
+.Toastify__toast-theme--dark {
+  background-color: #0A0908 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7) !important;
+  font-family: inherit !important;
+  padding: 16px 20px !important;
+}
+
+.Toastify__toast-body {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+.Toastify__progress-bar,
+.Toastify__progress-bar--error,
+.Toastify__progress-bar--warning,
+.Toastify__progress-bar--info,
+.Toastify__progress-bar--success {
+  background: #E5B258 !important;
+}
+
+.Toastify__close-button--dark {
+  color: #a1a1aa !important;
+  opacity: 0.8 !important;
+}
+
+/* Hide native browser calendar & time picker indicator icons */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  visibility: hidden !important;
+}
+
+input[type="datetime-local"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-inner-spin-button,
+input[type="time"]::-webkit-inner-spin-button {
+  display: none !important;
+}
+
+/* Prevent browser autofill from turning inputs white/light blue */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #FAF7F2 !important;
+  box-shadow: 0 0 0 1000px #0A0908 inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #0A0908 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #FAF7F2;
+}
+
+input:-moz-autofill,
+input:-moz-autofill-preview {
+  background-color: #0A0908 !important;
+  color: #FAF7F2 !important;
+}
