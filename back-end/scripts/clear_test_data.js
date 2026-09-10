@@ -5,14 +5,14 @@ async function main() {
   console.log('--------------------------------------------------');
   console.log('Trustive DB Data Purge Utility');
   console.log('--------------------------------------------------');
-  console.log(`Connecting to database: ${process.env.DB_NAME || 'ppm_db'} at ${process.env.DB_HOST || 'localhost'}...`);
+  console.log(`Connecting to database: ${process.env.DB_NAME || ''} at ${process.env.DB_HOST || 'localhost'}...`);
 
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT || 3306),
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'ppm_db',
+    database: process.env.DB_NAME || '',
   });
 
   console.log('Connected successfully.\n');

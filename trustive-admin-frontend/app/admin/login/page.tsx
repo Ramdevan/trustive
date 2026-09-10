@@ -63,28 +63,24 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen bg-background bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900/50 via-background to-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Glows */}
-            <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent opacity-[0.03] blur-[150px] rounded-full"></div>
-            <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-accent opacity-[0.03] blur-[150px] rounded-full"></div>
-
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
             <div className="w-full max-w-[420px] relative z-10 space-y-8">
                 {/* Logo and Header */}
                 <div className="text-center space-y-6">
-                    <div className="relative inline-flex items-center justify-center w-20 h-20 bg-accent rounded-2xl rotate-12 shadow-[0_0_50px_rgba(229,178,88,0.2)]">
-                        <ShieldCheck className="w-10 h-10 text-black -rotate-12" />
+                    <div className="relative inline-flex items-center justify-center w-20 h-20 bg-[#212E73] rounded-2xl rotate-12 shadow-lg shadow-[#212E73]/20">
+                        <ShieldCheck className="w-10 h-10 text-white -rotate-12" />
                     </div>
                     <div className="space-y-2">
-                        <h1 className="text-4xl font-paytone text-white tracking-tight uppercase">TRUSTIVE ADMIN</h1>
+                        <h1 className="text-4xl font-paytone text-zinc-900 tracking-tight uppercase">TRUSTIVE ADMIN</h1>
                         <p className="text-zinc-500 font-medium text-[10px] uppercase tracking-[6px]">Secure Access Terminal</p>
                     </div>
                 </div>
 
                 {/* Login Card */}
-                <div className="bg-sidebar rounded-[32px] border border-white/5 p-8 shadow-2xl backdrop-blur-xl transition-all duration-500">
+                <div className="bg-white rounded-[32px] border border-zinc-200/90 p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-500">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {error && (
-                            <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center animate-shake">
+                            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center animate-shake">
                                 {error}
                             </div>
                         )}
@@ -101,7 +97,7 @@ export default function AdminLogin() {
                                             required
                                             value={credentials.email}
                                             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                                            className="w-full px-5 py-4 bg-black/40 border border-white/5 rounded-xl focus:border-accent outline-none transition-all text-white text-sm placeholder:text-zinc-700 font-medium"
+                                            className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-xl focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none transition-all text-zinc-900 text-sm placeholder:text-zinc-400 font-medium"
                                             placeholder="admin@trustive.com"
                                         />
                                     </div>
@@ -116,13 +112,13 @@ export default function AdminLogin() {
                                                 required
                                                 value={credentials.password}
                                                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                                                className="w-full px-5 py-4 pr-12 bg-black/40 border border-white/5 rounded-xl focus:border-accent outline-none transition-all text-white text-sm placeholder:text-zinc-700 font-medium"
+                                                className="w-full px-5 py-4 pr-12 bg-zinc-50 border border-zinc-200 rounded-xl focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none transition-all text-zinc-900 text-sm placeholder:text-zinc-400 font-medium"
                                                 placeholder="••••••••••••"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowPassword(!showPassword)}
-                                                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-zinc-500 hover:text-white transition-colors focus:outline-none"
+                                                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-700 transition-colors focus:outline-none"
                                                 title={showPassword ? "Hide password" : "Show password"}
                                             >
                                                 {showPassword ? (
@@ -135,8 +131,8 @@ export default function AdminLogin() {
                                     </div>
                                 </>
                             ) : (
-                                <div className="space-y-2 py-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                                    <label className="text-[10px] font-black text-accent uppercase tracking-[4px] px-1 block text-center mb-4">
+                                <div className="space-y-2 py-4 animate-in fade-in duration-300">
+                                    <label className="text-[10px] font-bold text-[#212E73] uppercase tracking-[4px] px-1 block text-center mb-4">
                                         Verification Required
                                     </label>
                                     <div className="relative">
@@ -147,7 +143,7 @@ export default function AdminLogin() {
                                             autoFocus
                                             value={twoFaCode}
                                             onChange={(e) => setTwoFaCode(e.target.value.replace(/\D/g, ""))}
-                                            className="w-full px-5 py-6 bg-accent/5 border-2 border-accent/20 rounded-2xl focus:border-accent outline-none transition-all text-white text-3xl text-center tracking-[1rem] font-black placeholder:text-zinc-800"
+                                            className="w-full px-5 py-6 bg-zinc-50 border-2 border-[#212E73]/30 rounded-2xl focus:border-[#212E73] outline-none transition-all text-zinc-900 text-3xl text-center tracking-[1rem] font-bold placeholder:text-zinc-300"
                                             placeholder="000000"
                                         />
                                     </div>
@@ -157,7 +153,7 @@ export default function AdminLogin() {
                                     <button 
                                         type="button"
                                         onClick={() => setRequire2FA(false)}
-                                        className="w-full text-[10px] font-bold text-zinc-600 uppercase tracking-widest mt-6 hover:text-white transition-colors"
+                                        className="w-full text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-6 hover:text-zinc-800 transition-colors"
                                     >
                                         Back to Identity Login
                                     </button>
@@ -168,7 +164,7 @@ export default function AdminLogin() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-accent hover:bg-accent/90 text-black py-4 rounded-xl font-paytone text-sm transition-all active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-accent/10 mt-4"
+                            className="w-full bg-[#212E73] hover:bg-[#1a255c] text-white py-4 rounded-xl font-paytone text-sm transition-all active:scale-[0.98] disabled:opacity-50 shadow-md shadow-[#212E73]/20 mt-4 cursor-pointer"
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center gap-2">
@@ -183,7 +179,7 @@ export default function AdminLogin() {
                 </div>
 
                 {/* Footer Notes */}
-                <p className="text-center text-[9px] text-zinc-600 uppercase tracking-[4px] font-medium opacity-50">
+                <p className="text-center text-[9px] text-zinc-500 uppercase tracking-[4px] font-medium">
                     Prop Defi Management • 2026 Internal Control
                 </p>
             </div>

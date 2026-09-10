@@ -7,7 +7,7 @@ import { getFriendlyErrorMessage, isUserRejection } from '@/utils/errors';
 import { confirmAction } from '@/utils/confirm';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
-const TRUSTIVE_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || process.env.NEXT_PUBLIC_PPM_TOKEN_ADDRESS || '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D';
+const TRUSTIVE_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
 const STAKING_CONTRACT = process.env.NEXT_PUBLIC_STAKING_CONTRACT || '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
 
 const MIN_STAKE = 1000;
@@ -159,33 +159,33 @@ const StakeModal: React.FC<StakeModalProps> = ({ onClose, onSuccess }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md"
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="w-full max-w-md rounded-3xl bg-card border border-white/10 p-6 space-y-6">
+      <div className="w-full max-w-md rounded-3xl bg-white border border-zinc-200 p-6 sm:p-8 space-y-6 shadow-2xl">
 
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-[1.25rem] font-medium text-[#FAF7F2]">Stake Trustive Tokens</h2>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors cursor-pointer">
+          <h2 className="text-[1.35rem] font-bold text-zinc-900">Stake Trustive Tokens</h2>
+          <button onClick={onClose} className="text-zinc-400 hover:text-zinc-700 transition-colors cursor-pointer">
             <LuX className="h-5 w-5" />
           </button>
         </div>
 
         {/* Plan info (read-only) */}
         {plan && (
-          <div className="rounded-2xl bg-black/40 border border-white/5 p-4 grid grid-cols-3 gap-4 text-center">
+          <div className="rounded-2xl bg-zinc-50 border border-zinc-200/80 p-4 grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-[0.75rem] text-zinc-500 mb-1">Plan</div>
-              <div className="text-[0.9rem] font-bold text-[#FAF7F2]">{plan.name}</div>
+              <div className="text-[0.9rem] font-bold text-zinc-900">{plan.name}</div>
             </div>
             <div>
               <div className="text-[0.75rem] text-zinc-500 mb-1">APY</div>
-              <div className="text-[0.9rem] font-bold text-accent">{Number(plan.apy).toFixed(0)}%</div>
+              <div className="text-[0.9rem] font-bold text-[#212E73]">{Number(plan.apy).toFixed(0)}%</div>
             </div>
             <div>
               <div className="text-[0.75rem] text-zinc-500 mb-1">Lock Period</div>
-              <div className="text-[0.9rem] font-bold text-[#FAF7F2]">3 min</div>
+              <div className="text-[0.9rem] font-bold text-zinc-900">3 min</div>
             </div>
           </div>
         )}
@@ -193,9 +193,9 @@ const StakeModal: React.FC<StakeModalProps> = ({ onClose, onSuccess }) => {
         {/* Amount input */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-[0.875rem] font-normal text-[#FAF7F2] block">Amount (Trustive)</label>
+            <label className="text-[0.875rem] font-semibold text-zinc-700 block">Amount (Trustive)</label>
             <span className="text-[0.75rem] text-zinc-500">
-              Balance: <span className="text-zinc-300 font-medium">{parseFloat(trustiveBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })} Trustive</span>
+              Balance: <span className="text-zinc-900 font-semibold">{parseFloat(trustiveBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })} Trustive</span>
             </span>
           </div>
           <input
@@ -207,7 +207,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ onClose, onSuccess }) => {
             max={MAX_STAKE}
             step="any"
             disabled={loading}
-            className="w-full bg-[#0A0908] border border-white/10 rounded-2xl px-6 py-4 text-[1.125rem] text-white placeholder:text-zinc-700 focus:outline-none focus:border-accent/40 transition-all disabled:opacity-50"
+            className="w-full bg-white border border-zinc-200 rounded-2xl px-6 py-4 text-[1.125rem] text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all disabled:opacity-50 font-medium"
           />
           <p className="text-[0.75rem] text-zinc-500">
             Min: {MIN_STAKE.toLocaleString()} Trustive &nbsp;·&nbsp; Max: {MAX_STAKE.toLocaleString()} Trustive
@@ -216,7 +216,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ onClose, onSuccess }) => {
 
         {/* Progress and success only - failures are raised as a toast */}
         {status && !isError && (
-          <div className={`px-4 py-3 rounded-xl text-[0.875rem] flex items-start gap-2 ${isSuccess ? 'bg-green-500/10 border border-green-500/20 text-green-400' : 'bg-accent/10 border border-accent/20 text-accent'}`}>
+          <div className={`px-4 py-3 rounded-xl text-[0.875rem] flex items-start gap-2 ${isSuccess ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-blue-50 border border-blue-200 text-[#212E73]'}`}>
             {loading && <LuLoader className="h-4 w-4 mt-0.5 flex-shrink-0 animate-spin" />}
             <span>{status}</span>
           </div>
@@ -226,7 +226,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ onClose, onSuccess }) => {
         <button
           onClick={handleStake}
           disabled={loading || isSuccess || !plan}
-          className="w-full py-4 rounded-2xl bg-accent hover:bg-accent/90 text-black font-bold text-[1rem] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-accent/20"
+          className="w-full py-4 rounded-2xl bg-[#212E73] hover:bg-[#16225B] text-white font-bold text-[1rem] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-[#212E73]/20"
         >
           {loading && <LuLoader className="h-5 w-5 animate-spin" />}
           {isSuccess ? 'Staked!' : loading ? 'Processing...' : 'Stake Now'}

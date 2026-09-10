@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0A0908;
-  --foreground: #ffffff;
-  --sidebar-bg: #141312;
-  --card-bg: #141312;
+  --background: #EBE9EB;
+  --foreground: #181B22;
+  --sidebar-bg: #FFFFFF;
+  --card-bg: #FFFFFF;
   --accent: #E5B258;
-  --accent-foreground: #141312;
-  --muted: #A1A1AA;
+  --accent-foreground: #181B22;
+  --muted: #6B7280;
+  --brand-navy: #212E73;
 }
 
 @theme inline {
@@ -18,11 +19,15 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
+  --color-navy: var(--brand-navy);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image: radial-gradient(120% 120% at 85% 10%, #F5F4F6 0%, #EBE9EB 45%, #DFDDE2 100%);
+  background-attachment: fixed;
   color: var(--foreground);
+  min-height: 100vh;
 }
 
 /* Root font-size scaling for very large displays (matches user panel).

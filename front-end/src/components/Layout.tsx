@@ -76,7 +76,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [router.asPath, isConnected, account]);
 
   return (
-    <div className="min-h-screen bg-black font-sans text-white overflow-x-hidden">
+    <div className="min-h-screen bg-transparent font-sans text-foreground overflow-x-hidden">
       <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex pt-[5rem] relative">
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
@@ -84,21 +84,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Mobile Overlay */}
         {isSidebarOpen && (
           <div
-            className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-30 bg-black/30 backdrop-blur-sm lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
 
         <main className="lg:pl-70 w-full transition-all min-h-[calc(100vh-5rem)] relative">
           {isConnected && account && userProfile?.wallet_address && userProfile.wallet_address.toLowerCase() !== account.toLowerCase() ? (
-            <div className="absolute inset-0 z-[40] flex items-center justify-center bg-black/80 backdrop-blur-xl p-4 sm:p-8">
-              <div className="max-w-md w-full bg-[#0D0D0D] border border-red-500/20 rounded-[2.5rem] p-10 text-center shadow-[0_0_100px_rgba(239,68,68,0.1)]">
-                <div className="w-20 h-20 bg-red-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-500/20">
+            <div className="absolute inset-0 z-[40] flex items-center justify-center bg-black/40 backdrop-blur-md p-4 sm:p-8">
+              <div className="max-w-md w-full bg-white border border-zinc-200 rounded-[2.5rem] p-10 text-center shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+                <div className="w-20 h-20 bg-red-50 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-200">
                   <LuTriangleAlert className="w-10 h-10 text-red-500" />
                 </div>
-                <h1 className="text-2xl font-black text-white uppercase tracking-tight mb-4">Wallet Mismatch</h1>
-                <p className="text-zinc-500 text-sm font-medium leading-relaxed mb-8">
-                  Your account is linked to <span className="text-white font-mono text-xs">{userProfile.wallet_address.slice(0, 10)}...{userProfile.wallet_address.slice(-8)}</span>. 
+                <h1 className="text-2xl font-black text-zinc-900 uppercase tracking-tight mb-4">Wallet Mismatch</h1>
+                <p className="text-zinc-600 text-sm font-medium leading-relaxed mb-8">
+                  Your account is linked to <span className="text-zinc-900 font-mono text-xs">{userProfile.wallet_address.slice(0, 10)}...{userProfile.wallet_address.slice(-8)}</span>. 
                   Please connect the correct wallet to use the dashboard.
                 </p>
                 <div className="space-y-4">

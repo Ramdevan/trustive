@@ -127,16 +127,16 @@ export default function TransactionsLedger() {
     return (
         <div className="space-y-8 animate-in fade-in duration-200">
 
-            <div className="bg-sidebar rounded-[32px] border border-white/5 overflow-hidden shadow-2xl">
-                <div className="p-8 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-black/10">
+            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                <div className="p-8 border-b border-zinc-200 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-zinc-50/50">
                     <div className="relative flex-1 max-w-md">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                         <input
                             type="text"
                             placeholder="Search by wallet hash or TXID..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-black/40 border border-white/5 rounded-2xl pl-12 pr-6 py-3.5 focus:border-accent outline-none text-white text-sm transition-all placeholder:text-zinc-700"
+                            className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-6 py-3.5 focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none text-zinc-900 text-sm transition-all placeholder:text-zinc-400 shadow-sm"
                         />
                     </div>
                     <div className="flex items-center gap-4 relative">
@@ -146,11 +146,11 @@ export default function TransactionsLedger() {
                                 className={cn(
                                     "flex items-center gap-2 px-4 py-3 rounded-xl border transition-all cursor-pointer w-full md:w-auto justify-center",
                                     filterPhase !== "all"
-                                        ? "bg-accent/10 border-accent/30 text-accent"
-                                        : "bg-black/20 border-white/5 text-zinc-400 hover:bg-black/30"
+                                        ? "bg-[#212E73]/10 border-[#212E73]/30 text-[#212E73]"
+                                        : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 shadow-sm"
                                 )}
                             >
-                                <Filter className={cn("w-4 h-4", filterPhase !== "all" ? "text-accent" : "text-zinc-400")} />
+                                <Filter className={cn("w-4 h-4", filterPhase !== "all" ? "text-[#212E73]" : "text-zinc-500")} />
                                 <span className="text-xs font-bold uppercase tracking-widest">
                                     {filterPhase === "all" ? "Filter: All Phases" : `Phase: ${filterPhase}`}
                                 </span>
@@ -159,7 +159,7 @@ export default function TransactionsLedger() {
                             <button
                                 onClick={handleExportCSV}
                                 disabled={transactions.length === 0}
-                                className="w-full md:w-auto px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/10 transition-all flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full md:w-auto px-4 py-2 bg-white hover:bg-zinc-50 text-zinc-700 rounded-xl border border-zinc-200 transition-all flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                             >
                                 <Download className="w-3 h-3" />
                                 Export CSV
@@ -169,7 +169,7 @@ export default function TransactionsLedger() {
                         {showFilters && (
                             <>
                                 <div className="fixed inset-0 z-10" onClick={() => setShowFilters(false)} />
-                                <div className="absolute right-0 top-full mt-2 w-48 bg-sidebar border border-white/10 rounded-2xl shadow-2xl z-20 overflow-hidden py-2 animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-zinc-200 rounded-2xl shadow-xl z-20 overflow-hidden py-2 animate-in fade-in zoom-in-95 duration-200">
                                     {phases.map((phase) => (
                                         <button
                                             key={phase}
@@ -180,8 +180,8 @@ export default function TransactionsLedger() {
                                             className={cn(
                                                 "w-full px-5 py-2.5 text-left text-[10px] font-black uppercase tracking-widest transition-colors",
                                                 filterPhase === phase
-                                                    ? "bg-accent text-black"
-                                                    : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                                                    ? "bg-[#212E73] text-white"
+                                                    : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
                                             )}
                                         >
                                             {phase === "all" ? "Show All" : phase}
@@ -196,80 +196,80 @@ export default function TransactionsLedger() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-base">
                         <thead>
-                            <tr className="bg-black/20 text-zinc-500 text-xs font-black uppercase tracking-[0.2em]">
-                                <th className="px-12 py-8 text-center w-28 uppercase">S No</th>
-                                <th className="px-10 py-8 text-center uppercase">Users</th>
-                                <th className="px-10 py-8 text-center uppercase">Payment Type</th>
-                                <th className="px-10 py-8 text-center uppercase">Amount Paid</th>
-                                <th className="px-10 py-8 text-center uppercase">Trustive Received</th>
-                                <th className="px-10 py-8 text-center uppercase">Value (USD)</th>
-                                <th className="px-10 py-8 text-center uppercase">Status</th>
-                                <th className="px-12 py-8 text-center uppercase">Transaction Hash</th>
+                            <tr className="bg-[#212E73] text-white text-xs font-black uppercase tracking-[0.2em]">
+                                <th className="px-12 py-6 text-center w-28 uppercase">S No</th>
+                                <th className="px-10 py-6 text-center uppercase">Users</th>
+                                <th className="px-10 py-6 text-center uppercase">Payment Type</th>
+                                <th className="px-10 py-6 text-center uppercase">Amount Paid</th>
+                                <th className="px-10 py-6 text-center uppercase">Trustive Received</th>
+                                <th className="px-10 py-6 text-center uppercase">Value (USD)</th>
+                                <th className="px-10 py-6 text-center uppercase">Status</th>
+                                <th className="px-12 py-6 text-center uppercase">Transaction Hash</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/5">
+                        <tbody className="divide-y divide-zinc-200">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6} className="px-8 py-20 text-center">
-                                        <div className="animate-spin h-6 w-6 border-b-2 border-accent mx-auto"></div>
+                                    <td colSpan={8} className="px-8 py-20 text-center">
+                                        <div className="animate-spin h-6 w-6 border-b-2 border-[#212E73] mx-auto"></div>
                                     </td>
                                 </tr>
                             ) : filtered.length > 0 ? (
                                 paginatedData.map((tx, i) => (
-                                    <tr key={tx.id} className="hover:bg-white/[0.03] transition-colors group">
-                                        <td className="px-12 py-8 text-center">
-                                            <span className="text-zinc-400 font-bold">{(currentPage - 1) * itemsPerPage + i + 1}</span>
+                                    <tr key={tx.id} className="hover:bg-zinc-50/70 transition-colors group">
+                                        <td className="px-12 py-6 text-center">
+                                            <span className="text-zinc-500 font-bold">{(currentPage - 1) * itemsPerPage + i + 1}</span>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
+                                        <td className="px-10 py-6 text-center">
                                             <div className="flex flex-col items-center">
-                                                <span className="text-white font-bold text-base">{tx.username || 'Anonymous'}</span>
+                                                <span className="text-zinc-900 font-bold text-base">{tx.username || 'Anonymous'}</span>
                                                 <div className="flex items-center gap-1 mt-1">
                                                     <span className="text-xs text-zinc-500 font-mono">{shortenAddress(tx.address)}</span>
                                                     <CopyButton text={tx.address} label="Copy Address" />
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
-                                            <div className="flex items-center justify-center gap-3 px-4 py-2 bg-white/5 rounded-xl border border-white/10 w-fit mx-auto">
+                                        <td className="px-10 py-6 text-center">
+                                            <div className="flex items-center justify-center gap-3 px-4 py-2 bg-zinc-100 rounded-xl border border-zinc-200 w-fit mx-auto">
                                                 <CryptoIcon coin={tx.payment_type} className="w-4 h-4" />
-                                                <span className="text-sm font-bold text-white uppercase">{tx.payment_type}</span>
+                                                <span className="text-sm font-bold text-zinc-900 uppercase">{tx.payment_type}</span>
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
-                                            <span className="text-[#E5A93E] font-bold text-base">
+                                        <td className="px-10 py-6 text-center">
+                                            <span className="text-[#212E73] font-bold text-base">
                                                 {formatDecimal(tx.crypto_value, 5, 2)}
                                             </span>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
+                                        <td className="px-10 py-6 text-center">
                                             <div className="flex flex-col items-center">
-                                                <p className="text-white font-bold text-base">{formatDecimal(tx.ptc_tokens, 5, 2)}</p>
-                                                <p className="text-xs text-accent font-black uppercase tracking-widest mt-1">Trustive Tokens</p>
+                                                <p className="text-zinc-900 font-bold text-base">{formatDecimal(tx.ptc_tokens, 5, 2)}</p>
+                                                <p className="text-xs text-[#212E73] font-black uppercase tracking-widest mt-1">Trustive Tokens</p>
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
-                                            <span className="text-white font-bold text-base">{formatUSD(tx.usd_value_of_crypto)}</span>
+                                        <td className="px-10 py-6 text-center">
+                                            <span className="text-zinc-900 font-bold text-base">{formatUSD(tx.usd_value_of_crypto)}</span>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
+                                        <td className="px-10 py-6 text-center">
                                             {tx.status === 'canceled' ? (
-                                                <div className="flex items-center justify-center gap-2 px-4 py-2 bg-red-400/10 text-red-500 border border-red-400/20 rounded-full w-fit mx-auto">
+                                                <div className="flex items-center justify-center gap-2 px-4 py-2 bg-red-100 text-red-600 border border-red-200 rounded-full w-fit mx-auto">
                                                     <Ban className="w-4 h-4" />
                                                     <span className="text-[10px] font-black uppercase tracking-widest">Canceled</span>
                                                 </div>
                                             ) : (
-                                                <div className="flex items-center justify-center gap-2 px-4 py-2 bg-green-400/10 text-green-400 border border-green-400/20 rounded-full w-fit mx-auto">
+                                                <div className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full w-fit mx-auto">
                                                     <CheckCircle2 className="w-4 h-4" />
                                                     <span className="text-[10px] font-black uppercase tracking-widest">Success</span>
                                                 </div>
                                             )}
                                         </td>
-                                        <td className="px-12 py-8 text-center">
+                                        <td className="px-12 py-6 text-center">
                                             <TxHashLink hash={tx.trans_hash} />
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={6} className="px-8 py-20 text-center text-zinc-600 lowercase font-medium italic">
+                                    <td colSpan={8} className="px-8 py-20 text-center text-zinc-500 font-medium italic">
                                         No network transactions matching current parameters.
                                     </td>
                                 </tr>
@@ -278,28 +278,28 @@ export default function TransactionsLedger() {
                     </table>
                 </div>
                 {filtered.length > 5 && (
-                    <div className="p-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 bg-black/10">
+                    <div className="p-8 border-t border-zinc-200 flex flex-col md:flex-row items-center justify-between gap-6 bg-zinc-50/50">
                         <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">
-                            Showing <span className="text-white">{startIndex + 1}</span> to <span className="text-white">{Math.min(startIndex + itemsPerPage, filtered.length)}</span> of <span className="text-white">{filtered.length}</span> Results
+                            Showing <span className="text-zinc-900">{startIndex + 1}</span> to <span className="text-zinc-900">{Math.min(startIndex + itemsPerPage, filtered.length)}</span> of <span className="text-zinc-900">{filtered.length}</span> Results
                         </div>
 
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setCurrentPage(1)}
                                 disabled={currentPage === 1}
-                                className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-500 hover:text-accent hover:bg-white/10 disabled:opacity-30 disabled:hover:text-zinc-500 transition-all shadow-xl cursor-pointer"
+                                className="p-2.5 bg-white border border-zinc-200 rounded-xl text-zinc-500 hover:text-[#212E73] hover:bg-zinc-50 disabled:opacity-40 disabled:hover:text-zinc-500 transition-all shadow-sm cursor-pointer"
                             >
                                 <ChevronsLeft className="w-4 h-4" />
                             </button>
                             <button
                                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                 disabled={currentPage === 1}
-                                className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-500 hover:text-accent hover:bg-white/10 disabled:opacity-30 disabled:hover:text-zinc-500 transition-all shadow-xl cursor-pointer"
+                                className="p-2.5 bg-white border border-zinc-200 rounded-xl text-zinc-500 hover:text-[#212E73] hover:bg-zinc-50 disabled:opacity-40 disabled:hover:text-zinc-500 transition-all shadow-sm cursor-pointer"
                             >
                                 <ChevronLeft className="w-4 h-4" />
                             </button>
 
-                            <div className="flex items-center bg-black/40 border border-white/5 rounded-xl px-1">
+                            <div className="flex items-center bg-zinc-100 border border-zinc-200 rounded-xl px-1">
                                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                                     let pageNum;
                                     if (totalPages <= 5) pageNum = i + 1;
@@ -314,8 +314,8 @@ export default function TransactionsLedger() {
                                             className={cn(
                                                 "min-w-[40px] h-10 text-[10px] font-black tracking-widest transition-all rounded-lg m-1 cursor-pointer",
                                                 currentPage === pageNum
-                                                    ? "bg-accent text-black shadow-lg shadow-accent/20"
-                                                    : "text-zinc-500 hover:text-white"
+                                                    ? "bg-[#212E73] text-white shadow-md"
+                                                    : "text-zinc-600 hover:text-zinc-900"
                                             )}
                                         >
                                             {pageNum}
@@ -327,14 +327,14 @@ export default function TransactionsLedger() {
                             <button
                                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                 disabled={currentPage === totalPages}
-                                className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-500 hover:text-accent hover:bg-white/10 disabled:opacity-30 disabled:hover:text-zinc-500 transition-all shadow-xl cursor-pointer"
+                                className="p-2.5 bg-white border border-zinc-200 rounded-xl text-zinc-500 hover:text-[#212E73] hover:bg-zinc-50 disabled:opacity-40 disabled:hover:text-zinc-500 transition-all shadow-sm cursor-pointer"
                             >
                                 <ChevronRight className="w-4 h-4" />
                             </button>
                             <button
                                 onClick={() => setCurrentPage(totalPages)}
                                 disabled={currentPage === totalPages}
-                                className="p-2.5 bg-white/5 border border-white/5 rounded-xl text-zinc-500 hover:text-accent hover:bg-white/10 disabled:opacity-30 disabled:hover:text-zinc-500 transition-all shadow-xl cursor-pointer"
+                                className="p-2.5 bg-white border border-zinc-200 rounded-xl text-zinc-500 hover:text-[#212E73] hover:bg-zinc-50 disabled:opacity-40 disabled:hover:text-zinc-500 transition-all shadow-sm cursor-pointer"
                             >
                                 <ChevronsRight className="w-4 h-4" />
                             </button>

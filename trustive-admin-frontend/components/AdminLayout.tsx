@@ -205,13 +205,13 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="min-h-screen bg-background flex overflow-hidden">
             {/* Sidebar */}
-            <aside className="fixed left-0 top-0 h-screen w-70 bg-sidebar z-40 hidden lg:flex flex-col border-r border-white/5 overflow-hidden">
+            <aside className="fixed left-0 top-0 h-screen w-70 bg-white z-40 hidden lg:flex flex-col border-r border-zinc-200/90 shadow-sm overflow-hidden">
                 <div className="p-8 shrink-0">
                     <Link href="/admin/dashboard" className="flex items-center gap-3 hover:opacity-90 transition-opacity cursor-pointer">
-                        <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center overflow-hidden border border-accent/20">
-                            <span className="text-black font-bold text-xl font-space-grotesk">P</span>
+                        <div className="w-10 h-10 bg-[#212E73] rounded-full flex items-center justify-center overflow-hidden shadow-md shadow-[#212E73]/20">
+                            <span className="text-white font-bold text-xl font-space-grotesk">T</span>
                         </div>
-                        <span className="text-xl font-bold text-white tracking-tight uppercase">Trustive Admin</span>
+                        <span className="text-xl font-bold text-zinc-900 tracking-tight uppercase">Trustive Admin</span>
                     </Link>
                 </div>
 
@@ -227,8 +227,8 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                 className={cn(
                                     "flex items-center gap-4 px-5 py-3 rounded-xl transition-all font-medium text-sm",
                                     isActive
-                                        ? "bg-accent text-black shadow-lg shadow-accent/20"
-                                        : "text-zinc-400 hover:text-white hover:bg-white/5"
+                                        ? "bg-[#212E73] text-white shadow-md shadow-[#212E73]/20"
+                                        : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100"
                                 )}
                             >
                                 <Icon className="w-4 h-4 shrink-0" />
@@ -238,7 +238,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                     })}
                 </nav>
 
-                <div className="p-4 mt-auto border-t border-white/5 space-y-3">
+                <div className="p-4 mt-auto border-t border-zinc-200 space-y-3">
                     <button
                         onClick={() => {
                             localStorage.removeItem("admin_token");
@@ -246,18 +246,18 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                             disconnectWallet();
                             router.push("/admin/login");
                         }}
-                        className="flex items-center justify-center gap-3 w-full py-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all text-sm font-bold border border-red-500/10"
+                        className="flex items-center justify-center gap-3 w-full py-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all text-sm font-bold border border-red-200"
                     >
                         <LogOut className="w-4 h-4" />
                         Logout
                     </button>
 
                     <div className="flex items-center gap-3 px-2 py-2">
-                        <div className="w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center shrink-0 border border-accent/20">
-                            <Users className="w-4 h-4 text-accent" />
+                        <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center shrink-0 border border-blue-200">
+                            <Users className="w-4 h-4 text-[#212E73]" />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <p className="text-xs font-bold text-white truncate">Administrator</p>
+                            <p className="text-xs font-bold text-zinc-900 truncate">Administrator</p>
                             <p className="text-[10px] text-zinc-500 uppercase truncate">Super User</p>
                         </div>
                     </div>
@@ -266,15 +266,15 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
 
             {/* Main Area */}
             <div className="flex-1 lg:ml-70 flex flex-col h-screen overflow-hidden">
-                <header className="h-[80px] shrink-0 bg-sidebar flex items-center justify-between px-8 border-b border-white/5 z-30">
+                <header className="h-[80px] shrink-0 bg-white/90 backdrop-blur-md flex items-center justify-between px-8 border-b border-zinc-200/90 shadow-xs z-30">
                     <div className="flex flex-col min-w-0">
-                        <h2 className="text-lg font-bold text-white uppercase tracking-tight">
+                        <h2 className="text-lg font-bold text-zinc-900 uppercase tracking-tight">
                             {navItems.find((item) => item.href === pathname)?.name || "Control Center"}
                         </h2>
-                        <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5">
+                        <div className="flex items-center gap-2 text-[10px] text-zinc-400 uppercase tracking-widest mt-0.5">
                             <span>Admin Console</span>
-                            <span className="text-accent">/</span>
-                            <span className="text-accent font-bold truncate">
+                            <span className="text-[#212E73]">/</span>
+                            <span className="text-[#212E73] font-bold truncate">
                                 {navItems.find((item) => item.href === pathname)?.name || "Overview"}
                             </span>
                         </div>
@@ -310,7 +310,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                                     <button
                                                         onClick={openConnectModal}
                                                         type="button"
-                                                        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-accent text-black font-bold text-xs transition-all shadow-lg shadow-accent/20 hover:scale-105 active:scale-95 cursor-pointer"
+                                                        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#212E73] text-white font-bold text-xs transition-all shadow-md shadow-[#212E73]/20 hover:bg-[#16225B] hover:scale-105 active:scale-95 cursor-pointer"
                                                     >
                                                         <Wallet className="w-4 h-4" />
                                                         Connect Wallet
@@ -323,7 +323,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                                     <button
                                                         onClick={openChainModal}
                                                         type="button"
-                                                        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-red-500 text-white font-bold text-xs transition-all shadow-lg shadow-red-500/20 hover:scale-105 active:scale-95 cursor-pointer"
+                                                        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-red-500 text-white font-bold text-xs transition-all shadow-md shadow-red-500/20 hover:scale-105 active:scale-95 cursor-pointer"
                                                     >
                                                         <TriangleAlert className="w-4 h-4" />
                                                         Wrong Network
@@ -335,9 +335,9 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                                 <button
                                                     onClick={openAccountModal}
                                                     type="button"
-                                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs transition-all hover:bg-white/10 cursor-pointer"
+                                                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-zinc-100 border border-zinc-200 text-zinc-900 font-bold text-xs transition-all hover:bg-zinc-200 cursor-pointer shadow-xs"
                                                 >
-                                                    <div className="w-2 h-2 rounded-full bg-green-500 mr-1 animate-pulse" />
+                                                    <div className="w-2 h-2 rounded-full bg-emerald-500 mr-1 animate-pulse" />
                                                     {rbAccount.displayName}
                                                 </button>
                                             );
@@ -349,30 +349,30 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto p-8 custom-scrollbar bg-background relative">
+                <main className="flex-1 overflow-y-auto p-8 custom-scrollbar bg-transparent relative">
                     {!isAdminWallet ? (
-                        <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-xl p-8">
-                            <div className="max-w-md w-full bg-sidebar border border-accent/20 rounded-[2.5rem] p-10 text-center shadow-[0_0_100px_rgba(229,169,62,0.1)] animate-in zoom-in-95 duration-300">
-                                <div className="w-20 h-20 bg-accent/10 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-accent/20">
+                        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md p-8">
+                            <div className="max-w-md w-full bg-white border border-zinc-200 rounded-[2.5rem] p-10 text-center shadow-2xl animate-in zoom-in-95 duration-300">
+                                <div className="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-blue-200">
                                     {isConnected ? (
-                                        <TriangleAlert className="w-10 h-10 text-accent" />
+                                        <TriangleAlert className="w-10 h-10 text-amber-500" />
                                     ) : (
-                                        <Wallet className="w-10 h-10 text-accent" />
+                                        <Wallet className="w-10 h-10 text-[#212E73]" />
                                     )}
                                 </div>
-                                <h1 className="text-2xl font-black text-white uppercase tracking-tight mb-4">
+                                <h1 className="text-2xl font-black text-zinc-900 uppercase tracking-tight mb-4">
                                     {isConnected ? "Unauthorized Wallet" : "Identity Required"}
                                 </h1>
-                                <p className="text-zinc-500 text-sm font-medium leading-relaxed mb-8">
+                                <p className="text-zinc-600 text-sm font-medium leading-relaxed mb-8">
                                     {isConnected 
                                         ? `The connected wallet (${shortenAddress(address || "")}) is not authorized.`
                                         : "Please connect the authorized master admin wallet to access the control panel."
                                     }
                                 </p>
                                 <div className="space-y-4">
-                                    <div className="p-4 bg-accent/5 rounded-2xl border border-accent/10">
-                                        <p className="text-[10px] font-black text-accent uppercase tracking-widest mb-1">Required Authority</p>
-                                        <p className="text-xs font-mono text-zinc-400 break-all">{ADMIN_WALLET_ADDRESS || 'Master Admin Address Not Set'}</p>
+                                    <div className="p-4 bg-zinc-50 rounded-2xl border border-zinc-200">
+                                        <p className="text-[10px] font-bold text-[#212E73] uppercase tracking-widest mb-1">Required Authority</p>
+                                        <p className="text-xs font-mono text-zinc-600 break-all">{ADMIN_WALLET_ADDRESS || 'Master Admin Address Not Set'}</p>
                                     </div>
                                     
                                     {!isConnected ? (

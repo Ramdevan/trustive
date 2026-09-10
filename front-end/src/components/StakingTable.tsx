@@ -76,13 +76,13 @@ const isRealHash = (hash?: string | null): hash is string =>
 
 const TxLink: React.FC<{ hash?: string | null; fallbackIndex?: number | null }> = ({ hash, fallbackIndex }) => (
   isRealHash(hash) ? (
-    <a href={`https://sepolia.etherscan.io/tx/${hash}`} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline" title={hash}>
+    <a href={`https://sepolia.etherscan.io/tx/${hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline" title={hash}>
       {shortenHash(hash)}
     </a>
   ) : fallbackIndex !== undefined ? (
-    <span title="Synced from chain">#{fallbackIndex ?? '—'}</span>
+    <span title="Synced from chain" className="text-zinc-700">#{fallbackIndex ?? '—'}</span>
   ) : (
-    <span className="text-zinc-600">—</span>
+    <span className="text-zinc-400">—</span>
   )
 );
 
@@ -124,13 +124,13 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
     <div className="w-full space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col gap-3">
-          <h2 className="text-[1.25rem] font-medium text-white">Staking Transaction</h2>
-          <div className="flex bg-black/40 p-1 rounded-xl border border-white/5 shrink-0 w-fit">
-            {(['Active', 'Withdrawn'] as const).map(tab => (
+          <h2 className="text-[1.25rem] font-medium text-zinc-900">Staking Transaction</h2>
+          <div className="flex bg-zinc-100 p-1.5 rounded-xl border border-zinc-200">
+            {(['Active', 'Withdrawn'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => { setActiveTab(tab); setPage(1); }}
-                className={`px-6 py-2 rounded-lg text-[0.875rem] font-bold transition-all cursor-pointer ${activeTab === tab ? 'bg-accent text-black shadow-lg' : 'text-zinc-400 hover:text-white'}`}
+                className={`px-6 py-2 rounded-lg text-[0.875rem] font-bold transition-all cursor-pointer ${activeTab === tab ? 'bg-[#212E73] text-white shadow-md' : 'text-zinc-600 hover:text-zinc-900'}`}
               >
                 {tab}
               </button>
@@ -144,57 +144,56 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
         />
       </div>
 
-      <div className="overflow-x-auto rounded-2xl bg-card border border-white/5">
+      <div className="overflow-x-auto rounded-2xl bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
         <table className="w-full text-left border-collapse min-w-[64rem]">
           <thead>
-            <tr className="text-[#FAF7F2] text-[0.8rem] sm:text-[1rem] font-medium border-b border-white/5 align-middle whitespace-nowrap">
-              <th className="px-6 py-5 min-w-[5rem]">S No</th>
-              <th className="px-6 py-5 min-w-[8rem]">Plan</th>
-              <th className="px-6 py-5 min-w-[6rem]">APY</th>
-              <th className="px-6 py-5 min-w-[10rem]">Staked Token</th>
-              <th className="px-6 py-5 min-w-[10rem]">Ends on</th>
-              <th className="px-6 py-5 min-w-[11rem]">Reward</th>
-              <th className="px-6 py-5 min-w-[8rem]">Status</th>
-              <th className="px-6 py-5 min-w-[15rem]">Transaction Hash</th>
-              {showAction && <th className="px-6 py-5 min-w-[13rem]">Action</th>}
+            <tr className="text-zinc-500 text-[0.85rem] font-semibold bg-zinc-50/80 border-b border-zinc-200 align-middle whitespace-nowrap">
+              <th className="px-6 py-4 min-w-[5rem]">S No</th>
+              <th className="px-6 py-4 min-w-[8rem]">Plan</th>
+              <th className="px-6 py-4 min-w-[6rem]">APY</th>
+              <th className="px-6 py-4 min-w-[10rem]">Staked Token</th>
+              <th className="px-6 py-4 min-w-[10rem]">Ends on</th>
+              <th className="px-6 py-4 min-w-[11rem]">Reward</th>
+              <th className="px-6 py-4 min-w-[8rem]">Status</th>
+              <th className="px-6 py-4 min-w-[15rem]">Transaction Hash</th>
+              {showAction && <th className="px-6 py-4 min-w-[13rem]">Action</th>}
             </tr>
           </thead>
-          <tbody className="text-[0.875rem] font-medium text-[#94A3B8]">
+          <tbody className="text-[0.875rem] font-medium text-zinc-600">
             {loading ? (
               <tr><td colSpan={columnCount} className="px-6 py-12 text-center text-zinc-500">Loading stakes...</td></tr>
             ) : paginated.length === 0 ? (
               <tr><td colSpan={columnCount} className="px-6 py-12 text-center text-zinc-500">No {activeTab.toLowerCase()} stakes found</td></tr>
             ) : paginated.map((s, index) => {
               const isBusy = claimingId === s.id;
-              const isOpen = s.status !== 'unstaked'; // not yet withdrawn
+              const isOpen = s.status !== 'unstaked';
               const isEmergency = Boolean(Number(s.is_emergency));
-              // Lock ended -> standard claim; still locked -> emergency exit
               const action = getStakeAction(s, now);
               const { lockExpired, endsAt } = action;
               const canClaim = action.kind === 'claim' && action.enabled;
               const canEmergencyWithdraw = action.kind === 'emergency' && action.enabled;
               return (
-                <tr key={s.id} className="hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
-                  <td className="px-6 py-5 align-middle whitespace-nowrap text-[#FAF7F2]">{(page - 1) * PAGE_SIZE + index + 1}</td>
-                  <td className="px-6 py-5 align-middle whitespace-nowrap">{s.plan_name}</td>
-                  <td className="px-6 py-5 align-middle whitespace-nowrap text-accent">{Number(s.apy || 8).toFixed(0)}%</td>
-                  <td className="px-6 py-5 align-middle whitespace-nowrap text-[#FAF7F2] font-semibold">
+                <tr key={s.id} className="hover:bg-zinc-50/70 transition-colors border-b border-zinc-100 last:border-0">
+                  <td className="px-6 py-4 align-middle whitespace-nowrap text-zinc-800">{(page - 1) * PAGE_SIZE + index + 1}</td>
+                  <td className="px-6 py-4 align-middle whitespace-nowrap font-bold text-zinc-900">{s.plan_name}</td>
+                  <td className="px-6 py-4 align-middle whitespace-nowrap text-[#212E73] font-bold">{Number(s.apy || 8).toFixed(0)}%</td>
+                  <td className="px-6 py-4 align-middle whitespace-nowrap text-zinc-900 font-semibold">
                     {Number(s.amount).toLocaleString(undefined, { maximumFractionDigits: 2 })} Trustive
                   </td>
-                  <td className="px-6 py-5 align-middle whitespace-nowrap text-[#64748B]">{formatDate(s.end_at)}</td>
-                  <td className="px-6 py-5 align-middle whitespace-nowrap">
+                  <td className="px-6 py-4 align-middle whitespace-nowrap text-zinc-500">{formatDate(s.end_at)}</td>
+                  <td className="px-6 py-4 align-middle whitespace-nowrap">
                     {s.status !== 'unstaked' ? (
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-accent text-[0.875rem] font-bold">+{formatTrustive(stakeReward(s))}</span>
-                        <span className="text-[0.7rem] text-zinc-500">
+                        <span className="text-emerald-700 text-[0.875rem] font-bold">+{formatTrustive(stakeReward(s))}</span>
+                        <span className="text-[0.7rem] text-zinc-400">
                           {lockExpired ? 'Ready to claim' : 'Expected at maturity'}
                         </span>
                       </div>
                     ) : (
                       isEmergency ? (
-                        <span className="text-zinc-500 text-[0.8rem] font-medium">No reward</span>
+                        <span className="text-zinc-400 text-[0.8rem] font-medium">No reward</span>
                       ) : (
-                        <span className="text-accent text-[0.875rem] font-bold">+{formatTrustive(stakeReward(s))}</span>
+                        <span className="text-emerald-700 text-[0.875rem] font-bold">+{formatTrustive(stakeReward(s))}</span>
                       )
                     )}
                   </td>
@@ -204,31 +203,29 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
                         ? (isEmergency ? 'Early Exit' : 'Claimed')
                         : lockExpired ? 'Claimable' : 'Active';
                       const tone = label === 'Active'
-                        ? { bg: 'bg-[#EAB3081A]', text: 'text-[#EAB308]', dot: 'bg-[#EAB308]' }
+                        ? { bg: 'bg-amber-50 text-amber-700 border border-amber-200', dot: 'bg-amber-500' }
                         : label === 'Claimable' || label === 'Claimed'
-                          ? { bg: 'bg-[#10B9811A]', text: 'text-[#10B981]', dot: 'bg-[#10B981]' }
+                          ? { bg: 'bg-emerald-50 text-emerald-700 border border-emerald-200', dot: 'bg-emerald-500' }
                           : label === 'Early Exit'
-                            ? { bg: 'bg-red-500/10', text: 'text-red-400', dot: 'bg-red-400' }
-                            : { bg: 'bg-white/5', text: 'text-zinc-400', dot: 'bg-zinc-400' };
+                            ? { bg: 'bg-red-50 text-red-600 border border-red-200', dot: 'bg-red-500' }
+                            : { bg: 'bg-zinc-100 text-zinc-600 border border-zinc-200', dot: 'bg-zinc-400' };
                       return (
-                        <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[0.75rem] font-bold ${tone.bg} ${tone.text}`}>
+                        <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[0.75rem] font-bold ${tone.bg}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${tone.dot}`} />
                           {label}
                         </span>
                       );
                     })()}
                   </td>
-                  <td className="px-6 py-5 align-middle font-mono">
+                  <td className="px-6 py-4 align-middle font-mono">
                     {s.status === 'unstaked' ? (
-                      // A withdrawn stake has two transactions behind it: the one
-                      // that locked the tokens and the one that released them
                       <div className="flex flex-col gap-1.5">
                         <div className="flex items-center gap-2">
-                          <span className="font-sans text-[0.65rem] uppercase tracking-wide text-zinc-500 w-[4.5rem] shrink-0">Staked</span>
+                          <span className="font-sans text-[0.65rem] uppercase tracking-wide text-zinc-400 w-[4.5rem] shrink-0">Staked</span>
                           <TxLink hash={s.stake_tx_hash} fallbackIndex={s.chain_stake_index} />
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="font-sans text-[0.65rem] uppercase tracking-wide text-zinc-500 w-[4.5rem] shrink-0">Withdrawn</span>
+                          <span className="font-sans text-[0.65rem] uppercase tracking-wide text-zinc-400 w-[4.5rem] shrink-0">Withdrawn</span>
                           <TxLink hash={s.unstake_tx_hash} />
                         </div>
                       </div>
@@ -237,18 +234,18 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
                     )}
                   </td>
                   {showAction && (
-                  <td className="px-6 py-5 align-middle">
+                  <td className="px-6 py-4 align-middle">
                     {s.status !== 'unstaked' ? (
                       <div className="flex flex-col items-start gap-1">
                         {lockExpired ? (
                           <button
                             onClick={() => canClaim && onClaim && onClaim(s)}
                             disabled={!canClaim || isBusy}
-                            className={`flex items-center justify-center gap-1.5 font-bold px-4 py-2 rounded-xl transition-all text-xs shadow-lg whitespace-nowrap ${isBusy
-                              ? 'bg-accent/40 text-black/50 cursor-not-allowed'
+                            className={`flex items-center justify-center gap-1.5 font-bold px-4 py-2 rounded-xl transition-all text-xs shadow-md whitespace-nowrap ${isBusy
+                              ? 'bg-[#212E73]/40 text-white/50 cursor-not-allowed'
                               : canClaim
-                                ? 'bg-accent hover:bg-accent/90 text-black cursor-pointer shadow-accent/10 active:scale-[0.95]'
-                                : 'bg-white/5 text-zinc-500 border border-white/5 cursor-not-allowed'
+                                ? 'bg-[#212E73] hover:bg-[#16225B] text-white cursor-pointer shadow-[#212E73]/20 active:scale-[0.95]'
+                                : 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed'
                               }`}
                           >
                             {isBusy && claimingMode === 'claim' ? 'Claiming...' : <><LuLockOpen className="h-3 w-3" />Claim</>}
@@ -257,11 +254,11 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
                           <button
                             onClick={() => canEmergencyWithdraw && onEmergencyWithdraw && onEmergencyWithdraw(s)}
                             disabled={!canEmergencyWithdraw || isBusy}
-                            className={`flex items-center justify-center gap-1.5 font-bold px-4 py-2 rounded-xl transition-all text-xs shadow-lg whitespace-nowrap ${isBusy
+                            className={`flex items-center justify-center gap-1.5 font-bold px-4 py-2 rounded-xl transition-all text-xs shadow-sm whitespace-nowrap ${isBusy
                               ? 'bg-red-600/40 text-white/50 cursor-not-allowed'
                               : canEmergencyWithdraw
-                                ? 'bg-red-600/10 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 cursor-pointer shadow-red-600/10 active:scale-[0.95]'
-                                : 'bg-white/5 text-zinc-500 border border-white/5 cursor-not-allowed'
+                                ? 'bg-red-50 hover:bg-red-600 text-red-600 hover:text-white border border-red-200 cursor-pointer active:scale-[0.95]'
+                                : 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed'
                               }`}
                             title="Withdraw before the lock period ends - rewards are forfeited"
                           >
@@ -269,11 +266,11 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
                           </button>
                         )}
                         {isOpen && !lockExpired && endsAt !== null && (
-                          <span className="text-[0.7rem] text-zinc-500">{formatRemaining(endsAt - now)}</span>
+                          <span className="text-[0.7rem] text-zinc-400">{formatRemaining(endsAt - now)}</span>
                         )}
                       </div>
                     ) : (
-                      <span className="text-zinc-600">—</span>
+                      <span className="text-zinc-400">—</span>
                     )}
                   </td>
                   )}
@@ -284,12 +281,12 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
         </table>
 
         {totalPages > 1 && (
-          <div className="px-6 py-5 flex items-center justify-end border-t border-white/5 bg-black/20">
+          <div className="px-6 py-4 flex items-center justify-end border-t border-zinc-100 bg-zinc-50/40">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="w-10 h-10 flex items-center justify-center rounded-xl bg-black/40 border border-white/5 text-zinc-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
               >
                 <LuChevronLeft className="h-4 w-4" />
               </button>
@@ -297,7 +294,7 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
                 <button
                   key={p}
                   onClick={() => setPage(p)}
-                  className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold transition-all cursor-pointer ${p === page ? 'bg-accent text-black' : 'bg-black/40 border border-white/5 text-zinc-400 hover:text-white'}`}
+                  className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold transition-all cursor-pointer ${p === page ? 'bg-[#212E73] text-white shadow-md shadow-[#212E73]/20' : 'bg-white border border-zinc-200 text-zinc-700 hover:bg-zinc-100 shadow-sm'}`}
                 >
                   {p}
                 </button>
@@ -305,7 +302,7 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
               <button
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="w-10 h-10 flex items-center justify-center rounded-xl bg-black/40 border border-white/5 text-zinc-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
               >
                 <LuChevronRight className="h-4 w-4" />
               </button>

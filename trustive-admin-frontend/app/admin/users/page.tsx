@@ -97,13 +97,13 @@ export default function UsersPage() {
     });
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-700">
+        <div className="space-y-8 animate-in fade-in duration-200">
             {/* Header & Controls */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                 <div>
                     <div className="flex items-center gap-3">
-                        <h1 className="text-3xl font-black text-white uppercase tracking-tight">User Registry</h1>
-                        <span className="px-3 py-1 bg-[#E5B258]/10 border border-[#E5B258]/20 rounded-full text-[10px] font-black text-[#E5B258] uppercase tracking-widest">
+                        <h1 className="text-3xl font-black text-zinc-900 uppercase tracking-tight">User Registry</h1>
+                        <span className="px-3 py-1 bg-[#212E73]/10 border border-[#212E73]/20 rounded-full text-[10px] font-bold text-[#212E73] uppercase tracking-widest">
                             Global Asset Directory
                         </span>
                     </div>
@@ -112,56 +112,56 @@ export default function UsersPage() {
 
                 {/* Search Bar */}
                 <div className="relative w-full md:w-96">
-                    <Search className="w-4 h-4 text-zinc-500 absolute left-4 top-1/2 -translate-y-1/2" />
+                    <Search className="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2" />
                     <input
                         type="text"
                         placeholder="Search wallet, name or email..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-[#0A0908] border border-white/10 rounded-2xl pl-11 pr-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-accent/40 transition-colors"
+                        className="w-full bg-white border border-zinc-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] transition-colors shadow-sm"
                     />
                 </div>
             </div>
 
             {/* Users Table */}
-            <div className="bg-[#0A0908] rounded-[32px] border border-white/5 overflow-hidden shadow-2xl relative z-10">
+            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-[#E5B258] text-black uppercase font-black text-xs tracking-widest">
-                                <th className="px-10 py-8 text-center rounded-tl-[32px]">S/No</th>
-                                <th className="px-10 py-8 text-center">WALLET ADDRESS</th>
-                                <th className="px-10 py-8 text-center">TRUSTIVE BALANCE</th>
-                                <th className="px-10 py-8 text-center">KYC STATUS</th>
-                                <th className="px-10 py-8 text-center">STATUS</th>
-                                <th className="px-12 py-8 text-center rounded-tr-[32px]">ACCOUNT PROFILE</th>
+                            <tr className="bg-[#212E73] text-white uppercase font-bold text-xs tracking-widest">
+                                <th className="px-10 py-6 text-center rounded-tl-[32px]">S/No</th>
+                                <th className="px-10 py-6 text-center">WALLET ADDRESS</th>
+                                <th className="px-10 py-6 text-center">TRUSTIVE BALANCE</th>
+                                <th className="px-10 py-6 text-center">KYC STATUS</th>
+                                <th className="px-10 py-6 text-center">STATUS</th>
+                                <th className="px-12 py-6 text-center rounded-tr-[32px]">ACCOUNT PROFILE</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/[0.03]">
+                        <tbody className="divide-y divide-zinc-200">
                             {isLoading ? (
                                 <tr>
                                     <td colSpan={6} className="py-24 text-center">
-                                        <div className="animate-spin h-10 w-10 border-b-2 border-accent mx-auto rounded-full" />
-                                        <p className="mt-4 text-white/20 font-bold uppercase tracking-widest text-xs">Querying Database Registry...</p>
+                                        <div className="animate-spin h-10 w-10 border-b-2 border-[#212E73] mx-auto rounded-full" />
+                                        <p className="mt-4 text-zinc-400 font-bold uppercase tracking-widest text-xs">Querying Database Registry...</p>
                                     </td>
                                 </tr>
                             ) : filteredUsers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="py-24 text-center text-white/20 uppercase font-black tracking-widest text-sm">
+                                    <td colSpan={6} className="py-24 text-center text-zinc-400 uppercase font-bold tracking-widest text-sm italic">
                                         No users identified matching the criteria
                                     </td>
                                 </tr>
                             ) : (
                                 filteredUsers.map((u, i) => (
-                                    <tr key={u.id} className="hover:bg-white/[0.01] transition-colors group">
-                                        <td className="px-10 py-8 text-center">
-                                            <span className="text-white/20 font-mono text-base group-hover:text-white/40 transition-colors">
+                                    <tr key={u.id} className="hover:bg-zinc-50/70 transition-colors group">
+                                        <td className="px-10 py-6 text-center">
+                                            <span className="text-zinc-400 font-mono text-base">
                                                 {(i + 1).toString().padStart(2, '0')}
                                             </span>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
-                                            <div className="flex items-center justify-center gap-5">
-                                                <div className="w-12 h-12 rounded-xl bg-accent/5 border border-white/5 flex items-center justify-center shrink-0 group-hover:border-accent/20 transition-all overflow-hidden">
+                                        <td className="px-10 py-6 text-center">
+                                            <div className="flex items-center justify-center gap-4">
+                                                <div className="w-12 h-12 rounded-xl bg-zinc-100 border border-zinc-200 flex items-center justify-center shrink-0 overflow-hidden">
                                                     {u.profile_pic ? (
                                                         <img
                                                             src={u.profile_pic.startsWith('http') || u.profile_pic.startsWith('data:') ? u.profile_pic : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3007'}${u.profile_pic}`}
@@ -169,58 +169,58 @@ export default function UsersPage() {
                                                             className="w-full h-full object-cover"
                                                         />
                                                     ) : (
-                                                        <UserIcon className="w-6 h-6 text-accent/40 group-hover:text-accent transition-colors" />
+                                                        <UserIcon className="w-6 h-6 text-[#212E73]/60" />
                                                     )}
                                                 </div>
                                                 <div className="flex flex-col min-w-0 items-start">
                                                     <div className="flex items-center gap-1.5">
-                                                        <span className="font-mono text-white text-base font-medium tracking-tight truncate" title={u.wallet_address}>
+                                                        <span className="font-mono text-zinc-900 text-base font-semibold tracking-tight truncate" title={u.wallet_address}>
                                                             {u.wallet_address ? shortenAddress(u.wallet_address) : 'Unlinked Account'}
                                                         </span>
                                                         {u.wallet_address && <CopyAddressButton address={u.wallet_address} />}
                                                     </div>
-                                                    <span className="text-xs text-white/30 uppercase font-bold tracking-widest mt-1 truncate">
+                                                    <span className="text-xs text-zinc-500 font-medium truncate">
                                                         {u.name || u.email || 'Anonymous User'}
                                                     </span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8">
+                                        <td className="px-10 py-6">
                                             <div className="flex flex-col items-center">
-                                                <span className="text-white font-bold text-lg">
+                                                <span className="text-zinc-900 font-bold text-lg">
                                                     {formatDecimal(u.ptc_tokens_purchased, 5, 2)}
                                                 </span>
-                                                <span className="text-[10px] text-accent/60 font-bold uppercase tracking-wider mt-1">Trustive Tokens</span>
+                                                <span className="text-[10px] text-[#212E73] font-bold uppercase tracking-wider mt-0.5">Trustive Tokens</span>
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
+                                        <td className="px-10 py-6 text-center">
                                             {u.kyc_status === 'verified' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/20">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-200">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                                                     Verified
                                                 </span>
                                             ) : u.kyc_status === 'pending' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-bold uppercase tracking-wider border border-amber-500/20">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider border border-amber-200">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                                                     Pending
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-800/60 text-zinc-400 text-xs font-bold uppercase tracking-wider border border-zinc-700/30">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-500 text-xs font-bold uppercase tracking-wider border border-zinc-200">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
                                                     Unverified
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-10 py-8 text-center">
-                                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-widest border border-green-500/20">
-                                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                        <td className="px-10 py-6 text-center">
+                                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest border border-emerald-200">
+                                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                                                 Active
                                             </span>
                                         </td>
-                                        <td className="px-12 py-8 text-center">
+                                        <td className="px-12 py-6 text-center">
                                             <button
                                                 onClick={() => setSelectedUser({ id: u.id, wallet_address: u.wallet_address || null })}
-                                                className="px-8 py-3 bg-accent text-black text-xs font-black uppercase tracking-[0.1em] rounded-full hover:bg-accent/90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-accent/10"
+                                                className="px-6 py-2.5 bg-[#212E73] hover:bg-[#1a255c] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer"
                                             >
                                                 View Profile
                                             </button>
@@ -248,7 +248,6 @@ export default function UsersPage() {
 }
 
 function ProfileModal({ address, userId, name, email, onClose }: { address: string; userId: number; name: string; email: string; onClose: () => void }) {
-    // Use wallet address if available, otherwise fall back to user ID
     const profileParam = address || `id/${userId}`;
     const { data: profileData, isLoading } = useQuery({
         queryKey: ["user-profile", profileParam],
@@ -260,14 +259,14 @@ function ProfileModal({ address, userId, name, email, onClose }: { address: stri
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm px-4" onClick={onClose} />
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm px-4" onClick={onClose} />
 
-            <div className="relative w-full max-w-4xl bg-sidebar rounded-[2.5rem] border border-white/10 overflow-hidden shadow-[0_0_100px_rgba(229,169,62,0.1)] animate-in zoom-in-95 duration-300">
+            <div className="relative w-full max-w-4xl bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
                 {/* Header */}
-                <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+                <div className="p-8 border-b border-zinc-200 bg-zinc-50/50 flex items-center justify-between">
                     <div className="flex items-center gap-6">
                         {/* Profile Image Box */}
-                        <div className="w-24 h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 shadow-2xl">
+                        <div className="w-20 h-20 rounded-2xl bg-zinc-100 border border-zinc-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                             {stats?.profile_pic ? (
                                 <img
                                     src={stats.profile_pic.startsWith('http') || stats.profile_pic.startsWith('data:') ? stats.profile_pic : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3007'}${stats.profile_pic}`}
@@ -275,33 +274,33 @@ function ProfileModal({ address, userId, name, email, onClose }: { address: stri
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <UserIcon className="w-10 h-10 text-white/10" />
+                                <UserIcon className="w-8 h-8 text-zinc-400" />
                             )}
                         </div>
 
                         <div>
-                            <div className="flex items-center gap-3 mb-2">
-                                <h2 className="text-2xl font-black text-white uppercase tracking-tight">
+                            <div className="flex items-center gap-3 mb-1">
+                                <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">
                                     {name || "User Profile"}
                                 </h2>
-                                <span className="px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-[10px] font-bold text-green-500 uppercase tracking-widest">
+                                <span className="px-3 py-1 bg-emerald-100 border border-emerald-200 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-widest">
                                     Verification Success
                                 </span>
                             </div>
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-0.5">
                                 <div className="flex items-center gap-1.5">
-                                    <p className="text-white/40 font-mono text-sm tracking-tight">{address || 'No Wallet Linked'}</p>
+                                    <p className="text-zinc-500 font-mono text-sm">{address || 'No Wallet Linked'}</p>
                                     {address && <CopyAddressButton address={address} />}
                                 </div>
-                                <p className="text-accent/60 text-xs font-medium lowercase tracking-wide">{email}</p>
+                                <p className="text-[#212E73] text-xs font-semibold">{email}</p>
                             </div>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-red-500/20 hover:text-red-500 transition-all group self-start"
+                        className="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-500 hover:bg-red-50 hover:text-red-500 transition-all cursor-pointer"
                     >
-                        <X className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <X className="w-5 h-5" />
                     </button>
                 </div>
 
@@ -309,8 +308,8 @@ function ProfileModal({ address, userId, name, email, onClose }: { address: stri
                 <div className="p-8">
                     {isLoading ? (
                         <div className="py-24 text-center">
-                            <div className="animate-spin h-12 w-12 border-b-2 border-accent mx-auto rounded-full" />
-                            <p className="mt-4 text-white/20 font-bold uppercase tracking-widest text-xs">Assembling Data...</p>
+                            <div className="animate-spin h-10 w-10 border-b-2 border-[#212E73] mx-auto rounded-full" />
+                            <p className="mt-4 text-zinc-400 font-bold uppercase tracking-widest text-xs">Assembling Data...</p>
                         </div>
                     ) : stats ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -319,7 +318,7 @@ function ProfileModal({ address, userId, name, email, onClose }: { address: stri
                                 value={formatDecimal(stats.balance, 5, 2)}
                                 unit="Trustive"
                                 icon={TrendingUp}
-                                color="text-accent"
+                                color="text-[#212E73]"
                             />
 
                             <StatCard
@@ -327,36 +326,35 @@ function ProfileModal({ address, userId, name, email, onClose }: { address: stri
                                 value={formatDecimal(stats.total_rewards, 5, 2)}
                                 unit="Trustive"
                                 icon={TrendingUp}
-                                color="text-purple-400"
+                                color="text-purple-600"
                             />
                             <StatCard
                                 label="Total USDT"
                                 value={formatDecimal(stats.total_usdt, 5, 2)}
                                 unit="USD"
                                 icon={DollarSign}
-                                color="text-green-500"
+                                color="text-emerald-600"
                             />
                             <StatCard
                                 label="Total Vested"
                                 value={formatDecimal(stats.total_vested, 5, 2)}
                                 unit="Trustive"
                                 icon={ShieldCheck}
-                                color="text-blue-500"
+                                color="text-blue-600"
                             />
-
                         </div>
                     ) : (
-                        <div className="py-24 text-center text-white/20 uppercase font-black tracking-widest text-sm">
+                        <div className="py-24 text-center text-zinc-400 uppercase font-bold tracking-widest text-sm italic">
                             Failed to load user statistics
                         </div>
                     )}
                 </div>
 
                 {/* Footer */}
-                <div className="p-8 bg-white/[0.02] border-t border-white/5 flex items-center justify-end">
+                <div className="p-6 bg-zinc-50/50 border-t border-zinc-200 flex items-center justify-end">
                     <button
                         onClick={onClose}
-                        className="px-8 py-3 bg-white/5 text-white/60 text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-white/10 hover:text-white transition-all"
+                        className="px-6 py-2.5 bg-white border border-zinc-200 text-zinc-700 text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-zinc-100 transition-all cursor-pointer shadow-sm"
                     >
                         Close Registry
                     </button>
@@ -374,18 +372,18 @@ function StatCard({ label, value, unit, icon: Icon, color }: {
     color: string
 }) {
     return (
-        <div className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl group hover:border-white/10 transition-all shadow-lg hover:shadow-black/40">
+        <div className="p-6 bg-zinc-50 border border-zinc-200 rounded-2xl group hover:border-zinc-300 transition-all shadow-sm">
             <div className="flex items-start justify-between mb-4">
-                <div className={cn("w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center transition-all group-hover:scale-110", color)}>
+                <div className={cn("w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center transition-all shadow-sm", color)}>
                     <Icon size={20} />
                 </div>
-                <ChevronRight size={16} className="text-white/10" />
+                <ChevronRight size={16} className="text-zinc-400" />
             </div>
             <div className="flex flex-col">
-                <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.1em] mb-1">{label}</span>
+                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.1em] mb-1">{label}</span>
                 <div className="flex items-baseline gap-1.5">
-                    <span className="text-xl font-black text-white tracking-tight">{value}</span>
-                    <span className="text-[9px] font-bold text-accent uppercase tracking-widest">{unit}</span>
+                    <span className="text-2xl font-bold text-zinc-900 tracking-tight">{value}</span>
+                    <span className="text-[10px] font-bold text-[#212E73] uppercase tracking-widest">{unit}</span>
                 </div>
             </div>
         </div>

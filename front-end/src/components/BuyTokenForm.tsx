@@ -4,7 +4,6 @@ import { sepolia } from 'wagmi/chains';
 import ethIcon from '@/assets/images/eth-icon.svg';
 import usdtIcon from '@/assets/images/usdt-icon.svg';
 import usdcIcon from '@/assets/images/usdc-icon.svg';
-import logo from '@/assets/images/logo.svg';
 import { useWeb3 } from '@/context/Web3Context';
 import { ethers } from 'ethers';
 import { useAccount as useWagmiAccount } from 'wagmi';
@@ -441,7 +440,7 @@ const BuyTokenForm: React.FC = () => {
           address: account,
           CryptoValue: amount,
           payment_type: method,
-          PPM_tokens: rawTrustive,
+          trustive_tokens: rawTrustive,
           transHash: txHash,
           USDvalue_of_crypto_purchased: method !== 'ETH' ? amount : '0',
           sale_type: (sale as any)?.type || (sale as any)?.name || '',
@@ -477,24 +476,24 @@ const BuyTokenForm: React.FC = () => {
   };
 
   return (
-    <div className="rounded-3xl bg-card p-6 border border-white/5 space-y-8">
-      <h2 className="text-[1.25rem] font-medium text-[#FAF7F2] px-2">Buy Token</h2>
+    <div className="rounded-3xl bg-white p-6 md:p-8 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] space-y-8">
+      <h2 className="text-[1.5rem] font-bold text-zinc-900 px-1">Buy Token</h2>
 
       {/* Payment method selector */}
       <div className="space-y-2">
-        <label className="text-[0.875rem] font-normal text-[#FAF7F2] block">Select payment method</label>
+        <label className="text-[0.875rem] font-semibold text-zinc-700 block">Select payment method</label>
         <div className="grid grid-cols-3 gap-3">
           {PAYMENT_METHODS.map(m => (
             <button
               key={m}
               onClick={() => { setMethod(m); setAmount(''); setTrustiveTokens(''); setTxStatus(''); setIsError(false); setIsSuccess(false); }}
               className={`flex items-center justify-center gap-2 py-4 rounded-xl transition-all cursor-pointer border ${method === m
-                ? 'bg-accent border-accent text-black font-bold shadow-lg shadow-accent/10'
-                : 'bg-black/40 border-white/5 text-zinc-400 hover:text-white'
+                ? 'bg-[#212E73] border-[#212E73] text-white font-bold shadow-md shadow-[#212E73]/20'
+                : 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
                 }`}
             >
               <div className="w-6 h-6 relative">
-                <Image src={getIcon(m)} alt={m} fill className={method === m ? '' : 'grayscale opacity-60'} />
+                <Image src={getIcon(m)} alt={m} fill className={method === m ? '' : 'grayscale opacity-70'} />
               </div>
               {m}
             </button>
@@ -504,7 +503,7 @@ const BuyTokenForm: React.FC = () => {
 
       {/* Wrong chain warning */}
       {isConnected && !isCorrectChain && (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[0.875rem]">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-[0.875rem]">
           <LuTriangleAlert className="h-4 w-4 flex-shrink-0" />
           Please switch to Ethereum Sepolia to purchase tokens
         </div>
@@ -512,7 +511,7 @@ const BuyTokenForm: React.FC = () => {
 
       {/* Enter Amount */}
       <div className="space-y-3">
-        <label className="text-[0.875rem] font-normal text-[#FAF7F2] block">Enter Amount</label>
+        <label className="text-[0.875rem] font-semibold text-zinc-700 block">Enter Amount</label>
 
         {/* Balance Display - Compact Premium Card */}
         <div
@@ -521,32 +520,32 @@ const BuyTokenForm: React.FC = () => {
             : 'max-h-0 opacity-0 mb-0 scale-95'
             }`}
         >
-          <div className="bg-gradient-to-br from-[#1A1A1A] via-[#121212] to-[#0A0908] rounded-2xl border border-white/10 shadow-2xl px-5 py-3.5 transform transition-all duration-500">
+          <div className="bg-zinc-50 rounded-2xl border border-zinc-200 shadow-sm px-5 py-3.5 transform transition-all duration-500">
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_10px_#E5A93E] animate-pulse"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#212E73] animate-pulse"></div>
                   <span className="text-zinc-500 text-[0.75rem] font-bold uppercase tracking-widest">
                     Available Balance
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-white text-[1rem] font-bold tracking-tight">
+                  <span className="text-zinc-900 text-[1rem] font-bold tracking-tight">
                     {currentBalance}
                   </span>
-                  <span className="text-accent text-[0.75rem] font-black uppercase tracking-wider px-2 py-0.5 bg-accent/10 rounded-lg border border-accent/20">
+                  <span className="text-[#212E73] text-[0.75rem] font-bold uppercase tracking-wider px-2 py-0.5 bg-blue-50 rounded-lg border border-blue-200">
                     {method}
                   </span>
                 </div>
               </div>
 
               {/* Percentage Buttons */}
-              <div className="flex items-center gap-1.5 bg-black/20 p-1 rounded-lg border border-white/5">
+              <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-zinc-200 shadow-xs">
                 {[25, 50, 75, 100].map((p) => (
                   <button
                     key={p}
                     onClick={() => handlePercentageClick(p)}
-                    className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-400 hover:text-accent hover:bg-white/5 rounded-md transition-all cursor-pointer"
+                    className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-600 hover:text-[#212E73] hover:bg-zinc-100 rounded-md transition-all cursor-pointer"
                   >
                     {p === 100 ? 'MAX' : `${p}%`}
                   </button>
@@ -564,13 +563,13 @@ const BuyTokenForm: React.FC = () => {
             value={amount}
             onChange={e => handleAmountChange(e.target.value)}
             disabled={loading}
-            className="w-full bg-[#0A0908] border border-white/10 rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] text-white placeholder:text-zinc-700 focus:outline-none focus:border-accent/40 transition-all font-normal disabled:opacity-50"
+            className="w-full bg-white border border-zinc-200 rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all font-medium disabled:opacity-50"
           />
-          <div className="absolute min-w-[8rem] right-4 top-1/2 -translate-y-1/2 flex items-center justify-center gap-2 px-3 py-2 border-l border-white/10 pointer-events-none">
+          <div className="absolute min-w-[8rem] right-4 top-1/2 -translate-y-1/2 flex items-center justify-center gap-2 px-3 py-2 border-l border-zinc-200 pointer-events-none">
             <div className="w-7 h-7 relative">
               <Image src={getIcon(method)} alt={method} fill />
             </div>
-            <span className="text-[0.875rem] font-bold text-[#FAF7F2]">{method}</span>
+            <span className="text-[0.875rem] font-bold text-zinc-900">{method}</span>
           </div>
         </div>
       </div>
@@ -578,7 +577,7 @@ const BuyTokenForm: React.FC = () => {
       {/* Receive */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-[0.875rem] font-normal text-[#FAF7F2] block">Receive</label>
+          <label className="text-[0.875rem] font-semibold text-zinc-700 block">Receive</label>
           {minLimit > 0 && (
             <span className="text-[0.75rem] text-zinc-500 font-medium">
               Min: {minLimit.toLocaleString('en-US')} Trustive{maxLimit > 0 ? ` • Max: ${maxLimit.toLocaleString('en-US')} Trustive` : ''}
@@ -591,18 +590,18 @@ const BuyTokenForm: React.FC = () => {
             placeholder="0.00"
             value={isCalculating ? 'Calculating...' : trustiveTokens}
             readOnly
-            className={`w-full bg-[#0A0908] border rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] placeholder:text-zinc-700 focus:outline-none font-normal transition-colors ${
+            className={`w-full bg-zinc-50 border rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] placeholder:text-zinc-400 focus:outline-none font-bold transition-colors ${
               isBelowMin || isAboveMax
-                ? 'border-amber-500/40 text-amber-300'
-                : 'border-white/10 text-white'
+                ? 'border-amber-400 text-amber-600'
+                : 'border-zinc-200 text-zinc-900'
             }`}
           />
-          <div className="absolute min-w-[8rem] right-4 top-1/2 -translate-y-1/2 flex items-center justify-center gap-2 px-3 py-2 border-l border-white/10 pointer-events-none">
+          <div className="absolute min-w-[8rem] right-4 top-1/2 -translate-y-1/2 flex items-center justify-center gap-2 px-3 py-2 border-l border-zinc-200 pointer-events-none">
             {isCalculating ? (
-              <LuLoader className="h-5 w-5 text-accent animate-spin" />
+              <LuLoader className="h-5 w-5 text-[#212E73] animate-spin" />
             ) : (
               <div className="w-16 h-8 relative">
-                <Image src={logo} alt="Trustive" fill priority />
+                <Image src="/assets/images/logo.svg" alt="Trustive" fill priority />
               </div>
             )}
           </div>
@@ -647,48 +646,48 @@ const BuyTokenForm: React.FC = () => {
           const connected = rbMounted && rbAccount && chain;
 
           let btnLabel = 'Buy Now';
-          let btnClass = 'bg-accent hover:bg-accent/90 text-black shadow-accent/10 cursor-pointer';
+          let btnClass = 'bg-[#212E73] hover:bg-[#16225B] text-white shadow-lg shadow-[#212E73]/25 cursor-pointer';
           let isDisabled = false;
 
           if (!connected) {
             btnLabel = 'Connect Wallet';
-            btnClass = 'bg-white/10 hover:bg-white/20 text-white border border-white/10 cursor-pointer';
+            btnClass = 'bg-[#212E73] hover:bg-[#16225B] text-white shadow-md shadow-[#212E73]/20 cursor-pointer';
             isDisabled = false;
           } else if (chain.unsupported) {
             btnLabel = 'Switch to Sepolia';
-            btnClass = 'bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 cursor-pointer';
+            btnClass = 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 cursor-pointer';
             isDisabled = false;
           } else if (saleLoaded && !isSaleActive) {
             btnLabel = sale?.computed_status === 'scheduled' ? 'Sale Coming Soon' : 'ICO Not Active';
-            btnClass = 'bg-zinc-800 text-zinc-500 border border-zinc-700 cursor-not-allowed';
+            btnClass = 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed';
             isDisabled = true;
           } else if (loading) {
             btnLabel = 'Processing...';
-            btnClass = 'bg-accent/60 text-black opacity-60 cursor-not-allowed';
+            btnClass = 'bg-[#212E73]/60 text-white opacity-75 cursor-not-allowed';
             isDisabled = true;
           } else if (!hasAmount) {
             btnLabel = 'Enter Amount';
-            btnClass = 'bg-zinc-800/80 text-zinc-500 border border-white/5 cursor-not-allowed';
+            btnClass = 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isCalculating) {
             btnLabel = 'Calculating Tokens...';
-            btnClass = 'bg-zinc-800/80 text-zinc-400 border border-white/5 cursor-not-allowed';
+            btnClass = 'bg-zinc-100 text-zinc-500 border border-zinc-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isInsufficientBalance) {
             btnLabel = `Insufficient ${method} Balance`;
-            btnClass = 'bg-red-500/10 text-red-400 border border-red-500/20 cursor-not-allowed';
+            btnClass = 'bg-red-50 text-red-600 border border-red-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isBelowMin) {
             btnLabel = `Minimum Buy is ${minLimit.toLocaleString('en-US')} Trustive`;
-            btnClass = 'bg-zinc-800/80 text-zinc-400 border border-amber-500/20 cursor-not-allowed';
+            btnClass = 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isAboveMax) {
             btnLabel = `Maximum Buy is ${maxLimit.toLocaleString('en-US')} Trustive`;
-            btnClass = 'bg-zinc-800/80 text-zinc-400 border border-amber-500/20 cursor-not-allowed';
+            btnClass = 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isInvalidTokenAmount) {
             btnLabel = 'Enter Valid Amount';
-            btnClass = 'bg-zinc-800/80 text-zinc-500 border border-white/5 cursor-not-allowed';
+            btnClass = 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed';
             isDisabled = true;
           }
 

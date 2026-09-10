@@ -175,20 +175,20 @@ export default function StakingManagement() {
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 bg-black min-h-screen p-4 sm:p-8 text-white">
+        <div className="space-y-8 animate-in fade-in duration-200">
             {/* Top Bar / Actions */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">Staking Plan & Transactions</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 uppercase">Staking Plan & Transactions</h2>
                     <p className="text-xs text-zinc-500 mt-1">Manage active on-chain staking pool and monitor user staking activity</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <button
                         onClick={handleSync}
                         disabled={syncing}
-                        className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl border border-white/5 transition-all flex items-center gap-2 text-xs font-semibold shadow-lg disabled:opacity-50 cursor-pointer"
+                        className="px-5 py-2.5 bg-white hover:bg-zinc-50 text-zinc-800 rounded-xl border border-zinc-200 transition-all flex items-center gap-2 text-xs font-semibold shadow-sm disabled:opacity-50 cursor-pointer"
                     >
-                        <RefreshCw className={cn("w-4 h-4 text-accent", syncing && "animate-spin")} />
+                        <RefreshCw className={cn("w-4 h-4 text-[#212E73]", syncing && "animate-spin")} />
                         <span>{syncing ? "Syncing..." : "Deep Chain Sync"}</span>
                     </button>
                 </div>
@@ -197,71 +197,71 @@ export default function StakingManagement() {
             {/* Staking Plan Detail Section */}
             <div className="space-y-4">
                 <div className="flex items-center gap-2 px-1">
-                    <Layers className="w-4 h-4 text-accent" />
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-300">Active Staking Plan</h3>
+                    <Layers className="w-4 h-4 text-[#212E73]" />
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-700">Active Staking Plan</h3>
                 </div>
 
                 {activePlan ? (
-                    <div className="rounded-3xl bg-[#0e0e0e] p-6 sm:p-8 border border-white/5 relative overflow-hidden transition-all hover:border-white/10 shadow-xl">
+                    <div className="rounded-3xl bg-white p-6 sm:p-8 border border-zinc-200/90 relative overflow-hidden transition-all shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 relative z-10 items-center text-center sm:text-left">
                             
                             {/* Plan Level & Duration */}
                             <div className="space-y-1.5 lg:pr-6">
-                                <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                                <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                                     {formatDuration(activePlan.duration_seconds)}
                                 </div>
-                                <div className="text-2xl font-bold text-white">
+                                <div className="text-2xl font-bold text-zinc-900">
                                     {(activePlan.name && activePlan.name !== 'Flexible' && !activePlan.name.startsWith('Level ')) ? activePlan.name : "GOLD"}
                                 </div>
-                                <div className="text-xs text-zinc-400 font-mono">
+                                <div className="text-xs text-zinc-500 font-mono">
                                     Min Stake: {formatDecimal(activePlan.min_stake && activePlan.min_stake !== '100' && activePlan.min_stake !== '0' ? activePlan.min_stake : "1000", 0)} Trustive
                                 </div>
                             </div>
                             
                             {/* APY */}
-                            <div className="space-y-1.5 sm:px-6 sm:border-l border-white/5">
-                                <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Annual Yield</div>
-                                <div className="text-2xl font-bold text-accent">
+                            <div className="space-y-1.5 sm:px-6 sm:border-l border-zinc-200">
+                                <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Annual Yield</div>
+                                <div className="text-2xl font-bold text-[#212E73]">
                                     {Number(activePlan.apy).toFixed(0)}% APY
                                 </div>
-                                <div className="text-xs text-emerald-400">Fixed Compound</div>
+                                <div className="text-xs text-emerald-600 font-semibold">Fixed Compound</div>
                             </div>
                             
                             {/* Status */}
-                            <div className="space-y-1.5 sm:px-6 sm:border-l border-white/5">
-                                <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Status</div>
+                            <div className="space-y-1.5 sm:px-6 sm:border-l border-zinc-200">
+                                <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Status</div>
                                 <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)] animate-pulse" />
-                                    <span className="text-lg font-bold text-emerald-400">Active</span>
+                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+                                    <span className="text-lg font-bold text-emerald-600">Active</span>
                                 </div>
-                                <div className="text-xs text-zinc-500">Open for staking</div>
+                                <div className="text-xs text-zinc-400">Open for staking</div>
                             </div>
                             
                             {/* Active Stakes */}
-                            <div className="space-y-1.5 sm:px-6 sm:border-l border-white/5">
-                                <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Active Stakes</div>
-                                <div className="text-2xl font-bold text-white">
+                            <div className="space-y-1.5 sm:px-6 sm:border-l border-zinc-200">
+                                <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Active Stakes</div>
+                                <div className="text-2xl font-bold text-zinc-900">
                                     {stats?.active_stakes || 0}
                                 </div>
-                                <div className="text-xs text-zinc-400">
+                                <div className="text-xs text-zinc-500 font-mono">
                                     {formatDecimal(stats?.total_staked || "0", 2, 2)} Trustive
                                 </div>
                             </div>
 
                             {/* Contract Address / Info */}
-                            <div className="space-y-1.5 lg:pl-6 lg:border-l border-white/5 flex flex-col justify-center">
-                                <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Contract Address</div>
+                            <div className="space-y-1.5 lg:pl-6 lg:border-l border-zinc-200 flex flex-col justify-center">
+                                <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Contract Address</div>
                                 <div className="flex items-center justify-center sm:justify-start gap-2">
-                                    <span className="text-xs text-zinc-300 font-mono">
+                                    <span className="text-xs text-zinc-700 font-mono font-medium">
                                         {shortenAddress(STAKING_CONTRACT_ADDRESS)}
                                     </span>
                                     <button
                                         onClick={() => handleCopy(STAKING_CONTRACT_ADDRESS)}
-                                        className="p-1 hover:text-white text-zinc-500 transition-colors cursor-pointer"
+                                        className="p-1 hover:text-[#212E73] text-zinc-400 transition-colors cursor-pointer"
                                         title="Copy Address"
                                     >
                                         {copiedAddress === STAKING_CONTRACT_ADDRESS ? (
-                                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                             <Check className="w-3.5 h-3.5 text-emerald-600" />
                                         ) : (
                                             <Copy className="w-3.5 h-3.5" />
                                         )}
@@ -270,19 +270,19 @@ export default function StakingManagement() {
                                         href={`https://sepolia.etherscan.io/address/${STAKING_CONTRACT_ADDRESS}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="p-1 hover:text-accent text-zinc-500 transition-colors"
+                                        className="p-1 hover:text-[#212E73] text-zinc-400 transition-colors"
                                         title="View on Etherscan"
                                     >
                                         <ExternalLink className="w-3.5 h-3.5" />
                                     </a>
                                 </div>
-                                <div className="text-[11px] text-zinc-500">Sepolia Testnet</div>
+                                <div className="text-[11px] text-zinc-400">Sepolia Testnet</div>
                             </div>
 
                         </div>
                     </div>
                 ) : (
-                    <div className="rounded-3xl bg-[#0e0e0e] p-8 border border-white/5 text-center text-zinc-500">
+                    <div className="rounded-3xl bg-white p-8 border border-zinc-200 text-center text-zinc-500 shadow-sm">
                         {plansLoading ? "Loading staking plan..." : "No active staking plan found on chain. Please click 'Deep Chain Sync'."}
                     </div>
                 )}
@@ -292,14 +292,14 @@ export default function StakingManagement() {
             <div className="space-y-4 pt-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-2 px-1">
-                        <Activity className="w-4 h-4 text-accent" />
-                        <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-300">User Staking Transactions</h3>
+                        <Activity className="w-4 h-4 text-[#212E73]" />
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-700">User Staking Transactions</h3>
                     </div>
 
                     {/* Search, Filter & CSV Export Controls */}
                     <div className="flex flex-wrap items-center gap-3">
                         {/* Status Filter Tabs */}
-                        <div className="flex items-center bg-zinc-900/80 p-1 rounded-xl border border-white/5">
+                        <div className="flex items-center bg-zinc-100 p-1 rounded-xl border border-zinc-200">
                             {[
                                 { label: "Active", value: "active" },
                                 { label: "Withdrawn", value: "completed" }
@@ -313,8 +313,8 @@ export default function StakingManagement() {
                                     className={cn(
                                         "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer",
                                         statusFilter === tab.value
-                                            ? "bg-accent text-black shadow-md"
-                                            : "text-zinc-400 hover:text-white"
+                                            ? "bg-[#212E73] text-white shadow-sm"
+                                            : "text-zinc-600 hover:text-zinc-900"
                                     )}
                                 >
                                     {tab.label}
@@ -324,7 +324,7 @@ export default function StakingManagement() {
 
                         {/* Search Input */}
                         <div className="relative">
-                            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                            <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                             <input
                                 type="text"
                                 placeholder="Search by address or tx..."
@@ -333,28 +333,28 @@ export default function StakingManagement() {
                                     setSearchTerm(e.target.value);
                                     setCurrentPage(1);
                                 }}
-                                className="bg-zinc-900 border border-white/5 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-accent/40 w-48 sm:w-64 transition-all"
+                                className="bg-white border border-zinc-200 rounded-xl pl-9 pr-4 py-2 text-xs text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] w-48 sm:w-64 transition-all shadow-sm"
                             />
                         </div>
 
                         {/* Export CSV Button */}
                         <button
                             onClick={handleExportCSV}
-                            className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white rounded-xl border border-white/5 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer"
+                            className="px-4 py-2 bg-white hover:bg-zinc-50 text-zinc-700 rounded-xl border border-zinc-200 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer shadow-sm"
                             title="Export CSV"
                         >
-                            <Download className="w-3.5 h-3.5 text-accent" />
+                            <Download className="w-3.5 h-3.5 text-[#212E73]" />
                             <span className="hidden sm:inline">Export CSV</span>
                         </button>
                     </div>
                 </div>
 
                 {/* Transactions Table Card */}
-                <div className="rounded-3xl bg-[#0e0e0e] border border-white/5 overflow-hidden shadow-2xl">
+                <div className="rounded-3xl bg-white border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse min-w-[55rem]">
                             <thead>
-                                <tr className="border-b border-white/5 text-[11px] font-bold text-zinc-500 uppercase tracking-wider bg-black/30">
+                                <tr className="bg-[#212E73] text-white text-[11px] font-bold uppercase tracking-wider">
                                     <th className="px-6 py-4">#</th>
                                     <th className="px-6 py-4">User</th>
                                     <th className="px-6 py-4 text-right">Staked Amount</th>
@@ -366,52 +366,50 @@ export default function StakingManagement() {
                                     <th className="px-6 py-4 text-center">Transaction Hash</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5 text-xs">
+                            <tbody className="divide-y divide-zinc-200 text-xs">
                                 {stakesLoading ? (
                                     <tr>
                                         <td colSpan={9} className="px-6 py-12 text-center text-zinc-500">
                                             <div className="flex items-center justify-center gap-2">
-                                                <RefreshCw className="w-4 h-4 animate-spin text-accent" />
+                                                <RefreshCw className="w-4 h-4 animate-spin text-[#212E73]" />
                                                 <span>Loading staking records...</span>
                                             </div>
                                         </td>
                                     </tr>
                                 ) : stakes.length === 0 ? (
                                     <tr>
-                                        <td colSpan={9} className="px-6 py-12 text-center text-zinc-500">
+                                        <td colSpan={9} className="px-6 py-12 text-center text-zinc-500 italic">
                                             No staking transactions found.
                                         </td>
                                     </tr>
                                 ) : (
                                     stakes.map((tx, idx) => {
-                                        // 'completed' means the lock expired but the tokens are
-                                        // still staked - only 'unstaked' has left the contract
                                         const isClaimable = tx.status === "completed";
                                         const isActive = tx.status === "active";
                                         const rowNumber = (currentPage - 1) * itemsPerPage + idx + 1;
 
                                         return (
-                                            <tr key={tx.id || idx} className="hover:bg-white/[0.02] transition-colors">
+                                            <tr key={tx.id || idx} className="hover:bg-zinc-50/70 transition-colors">
                                                 {/* Index */}
-                                                <td className="px-6 py-4 text-zinc-500 font-mono">
+                                                <td className="px-6 py-4 text-zinc-400 font-mono">
                                                     {rowNumber}
                                                 </td>
 
                                                 {/* User */}
                                                 <td className="px-6 py-4">
                                                     <div className="flex flex-col">
-                                                        <div className="font-semibold text-white">
+                                                        <div className="font-semibold text-zinc-900">
                                                             {tx.username || shortenAddress(tx.user_address)}
                                                         </div>
-                                                        <div className="flex items-center gap-1.5 text-zinc-500 text-[11px] font-mono">
+                                                        <div className="flex items-center gap-1.5 text-zinc-400 text-[11px] font-mono">
                                                             <span>{shortenAddress(tx.user_address)}</span>
                                                             <button
                                                                 onClick={() => handleCopy(tx.user_address)}
-                                                                className="hover:text-white transition-colors cursor-pointer"
+                                                                className="hover:text-zinc-700 transition-colors cursor-pointer"
                                                                 title="Copy Wallet"
                                                             >
                                                                 {copiedAddress === tx.user_address ? (
-                                                                    <Check className="w-3 h-3 text-emerald-400" />
+                                                                    <Check className="w-3 h-3 text-emerald-600" />
                                                                 ) : (
                                                                     <Copy className="w-3 h-3" />
                                                                 )}
@@ -422,53 +420,53 @@ export default function StakingManagement() {
 
                                                 {/* Staked Amount */}
                                                 <td className="px-6 py-4 text-right">
-                                                    <div className="font-bold text-accent">
+                                                    <div className="font-bold text-[#212E73]">
                                                         {formatDecimal(tx.amount, 2, 2)} Trustive
                                                     </div>
                                                 </td>
 
                                                 {/* Plan / APY */}
                                                 <td className="px-6 py-4 text-center">
-                                                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-900 border border-white/5 text-zinc-300 font-medium text-[11px]">
+                                                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-700 font-medium text-[11px]">
                                                         <span>{tx.plan_name || `Level ${tx.plan_id || 1}`}</span>
-                                                        <span className="text-accent font-bold">({tx.apy || activePlan?.apy || 8}%)</span>
+                                                        <span className="text-[#212E73] font-bold">({tx.apy || activePlan?.apy || 8}%)</span>
                                                     </div>
                                                 </td>
 
                                                 {/* Staked Date */}
-                                                <td className="px-6 py-4 text-center text-zinc-400 whitespace-nowrap text-[11px]">
+                                                <td className="px-6 py-4 text-center text-zinc-500 whitespace-nowrap text-[11px]">
                                                     {tx.start_at || tx.created_at ? formatDate(tx.start_at || tx.created_at) : "—"}
                                                 </td>
 
                                                 {/* Unlock Date */}
-                                                <td className="px-6 py-4 text-center text-zinc-400 whitespace-nowrap text-[11px]">
+                                                <td className="px-6 py-4 text-center text-zinc-500 whitespace-nowrap text-[11px]">
                                                     {tx.end_at ? formatDate(tx.end_at) : "—"}
                                                 </td>
 
                                                 {/* Reward Claimed */}
                                                 <td className="px-6 py-4 text-right font-medium">
                                                     {tx.reward_claimed && parseFloat(tx.reward_claimed) > 0 ? (
-                                                        <span className="text-emerald-400">+{formatDecimal(tx.reward_claimed, 4, 2)} Trustive</span>
+                                                        <span className="text-emerald-600 font-semibold">+{formatDecimal(tx.reward_claimed, 4, 2)} Trustive</span>
                                                     ) : (
-                                                        <span className="text-zinc-600">0.00 Trustive</span>
+                                                        <span className="text-zinc-400">0.00 Trustive</span>
                                                     )}
                                                 </td>
 
                                                 {/* Status */}
                                                 <td className="px-6 py-4 text-center">
                                                     {isActive ? (
-                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold text-[11px]">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-700 font-semibold text-[11px]">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                                                             Active
                                                         </span>
                                                     ) : isClaimable ? (
-                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent font-semibold text-[11px]">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 border border-amber-200 text-amber-800 font-semibold text-[11px]">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                                                             Claimable
                                                         </span>
                                                     ) : (
-                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-800/60 border border-zinc-700/40 text-zinc-400 font-semibold text-[11px]">
-                                                            <CheckCircle2 className="w-3 h-3 text-zinc-400" />
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-600 font-semibold text-[11px]">
+                                                            <CheckCircle2 className="w-3 h-3 text-zinc-500" />
                                                             Withdrawn
                                                         </span>
                                                     )}
@@ -488,45 +486,45 @@ export default function StakingManagement() {
 
                     {/* Pagination Controls */}
                     {totalPages > 1 && (
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-white/5 bg-black/20 text-xs text-zinc-400">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-zinc-200 bg-zinc-50/50 text-xs text-zinc-500">
                             <div>
-                                Page {currentPage} of {totalPages}
+                                Page <span className="font-semibold text-zinc-900">{currentPage}</span> of <span className="font-semibold text-zinc-900">{totalPages}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => setCurrentPage(1)}
                                     disabled={currentPage === 1}
-                                    className="p-2 rounded-lg bg-zinc-900 border border-white/5 hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-zinc-900 transition-colors cursor-pointer"
+                                    className="p-2 rounded-lg bg-white border border-zinc-200 hover:bg-zinc-50 disabled:opacity-40 transition-colors cursor-pointer shadow-sm"
                                     title="First Page"
                                 >
-                                    <ChevronsLeft className="w-4 h-4" />
+                                    <ChevronsLeft className="w-4 h-4 text-zinc-600" />
                                 </button>
                                 <button
                                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                     disabled={currentPage === 1}
-                                    className="p-2 rounded-lg bg-zinc-900 border border-white/5 hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-zinc-900 transition-colors cursor-pointer"
+                                    className="p-2 rounded-lg bg-white border border-zinc-200 hover:bg-zinc-50 disabled:opacity-40 transition-colors cursor-pointer shadow-sm"
                                     title="Previous Page"
                                 >
-                                    <ChevronLeft className="w-4 h-4" />
+                                    <ChevronLeft className="w-4 h-4 text-zinc-600" />
                                 </button>
-                                <span className="px-3 py-1 bg-zinc-900 rounded-lg border border-white/5 font-semibold text-white">
+                                <span className="px-3 py-1 bg-[#212E73] rounded-lg font-semibold text-white shadow-sm">
                                     {currentPage}
                                 </span>
                                 <button
                                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                     disabled={currentPage === totalPages}
-                                    className="p-2 rounded-lg bg-zinc-900 border border-white/5 hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-zinc-900 transition-colors cursor-pointer"
+                                    className="p-2 rounded-lg bg-white border border-zinc-200 hover:bg-zinc-50 disabled:opacity-40 transition-colors cursor-pointer shadow-sm"
                                     title="Next Page"
                                 >
-                                    <ChevronRight className="w-4 h-4" />
+                                    <ChevronRight className="w-4 h-4 text-zinc-600" />
                                 </button>
                                 <button
                                     onClick={() => setCurrentPage(totalPages)}
                                     disabled={currentPage === totalPages}
-                                    className="p-2 rounded-lg bg-zinc-900 border border-white/5 hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-zinc-900 transition-colors cursor-pointer"
+                                    className="p-2 rounded-lg bg-white border border-zinc-200 hover:bg-zinc-50 disabled:opacity-40 transition-colors cursor-pointer shadow-sm"
                                     title="Last Page"
                                 >
-                                    <ChevronsRight className="w-4 h-4" />
+                                    <ChevronsRight className="w-4 h-4 text-zinc-600" />
                                 </button>
                             </div>
                         </div>

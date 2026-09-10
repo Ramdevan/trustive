@@ -4,7 +4,7 @@
  */
 module.exports = async function (request, reply) {
   const { mysql } = request.server;
-  const apiKey = request.headers["trustive-key"] || request.headers["trustive_key"] || request.headers["ppm-key"] || request.headers["ppm_key"];
+  const apiKey = request.headers["trustive-key"] || request.headers["trustive_key"]
 
   if (!apiKey) {
     return reply.code(401).send({

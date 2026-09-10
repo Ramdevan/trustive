@@ -14,7 +14,7 @@ const menuItems = [
   { name: 'Vesting Claim', icon: LuRocket, path: '/vesting' },
 ];
 
-const TRUSTIVE_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || process.env.NEXT_PUBLIC_PPM_TOKEN_ADDRESS || '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D') as `0x${string}`;
+const TRUSTIVE_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA') as `0x${string}`;
 
 const sanitizeTokenSymbol = (symbol?: string): string => {
   if (!symbol) return 'Trustive';
@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const balanceDisplay = loading && balance === '— Trustive' ? 'Loading...' : balance;
 
   return (
-    <aside className={`fixed left-0 top-[5rem] z-40 h-[calc(100vh-5rem)] w-70 bg-sidebar p-4 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+    <aside className={`fixed left-0 top-[5rem] z-40 h-[calc(100vh-5rem)] w-70 bg-white/95 border-r border-zinc-200/80 p-4 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 backdrop-blur-md ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="space-y-2">
         {menuItems.map((item) => {
           const isActive = router.pathname === item.path;
@@ -85,9 +85,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               key={item.name}
               href={item.path}
               onClick={onClose}
-              className={`cursor-pointer flex items-center gap-3 rounded-xl px-4 py-3 text-[1.25rem] font-medium transition-all ${isActive
-                ? 'bg-accent text-black shadow-lg shadow-accent/10'
-                : 'text-[#FAF7F2] hover:bg-white/5 hover:text-white'}`}
+              className={`cursor-pointer flex items-center gap-3 rounded-xl px-4 py-3 text-[1.125rem] font-medium transition-all ${isActive
+                ? 'bg-[#212E73] text-white shadow-md shadow-[#212E73]/20'
+                : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}`}
             >
               <item.icon className="h-5 w-5" />
               {item.name}
@@ -96,9 +96,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         })}
       </div>
 
-      <div className="rounded-xl bg-black/40 p-4">
-        <div className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1">Trustive Balance</div>
-        <div className="text-lg font-bold text-white">{balanceDisplay}</div>
+      <div className="rounded-xl bg-zinc-50/90 border border-zinc-200/80 p-4">
+        <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">Trustive Balance</div>
+        <div className="text-lg font-bold text-zinc-900">{balanceDisplay}</div>
       </div>
     </aside>
   );

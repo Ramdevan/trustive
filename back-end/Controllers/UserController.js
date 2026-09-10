@@ -105,7 +105,7 @@ module.exports = async function (fastify, opts) {
   // ========================================
   // User Login
   // ========================================
-    fastify.post('/login', async (request, reply) => {
+  fastify.post('/login', async (request, reply) => {
     try {
       const { email, password, twoFaCode } = request.body;
 
@@ -128,7 +128,7 @@ module.exports = async function (fastify, opts) {
           : false;
 
         if (adminPasswordOk) {
-          
+
           if (settings.admin_two_fa_enabled) {
             if (!twoFaCode) {
               return reply.send({ status: true, require2FA: true, msg: '2FA code required' });
@@ -396,7 +396,7 @@ module.exports = async function (fastify, opts) {
       const { token } = request.query;
       const [rows] = await fastify.mysql.query('SELECT * FROM users WHERE verification_token = ?', [token]);
       if (!rows || rows.length === 0) {
-        const errorUrl = `${process.env.FRONTEND_URL || 'http://ppm.meme'}/login?verified=error`;
+        const errorUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login?verified=error`;
         return reply.redirect(errorUrl);
       }
       const user = rows[0];
@@ -406,12 +406,12 @@ module.exports = async function (fastify, opts) {
       );
 
       // Redirect to frontend login page
-      const loginUrl = `${process.env.FRONTEND_URL || 'http://ppm.meme'}/login?verified=true`;
+      const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login?verified=true`;
       return reply.redirect(loginUrl);
 
     } catch (err) {
       console.error('Verification error:', err);
-      const errorUrl = `${process.env.FRONTEND_URL || 'http://ppm.meme'}/login?verified=error`;
+      const errorUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/login?verified=error`;
       return reply.redirect(errorUrl);
     }
   });
@@ -689,7 +689,7 @@ module.exports = async function (fastify, opts) {
       }
 
       await fastify.mysql.query('UPDATE users SET name = ? WHERE id = ?', [name.trim(), decoded.id]);
-      
+
       return reply.send({ status: true, msg: 'Name updated successfully', name: name.trim() });
     } catch (err) {
       console.error('Update name error:', err);
@@ -795,7 +795,7 @@ module.exports = async function (fastify, opts) {
       const amountWei = ethers.parseUnits(amount.toString(), decimals);
       const nonce = Math.floor(Date.now() / 1000);
 
-      const ICO_ADDRESS = process.env.ICO_CONTRACT_ADDRESS || '0x8Ab0caB366B23Dcb88ceA447312CCb103B138cFa';
+      const ICO_ADDRESS = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
 
       // Validation: Enforce dynamic Trustive purchase limits from active sale
       try {
@@ -829,9 +829,9 @@ module.exports = async function (fastify, opts) {
         console.warn('Backend limit-check warning:', err.message);
       }
 
-      // EIP712 domain matching the contract constructor: EIP712("PPMICO", "1")
+      // EIP712 domain matching the contract constructor: EIP712("TRUSTIVEICO", "1")
       const domain = {
-        name: 'PPMICO',
+        name: 'TRUSTIVEICO',
         version: '1',
         chainId: 11155111,
         verifyingContract: ICO_ADDRESS,
@@ -871,12 +871,12 @@ module.exports = async function (fastify, opts) {
     schema: {
       body: {
         type: "object",
-        required: ['address', 'CryptoValue', 'payment_type', 'PPM_tokens', 'transHash', 'USDvalue_of_crypto_purchased'],
+        required: ['address', 'CryptoValue', 'payment_type', 'transHash', 'USDvalue_of_crypto_purchased'],
         properties: {
           address: { type: "string" },
           CryptoValue: { type: "string" },
           payment_type: { type: "string" },
-          PPM_tokens: { type: "string" },
+          trustive_tokens: { type: "string" },
           transHash: { type: "string", minLength: 64 },
           USDvalue_of_crypto_purchased: { type: "string" },
           sale_type: { type: "string" },
@@ -892,12 +892,14 @@ module.exports = async function (fastify, opts) {
         address,
         CryptoValue,
         payment_type,
-        PPM_tokens,
+        trustive_tokens,
         USDvalue_of_crypto_purchased,
         transHash,
         sale_type = '',
         status = 'success'
       } = req.body;
+
+      const tokenAmount = trustive_tokens || '0';
 
       // Check if transaction hash already exists
       const [existingTransaction] = await fastify.mysql.query(
@@ -907,7 +909,7 @@ module.exports = async function (fastify, opts) {
       if (existingTransaction && existingTransaction.length > 0) {
         return reply.code(200).send({
           status: true,
-          msg: `${PPM_tokens} Trustive tokens purchased successfully!!! (Already recorded)`,
+          msg: `${tokenAmount} Trustive tokens purchased successfully!!! (Already recorded)`,
         });
       }
 
@@ -959,13 +961,13 @@ module.exports = async function (fastify, opts) {
         `INSERT INTO ico_purchases
         (address, crypto_value, payment_type, ptc_tokens, trans_hash, usd_value_of_crypto, sale_type, status)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [address, CryptoValue, payment_type, PPM_tokens, transHash, finalUsdValue, resolvedSaleType || '', status]
+        [address, CryptoValue, payment_type, tokenAmount, transHash, finalUsdValue, resolvedSaleType || '', status]
       );
 
 
       return reply.code(200).send({
         status: true,
-        msg: `${PPM_tokens} Trustive tokens purchased successfully!!!`,
+        msg: `${tokenAmount} Trustive tokens purchased successfully!!!`,
       });
     } catch (err) {
       console.error('Error in /createPurchase:', err);
@@ -1332,7 +1334,7 @@ module.exports = async function (fastify, opts) {
       }
 
       const newTotal = parseFloat(plan.total_staked || '0') + parseFloat(amount);
-      await fastify.mysql.query("UPDATE staking_plans SET total_staked = ? WHERE id = ?", [newTotal.toString(), plan.id || 1]).catch(() => {});
+      await fastify.mysql.query("UPDATE staking_plans SET total_staked = ? WHERE id = ?", [newTotal.toString(), plan.id || 1]).catch(() => { });
       return reply.send({ status: true, msg: "Stake recorded successfully" });
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') return reply.send({ status: true, msg: "Stake already recorded" });

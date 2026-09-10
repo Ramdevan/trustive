@@ -5,9 +5,9 @@ import backedCryptoImage from '@/assets/images/backed-crypto-image.png';
 
 const PromoCard: React.FC = () => {
   return (
-    <div className="rounded-2xl bg-card p-8 border border-white/5 flex flex-col justify-between overflow-hidden relative group flex-1">
+    <div className="rounded-2xl bg-white p-8 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between overflow-hidden relative group flex-1">
       <div className="space-y-4 relative z-10">
-        <h3 className="text-[2.25rem] font-normal leading-tight text-white">
+        <h3 className="text-[2.25rem] font-bold leading-tight text-zinc-900">
           Secure your position <br />
           in asset backed <br />
           crypto
@@ -21,10 +21,10 @@ const PromoCard: React.FC = () => {
           className="object-contain w-full h-full"
           priority
         />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-accent/10 blur-3xl rounded-full -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#212E73]/5 blur-3xl rounded-full -z-10" />
       </div>
 
-      <Link href="/ico" className="cursor-pointer w-full rounded-xl bg-accent py-4 text-sm font-bold text-black transition-all hover:bg-accent/90 relative z-10 shadow-lg shadow-accent/20 text-center block">
+      <Link href="/ico" className="cursor-pointer w-full rounded-xl bg-[#212E73] py-4 text-sm font-bold text-white transition-all hover:bg-[#16225B] relative z-10 shadow-lg shadow-[#212E73]/20 text-center block">
         Go to ICO
       </Link>
     </div>

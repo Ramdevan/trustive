@@ -110,8 +110,8 @@ module.exports = async function (fastify, opts) {
         try {
             const [settingsRows] = await fastify.mysql.query("SELECT contract_address, ico_contract, ico_remaining_tokens FROM settings LIMIT 1");
             const currentSettings = settingsRows[0] || {};
-            const tokenAddr = currentSettings.contract_address || process.env.TOKEN_ADDRESS || '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D';
-            const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x8Ab0caB366B23Dcb88ceA447312CCb103B138cFa';
+            const tokenAddr = currentSettings.contract_address || process.env.TRUSTIVE_TOKEN_ADDRESS || process.env.TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
+            const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
 
             if (tokenAddr && icoAddr) {
                 const RPC_URLS = [
@@ -570,12 +570,7 @@ module.exports = async function (fastify, opts) {
                 try {
                     signer = ethers.verifyMessage(`Trustive admin password reset:${timestamp}`, signature);
                 } catch {
-                    signer = ethers.verifyMessage(`PPM admin password reset:${timestamp}`, signature);
-                }
-                if (signer.toLowerCase() !== settings.owner_address.toLowerCase()) {
-                    try {
-                        signer = ethers.verifyMessage(`PPM admin password reset:${timestamp}`, signature);
-                    } catch {}
+                    signer = ethers.verifyMessage(`Trustive password reset:${timestamp}`, signature);
                 }
             } catch (e) {
                 return reply.send({ status: false, msg: 'Invalid signature' });
@@ -604,7 +599,7 @@ module.exports = async function (fastify, opts) {
         try {
             const provider = await getWorkingProvider();
             const [settingsRows] = await mysql.query("SELECT ico_contract FROM settings LIMIT 1");
-            const icoAddr = settingsRows[0]?.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x8Ab0caB366B23Dcb88ceA447312CCb103B138cFa';
+            const icoAddr = settingsRows[0]?.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
             const icoContract = new ethers.Contract(icoAddr, ICO_ABI, provider);
 
             const currentBlock = await provider.getBlockNumber();
@@ -774,8 +769,8 @@ module.exports = async function (fastify, opts) {
             try {
                 const [settingsRows] = await fastify.mysql.query("SELECT * FROM settings LIMIT 1");
                 currentSettings = settingsRows[0] || {};
-                const tokenAddr = currentSettings.contract_address || process.env.TOKEN_ADDRESS || '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D';
-                const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x8Ab0caB366B23Dcb88ceA447312CCb103B138cFa';
+                const tokenAddr = currentSettings.contract_address || process.env.TRUSTIVE_TOKEN_ADDRESS || process.env.TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
+                const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
 
                 if (tokenAddr && icoAddr) {
                     const RPC_URLS = [
@@ -869,7 +864,7 @@ module.exports = async function (fastify, opts) {
             `);
 
             // Attach on-chain balances (subset/limited if needed, but doing all for now)
-            const trustiveTokenAddress = process.env.TRUSTIVE_TOKEN_ADDRESS || process.env.PPM_TOKEN_ADDRESS || '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D';
+            const trustiveTokenAddress = process.env.TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
             let provider = null;
             try { provider = await getWorkingProvider(); } catch (e) { }
 
@@ -950,7 +945,7 @@ module.exports = async function (fastify, opts) {
 
                 let onChainBalance = '0';
                 try {
-                    const trustiveTokenAddress = process.env.TRUSTIVE_TOKEN_ADDRESS || process.env.PPM_TOKEN_ADDRESS || '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D';
+                    const trustiveTokenAddress = process.env.TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
                     const provider = await getWorkingProvider();
                     const contract = new ethers.Contract(trustiveTokenAddress, ['function balanceOf(address) view returns (uint256)'], provider);
                     const val = await contract.balanceOf(address);
@@ -1041,7 +1036,7 @@ module.exports = async function (fastify, opts) {
             // On-chain Trustive Balance
             let onChainBalance = '0';
             try {
-                const trustiveTokenAddress = process.env.TRUSTIVE_TOKEN_ADDRESS || process.env.PPM_TOKEN_ADDRESS || '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D';
+                const trustiveTokenAddress = process.env.TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
                 const provider = await getWorkingProvider();
                 const contract = new ethers.Contract(trustiveTokenAddress, ['function balanceOf(address) view returns (uint256)'], provider);
                 const val = await contract.balanceOf(address);

@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0A0908;
-  --foreground: #ffffff;
-  --sidebar-bg: #141312;
-  --card-bg: #141312;
+  --background: #EBE9EB;
+  --foreground: #181B22;
+  --sidebar-bg: #FFFFFF;
+  --card-bg: #FFFFFF;
   --accent: #E5B258;
-  --accent-foreground: #141312;
-  --muted: #A1A1AA;
+  --accent-foreground: #181B22;
+  --muted: #6B7280;
+  --brand-navy: #212E73;
 }
 
 @theme inline {
@@ -18,14 +19,18 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
+  --color-navy: var(--brand-navy);
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image: radial-gradient(120% 120% at 85% 10%, #F5F4F6 0%, #EBE9EB 45%, #DFDDE2 100%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans);
+  min-height: 100vh;
 }
 
 
@@ -62,21 +67,21 @@ input[type=number] {
   appearance: textfield;
 }
 
-/* Prevent browser autofill from turning inputs white/light blue */
+/* Prevent browser autofill from turning inputs dark or unreadable */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active {
   -webkit-background-clip: text;
-  -webkit-text-fill-color: #FAF7F2 !important;
-  box-shadow: 0 0 0 1000px #0A0908 inset !important;
-  -webkit-box-shadow: 0 0 0 1000px #0A0908 inset !important;
+  -webkit-text-fill-color: #181B22 !important;
+  box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
   transition: background-color 5000s ease-in-out 0s;
-  caret-color: #FAF7F2;
+  caret-color: #181B22;
 }
 
 input:-moz-autofill,
 input:-moz-autofill-preview {
-  background-color: #0A0908 !important;
-  color: #FAF7F2 !important;
+  background-color: #FFFFFF !important;
+  color: #181B22 !important;
 }

@@ -68,7 +68,7 @@ echo ""
 echo "--- 9. Create Purchase ---"
 curl -s -X POST "$BASE/api/user/createPurchase" \
   -H "Content-Type: application/json" \
-  -d "{\"address\":\"$WALLET\",\"CryptoValue\":\"0.01\",\"payment_type\":\"ETH\",\"PPM_tokens\":\"222.22\",\"transHash\":\"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab\",\"USDvalue_of_crypto_purchased\":\"0\",\"status\":\"success\"}"
+  -d "{\"address\":\"$WALLET\",\"CryptoValue\":\"0.01\",\"payment_type\":\"ETH\",\"trustive_tokens\":\"222.22\",\"transHash\":\"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab\",\"USDvalue_of_crypto_purchased\":\"0\",\"status\":\"success\"}"
 
 # ----- User Data -----
 

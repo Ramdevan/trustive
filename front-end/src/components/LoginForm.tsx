@@ -119,7 +119,7 @@ const LoginForm: React.FC = () => {
         </div>
 
         {/* Form Section */}
-        <div className="flex flex-col justify-center p-8 md:p-16 space-y-6 bg-[#141312] rounded-[1.25rem]">
+        <div className="flex flex-col justify-center p-8 md:p-16 space-y-6 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-zinc-200/80 rounded-[1.25rem]">
           <div className="space-y-4 text-center">
             {/* Mobile Logo */}
             <div className="flex justify-center md:hidden mb-4">
@@ -131,15 +131,15 @@ const LoginForm: React.FC = () => {
                 className="object-contain"
               />
             </div>
-            <h1 className="text-[1.5rem] md:text-[2rem] font-normal text-[#FAF7F2]">Happy to see you again!</h1>
-            <p className="text-[0.875rem] font-normal text-[#FAF7F2]">Sign in to continue your journey</p>
+            <h1 className="text-[1.5rem] md:text-[2rem] font-bold text-zinc-900">Happy to see you again!</h1>
+            <p className="text-[0.875rem] font-medium text-zinc-500">Sign in to continue your journey</p>
             {success && (
-              <div className="bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-center">
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-center">
                 {success}
               </div>
             )}
             {error && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-center animate-pulse">
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-center animate-pulse">
                 {error}
               </div>
             )}
@@ -150,37 +150,37 @@ const LoginForm: React.FC = () => {
               <>
                 {/* Email */}
                 <div className="space-y-2">
-                  <label className="block text-[1rem] font-normal text-[#FAF7F2] ml-1">Email</label>
+                  <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Email</label>
                   <div className="relative group">
-                    <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-[#FAF7F2] group-focus-within:text-accent transition-colors" />
+                    <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
                     <input
                       type="email"
                       required
                       placeholder="Enter your email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#0A0908] border border-white/5 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-[#FAF7F2] focus:outline-none focus:border-accent/40 transition-all placeholder:text-zinc-700"
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium"
                     />
                   </div>
                 </div>
 
                 {/* Password */}
                 <div className="space-y-2">
-                  <label className="block text-[1rem] font-normal text-[#FAF7F2] ml-1">Password</label>
+                  <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Password</label>
                   <div className="relative group">
-                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-[#FAF7F2] group-focus-within:text-accent transition-colors" />
+                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-[#0A0908] border border-white/5 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-[#FAF7F2] focus:outline-none focus:border-accent/40 transition-all placeholder:text-zinc-700"
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(prev => !prev)}
-                      className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors p-1 focus:outline-none cursor-pointer"
+                      className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 transition-colors p-1 focus:outline-none cursor-pointer"
                       title={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
@@ -191,7 +191,7 @@ const LoginForm: React.FC = () => {
                     </button>
                   </div>
                   <div className="flex justify-end pr-1">
-                    <Link href="/forgot-password" className="text-[0.875rem] md:text-[1rem] font-normal text-[#FAF7F2] hover:text-accent transition-colors underline-offset-4 decoration-white/20 hover:decoration-accent cursor-pointer">
+                    <Link href="/forgot-password" className="text-[0.875rem] md:text-[1rem] font-medium text-[#212E73] hover:underline transition-colors cursor-pointer">
                       Forget Password?
                     </Link>
                   </div>
@@ -199,16 +199,16 @@ const LoginForm: React.FC = () => {
 
                 <label className="flex items-center gap-3 ml-1 mt-6 md:mt-10 cursor-pointer group/check w-fit">
                   <div className="relative flex items-center">
-                    <input type="checkbox" className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-[#FAF7F2] rounded-md checked:bg-accent checked:border-accent transition-all cursor-pointer" />
-                    <LuCheck className="absolute left-0.5 md:left-1 top-0.5 md:top-1 h-3.5 w-3.5 md:h-4 md:w-4 text-black opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[3]" />
+                    <input type="checkbox" className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-zinc-300 rounded-md checked:bg-[#212E73] checked:border-[#212E73] transition-all cursor-pointer" />
+                    <LuCheck className="absolute left-0.5 md:left-1 top-0.5 md:top-1 h-3.5 w-3.5 md:h-4 md:w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[3]" />
                   </div>
-                  <span className="text-[0.875rem] md:text-[1rem] font-normal text-[#FAF7F2] select-none group-hover/check:text-accent transition-colors">Remember Password</span>
+                  <span className="text-[0.875rem] md:text-[1rem] font-medium text-zinc-600 select-none group-hover/check:text-zinc-900 transition-colors">Remember Password</span>
                 </label>
               </>
             ) : (
               <div className="space-y-6 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="space-y-4">
-                  <label className="block text-center text-[1.25rem] font-bold text-accent uppercase tracking-[4px]">Verification Code</label>
+                  <label className="block text-center text-[1.25rem] font-bold text-[#212E73] uppercase tracking-[4px]">Verification Code</label>
                   <p className="text-center text-zinc-500 text-sm font-medium uppercase tracking-widest">Enter the 6-digit code from your app</p>
                   <input
                     type="text"
@@ -218,13 +218,13 @@ const LoginForm: React.FC = () => {
                     placeholder="000000"
                     value={twoFaCode}
                     onChange={(e) => setTwoFaCode(e.target.value.replace(/\D/g, ""))}
-                    className="w-full bg-[#0A0908] border-2 border-accent/20 rounded-[1.25rem] py-6 text-white text-center text-3xl font-black tracking-[1.5rem] focus:outline-none focus:border-accent transition-all placeholder:text-zinc-800"
+                    className="w-full bg-zinc-50 border-2 border-zinc-300 rounded-[1.25rem] py-6 text-zinc-900 text-center text-3xl font-black tracking-[1.5rem] focus:outline-none focus:border-[#212E73] transition-all placeholder:text-zinc-300"
                   />
                 </div>
                 <button 
                     type="button" 
                     onClick={() => setRequire2FA(false)}
-                    className="w-full text-zinc-500 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest"
+                    className="w-full text-zinc-500 hover:text-zinc-900 transition-colors text-xs font-bold uppercase tracking-widest"
                 >
                     Back to Login
                 </button>
@@ -234,14 +234,14 @@ const LoginForm: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-accent hover:bg-accent/90 text-black font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-accent/5 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50"
+              className="w-full bg-[#212E73] hover:bg-[#16225B] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#212E73]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50"
             >
               {loading ? "Authenticating..." : "Login"}
             </button>
           </form>
 
-          <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-[#FAF7F2]">
-            Don't have an account? <Link href="/register" className="text-[#E5A93E] font-normal hover:underline underline-offset-6 decoration-[#E5A93E]">Sign up</Link>
+          <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-zinc-600">
+            Don't have an account? <Link href="/register" className="text-[#212E73] font-bold hover:underline">Sign up</Link>
           </p>
         </div>
       </div>

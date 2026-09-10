@@ -80,26 +80,26 @@ const DashboardChart: React.FC = () => {
   const ticks = [0, tickMax / 4, tickMax / 2, (3 * tickMax) / 4, tickMax].map(Math.round);
 
   return (
-    <div className="rounded-3xl bg-card p-8 border border-white/5 flex flex-col gap-10 flex-[1.5] min-h-[500px]">
+    <div className="rounded-3xl bg-white p-8 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col gap-10 flex-[1.5] min-h-[500px]">
       <div className="flex items-center justify-between">
-        <h3 className="text-[2.5rem] font-medium text-white tracking-tight">Tokens Purchased</h3>
+        <h3 className="text-[2.25rem] md:text-[2.5rem] font-bold text-zinc-900 tracking-tight">Tokens Purchased</h3>
 
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setIsYearMenuOpen(!isYearMenuOpen)}
-            className="flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-[0.875rem] text-zinc-400 border border-white/5 hover:bg-white/10 transition-all cursor-pointer min-w-[120px] justify-between"
+            className="flex items-center gap-2 rounded-xl bg-zinc-100 px-4 py-2 text-[0.875rem] text-zinc-700 border border-zinc-200 hover:bg-zinc-200 transition-all cursor-pointer min-w-[120px] justify-between"
           >
             Year: {selectedYear}
             <LuChevronDown className={`h-4 w-4 transition-transform ${isYearMenuOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {isYearMenuOpen && (
-            <div className="absolute top-full right-0 mt-2 w-full bg-[#1A1918] border border-white/10 rounded-xl overflow-hidden z-50 shadow-2xl">
+            <div className="absolute top-full right-0 mt-2 w-full bg-white border border-zinc-200 rounded-xl overflow-hidden z-50 shadow-xl">
               {allYears.map(year => (
                 <button
                   key={year}
                   onClick={() => handleYearChange(year)}
-                  className={`w-full text-left px-4 py-2.5 text-[0.875rem] transition-colors hover:bg-accent/10 ${selectedYear === year ? 'text-accent bg-accent/5' : 'text-zinc-400'}`}
+                  className={`w-full text-left px-4 py-2.5 text-[0.875rem] transition-colors hover:bg-zinc-100 ${selectedYear === year ? 'text-[#212E73] font-bold bg-blue-50/50' : 'text-zinc-700'}`}
                 >
                   {year}
                 </button>
@@ -116,7 +116,7 @@ const DashboardChart: React.FC = () => {
             margin={{ top: 10, right: 10, left: -10, bottom: 20 }}
             barSize={40}
           >
-            <CartesianGrid vertical={false} stroke="#ffffff08" strokeDasharray="0" />
+            <CartesianGrid vertical={false} stroke="#E2E8F0" strokeDasharray="0" />
             <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 13, fontWeight: 500 }} dy={15} />
             <YAxis
               axisLine={false}
@@ -127,9 +127,9 @@ const DashboardChart: React.FC = () => {
               ticks={ticks}
             />
             <Tooltip
-              cursor={{ fill: 'rgba(255,255,255,0.03)' }}
-              contentStyle={{ backgroundColor: '#141312', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '12px 16px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
-              itemStyle={{ color: '#E5B258', fontWeight: 'bold' }}
+              cursor={{ fill: 'rgba(33,46,115,0.04)' }}
+              contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '12px 16px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}
+              itemStyle={{ color: '#212E73', fontWeight: 'bold' }}
               labelStyle={{ color: '#64748B', marginBottom: '4px' }}
               formatter={(v) => [
                 `${Number(v ?? 0).toLocaleString()} Trustive`,
@@ -140,7 +140,7 @@ const DashboardChart: React.FC = () => {
               {chartData.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={chartData[index].value > 0 && index === chartData.reduce((best, d, i) => d.value > chartData[best].value ? i : best, 0) ? '#E5B258' : chartData[index].value > 0 ? '#FAF7F2' : '#1a1a1a'}
+                  fill={chartData[index].value > 0 && index === chartData.reduce((best, d, i) => d.value > chartData[best].value ? i : best, 0) ? '#212E73' : chartData[index].value > 0 ? '#4353A4' : '#E2E4E9'}
                 />
               ))}
             </Bar>

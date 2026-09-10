@@ -15,7 +15,7 @@ import { ethers } from "ethers";
 import CopyButton from "@/components/CopyButton";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
-const TRUSTIVE_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || process.env.NEXT_PUBLIC_PPM_TOKEN_ADDRESS || "0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D") as `0x${string}`;
+const TRUSTIVE_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || "0xe12F60d7c0bc493b033c789Aa533E772541041eA") as `0x${string}`;
 
 const sanitizeTokenSymbol = (symbol?: string): string => {
   if (!symbol) return 'Trustive';
@@ -82,7 +82,7 @@ export default function Dashboard() {
           const parsed = JSON.parse(cached);
           return parsed.name || '';
         }
-      } catch {}
+      } catch { }
     }
     return '';
   });
@@ -165,7 +165,7 @@ export default function Dashboard() {
               const cached = localStorage.getItem('user_data');
               const existing = cached ? JSON.parse(cached) : {};
               localStorage.setItem('user_data', JSON.stringify({ ...existing, name }));
-            } catch {}
+            } catch { }
           }
         }
 
@@ -239,132 +239,132 @@ export default function Dashboard() {
   if (!isConnected) {
     return (
       <AuthGuard>
-      <Layout>
-        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
-          <LuWallet className="h-16 w-16 text-zinc-600" />
-          <div>
-            <h2 className="text-[1.5rem] font-medium text-white mb-2">Connect Your Wallet</h2>
-            <p className="text-zinc-500 text-[1rem]">Connect your wallet to view your dashboard</p>
+        <Layout>
+          <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
+            <LuWallet className="h-16 w-16 text-zinc-600" />
+            <div>
+              <h2 className="text-[1.5rem] font-medium text-white mb-2">Connect Your Wallet</h2>
+              <p className="text-zinc-500 text-[1rem]">Connect your wallet to view your dashboard</p>
+            </div>
+            <button
+              onClick={connectWallet}
+              className="bg-accent hover:bg-accent/90 text-black font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer"
+            >
+              Connect Wallet
+            </button>
           </div>
-          <button
-            onClick={connectWallet}
-            className="bg-accent hover:bg-accent/90 text-black font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      </Layout>
+        </Layout>
       </AuthGuard>
     );
   }
 
   return (
     <AuthGuard>
-    <Layout>
-      <div className="flex flex-col gap-4 mx-auto">
-        {/* Top Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard title="Current Token Price" value={stats.tokenPrice} icon={<div />} />
-          <StatCard title="Tokens Purchased" value={isConnected ? stats.tokensPurchased : "—"} icon={<div />} />
-          <StatCard title="Total Transactions" value={isConnected ? stats.totalTransactions : "—"} icon={<div />} />
-          <StatCard title="Tokens Available" value={isConnected ? stats.tokensAvailable : "—"} icon={<div />} />
-        </div>
-
-        {/* Second Row Stats - Only shown during Active Sale */}
-        {stats.saleName !== "—" && (
+      <Layout>
+        <div className="flex flex-col gap-4 mx-auto">
+          {/* Top Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard title="Active Sale" value={stats.saleName} icon={<div />} />
-            <StatCard title="Sale End Date" value={stats.saleEndDate} icon={<div />} />
-            <StatCard title="Total Allocated" value={isConnected ? stats.totalAllocated : "—"} icon={<div />} />
-            <StatCard title="Balance in the sale" value={isConnected ? stats.balanceInSale : "—"} icon={<div />} />
+            <StatCard title="Current Token Price" value={stats.tokenPrice} icon={<div />} />
+            <StatCard title="Tokens Purchased" value={isConnected ? stats.tokensPurchased : "—"} icon={<div />} />
+            <StatCard title="Total Transactions" value={isConnected ? stats.totalTransactions : "—"} icon={<div />} />
+            <StatCard title="Tokens Available" value={isConnected ? stats.tokensAvailable : "—"} icon={<div />} />
           </div>
-        )}
 
-        {/* Hidden: Chart and Promo Section
+          {/* Second Row Stats - Only shown during Active Sale */}
+          {stats.saleName !== "—" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard title="Active Sale" value={stats.saleName} icon={<div />} />
+              <StatCard title="Sale End Date" value={stats.saleEndDate} icon={<div />} />
+              <StatCard title="Total Allocated" value={isConnected ? stats.totalAllocated : "—"} icon={<div />} />
+              <StatCard title="Balance in the sale" value={isConnected ? stats.balanceInSale : "—"} icon={<div />} />
+            </div>
+          )}
+
+          {/* Hidden: Chart and Promo Section
         <div className="flex flex-col xl:flex-row gap-4">
           <DashboardChart />
           <PromoCard />
         </div>
         */}
 
-        {/* Recent Transactions */}
-        <div className="rounded-3xl bg-card border border-white/5 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
-            <h2 className="text-[1.125rem] font-medium text-[#FAF7F2]">Recent Transactions</h2>
-          </div>
-
-          {!isConnected ? (
-            <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">
-              Connect your wallet to see recent transactions
+          {/* Recent Transactions */}
+          <div className="rounded-3xl bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-100">
+              <h2 className="text-[1.25rem] font-bold text-zinc-900">Recent Transactions</h2>
             </div>
-          ) : txLoading ? (
-            <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">Loading...</div>
-          ) : recentTxs.length === 0 ? (
-            <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">No transactions yet</div>
-          ) : (
-            <div className="overflow-x-auto -mx-3 sm:mx-0">
-              <table className="w-full text-left border-collapse min-w-[36rem]">
-                <thead>
-                  <tr className="text-[0.7rem] font-medium text-zinc-500 uppercase tracking-wider">
-                    <th className="px-4 sm:px-6 py-4 text-left">S No</th>
-                    <th className="px-4 sm:px-6 py-4 text-left">Users</th>
-                    <th className="px-4 sm:px-6 py-4 text-center">Payment Type</th>
-                    <th className="px-4 sm:px-6 py-4 text-center">Amount Paid</th>
-                    <th className="px-4 sm:px-6 py-4 text-center">Received Trustive</th>
-                    <th className="px-4 sm:px-6 py-4 text-center">USD Value</th>
-                    <th className="px-4 sm:px-6 py-4 text-center">Status</th>
-                    <th className="px-4 sm:px-6 py-4 text-center">Transaction Hash</th>
-                  </tr>
-                </thead>
-                <tbody className="text-[0.8rem] text-[#94A3B8]">
-                  {recentTxs.map((tx, i) => {
-                    const isSuccess = tx.status === 'success' || tx.status === 'paid';
-                    return (
-                      <tr key={tx.id ?? i} className="border-t border-white/5 hover:bg-white/[0.02] transition-colors">
-                        <td className="px-4 sm:px-6 py-3 text-[#FAF7F2]">{i + 1}</td>
-                        <td className="px-4 sm:px-6 py-3 text-[#FAF7F2]">
-                          <div className="flex items-center gap-1.5">
-                            <span>{userName || shortenHash(account ?? undefined)}</span>
-                            {account && <CopyButton text={account} label="Copy Address" />}
-                          </div>
-                        </td>
-                        <td className="px-4 sm:px-6 py-3 text-[#E5A93E] whitespace-nowrap text-center">{tx.payment_type}</td>
-                        <td className="px-4 sm:px-6 py-3 text-[#E5A93E] whitespace-nowrap text-center">{tx.crypto_value}</td>
-                        <td className="px-4 sm:px-6 py-3 text-[#E5A93E] whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} Trustive</td>
-                        <td className="px-4 sm:px-6 py-3 text-white font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                        <td className="px-4 sm:px-6 py-3 text-center">
-                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[0.65rem] font-bold mx-auto ${isSuccess ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${isSuccess ? 'bg-green-400' : 'bg-yellow-400'}`} />
-                            {isSuccess ? 'Success' : 'Pending'}
-                          </span>
-                        </td>
-                        <td className="px-4 sm:px-6 py-3 font-mono text-center">
-                          {tx.trans_hash ? (
-                            <a href={`https://sepolia.etherscan.io/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline" title={tx.trans_hash}>
-                              {shortenHash(tx.trans_hash)}
-                            </a>
-                          ) : '—'}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
 
-          <div className="px-6 py-4 border-t border-white/5 flex justify-center">
-            <Link
-              href="/transactions"
-              className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-accent hover:text-accent/80 transition-colors"
-            >
-              Show all transactions
-              <LuArrowRight className="h-4 w-4" />
-            </Link>
+            {!isConnected ? (
+              <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">
+                Connect your wallet to see recent transactions
+              </div>
+            ) : txLoading ? (
+              <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">Loading...</div>
+            ) : recentTxs.length === 0 ? (
+              <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">No transactions yet</div>
+            ) : (
+              <div className="overflow-x-auto -mx-3 sm:mx-0">
+                <table className="w-full text-left border-collapse min-w-[36rem]">
+                  <thead>
+                    <tr className="text-[0.75rem] font-semibold text-zinc-400 uppercase tracking-wider bg-zinc-50/50">
+                      <th className="px-4 sm:px-6 py-4 text-left">S No</th>
+                      <th className="px-4 sm:px-6 py-4 text-left">Users</th>
+                      <th className="px-4 sm:px-6 py-4 text-center">Payment Type</th>
+                      <th className="px-4 sm:px-6 py-4 text-center">Amount Paid</th>
+                      <th className="px-4 sm:px-6 py-4 text-center">Received Trustive</th>
+                      <th className="px-4 sm:px-6 py-4 text-center">USD Value</th>
+                      <th className="px-4 sm:px-6 py-4 text-center">Status</th>
+                      <th className="px-4 sm:px-6 py-4 text-center">Transaction Hash</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-[0.85rem] text-zinc-600">
+                    {recentTxs.map((tx, i) => {
+                      const isSuccess = tx.status === 'success' || tx.status === 'paid';
+                      return (
+                        <tr key={tx.id ?? i} className="border-t border-zinc-100 hover:bg-zinc-50/60 transition-colors">
+                          <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-medium">{i + 1}</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-zinc-900">
+                            <div className="flex items-center gap-1.5">
+                              <span>{userName || shortenHash(account ?? undefined)}</span>
+                              {account && <CopyButton text={account} label="Copy Address" />}
+                            </div>
+                          </td>
+                          <td className="px-4 sm:px-6 py-3.5 text-[#212E73] font-bold whitespace-nowrap text-center">{tx.payment_type}</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-medium whitespace-nowrap text-center">{tx.crypto_value}</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} Trustive</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-center">
+                            <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.7rem] font-bold mx-auto ${isSuccess ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${isSuccess ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                              {isSuccess ? 'Success' : 'Pending'}
+                            </span>
+                          </td>
+                          <td className="px-4 sm:px-6 py-3.5 font-mono text-center">
+                            {tx.trans_hash ? (
+                              <a href={`https://sepolia.etherscan.io/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline" title={tx.trans_hash}>
+                                {shortenHash(tx.trans_hash)}
+                              </a>
+                            ) : '—'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="px-6 py-4 border-t border-zinc-100 flex justify-center bg-zinc-50/30">
+              <Link
+                href="/transactions"
+                className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-[#212E73] hover:text-[#16225B] transition-colors"
+              >
+                Show all transactions
+                <LuArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
     </AuthGuard>
   );
 }

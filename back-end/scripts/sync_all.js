@@ -30,9 +30,9 @@ async function initProvider() {
     throw new Error("No working RPC found");
 }
 
-const ICO_ADDR = process.env.ICO_CONTRACT_ADDRESS;
-const STAKING_ADDR = process.env.STAKING_CONTRACT_ADDRESS;
-const VESTING_ADDR = process.env.VESTING_CONTRACT_ADDRESS;
+const ICO_ADDR = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
+const STAKING_ADDR = process.env.STAKING_CONTRACT_ADDRESS || '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
+const VESTING_ADDR = process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
 
 const ICO_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, '../abi\'s/ico.json'), 'utf8'));
 const STAKING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, '../abi\'s/staking.json'), 'utf8'));
@@ -196,6 +196,9 @@ async function sync() {
                     ]);
                 }
             }
+        } catch (e) { }
+    }
+
     // 6. ICO PURCHASES SYNC
     console.log("Syncing ICO Purchases Events...");
     try {
@@ -205,7 +208,7 @@ async function sync() {
         for (const log of icoLogs) {
             const txHash = log.transactionHash;
             const recipient = log.args[0];
-            const ppmTokens = ethers.formatEther(log.args[1]);
+            const trustiveTokens = ethers.formatEther(log.args[1]);
             uniqueUsers.add(recipient.toLowerCase());
 
             let createdAt = new Date();
@@ -240,7 +243,7 @@ async function sync() {
                 `INSERT INTO ico_purchases (address, crypto_value, payment_type, ptc_tokens, trans_hash, usd_value_of_crypto, sale_type, status, created_at)
                  VALUES (?, ?, ?, ?, ?, ?, ?, 'success', ?)
                  ON DUPLICATE KEY UPDATE ptc_tokens = VALUES(ptc_tokens), status = 'success'`,
-                [recipient, cryptoValue, paymentType, ppmTokens, txHash, usdValue, 'PRESALE', createdAt]
+                [recipient, cryptoValue, paymentType, trustiveTokens, txHash, usdValue, 'PRESALE', createdAt]
             );
         }
     } catch (e) {

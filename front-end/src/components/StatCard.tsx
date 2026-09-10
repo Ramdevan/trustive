@@ -29,15 +29,15 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon }) => {
   }, [value]);
 
   return (
-    <div className="flex flex-col gap-3 sm:gap-4 rounded-2xl bg-card p-5 sm:p-6 border border-white/5 hover:border-accent/20 transition-all overflow-hidden min-h-[140px] h-full">
+    <div className="flex flex-col gap-3 sm:gap-4 rounded-2xl bg-white p-5 sm:p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] hover:border-[#212E73]/30 transition-all overflow-hidden min-h-[140px] h-full">
       <div className="flex items-center gap-3 min-w-0">
-        {icon && <div className="h-5 w-5 bg-accent rounded-full flex-shrink-0" />}
-        <span className="text-[1rem] font-medium text-[#FAF7F2] truncate whitespace-nowrap overflow-hidden">{title}</span>
+        {icon && <div className="h-5 w-5 bg-[#212E73] rounded-full flex-shrink-0" />}
+        <span className="text-[1rem] font-medium text-zinc-600 truncate whitespace-nowrap overflow-hidden">{title}</span>
       </div>
       <div ref={containerRef} className="flex items-center flex-1 overflow-hidden w-full">
         <div
           ref={textRef}
-          className="font-semibold tracking-tight text-[#FAF7F2] whitespace-nowrap"
+          className="font-bold tracking-tight text-zinc-900 whitespace-nowrap"
           style={{ fontSize: `${fontSize}rem` }}
         >
           {value}

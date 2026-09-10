@@ -20,12 +20,12 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `token_symbol` varchar(20) DEFAULT 'Trustive',
   `chain` varchar(50) DEFAULT 'Base Sepolia',
   `token_decimal` int DEFAULT 18,
-  `contract_address` varchar(255) DEFAULT '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D',
+  `contract_address` varchar(255) DEFAULT '0xe12F60d7c0bc493b033c789Aa533E772541041eA',
   `crypto_decimal` int DEFAULT 8,
   `fiat_decimal` int DEFAULT 2,
-  `ico_contract` varchar(255) DEFAULT '0x8Ab0caB366B23Dcb88ceA447312CCb103B138cFa',
-  `usdt_address` varchar(255) DEFAULT '0x59e50cD6361b48eA9008c8f7cf19869d6F8862A6',
-  `usdc_address` varchar(255) DEFAULT '0x4A4C672c0cEB4880Ff5429512768F9f6c5645715',
+  `ico_contract` varchar(255) DEFAULT '0x300C8EEB80Af24FF831015cF667f670077Fe1564',
+  `usdt_address` varchar(255) DEFAULT '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3',
+  `usdc_address` varchar(255) DEFAULT '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b',
   `eth_address` varchar(255) DEFAULT NULL,
   `staking_contract` varchar(255) DEFAULT '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb',
   `vesting_contract` varchar(255) DEFAULT '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12',
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 
 -- Insert default settings
 INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `staking_contract`, `vesting_contract`, `referral_level1`, `admin_email`, `admin_password`)
-VALUES ('Trustive', 'Trustive', 'Trustive', 'Base Sepolia', 18, '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D', '0x8Ab0caB366B23Dcb88ceA447312CCb103B138cFa', '0x59e50cD6361b48eA9008c8f7cf19869d6F8862A6', '0x4A4C672c0cEB4880Ff5429512768F9f6c5645715', '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb', '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12', 5.00, 'admin@trustive.com', 'admin123');
+VALUES ('Trustive', 'Trustive', 'Trustive', 'Base Sepolia', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb', '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12', 5.00, 'admin@trustive.com', 'admin123');
 
 -- ========================================
 -- Users Table

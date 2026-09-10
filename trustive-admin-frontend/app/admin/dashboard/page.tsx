@@ -46,7 +46,7 @@ function AutoScalingText({ children }: { children: React.ReactNode }) {
         <div ref={wrapRef} className="w-full overflow-hidden flex items-center h-[34px] mb-3">
             <h3
                 ref={textRef}
-                className="text-[28px] font-bold text-white tracking-tight whitespace-nowrap origin-left"
+                className="text-[28px] font-bold text-zinc-900 tracking-tight whitespace-nowrap origin-left"
                 style={{ transform: `scale(${scale})` }}
             >
                 {children}
@@ -74,8 +74,8 @@ export default function Dashboard() {
     const lastTx = dashboardData?.lastTransactions || [];
     const errorMsg = null;
 
-    const tokenAddress = (dashboardData?.settings?.contract_address || "0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D") as `0x${string}`;
-    const icoAddress = (dashboardData?.settings?.ico_contract || "0x8Ab0caB366B23Dcb88ceA447312CCb103B138cFa") as `0x${string}`;
+    const tokenAddress = (dashboardData?.settings?.contract_address || "0xe12F60d7c0bc493b033c789Aa533E772541041eA") as `0x${string}`;
+    const icoAddress = (dashboardData?.settings?.ico_contract || "0x300C8EEB80Af24FF831015cF667f670077Fe1564") as `0x${string}`;
 
     // Read live on-chain token balance of the ICO smart contract
     const { data: onChainICOBalanceWei } = useReadContract({
@@ -134,12 +134,12 @@ export default function Dashboard() {
         <div className="space-y-8 animate-in fade-in duration-200">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {statCards.map((stat, i) => (
-                    <Link key={i} href={stat.link} className="bg-[#0A0908] p-8 rounded-[24px] border border-white/5 hover:border-accent/30 cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group relative flex flex-col justify-between min-h-[160px] shadow-2xl">
+                    <Link key={i} href={stat.link} className="bg-white p-8 rounded-[24px] border border-zinc-200/90 hover:border-[#212E73]/40 cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group relative flex flex-col justify-between min-h-[160px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
                         <div className="flex justify-between items-start">
-                            <span className="text-[10px] font-extrabold text-zinc-500 tracking-[0.2em] uppercase border-b border-zinc-800 pb-1">
+                            <span className="text-[10px] font-extrabold text-zinc-400 tracking-[0.2em] uppercase border-b border-zinc-100 pb-1">
                                 {stat.topLabel}
                             </span>
-                            <div className="w-10 h-10 rounded-[12px] bg-white/[0.02] border border-white/5 flex items-center justify-center text-accent/80 group-hover:text-accent transition-colors">
+                            <div className="w-10 h-10 rounded-[12px] bg-blue-50/70 border border-blue-100 flex items-center justify-center text-[#212E73] group-hover:bg-[#212E73] group-hover:text-white transition-all">
                                 <stat.icon className="w-4 h-4" />
                             </div>
                         </div>
@@ -148,10 +148,10 @@ export default function Dashboard() {
                             <AutoScalingText>{stat.value}</AutoScalingText>
                             <div className="flex items-center gap-2">
                                 <div className="flex -space-x-1">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#E5B258]" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#E5B258]/40" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-[#212E73]" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-[#212E73]/30" />
                                 </div>
-                                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.15em]">
+                                <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-[0.15em]">
                                     {stat.bottomLabel}
                                 </span>
                             </div>
@@ -161,67 +161,67 @@ export default function Dashboard() {
             </div>
 
             {/* Table Section */}
-            <div className="bg-sidebar rounded-[32px] border border-white/5 overflow-hidden flex flex-col shadow-2xl">
-                <div className="px-8 py-6 flex items-center justify-between">
-                    <h3 className="text-white font-bold text-lg tracking-tight">Recent Transactions</h3>
-                    <a href="/admin/transactions" className="bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl text-zinc-400 text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2">
+            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden flex flex-col shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                <div className="px-8 py-6 flex items-center justify-between border-b border-zinc-100">
+                    <h3 className="text-zinc-900 font-bold text-lg tracking-tight">Recent Transactions</h3>
+                    <a href="/admin/transactions" className="bg-zinc-100 hover:bg-zinc-200 px-4 py-2 rounded-xl text-[#212E73] text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2">
                         View All <ArrowUpRight className="w-3 h-3" />
                     </a>
                 </div>
 
                 <div className="overflow-x-auto">
                     {lastTx.length === 0 ? (
-                        <p className="text-center text-zinc-600 py-12 text-sm">No transactions yet</p>
+                        <p className="text-center text-zinc-400 py-12 text-sm">No transactions yet</p>
                     ) : (
                         <table className="w-full">
                             <thead>
-                                <tr className="bg-accent text-black uppercase font-black text-xs tracking-widest">
-                                    <th className="px-12 py-8 text-center first:rounded-tl-2xl">ID</th>
-                                    <th className="px-10 py-8 text-center">User</th>
-                                    <th className="px-10 py-8 text-center">Transaction Hash</th>
-                                    <th className="px-10 py-8 text-center">Payment</th>
-                                    <th className="px-10 py-8 text-center">Trustive Purchased</th>
-                                    <th className="px-10 py-8 text-center">Value (USD)</th>
-                                    <th className="px-12 py-8 text-center last:rounded-tr-2xl">Date</th>
+                                <tr className="bg-[#212E73] text-white uppercase font-black text-xs tracking-widest">
+                                    <th className="px-12 py-6 text-center first:rounded-tl-2xl">ID</th>
+                                    <th className="px-10 py-6 text-center">User</th>
+                                    <th className="px-10 py-6 text-center">Transaction Hash</th>
+                                    <th className="px-10 py-6 text-center">Payment</th>
+                                    <th className="px-10 py-6 text-center">Trustive Purchased</th>
+                                    <th className="px-10 py-6 text-center">Value (USD)</th>
+                                    <th className="px-12 py-6 text-center last:rounded-tr-2xl">Date</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5 bg-[#0A0908]">
+                            <tbody className="divide-y divide-zinc-100 bg-white">
                                 {lastTx.map((tx: any, i: number) => (
-                                    <tr key={tx.id ?? i} className="hover:bg-white/5 transition-colors group">
-                                        <td className="px-12 py-8 text-zinc-500 text-sm font-bold text-center">{i + 1}</td>
-                                        <td className="px-10 py-8">
+                                    <tr key={tx.id ?? i} className="hover:bg-zinc-50/70 transition-colors group">
+                                        <td className="px-12 py-6 text-zinc-400 text-sm font-bold text-center">{i + 1}</td>
+                                        <td className="px-10 py-6">
                                             <div className="flex flex-col items-center justify-center">
-                                                <span className="text-zinc-300 font-bold text-sm">{tx.username || (tx.address ? shortenAddress(tx.address) : "Anonymous")}</span>
+                                                <span className="text-zinc-900 font-bold text-sm">{tx.username || (tx.address ? shortenAddress(tx.address) : "Anonymous")}</span>
                                                 {tx.address && (
-                                                    <div className="flex items-center gap-1 mt-0.5 text-xs text-zinc-500 font-mono">
+                                                    <div className="flex items-center gap-1 mt-0.5 text-xs text-zinc-400 font-mono">
                                                         <span>{shortenAddress(tx.address)}</span>
                                                         <CopyButton text={tx.address} label="Copy Address" />
                                                     </div>
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8">
+                                        <td className="px-10 py-6">
                                             <div className="flex justify-center">
                                                 <TxHashLink hash={tx.trans_hash} />
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8">
+                                        <td className="px-10 py-6">
                                             <div className="flex items-center justify-center gap-3">
                                                 <CryptoIcon coin={tx.payment_type} className="w-5 h-5" />
-                                                <span className="text-zinc-200 text-sm font-bold uppercase">{tx.payment_type}</span>
+                                                <span className="text-zinc-900 text-sm font-bold uppercase">{tx.payment_type}</span>
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
+                                        <td className="px-10 py-6 text-center">
                                             <div className="flex flex-col items-center">
-                                                <span className="text-accent font-bold text-base tracking-tight">{formatDecimal(tx.ptc_tokens, 5)}</span>
-                                                <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest mt-0.5">Trustive Tokens</span>
+                                                <span className="text-[#212E73] font-bold text-base tracking-tight">{formatDecimal(tx.ptc_tokens, 5)}</span>
+                                                <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">Trustive Tokens</span>
                                             </div>
                                         </td>
-                                        <td className="px-10 py-8 text-center">
-                                            <span className="text-white font-bold text-base">{formatUSD(tx.usd_value_of_crypto)}</span>
+                                        <td className="px-10 py-6 text-center">
+                                            <span className="text-zinc-900 font-bold text-base">{formatUSD(tx.usd_value_of_crypto)}</span>
                                         </td>
-                                        <td className="px-12 py-8 text-center">
-                                            <span className="text-zinc-400 text-sm font-bold">
+                                        <td className="px-12 py-6 text-center">
+                                            <span className="text-zinc-500 text-sm font-bold">
                                                 {tx.created_at_utc ? new Date(tx.created_at_utc).toLocaleDateString("en-GB") : "—"}
                                             </span>
                                         </td>

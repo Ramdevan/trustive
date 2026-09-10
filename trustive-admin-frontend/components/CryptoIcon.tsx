@@ -64,7 +64,7 @@ export function CryptoIcon({ coin, className = "w-5 h-5" }: { coin: string; clas
     if (symbol === "USDC" || symbol.includes("USDC")) {
         return <UsdcIcon className={className} />;
     }
-    if (symbol === "PPM" || symbol.includes("PPM") || symbol === "TRUSTIVE" || symbol.includes("TRUSTIVE") || symbol === "TRUSTIVE" || symbol.includes("TRUSTIVE") || symbol.includes("PTC")) {
+    if (symbol === "TRSIV" || symbol.includes("TRSIV") || symbol === "TRUSTIVE" || symbol.includes("TRUSTIVE") || symbol === "TRUSTIVE" || symbol.includes("TRUSTIVE") || symbol.includes("PTC")) {
         return <TrustiveIcon className={className} />;
     }
     return <EthIcon className={className} />;

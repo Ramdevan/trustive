@@ -1,7 +1,7 @@
 const { ethers } = require('ethers');
 
-const RPC_URL = 'https://eth-sepolia-testnet.api.pocket.network';
-const TOKEN_ADDRESS = '0xFf602986Fc0F3711F7E1251CfbD38a33Cc594d4D';
+const RPC_URL = process.env.RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com';
+const TOKEN_ADDRESS = process.env.TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
 
 async function checkToken() {
     const provider = new ethers.JsonRpcProvider(RPC_URL);

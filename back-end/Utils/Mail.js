@@ -31,9 +31,9 @@ const sendVerificationEmail = (to, token) => {
         console.error('Mail not configured. Email to', to, 'could not be sent.');
         return Promise.resolve({ skipped: true }); // Resolution to not crash the signup flow
     }
-    const verificationLink = `${process.env.FRONTEND_URL || 'http://ppm.meme'}/api/user/verify-email?token=${token}`;
+    const verificationLink = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/api/user/verify-email?token=${token}`;
     const mailOptions = {
-        from: `"Trustive Support" <support@${process.env.MAILGUN_DOMAIN || 'mg.ppm.meme'}>`,
+        from: `"Trustive Support" <support@${process.env.MAILGUN_DOMAIN || ''}>`,
         to: to,
         subject: 'Verify Your Email Address',
         html: `
@@ -66,9 +66,9 @@ const sendPasswordResetEmail = (to, token) => {
         console.error('Mail not configured. Password reset email to', to, 'could not be sent.');
         return Promise.resolve({ skipped: true });
     }
-    const resetLink = `${process.env.FRONTEND_URL || 'http://ppm.meme'}/reset-password?token=${token}`;
+    const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:3000/'}/reset-password?token=${token}`;
     const mailOptions = {
-        from: `"Trustive Support" <support@${process.env.MAILGUN_DOMAIN || 'mg.ppm.meme'}>`,
+        from: `"Trustive Support" <support@${process.env.MAILGUN_DOMAIN || ''}>`,
         to: to,
         subject: 'Reset Your Password - Trustive',
         html: `
