@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 // Routes accessible only to unauthenticated/guest users
 const GUEST_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password'];
+const KYC_ROUTE = '/kyc';
 const HOME_ROUTE = '/dashboard';
 const LOGIN_ROUTE = '/login';
 
@@ -17,6 +18,17 @@ interface AuthGuardProps {
 const cleanPath = (url: string) => {
   const path = url.split('?')[0].split('#')[0];
   return path === '' ? '/' : path;
+};
+
+const getUserKycStatus = (): string => {
+  try {
+    const data = localStorage.getItem('user_data');
+    if (!data) return 'unverified';
+    const parsed = JSON.parse(data);
+    return parsed.kyc_status || 'unverified';
+  } catch {
+    return 'unverified';
+  }
 };
 
 const IDLE_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes of inactivity
@@ -125,12 +137,25 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
       const token = readToken();
 
       if (token) {
-        if (isPublicRoute(path)) {
-          // Authenticated user landed on login/register/root -> send them home
-          redirect(HOME_ROUTE);
+        const kycStatus = getUserKycStatus();
+        const isVerified = kycStatus === 'verified';
+
+        if (!isVerified) {
+          // User is authenticated but KYC is not verified
+          if (path === KYC_ROUTE) {
+            setAuthorized(true);
+            pinHistory();
+          } else {
+            redirect(KYC_ROUTE);
+          }
         } else {
-          setAuthorized(true);
-          pinHistory();
+          // User is authenticated and KYC is verified
+          if (path === KYC_ROUTE || isPublicRoute(path)) {
+            redirect(HOME_ROUTE);
+          } else {
+            setAuthorized(true);
+            pinHistory();
+          }
         }
       } else {
         if (isGuestRoute(path)) {
@@ -161,15 +186,19 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
         return;
       }
 
-      if (poppedToBase || isPublicRoute(path)) {
+      const kycStatus = getUserKycStatus();
+      const isVerified = kycStatus === 'verified';
+      const targetHome = isVerified ? HOME_ROUTE : KYC_ROUTE;
+
+      if (poppedToBase || isPublicRoute(path) || (!isVerified && path !== KYC_ROUTE)) {
         setAuthorized(false);
         // Push a fresh entry (this also drops the forward entries, killing the
         // "back to login then forward into dashboard" bypass) and re-pin below it
-        window.history.pushState({ __trustivePin: PIN_LIVE }, '', HOME_ROUTE);
+        window.history.pushState({ __trustivePin: PIN_LIVE }, '', targetHome);
         router
-          .replace(HOME_ROUTE)
+          .replace(targetHome)
           .catch(() => { })
-          .finally(() => evaluateAuth(HOME_ROUTE));
+          .finally(() => evaluateAuth(targetHome));
         return;
       }
 

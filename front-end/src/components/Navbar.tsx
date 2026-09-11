@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LuWallet, LuMenu, LuSettings, LuLogOut, LuTriangleAlert, LuUser } from 'react-icons/lu';
+import { LuWallet, LuMenu, LuSettings, LuLogOut, LuTriangleAlert, LuUser, LuShieldCheck, LuShieldAlert } from 'react-icons/lu';
 import Image from 'next/image';
 import Link from 'next/link';
 import userProfile from '@/assets/images/user.png';
@@ -34,6 +34,16 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
     return null;
   });
 
+  const [userProfileData, setUserProfileData] = useState<{ name?: string; email?: string; kyc_status?: string } | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = localStorage.getItem('user_data');
+        return cached ? JSON.parse(cached) : null;
+      } catch {}
+    }
+    return null;
+  });
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
   // Find the icon from the connectors list which is more reliable in Wagmi 2
@@ -56,13 +66,17 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         });
         const data = await res.json();
         if (data.status && data.user) {
+          setUserProfileData(data.user);
           if (data.user.profile_pic) {
             setProfilePic(data.user.profile_pic);
           }
           try {
             const cached = localStorage.getItem('user_data');
             const existing = cached ? JSON.parse(cached) : {};
-            localStorage.setItem('user_data', JSON.stringify({ ...existing, ...data.user }));
+            const finalKyc = (existing.kyc_status === 'verified' || data.user.kyc_status === 'verified')
+              ? 'verified'
+              : (data.user.kyc_status || 'unverified');
+            localStorage.setItem('user_data', JSON.stringify({ ...existing, ...data.user, kyc_status: finalKyc }));
           } catch {}
         }
       } catch (err) {
@@ -206,6 +220,27 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           </button>
                         )}
                       </div>
+
+                      {/* User Info & KYC Status */}
+                      {userProfileData && (
+                        <div className="px-4 py-3 border-b border-zinc-100 mb-2">
+                          <p className="text-sm font-bold text-zinc-900 truncate">{userProfileData.name || 'User Account'}</p>
+                          <p className="text-xs text-zinc-400 truncate mb-1.5">{userProfileData.email}</p>
+                          <div className="flex items-center gap-1.5">
+                            {userProfileData.kyc_status === 'verified' ? (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-wider">
+                                <LuShieldCheck className="w-3 h-3 text-emerald-600" />
+                                KYC Verified
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider">
+                                <LuShieldAlert className="w-3 h-3 text-amber-600" />
+                                KYC Pending
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
 
                       <div className="px-2 space-y-1">
                         <Link

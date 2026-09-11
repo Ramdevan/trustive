@@ -32,6 +32,7 @@ interface User {
     ptc_tokens_purchased: string;
     total_usd_invested: string;
     profile_pic?: string | null;
+    kyc_status?: string;
 }
 
 interface UserProfileStats {
@@ -192,10 +193,27 @@ export default function UsersPage() {
                                             </div>
                                         </td>
                                         <td className="px-10 py-6 text-center">
-                                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest border border-emerald-200">
-                                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                                Active
-                                            </span>
+                                            {u.kyc_status === 'verified' ? (
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-200">
+                                                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                                                    Verified
+                                                </span>
+                                            ) : u.kyc_status === 'pending' ? (
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider border border-amber-200">
+                                                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                                                    KYC Pending
+                                                </span>
+                                            ) : u.kyc_status === 'rejected' ? (
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase tracking-wider border border-red-200">
+                                                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                                                    KYC Rejected
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 text-xs font-bold uppercase tracking-wider border border-zinc-200">
+                                                    <span className="w-2 h-2 rounded-full bg-zinc-400" />
+                                                    Unverified
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="px-12 py-6 text-center">
                                             <button
@@ -220,6 +238,7 @@ export default function UsersPage() {
                     userId={selectedUser.id}
                     name={users.find(u => u.id === selectedUser.id)?.name || ""}
                     email={users.find(u => u.id === selectedUser.id)?.email || ""}
+                    kycStatus={users.find(u => u.id === selectedUser.id)?.kyc_status || "unverified"}
                     onClose={() => setSelectedUser(null)}
                 />
             )}
@@ -227,7 +246,7 @@ export default function UsersPage() {
     );
 }
 
-function ProfileModal({ address, userId, name, email, onClose }: { address: string; userId: number; name: string; email: string; onClose: () => void }) {
+function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { address: string; userId: number; name: string; email: string; kycStatus?: string; onClose: () => void }) {
     const profileParam = address || `id/${userId}`;
     const { data: profileData, isLoading } = useQuery({
         queryKey: ["user-profile", profileParam],
@@ -263,6 +282,27 @@ function ProfileModal({ address, userId, name, email, onClose }: { address: stri
                                 <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">
                                     {name || "User Profile"}
                                 </h2>
+                                {kycStatus === 'verified' ? (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-200">
+                                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                                        KYC Verified
+                                    </span>
+                                ) : kycStatus === 'pending' ? (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider border border-amber-200">
+                                        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                                        KYC Pending
+                                    </span>
+                                ) : kycStatus === 'rejected' ? (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase tracking-wider border border-red-200">
+                                        <span className="w-2 h-2 rounded-full bg-red-500" />
+                                        KYC Rejected
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-600 text-xs font-bold uppercase tracking-wider border border-zinc-200">
+                                        <span className="w-2 h-2 rounded-full bg-zinc-400" />
+                                        KYC Unverified
+                                    </span>
+                                )}
                             </div>
                             <div className="flex flex-col gap-0.5">
                                 <div className="flex items-center gap-1.5">

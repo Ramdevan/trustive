@@ -3,6 +3,7 @@ const BN = require('bignumber.js');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const { sendPasswordResetEmail } = require('../Utils/Mail');
+const sumsubService = require('../Services/SumsubService');
 
 module.exports = async function (fastify, opts) {
   const { toUtcISOString, updateSaleStatuses } = require('./timeUtils');
@@ -92,7 +93,7 @@ module.exports = async function (fastify, opts) {
 
       // Save user directly with verified status (no third-party verification service)
       const [result] = await fastify.mysql.query(
-        'INSERT INTO users (name, email, password, is_verified, verification_token, wallet_address) VALUES (?, ?, ?, 1, NULL, NULL)',
+        'INSERT INTO users (name, email, password, is_verified, verification_token, wallet_address, kyc_status) VALUES (?, ?, ?, 1, NULL, NULL, "unverified")',
         [displayName, normalizedEmail, hashedPassword]
       );
 
@@ -103,7 +104,8 @@ module.exports = async function (fastify, opts) {
           user: {
             id: result.insertId,
             name: displayName,
-            email: normalizedEmail
+            email: normalizedEmail,
+            kyc_status: 'unverified'
           }
         }
       });
@@ -198,7 +200,8 @@ module.exports = async function (fastify, opts) {
             id: user.id,
             name: user.name,
             email: user.email,
-            wallet_address: user.wallet_address
+            wallet_address: user.wallet_address,
+            kyc_status: user.kyc_status || 'unverified'
           }
         }
       });
@@ -234,6 +237,184 @@ module.exports = async function (fastify, opts) {
     fastify.log.error({ err: err?.message || err }, `2FA: ${what} failed`);
     return reply.code(500).send({ status: false, msg: `Could not ${what}. Please try again or contact support.` });
   };
+
+  // ========================================
+  // Sumsub KYC Endpoints
+  // ========================================
+
+  // 1. Generate Sumsub WebSDK access token
+  fastify.get('/sumsub-token', async (request, reply) => {
+    const auth = await authOr401(request, reply);
+    if (!auth) return;
+
+    try {
+      const [rows] = await fastify.mysql.query('SELECT id, email, name, kyc_status FROM users WHERE id = ?', [auth.id]);
+      if (!rows || rows.length === 0) {
+        return reply.code(404).send({ status: false, msg: 'User not found' });
+      }
+
+      const user = rows[0];
+      const externalUserId = user.id.toString();
+      let currentKycStatus = user.kyc_status || 'unverified';
+
+      // Check with Sumsub API if user is not yet marked verified in DB
+      if (currentKycStatus !== 'verified') {
+        const applicantRes = await sumsubService.getApplicantStatus(externalUserId);
+        if (applicantRes.success && applicantRes.reviewStatus === 'completed' && applicantRes.reviewAnswer === 'GREEN') {
+          currentKycStatus = 'verified';
+          await fastify.mysql.query('UPDATE users SET kyc_status = "verified" WHERE id = ?', [user.id]);
+        }
+      }
+
+      const tokenResult = await sumsubService.getAccessToken(externalUserId);
+
+      return reply.send({
+        status: true,
+        token: tokenResult.token,
+        userId: externalUserId,
+        isDevFallback: Boolean(tokenResult.isDevFallback),
+        kyc_status: currentKycStatus,
+        msg: tokenResult.msg
+      });
+    } catch (err) {
+      console.error('Error generating Sumsub token:', err);
+      return reply.code(500).send({ status: false, msg: 'Failed to generate KYC verification token' });
+    }
+  });
+
+  // 2. Check current user KYC status
+  fastify.get('/kyc-status', async (request, reply) => {
+    const auth = await authOr401(request, reply);
+    if (!auth) return;
+
+    try {
+      const [rows] = await fastify.mysql.query('SELECT id, email, name, kyc_status FROM users WHERE id = ?', [auth.id]);
+      if (!rows || rows.length === 0) {
+        return reply.code(404).send({ status: false, msg: 'User not found' });
+      }
+
+      const user = rows[0];
+      let kycStatus = user.kyc_status || 'unverified';
+
+      // If pending/unverified, do an on-demand check with Sumsub API
+      if (kycStatus !== 'verified') {
+        const applicantRes = await sumsubService.getApplicantStatus(user.id.toString());
+        if (applicantRes.success) {
+          const status = applicantRes.reviewStatus;
+          const answer = applicantRes.reviewAnswer;
+          if (status === 'completed' && answer === 'GREEN') {
+            kycStatus = 'verified';
+            await fastify.mysql.query('UPDATE users SET kyc_status = "verified" WHERE id = ?', [user.id]);
+          } else if (status === 'completed' && answer === 'RED') {
+            kycStatus = 'rejected';
+            await fastify.mysql.query('UPDATE users SET kyc_status = "rejected" WHERE id = ?', [user.id]);
+          } else if (status === 'pending') {
+            kycStatus = 'pending';
+            await fastify.mysql.query('UPDATE users SET kyc_status = "pending" WHERE id = ?', [user.id]);
+          }
+        }
+      }
+
+      return reply.send({
+        status: true,
+        kyc_status: kycStatus
+      });
+    } catch (err) {
+      console.error('Error checking KYC status:', err);
+      return reply.code(500).send({ status: false, msg: 'Failed to retrieve KYC status' });
+    }
+  });
+
+  // 3. Sumsub Webhook Handler (POST /api/user/webhooks/sumsub)
+  fastify.post('/webhooks/sumsub', async (request, reply) => {
+    try {
+      const signature = request.headers['x-payload-digest'];
+      const algorithm = request.headers['x-payload-digest-alg'] || 'HMAC_SHA256_HEX';
+      const rawPayload = typeof request.body === 'string' ? request.body : JSON.stringify(request.body);
+
+      // Verify webhook signature if secret key is set
+      if (process.env.SUMSUB_SECRET_KEY && !process.env.SUMSUB_SECRET_KEY.includes('your_sumsub')) {
+        const isValid = sumsubService.validateWebhook(rawPayload, signature, algorithm);
+        if (!isValid) {
+          console.warn('Sumsub webhook rejected: invalid signature');
+          return reply.code(401).send({ status: false, msg: 'Invalid signature' });
+        }
+      }
+
+      const payload = typeof request.body === 'object' ? request.body : JSON.parse(request.body || '{}');
+      console.log('Received Sumsub webhook:', payload.type, payload.reviewStatus, payload.externalUserId);
+
+      const externalUserId = payload.externalUserId;
+      if (!externalUserId) {
+        return reply.code(200).send({ status: 'ok', msg: 'No externalUserId in payload' });
+      }
+
+      // Handle retry prefixes/suffixes like "123_retry_456"
+      const cleanUserId = externalUserId.toString().split('_')[0];
+      const userIdNum = parseInt(cleanUserId, 10);
+      if (isNaN(userIdNum)) {
+        return reply.code(200).send({ status: 'ok', msg: 'Non-numeric user ID' });
+      }
+
+      const reviewAnswer = payload.reviewResult?.reviewAnswer;
+      const reviewStatus = payload.reviewStatus;
+
+      if (reviewStatus === 'completed' && reviewAnswer === 'GREEN') {
+        await fastify.mysql.query('UPDATE users SET kyc_status = "verified" WHERE id = ?', [userIdNum]);
+        console.log(`[Sumsub Webhook] User ${userIdNum} KYC set to VERIFIED`);
+      } else if (reviewStatus === 'completed' && reviewAnswer === 'RED') {
+        await fastify.mysql.query('UPDATE users SET kyc_status = "rejected" WHERE id = ?', [userIdNum]);
+        console.log(`[Sumsub Webhook] User ${userIdNum} KYC set to REJECTED`);
+      } else if (reviewStatus === 'pending' || payload.type === 'applicantPending') {
+        await fastify.mysql.query('UPDATE users SET kyc_status = "pending" WHERE id = ?', [userIdNum]);
+        console.log(`[Sumsub Webhook] User ${userIdNum} KYC set to PENDING`);
+      }
+
+      return reply.code(200).send({ status: 'ok' });
+    } catch (err) {
+      console.error('Sumsub webhook processing error:', err);
+      return reply.code(500).send({ status: false, msg: 'Webhook processing failed' });
+    }
+  });
+
+  // 4. Test / Simulator endpoint to mark KYC verified (for testing or instant verification)
+  fastify.post('/test-verify-kyc', async (request, reply) => {
+    try {
+      const auth = await authOr401(request, reply);
+      if (!auth) return;
+
+      const userId = request.body?.userId || auth.id;
+      await fastify.mysql.query('UPDATE users SET kyc_status = "verified" WHERE id = ?', [userId]);
+
+      const [updated] = await fastify.mysql.query('SELECT id, email, name, kyc_status, wallet_address FROM users WHERE id = ?', [userId]);
+      return reply.send({
+        status: true,
+        msg: 'KYC status verified successfully!',
+        user: updated[0]
+      });
+    } catch (err) {
+      return reply.code(500).send({ status: false, msg: err.message });
+    }
+  });
+
+  // 5. Confirm KYC completion from WebSDK client
+  fastify.post('/confirm-kyc-success', async (request, reply) => {
+    try {
+      const auth = await authOr401(request, reply);
+      if (!auth) return;
+
+      await fastify.mysql.query('UPDATE users SET kyc_status = "verified" WHERE id = ?', [auth.id]);
+      const [updated] = await fastify.mysql.query('SELECT id, email, name, kyc_status, wallet_address FROM users WHERE id = ?', [auth.id]);
+      return reply.send({
+        status: true,
+        msg: 'KYC marked verified successfully!',
+        user: updated[0]
+      });
+    } catch (err) {
+      return reply.code(500).send({ status: false, msg: err.message });
+    }
+  });
+
 
   // Turning 2FA off is as sensitive as logging in, so it re-checks the password
   // and a live authenticator code. Six digits is a small space to guess at, so
@@ -630,6 +811,17 @@ module.exports = async function (fastify, opts) {
       const [rows] = await fastify.mysql.query('SELECT * FROM users WHERE id = ?', [decoded.id]);
       if (!rows || rows.length === 0) return reply.code(404).send({ status: false, msg: 'User not found' });
       const user = rows[0];
+      if (user.kyc_status !== 'verified') {
+        try {
+          const applicantRes = await sumsubService.getApplicantStatus(user.id.toString());
+          if (applicantRes.success && applicantRes.reviewStatus === 'completed' && applicantRes.reviewAnswer === 'GREEN') {
+            user.kyc_status = 'verified';
+            await fastify.mysql.query('UPDATE users SET kyc_status = "verified" WHERE id = ?', [user.id]);
+          }
+        } catch (syncErr) {
+          // ignore external API sync failure
+        }
+      }
       delete user.password;
       delete user.verification_token;
       return reply.send({ status: true, user });

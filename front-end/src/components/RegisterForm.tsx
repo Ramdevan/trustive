@@ -22,7 +22,16 @@ const RegisterForm: React.FC = () => {
   React.useEffect(() => {
     const token = localStorage.getItem('user_token');
     if (token) {
-      router.replace('/dashboard');
+      try {
+        const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+        if (userData?.kyc_status === 'verified') {
+          router.replace('/dashboard');
+        } else {
+          router.replace('/kyc');
+        }
+      } catch {
+        router.replace('/kyc');
+      }
     }
   }, [router]);
 

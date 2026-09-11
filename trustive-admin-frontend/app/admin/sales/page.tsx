@@ -655,7 +655,7 @@ export default function SalesManagement() {
             {/* ── Initialize New Phase Modal ── */}
             {isNewPhaseOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-                    <form onSubmit={handleCreatePhase} className="bg-white w-full max-w-2xl rounded-[40px] border border-zinc-200 overflow-hidden shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
+                    <form onSubmit={handleCreatePhase} className="bg-white w-full max-w-4xl rounded-[40px] border border-zinc-200 overflow-hidden shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
                         <div className="p-8 border-b border-zinc-200 flex items-center justify-between bg-zinc-50/50">
                             <div className="flex items-center gap-3">
                                 <div className="w-2 h-8 bg-[#212E73] rounded-full" />

@@ -22,7 +22,16 @@ const LoginForm: React.FC = () => {
   React.useEffect(() => {
     const token = localStorage.getItem('user_token');
     if (token) {
-      router.replace('/dashboard');
+      try {
+        const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+        if (userData?.kyc_status === 'verified') {
+          router.replace('/dashboard');
+        } else {
+          router.replace('/kyc');
+        }
+      } catch {
+        router.replace('/kyc');
+      }
     }
   }, [router]);
 
@@ -73,7 +82,13 @@ const LoginForm: React.FC = () => {
               }
             });
           } catch (e) { }
-          window.location.replace('/dashboard');
+
+          const kycStatus = data.data.user?.kyc_status;
+          if (kycStatus === 'verified') {
+            window.location.replace('/dashboard');
+          } else {
+            window.location.replace('/kyc');
+          }
         }
       } else {
         setError(data.msg || "Invalid credentials");
