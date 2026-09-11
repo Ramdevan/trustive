@@ -27,7 +27,10 @@ const LoginForm: React.FC = () => {
   }, [router]);
 
   React.useEffect(() => {
-    if (router.query.verified === 'true') {
+    if (router.query.registered === 'true') {
+      setSuccess("Registration successful! Please sign in with your email and password.");
+      setError(null);
+    } else if (router.query.verified === 'true') {
       setSuccess("Email verified successfully! You can now log in.");
       setError(null);
     } else if (router.query.verified === 'error') {

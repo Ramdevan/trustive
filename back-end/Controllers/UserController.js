@@ -2,7 +2,7 @@ const ethers = require('ethers');
 const BN = require('bignumber.js');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const { sendVerificationEmail, sendPasswordResetEmail } = require('../Utils/Mail');
+const { sendPasswordResetEmail } = require('../Utils/Mail');
 
 module.exports = async function (fastify, opts) {
   const { toUtcISOString, updateSaleStatuses } = require('./timeUtils');
@@ -37,18 +37,34 @@ module.exports = async function (fastify, opts) {
 
 
   // ========================================
+  // ========================================
   // User Signup
   // ========================================
   fastify.post('/signup', async (request, reply) => {
     try {
-      const { name, email, password } = request.body;
+      const { name, email, password, confirmPassword } = request.body || {};
 
       if (!name || !name.trim()) {
         return reply.code(400).send({ status: false, msg: 'Username is required' });
       }
 
-      if (!email || !password) {
-        return reply.code(400).send({ status: false, msg: 'Email and password are required' });
+      if (!email || !email.trim()) {
+        return reply.code(400).send({ status: false, msg: 'Email is required' });
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const normalizedEmail = email.trim().toLowerCase();
+      if (!emailRegex.test(normalizedEmail)) {
+        return reply.code(400).send({ status: false, msg: 'Please enter a valid email address' });
+      }
+
+      if (!password) {
+        return reply.code(400).send({ status: false, msg: 'Password is required' });
+      }
+
+      // If confirmPassword is provided, ensure it matches
+      if (confirmPassword !== undefined && password !== confirmPassword) {
+        return reply.code(400).send({ status: false, msg: 'Passwords do not match' });
       }
 
       // Strong password validation: 8-15 chars, 1 uppercase letter, 1 number, 1 special character
@@ -65,32 +81,31 @@ module.exports = async function (fastify, opts) {
         return reply.code(400).send({ status: false, msg: 'Password must contain at least one special character' });
       }
 
-      // Check if email already exists
-      const [existing] = await fastify.mysql.query('SELECT * FROM users WHERE email = ?', [email]);
+      // Check if email already exists in database
+      const [existing] = await fastify.mysql.query('SELECT id FROM users WHERE LOWER(email) = ?', [normalizedEmail]);
       if (existing && existing.length > 0) {
-        return reply.code(400).send({ status: false, msg: 'Email already registered' });
+        return reply.code(400).send({ status: false, msg: 'Email already registered. Please use another.' });
       }
 
-      const displayName = name && name.trim() ? name.trim() : email.split('@')[0];
+      const displayName = name.trim();
       const hashedPassword = await bcrypt.hash(password, 10);
-      const verificationToken = crypto.randomBytes(32).toString('hex');
 
+      // Save user directly with verified status (no third-party verification service)
       const [result] = await fastify.mysql.query(
-        'INSERT INTO users (name, email, password, is_verified, verification_token, wallet_address) VALUES (?, ?, ?, 0, ?, ?)',
-        [displayName, email, hashedPassword, verificationToken, null] // wallet_address null initially, is_verified 0 until email verified
+        'INSERT INTO users (name, email, password, is_verified, verification_token, wallet_address) VALUES (?, ?, ?, 1, NULL, NULL)',
+        [displayName, normalizedEmail, hashedPassword]
       );
-
-      // Send verification email
-      try {
-        await sendVerificationEmail(email, verificationToken);
-      } catch (emailErr) {
-        console.error('Email sending failed:', emailErr);
-      }
 
       return reply.code(201).send({
         status: true,
-        msg: 'Signup successful! Please check your email to verify your account before logging in.',
-        requireVerification: true
+        msg: 'Registration successful! You can now log in.',
+        data: {
+          user: {
+            id: result.insertId,
+            name: displayName,
+            email: normalizedEmail
+          }
+        }
       });
 
     } catch (err) {
@@ -107,13 +122,14 @@ module.exports = async function (fastify, opts) {
   // ========================================
   fastify.post('/login', async (request, reply) => {
     try {
-      const { email, password, twoFaCode } = request.body;
+      const { email, password, twoFaCode } = request.body || {};
 
       if (!email || !password) {
         return reply.code(400).send({ status: false, msg: 'Email and password are required' });
       }
 
-      const [rows] = await fastify.mysql.query('SELECT * FROM users WHERE email = ?', [email]);
+      const normalizedEmail = email.trim().toLowerCase();
+      const [rows] = await fastify.mysql.query('SELECT * FROM users WHERE LOWER(email) = ?', [normalizedEmail]);
       let user = rows[0];
 
       if (!user) {
@@ -121,14 +137,11 @@ module.exports = async function (fastify, opts) {
         const [settingsRows] = await fastify.mysql.query('SELECT admin_email, admin_password, admin_two_fa_secret, admin_two_fa_enabled FROM settings LIMIT 1');
         const settings = settingsRows[0];
 
-        // admin_password is a bcrypt hash now (AdminController hashes the old
-        // plaintext value on boot), so this has to compare the same way.
-        const adminPasswordOk = settings && settings.admin_password && email === settings.admin_email
+        const adminPasswordOk = settings && settings.admin_password && normalizedEmail === settings.admin_email?.toLowerCase()
           ? await bcrypt.compare(password, settings.admin_password)
           : false;
 
         if (adminPasswordOk) {
-
           if (settings.admin_two_fa_enabled) {
             if (!twoFaCode) {
               return reply.send({ status: true, require2FA: true, msg: '2FA code required' });
@@ -155,16 +168,9 @@ module.exports = async function (fastify, opts) {
         return reply.code(401).send({ status: false, msg: 'Invalid email or password' });
       }
 
-
-
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return reply.code(401).send({ status: false, msg: 'Invalid email or password' });
-      }
-
-      // Check if email is verified
-      if (!user.is_verified) {
-        return reply.code(403).send({ status: false, msg: 'Please verify your email before logging in. Check your inbox for the verification link.' });
       }
 
       // Check User 2FA

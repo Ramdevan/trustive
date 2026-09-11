@@ -32,7 +32,6 @@ interface User {
     ptc_tokens_purchased: string;
     total_usd_invested: string;
     profile_pic?: string | null;
-    kyc_status?: string | null;
 }
 
 interface UserProfileStats {
@@ -132,7 +131,6 @@ export default function UsersPage() {
                                 <th className="px-10 py-6 text-center rounded-tl-[32px]">S/No</th>
                                 <th className="px-10 py-6 text-center">WALLET ADDRESS</th>
                                 <th className="px-10 py-6 text-center">TRUSTIVE BALANCE</th>
-                                <th className="px-10 py-6 text-center">KYC STATUS</th>
                                 <th className="px-10 py-6 text-center">STATUS</th>
                                 <th className="px-12 py-6 text-center rounded-tr-[32px]">ACCOUNT PROFILE</th>
                             </tr>
@@ -140,14 +138,14 @@ export default function UsersPage() {
                         <tbody className="divide-y divide-zinc-200">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={6} className="py-24 text-center">
+                                    <td colSpan={5} className="py-24 text-center">
                                         <div className="animate-spin h-10 w-10 border-b-2 border-[#212E73] mx-auto rounded-full" />
                                         <p className="mt-4 text-zinc-400 font-bold uppercase tracking-widest text-xs">Querying Database Registry...</p>
                                     </td>
                                 </tr>
                             ) : filteredUsers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="py-24 text-center text-zinc-400 uppercase font-bold tracking-widest text-sm italic">
+                                    <td colSpan={5} className="py-24 text-center text-zinc-400 uppercase font-bold tracking-widest text-sm italic">
                                         No users identified matching the criteria
                                     </td>
                                 </tr>
@@ -192,24 +190,6 @@ export default function UsersPage() {
                                                 </span>
                                                 <span className="text-[10px] text-[#212E73] font-bold uppercase tracking-wider mt-0.5">Trustive Tokens</span>
                                             </div>
-                                        </td>
-                                        <td className="px-10 py-6 text-center">
-                                            {u.kyc_status === 'verified' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-200">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                                    Verified
-                                                </span>
-                                            ) : u.kyc_status === 'pending' ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider border border-amber-200">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                                                    Pending
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-500 text-xs font-bold uppercase tracking-wider border border-zinc-200">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
-                                                    Unverified
-                                                </span>
-                                            )}
                                         </td>
                                         <td className="px-10 py-6 text-center">
                                             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest border border-emerald-200">
@@ -283,9 +263,6 @@ function ProfileModal({ address, userId, name, email, onClose }: { address: stri
                                 <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">
                                     {name || "User Profile"}
                                 </h2>
-                                <span className="px-3 py-1 bg-emerald-100 border border-emerald-200 rounded-full text-[10px] font-bold text-emerald-700 uppercase tracking-widest">
-                                    Verification Success
-                                </span>
                             </div>
                             <div className="flex flex-col gap-0.5">
                                 <div className="flex items-center gap-1.5">

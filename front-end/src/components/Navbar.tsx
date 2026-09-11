@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LuShieldCheck, LuWallet, LuMenu, LuSettings, LuLogOut, LuTriangleAlert, LuUser } from 'react-icons/lu';
+import { LuWallet, LuMenu, LuSettings, LuLogOut, LuTriangleAlert, LuUser } from 'react-icons/lu';
 import Image from 'next/image';
 import Link from 'next/link';
 import userProfile from '@/assets/images/user.png';
@@ -96,11 +96,6 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
-        <button className="hidden sm:flex items-center gap-2 rounded-xl bg-zinc-100 border border-zinc-200 px-3 md:px-5 py-2.5 md:py-3 text-[0.875rem] md:text-[1rem] font-medium text-zinc-800 transition-colors hover:bg-zinc-200 cursor-pointer">
-          <LuShieldCheck className="h-5 w-5 text-[#212E73]" />
-          <span className="hidden md:inline">KYC</span>
-        </button>
-
         {/* Wrong chain warning */}
         {isConnected && !isCorrectChain && (
           <button

@@ -36,6 +36,12 @@ const RegisterForm: React.FC = () => {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email.trim())) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
     if (!password) {
       setError("Password is required");
       return;
@@ -79,23 +85,20 @@ const RegisterForm: React.FC = () => {
       const res = await fetch(`${API_URL}/api/user/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          confirmPassword
+        })
       });
       const data = await res.json();
 
       if (data.status) {
-        if (data.requireVerification) {
-          // Email verification required - show success message and redirect to login
-          setSuccess(data.msg || "Signup successful! Please check your email to verify your account.");
-          setTimeout(() => {
-            router.replace('/login');
-          }, 4000);
-        } else if (data.data?.token) {
-          localStorage.setItem("user_token", data.data.token);
-          localStorage.setItem("user_data", JSON.stringify(data.data.user));
-          localStorage.setItem("user_last_activity", Date.now().toString());
-          window.location.replace('/dashboard');
-        }
+        setSuccess(data.msg || "Registration successful! Redirecting to login...");
+        setTimeout(() => {
+          router.push('/login?registered=true');
+        }, 1500);
       } else {
         setError(data.msg || "Registration failed");
       }
