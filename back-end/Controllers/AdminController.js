@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { ethers } = require('ethers');
+const { getProvider, withFailover, invalidateProvider } = require('../Utils/rpcProvider');
 const bcrypt = require('bcrypt');
 
 module.exports = async function (fastify, opts) {
@@ -44,36 +45,9 @@ module.exports = async function (fastify, opts) {
         }
     });
 
-    // RPC Cache and Provider Management
-    const RPC_URLS = [
-        process.env.RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com',
-        'https://ethereum-sepolia-rpc.publicnode.com'
-    ];
-
-    let _cachedProvider = null;
-    let _lastProviderRefresh = 0;
-    const PROVIDER_TIMEOUT = 300000; // 5 minutes
-
-    async function getWorkingProvider() {
-        if (_cachedProvider && (Date.now() - _lastProviderRefresh < PROVIDER_TIMEOUT)) {
-            return _cachedProvider;
-        }
-
-        for (const url of RPC_URLS) {
-            try {
-                const p = new ethers.JsonRpcProvider(url);
-                await Promise.race([
-                    p.getBlockNumber(),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
-                ]);
-                _cachedProvider = p;
-                _lastProviderRefresh = Date.now();
-                return p;
-            } catch (_) { }
-        }
-        if (_cachedProvider) return _cachedProvider;
-        throw new Error('All RPC endpoints unavailable');
-    }
+    // RPC provider – uses centralized Utils/rpcProvider.js with 5-endpoint
+    // rotational failover. getWorkingProvider is an alias for compatibility.
+    const getWorkingProvider = getProvider;
 
     // Generic Cache for View Calls
     const _viewCache = new Map();
@@ -94,12 +68,12 @@ module.exports = async function (fastify, opts) {
             if (!settings?.ico_contract) return null;
 
             const simpleAbi = [{ "inputs": [], "name": "tokenAmountPerUSD", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }];
-            const provider = await getWorkingProvider();
-            const contract = new ethers.Contract(settings.ico_contract, simpleAbi, provider);
-            const onChain = await contract.tokenAmountPerUSD();
-
-            const tokensPerUSD = parseFloat(onChain.toString()) / (10 ** 18);
-            return tokensPerUSD > 0 ? (1 / tokensPerUSD) : 0;
+            return await withFailover(async (provider) => {
+                const contract = new ethers.Contract(settings.ico_contract, simpleAbi, provider);
+                const onChain = await contract.tokenAmountPerUSD();
+                const tokensPerUSD = parseFloat(onChain.toString()) / (10 ** 18);
+                return tokensPerUSD > 0 ? (1 / tokensPerUSD) : 0;
+            });
         } catch (err) {
             console.error('getOnChainTokenPrice error:', err.message);
             return null;
@@ -114,14 +88,8 @@ module.exports = async function (fastify, opts) {
             const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
 
             if (tokenAddr && icoAddr) {
-                const RPC_URLS = [
-                    'https://ethereum-sepolia-rpc.publicnode.com',
-                    'https://sepolia.gateway.tenderly.co',
-                    'https://sepolia.drpc.org',
-                ];
-                for (const rpc of RPC_URLS) {
-                    try {
-                        const provider = new ethers.JsonRpcProvider(rpc);
+                try {
+                    return await withFailover(async (provider) => {
                         const tokenContract = new ethers.Contract(
                             tokenAddr,
                             ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'],
@@ -132,7 +100,9 @@ module.exports = async function (fastify, opts) {
                             tokenContract.decimals().catch(() => 18)
                         ]);
                         return parseFloat(ethers.formatUnits(balWei, decimals));
-                    } catch (e) { }
+                    });
+                } catch (_) {
+                    // All RPCs failed – fall through to DB fallback
                 }
                 if (currentSettings.ico_remaining_tokens) {
                     return parseFloat(currentSettings.ico_remaining_tokens);
@@ -152,7 +122,7 @@ module.exports = async function (fastify, opts) {
     const STAKING_CONTRACT_ADDRESS = process.env.STAKING_CONTRACT_ADDRESS || '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
 
     async function getStakingContract() {
-        const provider = await getWorkingProvider();
+        const provider = await getProvider();
         return new ethers.Contract(STAKING_CONTRACT_ADDRESS, STAKING_ABI, provider);
     }
 
@@ -200,7 +170,7 @@ module.exports = async function (fastify, opts) {
 
             // Clean up DB plans that exceed on-chain total plans
             if (totalPlans > 0) {
-                await mysql.query("DELETE FROM staking_plans WHERE chain_level > ? OR chain_level IS NULL", [totalPlans]).catch(() => {});
+                await mysql.query("DELETE FROM staking_plans WHERE chain_level > ? OR chain_level IS NULL", [totalPlans]).catch(() => { });
             }
 
             return synced;
@@ -603,7 +573,7 @@ module.exports = async function (fastify, opts) {
             const icoContract = new ethers.Contract(icoAddr, ICO_ABI, provider);
 
             const currentBlock = await provider.getBlockNumber();
-            const startBlock = 11500000;
+            const startBlock = Math.max(0, currentBlock - 50000);
             const filter = icoContract.filters.TokenPurchased();
             const CHUNK_SIZE = 10000;
             let logs = [];
@@ -663,8 +633,8 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get('/dashboard', async (request, reply) => {
         try {
-            await updateSaleStatuses(fastify.mysql);
-            await syncIcoPurchasesFromChain(fastify.mysql);
+            updateSaleStatuses(fastify.mysql).catch(() => {});
+            syncIcoPurchasesFromChain(fastify.mysql).catch(() => {});
 
             const [
                 [statsRows],
@@ -773,14 +743,8 @@ module.exports = async function (fastify, opts) {
                 const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
 
                 if (tokenAddr && icoAddr) {
-                    const RPC_URLS = [
-                        'https://ethereum-sepolia-rpc.publicnode.com',
-                        'https://sepolia.gateway.tenderly.co',
-                        'https://sepolia.drpc.org',
-                    ];
-                    for (const rpc of RPC_URLS) {
-                        try {
-                            const provider = new ethers.JsonRpcProvider(rpc);
+                    try {
+                        contractBal = await withFailover(async (provider) => {
                             const tokenContract = new ethers.Contract(
                                 tokenAddr,
                                 [
@@ -793,15 +757,15 @@ module.exports = async function (fastify, opts) {
                                 tokenContract.balanceOf(icoAddr),
                                 tokenContract.decimals().catch(() => 18)
                             ]);
-                            contractBal = parseFloat(ethers.formatUnits(balWei, decimals));
-                            break;
-                        } catch (e) {
-                            // try next RPC
-                        }
+                            return parseFloat(ethers.formatUnits(balWei, decimals));
+                        });
+                    } catch (_) {
+                        // All RPCs failed
                     }
 
                     if (contractBal !== null && statsRows && statsRows[0]) {
                         statsRows[0].total_ico_remaining = contractBal;
+                        await fastify.mysql.query("UPDATE settings SET ico_remaining_tokens = ? WHERE id = ?", [contractBal.toString(), currentSettings.id || 1]).catch(() => {});
                     } else if (currentSettings.ico_remaining_tokens !== undefined && currentSettings.ico_remaining_tokens !== null && parseFloat(currentSettings.ico_remaining_tokens) > 0) {
                         if (statsRows && statsRows[0]) {
                             statsRows[0].total_ico_remaining = parseFloat(currentSettings.ico_remaining_tokens) || 0;
@@ -1423,7 +1387,7 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get('/getTransactionDetails', async (request, reply) => {
         try {
-            await syncIcoPurchasesFromChain(fastify.mysql);
+            syncIcoPurchasesFromChain(fastify.mysql).catch(() => {});
             const [rows] = await fastify.mysql.query(`
                 SELECT ip.id, ip.address, ip.crypto_value, ip.payment_type, ip.ptc_tokens, ip.trans_hash, ip.usd_value_of_crypto, ip.sale_type, ip.status, ip.created_at, u.name as username
                 FROM ico_purchases ip
@@ -1721,8 +1685,8 @@ module.exports = async function (fastify, opts) {
     // ========================================
     const vestingFs = require('fs');
     const vestingPath = require('path');
-    const vestingRpcUrl = process.env.RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com';
-    const vestingProvider = new ethers.JsonRpcProvider(vestingRpcUrl);
+    // Vesting uses the same centralized RPC provider with failover
+    // (no static provider – avoids stale connection errors)
 
     // Ensure vesting table exists
     await fastify.mysql.query(`CREATE TABLE IF NOT EXISTS vesting_schedules (
@@ -1750,10 +1714,11 @@ module.exports = async function (fastify, opts) {
         console.error("vesting_schedules unique key migration error:", err.message);
     }
 
-    function getVestingContract() {
-        const addr = process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+    async function getVestingContract() {
+        const addr = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
         const abi = JSON.parse(vestingFs.readFileSync(vestingPath.join(__dirname, "../abi's/vesting.json"), 'utf8'));
-        return new ethers.Contract(addr, abi, vestingProvider);
+        const provider = await getProvider();
+        return new ethers.Contract(addr, abi, provider);
     }
 
     fastify.get('/vestings', async (request, reply) => {
@@ -1806,7 +1771,7 @@ module.exports = async function (fastify, opts) {
                     created_at: toUtcISOString(c.created_at)
                 });
             }
-            const contract = getVestingContract();
+            const contract = await getVestingContract();
             const processed = await Promise.all(vestings.map(async (v) => {
                 const index = v.vesting_index !== null ? v.vesting_index : 0;
                 const cacheKey = `v_${v.beneficiary}_${index}`;
@@ -1863,7 +1828,7 @@ module.exports = async function (fastify, opts) {
 
     fastify.get('/vesting/sync', async (request, reply) => {
         try {
-            const contract = getVestingContract();
+            const contract = await getVestingContract();
             const [users] = await fastify.mysql.query("SELECT wallet_address FROM users WHERE wallet_address IS NOT NULL AND wallet_address != ''");
 
             let syncCount = 0;
@@ -1938,7 +1903,7 @@ module.exports = async function (fastify, opts) {
 
     fastify.get('/vesting/settings', async (request, reply) => {
         try {
-            const vestingAddr = process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+            const vestingAddr = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
             const VESTING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/vesting.json"), 'utf8'));
             const provider = await getWorkingProvider();
             const contract = new ethers.Contract(vestingAddr, VESTING_ABI, provider);
@@ -1964,7 +1929,7 @@ module.exports = async function (fastify, opts) {
             const calldata = iface.encodeFunctionData('setMultipleVesting', [enabled]);
             return reply.send({
                 status: true,
-                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12',
+                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4',
                 calldata
             });
         } catch (err) {
@@ -1989,7 +1954,7 @@ module.exports = async function (fastify, opts) {
             // is off, and it reverts past maxVestingLimit while it is on. Check both here
             // so the admin never gets as far as signing a doomed tx in MetaMask.
             try {
-                const vestingContract = getVestingContract();
+                const vestingContract = await getVestingContract();
                 const [multipleEnabled, existingCount, maxLimit] = await Promise.all([
                     vestingContract.multipleVesting(),
                     vestingContract.getVestingCount(beneficiary),
@@ -2027,7 +1992,7 @@ module.exports = async function (fastify, opts) {
             ]);
             return reply.send({
                 status: true,
-                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12',
+                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4',
                 calldata,
                 params: { beneficiary, amount, cliffMonths, vestingMonths }
             });
@@ -2047,9 +2012,12 @@ module.exports = async function (fastify, opts) {
             // Wait for the vest tx first: reading the count while the node is
             // still a block behind returns a stale value, and the row then lands
             // on the previous vesting's index.
-            const contract = getVestingContract();
+            const contract = await getVestingContract();
             if (tx_hash) {
-                try { await vestingProvider.waitForTransaction(tx_hash, 1, 60000); } catch (e) {
+                try {
+                    const provider = await getProvider();
+                    await provider.waitForTransaction(tx_hash, 1, 60000);
+                } catch (e) {
                     console.warn('createVesting: waiting for tx failed:', e.message);
                 }
             }
@@ -2342,14 +2310,14 @@ module.exports = async function (fastify, opts) {
                     const latestId = latest[0].id;
 
                     if (rawAmount === 0n && withdrawAmount > 0n) {
-                        await mysql.query("UPDATE staking_records SET status = 'unstaked', reward_claimed = ? WHERE id = ?", [reward, latestId]).catch(() => {});
+                        await mysql.query("UPDATE staking_records SET status = 'unstaked', reward_claimed = ? WHERE id = ?", [reward, latestId]).catch(() => { });
                     } else if (rawAmount > 0n) {
                         const amt = ethers.formatEther(rawAmount);
                         const endAt = endTime > 0 ? new Date(endTime * 1000) : null;
                         const status = !isActive ? 'unstaked' : (endAt && new Date() > endAt ? 'completed' : 'active');
-                        await mysql.query("UPDATE staking_records SET status = ?, amount = ?, reward_claimed = ? WHERE id = ?", [status, amt, reward, latestId]).catch(() => {});
+                        await mysql.query("UPDATE staking_records SET status = ?, amount = ?, reward_claimed = ? WHERE id = ?", [status, amt, reward, latestId]).catch(() => { });
                     }
-                } catch (e) {}
+                } catch (e) { }
             }
         } catch (e) {
             console.error("syncAllStakesFromChain error:", e.message);
@@ -2360,7 +2328,7 @@ module.exports = async function (fastify, opts) {
     fastify.get('/staking/all-stakes', async (request, reply) => {
         try {
             // Trigger sync in background
-            syncAllStakesFromChain(fastify.mysql).catch(() => {});
+            syncAllStakesFromChain(fastify.mysql).catch(() => { });
 
             const page = parseInt(request.query.page) || 1;
             const limit = parseInt(request.query.limit) || 10;

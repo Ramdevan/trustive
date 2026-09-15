@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
-import { sepolia } from 'wagmi/chains';
+import { bscTestnet } from 'wagmi/chains';
 import ethIcon from '@/assets/images/eth-icon.svg';
 import usdtIcon from '@/assets/images/usdt-icon.svg';
 import usdcIcon from '@/assets/images/usdc-icon.svg';
@@ -25,9 +25,9 @@ const PAYMENT_CONFIG: Record<PaymentMethod, { index: number; decimals: number; l
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 const RPC_URLS = [
-  process.env.NEXT_PUBLIC_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com',
-  'https://ethereum-sepolia-rpc.publicnode.com',
-  'https://sepolia.gateway.tenderly.co',
+  process.env.NEXT_PUBLIC_RPC_URL || 'https://bsc-testnet-rpc.publicnode.com',
+  'https://bsc-testnet-rpc.publicnode.com',
+  'https://data-seed-prebsc-1-s1.binance.org:8545',
 ];
 
 const ICO_ABI = [
@@ -107,9 +107,9 @@ const BuyTokenForm: React.FC = () => {
       // List of providers to try: 1. Wallet Provider, 2. Public RPCs
       const providers = [
         provider,
-        new ethers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com'),
-        new ethers.JsonRpcProvider('https://sepolia.drpc.org'),
-        new ethers.JsonRpcProvider('https://rpc2.sepolia.org'),
+        new ethers.JsonRpcProvider('https://bsc-testnet-rpc.publicnode.com'),
+        new ethers.JsonRpcProvider('https://data-seed-prebsc-1-s1.binance.org:8545'),
+        new ethers.JsonRpcProvider('https://data-seed-prebsc-2-s1.binance.org:8545'),
       ].filter(Boolean) as (ethers.Provider | ethers.JsonRpcProvider)[];
 
       let success = false;
@@ -505,7 +505,7 @@ const BuyTokenForm: React.FC = () => {
       {isConnected && !isCorrectChain && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-[0.875rem]">
           <LuTriangleAlert className="h-4 w-4 flex-shrink-0" />
-          Please switch to Ethereum Sepolia to purchase tokens
+          Please switch to BSC Testnet to purchase tokens
         </div>
       )}
 
@@ -654,7 +654,7 @@ const BuyTokenForm: React.FC = () => {
             btnClass = 'bg-[#212E73] hover:bg-[#16225B] text-white shadow-md shadow-[#212E73]/20 cursor-pointer';
             isDisabled = false;
           } else if (chain.unsupported) {
-            btnLabel = 'Switch to Sepolia';
+            btnLabel = 'Switch to BSC Testnet';
             btnClass = 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 cursor-pointer';
             isDisabled = false;
           } else if (saleLoaded && !isSaleActive) {

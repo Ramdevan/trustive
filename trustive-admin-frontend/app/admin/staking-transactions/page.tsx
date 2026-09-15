@@ -267,7 +267,7 @@ export default function StakingManagement() {
                                         )}
                                     </button>
                                     <a
-                                        href={`https://sepolia.etherscan.io/address/${STAKING_CONTRACT_ADDRESS}`}
+                                        href={`https://testnet.bscscan.com/address/${STAKING_CONTRACT_ADDRESS}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="p-1 hover:text-[#212E73] text-zinc-400 transition-colors"
@@ -276,7 +276,7 @@ export default function StakingManagement() {
                                         <ExternalLink className="w-3.5 h-3.5" />
                                     </a>
                                 </div>
-                                <div className="text-[11px] text-zinc-400">Sepolia Testnet</div>
+                                <div className="text-[11px] text-zinc-400">BSC Testnet</div>
                             </div>
 
                         </div>

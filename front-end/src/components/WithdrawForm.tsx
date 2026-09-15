@@ -15,7 +15,7 @@ interface WithdrawFormProps {
   onClaim?: () => void;
 }
 
-const VESTING_CONTRACT = '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+const VESTING_CONTRACT = '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
 const VESTING_ABI = [
   'function claim(uint256 index) external',
   'function claimAll() external'
@@ -96,27 +96,27 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
       <div className="flex flex-col items-center">
         <span className="text-[0.75rem] text-zinc-500 uppercase tracking-wider">Claimable Now</span>
         <div className="flex items-baseline justify-center gap-2">
-            <span className="text-[2.25rem] font-bold text-accent leading-tight tracking-tighter">
+          <span className="text-[2.25rem] font-bold text-accent leading-tight tracking-tighter">
             {Number(claimableAmount).toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            </span>
-            <span className="text-[1.125rem] font-black text-[#E5A93E] uppercase tracking-wider">Trustive</span>
+          </span>
+          <span className="text-[1.125rem] font-black text-[#E5A93E] uppercase tracking-wider">Trustive</span>
         </div>
       </div>
 
       <div className="w-full">
         {status && !isError && (
-            <div className="px-3 py-2 mb-3 rounded-lg text-[0.75rem] bg-green-500/10 border border-green-500/20 text-green-400">
+          <div className="px-3 py-2 mb-3 rounded-lg text-[0.75rem] bg-green-500/10 border border-green-500/20 text-green-400">
             {status}
-            </div>
+          </div>
         )}
 
         <button
-            onClick={handleClaim}
-            disabled={loading || Number(claimableAmount) <= 0}
-            className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-accent/10 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+          onClick={handleClaim}
+          disabled={loading || Number(claimableAmount) <= 0}
+          className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-accent/10 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
-            {loading && <LuLoader className="h-4 w-4 animate-spin" />}
-            Claim Tokens
+          {loading && <LuLoader className="h-4 w-4 animate-spin" />}
+          Claim Tokens
         </button>
       </div>
     </div>

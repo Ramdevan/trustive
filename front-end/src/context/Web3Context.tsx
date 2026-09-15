@@ -3,8 +3,8 @@ import { useAccount, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useEthersProvider, useEthersSigner } from '@/hooks/useEthers';
 
-// Sepolia chain ID = 11155111
-export const TARGET_CHAIN_ID = 11155111;
+// BSC Testnet chain ID = 97
+export const TARGET_CHAIN_ID = 97;
 
 interface Web3ContextType {
   account: string | null;

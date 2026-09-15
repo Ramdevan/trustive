@@ -53,7 +53,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
     const { disconnectWallet } = useWeb3();
 
     // Admin wallet verification
-    const ADMIN_WALLET_ADDRESS = (process.env.NEXT_PUBLIC_ADMIN_WALLET || "0x1DE6383befD31A8700ba4EC3bAfc1aA4356FB00B").toLowerCase();
+    const ADMIN_WALLET_ADDRESS = (process.env.NEXT_PUBLIC_ADMIN_WALLET || "0x861b38d9E97ebE86883A55eB4b2b70cca795785E").toLowerCase();
     const isAdminWallet = address && ADMIN_WALLET_ADDRESS && address.toLowerCase() === ADMIN_WALLET_ADDRESS;
 
     const IDLE_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes of inactivity
@@ -364,7 +364,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                     {isConnected ? "Unauthorized Wallet" : "Identity Required"}
                                 </h1>
                                 <p className="text-zinc-600 text-sm font-medium leading-relaxed mb-8">
-                                    {isConnected 
+                                    {isConnected
                                         ? `The connected wallet (${shortenAddress(address || "")}) is not authorized.`
                                         : "Please connect the authorized master admin wallet to access the control panel."
                                     }
@@ -374,7 +374,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                         <p className="text-[10px] font-bold text-[#212E73] uppercase tracking-widest mb-1">Required Authority</p>
                                         <p className="text-xs font-mono text-zinc-600 break-all">{ADMIN_WALLET_ADDRESS || 'Master Admin Address Not Set'}</p>
                                     </div>
-                                    
+
                                     {!isConnected ? (
                                         <ConnectButton.Custom>
                                             {({ openConnectModal }) => (

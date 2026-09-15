@@ -3,9 +3,9 @@ import { ethers } from 'ethers';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 const RPC_URLS = [
-  process.env.NEXT_PUBLIC_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com',
-  'https://ethereum-sepolia-rpc.publicnode.com',
-  'https://sepolia.gateway.tenderly.co',
+  process.env.NEXT_PUBLIC_RPC_URL || 'https://bsc-testnet-rpc.publicnode.com',
+  'https://bsc-testnet-rpc.publicnode.com',
+  'https://data-seed-prebsc-1-s1.binance.org:8545',
 ];
 
 const ICO_ABI = [

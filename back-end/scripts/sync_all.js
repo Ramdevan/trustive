@@ -12,9 +12,11 @@ const dbConfig = {
 };
 
 const RPC_URLS = [
-    process.env.RPC_URL || 'https://rpc.sepolia.org',
-    'https://ethereum-sepolia-rpc.publicnode.com',
-    'https://sepolia.gateway.tenderly.co'
+    process.env.RPC_URL || 'https://bsc-testnet-rpc.publicnode.com',
+    'https://bsc-testnet-rpc.publicnode.com',
+    'https://data-seed-prebsc-1-s1.binance.org:8545',
+    'https://data-seed-prebsc-2-s1.binance.org:8545',
+    'https://bsc-testnet.drpc.org'
 ];
 
 let provider;
@@ -32,7 +34,7 @@ async function initProvider() {
 
 const ICO_ADDR = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
 const STAKING_ADDR = process.env.STAKING_CONTRACT_ADDRESS || '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
-const VESTING_ADDR = process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+const VESTING_ADDR = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
 
 const ICO_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, '../abi\'s/ico.json'), 'utf8'));
 const STAKING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, '../abi\'s/staking.json'), 'utf8'));

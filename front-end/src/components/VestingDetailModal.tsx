@@ -13,7 +13,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 // silently did nothing while only the shorter name was checked.
 const VESTING_CONTRACT = process.env.NEXT_PUBLIC_VESTING_CONTRACT_ADDRESS
   || process.env.NEXT_PUBLIC_VESTING_CONTRACT
-  || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+  || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
 const VESTING_ABI = [
   'function claim(uint256 index) external',
   'function claimPeriods(uint256 index, uint256 periods) external',
@@ -280,7 +280,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
                   <td className="px-5 py-4 align-middle whitespace-nowrap font-mono">
                     {row.txHash && row.txHash.startsWith('0x') && row.txHash.length >= 64 ? (
                       <a
-                        href={`https://sepolia.etherscan.io/tx/${row.txHash}`}
+                        href={`https://testnet.bscscan.com/tx/${row.txHash}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-accent hover:underline"

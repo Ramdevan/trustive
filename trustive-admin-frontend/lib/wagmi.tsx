@@ -1,8 +1,8 @@
 'use client';
 
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { sepolia } from 'wagmi/chains';
-import { http, createStorage } from 'wagmi';
+import { bscTestnet } from 'wagmi/chains';
+import { http, fallback, createStorage } from 'wagmi';
 
 // Use localStorage with a unique key prefix so admin wallet state
 // is isolated from the user panel (which uses cookieStorage).
@@ -18,9 +18,15 @@ const adminStorage = typeof window !== 'undefined'
 export const getConfig = () => getDefaultConfig({
     appName: 'Trustive Admin Panel',
     projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'demo-project-id',
-    chains: [sepolia],
+    chains: [bscTestnet],
     transports: {
-        [sepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'),
+        [bscTestnet.id]: fallback([
+            http(process.env.NEXT_PUBLIC_RPC_URL || 'https://bsc-testnet-rpc.publicnode.com'),
+            http('https://bsc-testnet-rpc.publicnode.com'),
+            http('https://data-seed-prebsc-1-s1.binance.org:8545'),
+            http('https://data-seed-prebsc-2-s1.binance.org:8545'),
+            http('https://bsc-testnet.drpc.org'),
+        ]),
     },
     ...(adminStorage ? { storage: adminStorage } : {}),
     ssr: true,

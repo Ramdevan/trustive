@@ -24,7 +24,7 @@ const APPLY = process.argv.includes('--apply');
 const ONLY_ADDRESS = process.argv.slice(2).find(a => a.startsWith('0x'));
 
 const PERIOD_SECONDS = 120; // 1 contract unit = 2 real minutes
-const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
 const ETHERSCAN_KEY = process.env.ETHERSCAN_API_KEY;
 
 const dbConfig = {
@@ -37,8 +37,10 @@ const dbConfig = {
 
 const RPC_URLS = [...new Set([
     process.env.RPC_URL,
-    'https://ethereum-sepolia-rpc.publicnode.com',
-    'https://eth-sepolia-testnet.api.pocket.network',
+    'https://bsc-testnet-rpc.publicnode.com',
+    'https://data-seed-prebsc-1-s1.binance.org:8545',
+    'https://data-seed-prebsc-2-s1.binance.org:8545',
+    'https://bsc-testnet.drpc.org',
 ].filter(Boolean))];
 
 const abi = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/vesting.json"), 'utf8'));

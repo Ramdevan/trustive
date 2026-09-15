@@ -117,7 +117,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
             className="hidden lg:flex items-center gap-2 rounded-xl bg-red-500/20 border border-red-500/40 px-4 py-3 text-[0.875rem] font-medium text-red-400 hover:bg-red-500/30 transition-colors cursor-pointer"
           >
             <LuTriangleAlert className="h-4 w-4" />
-            Switch to Sepolia
+            Switch to BSC Testnet
           </button>
         )}
 

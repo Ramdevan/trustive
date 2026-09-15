@@ -11,8 +11,9 @@ import {
     Eye,
     EyeOff
 } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { confirmAction } from "@/lib/confirm";
+import { apiRequest } from "@/lib/api-client";
 
 export default function AdminProfile() {
     const [passwords, setPasswords] = useState({
@@ -42,10 +43,7 @@ export default function AdminProfile() {
 
     const fetch2FAStatus = async () => {
         try {
-            const res = await fetch("/api/admin/2fa-status", {
-                headers: { "Authorization": `Bearer ${localStorage.getItem("admin_token")}` }
-            });
-            const data = await res.json();
+            const data = await apiRequest("/2fa-status");
             if (data.status) setTwoFaStatus(data.enabled);
         } catch (err) {
             console.error(err);
@@ -60,26 +58,21 @@ export default function AdminProfile() {
         
         setLoading(true);
         try {
-            const res = await fetch("/api/admin/change-password", {
+            const data = await apiRequest("/change-password", {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("admin_token")}`
-                },
                 body: JSON.stringify({
                     currentPassword: passwords.current,
                     newPassword: passwords.new
                 })
             });
-            const data = await res.json();
             if (data.status) {
                 toast.success("Password updated successfully");
                 setPasswords({ current: "", new: "", confirm: "" });
             } else {
                 toast.error(data.msg || "Failed to update password");
             }
-        } catch (err) {
-            toast.error("Network error");
+        } catch (err: any) {
+            toast.error(err?.message || "Network error");
         } finally {
             setLoading(false);
         }
@@ -88,17 +81,17 @@ export default function AdminProfile() {
     const initiate2FASetup = async () => {
         setVerifying(true);
         try {
-            const res = await fetch("/api/admin/generate-2fa", {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${localStorage.getItem("admin_token")}` }
+            const data = await apiRequest("/generate-2fa", {
+                method: "POST"
             });
-            const data = await res.json();
             if (data.status) {
                 setSetupData({ secret: data.secret, qrCode: data.qrCode });
                 setShowSetup(true);
+            } else {
+                toast.error(data.msg || "Failed to generate 2FA");
             }
-        } catch (err) {
-            toast.error("Failed to generate 2FA");
+        } catch (err: any) {
+            toast.error(err?.message || "Failed to generate 2FA");
         } finally {
             setVerifying(false);
         }
@@ -108,15 +101,10 @@ export default function AdminProfile() {
         if (verificationCode.length !== 6) return;
         setVerifying(true);
         try {
-            const res = await fetch("/api/admin/verify-2fa", {
+            const data = await apiRequest("/verify-2fa", {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("admin_token")}`
-                },
                 body: JSON.stringify({ code: verificationCode })
             });
-            const data = await res.json();
             if (data.status) {
                 toast.success("2FA Enabled Successfully");
                 setTwoFaStatus(true);
@@ -126,8 +114,8 @@ export default function AdminProfile() {
             } else {
                 toast.error(data.msg || "Invalid code");
             }
-        } catch (err) {
-            toast.error("Verification failed");
+        } catch (err: any) {
+            toast.error(err?.message || "Verification failed");
         } finally {
             setVerifying(false);
         }
@@ -146,15 +134,10 @@ export default function AdminProfile() {
         if (!disablePassword || disableCode.length !== 6) return;
         setVerifying(true);
         try {
-            const res = await fetch("/api/admin/disable-2fa", {
+            const data = await apiRequest("/disable-2fa", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("admin_token")}`
-                },
                 body: JSON.stringify({ password: disablePassword, code: disableCode })
             });
-            const data = await res.json();
             if (data.status) {
                 toast.success("2FA Disabled");
                 setTwoFaStatus(false);
@@ -163,8 +146,8 @@ export default function AdminProfile() {
                 toast.error(data.msg || "Failed to disable 2FA");
                 setDisableCode("");
             }
-        } catch (err) {
-            toast.error("Failed to disable 2FA");
+        } catch (err: any) {
+            toast.error(err?.message || "Failed to disable 2FA");
         } finally {
             setVerifying(false);
         }

@@ -76,7 +76,7 @@ const isRealHash = (hash?: string | null): hash is string =>
 
 const TxLink: React.FC<{ hash?: string | null; fallbackIndex?: number | null }> = ({ hash, fallbackIndex }) => (
   isRealHash(hash) ? (
-    <a href={`https://sepolia.etherscan.io/tx/${hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline" title={hash}>
+    <a href={`https://testnet.bscscan.com/tx/${hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline" title={hash}>
       {shortenHash(hash)}
     </a>
   ) : fallbackIndex !== undefined ? (

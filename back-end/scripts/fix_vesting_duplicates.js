@@ -31,12 +31,13 @@ const dbConfig = {
 
 const RPC_URLS = [
     process.env.RPC_URL,
-    'https://ethereum-sepolia-rpc.publicnode.com',
-    'https://sepolia.gateway.tenderly.co',
-    'https://sepolia.drpc.org',
+    'https://bsc-testnet-rpc.publicnode.com',
+    'https://data-seed-prebsc-1-s1.binance.org:8545',
+    'https://data-seed-prebsc-2-s1.binance.org:8545',
+    'https://bsc-testnet.drpc.org',
 ].filter(Boolean);
 
-const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
 
 async function getContract() {
     const abi = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/vesting.json"), 'utf8'));

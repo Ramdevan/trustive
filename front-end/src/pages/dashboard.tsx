@@ -115,11 +115,11 @@ export default function Dashboard() {
 
     // Fetch user token balance via RPC fallback
     const fetchBalanceFallback = async () => {
-      // rpc.sepolia.org is dead and only added latency to the fallback chain
+      // Use BSC Testnet RPC endpoints with fallback
       const providers = [
-        new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'),
-        new ethers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com'),
-        new ethers.JsonRpcProvider('https://sepolia.gateway.tenderly.co'),
+        new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL || 'https://bsc-testnet-rpc.publicnode.com'),
+        new ethers.JsonRpcProvider('https://bsc-testnet-rpc.publicnode.com'),
+        new ethers.JsonRpcProvider('https://data-seed-prebsc-1-s1.binance.org:8545'),
       ];
 
       for (const p of providers) {
@@ -340,7 +340,7 @@ export default function Dashboard() {
                           </td>
                           <td className="px-4 sm:px-6 py-3.5 font-mono text-center">
                             {tx.trans_hash ? (
-                              <a href={`https://sepolia.etherscan.io/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline" title={tx.trans_hash}>
+                              <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline" title={tx.trans_hash}>
                                 {shortenHash(tx.trans_hash)}
                               </a>
                             ) : '—'}

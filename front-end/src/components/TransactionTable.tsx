@@ -120,7 +120,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                   </td>
                   <td className="px-6 py-4 font-mono text-center">
                     {tx.trans_hash && tx.trans_hash.startsWith('0x') && tx.trans_hash.length >= 64 ? (
-                      <a href={`https://sepolia.etherscan.io/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline inline-block" title={tx.trans_hash}>
+                      <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline inline-block" title={tx.trans_hash}>
                         {shortenHash(tx.trans_hash)}
                       </a>
                     ) : (

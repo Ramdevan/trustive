@@ -42,9 +42,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       setLoading(true);
 
       const providers = [
-        new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'),
-        new ethers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com'),
-        new ethers.JsonRpcProvider('https://sepolia.gateway.tenderly.co'),
+        new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL || 'https://bsc-testnet-rpc.publicnode.com'),
+        new ethers.JsonRpcProvider('https://bsc-testnet-rpc.publicnode.com'),
+        new ethers.JsonRpcProvider('https://data-seed-prebsc-1-s1.binance.org:8545'),
       ];
 
       for (const p of providers) {

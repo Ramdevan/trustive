@@ -12,13 +12,13 @@ async function syncPurchases() {
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'trustive_ico'
         });
-        const provider = new ethers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com');
+        const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://bsc-testnet-rpc.publicnode.com');
         const icoAbi = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/ico.json"), 'utf8'));
         const icoAddress = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
         const icoContract = new ethers.Contract(icoAddress, icoAbi, provider);
 
         const currentBlock = await provider.getBlockNumber();
-        const startBlock = 11500000;
+        const startBlock = Math.max(0, currentBlock - 50000);
         const filter = icoContract.filters.TokenPurchased();
 
         const CHUNK_SIZE = 10000;

@@ -21,6 +21,7 @@ import {
 import { cn, formatDate, formatDecimal, formatInputDecimal } from "@/lib/utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useReadContract } from "wagmi";
+import { bscTestnet } from "wagmi/chains";
 import { formatUnits } from "viem";
 import { apiRequest } from "@/lib/api-client";
 import { toast } from "react-toastify";
@@ -91,6 +92,7 @@ export default function SalesManagement() {
         ] as const,
         functionName: "balanceOf",
         args: [icoAddress],
+        chainId: bscTestnet.id,
         query: {
             enabled: Boolean(tokenAddress && icoAddress),
             refetchInterval: 10000,
@@ -101,9 +103,11 @@ export default function SalesManagement() {
         ? parseFloat(formatUnits(onChainICOBalanceWei, 18))
         : null;
 
-    const availableIcoBalance: number | null = (onChainICOBalance !== null && onChainICOBalance > 0)
+    const availableIcoBalance: number | null = (onChainICOBalance !== null && !isNaN(onChainICOBalance) && onChainICOBalance > 0)
         ? onChainICOBalance
-        : (salesData?.ico_balance !== undefined && salesData?.ico_balance !== null ? Number(salesData.ico_balance) : null);
+        : (salesData?.ico_balance !== undefined && salesData?.ico_balance !== null && Number(salesData.ico_balance) > 0
+            ? Number(salesData.ico_balance)
+            : (onChainICOBalance !== null && !isNaN(onChainICOBalance) ? onChainICOBalance : null));
 
     const sales: Sale[] = salesData?.sales || [];
 

@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `usdc_address` varchar(255) DEFAULT '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b',
   `eth_address` varchar(255) DEFAULT NULL,
   `staking_contract` varchar(255) DEFAULT '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb',
-  `vesting_contract` varchar(255) DEFAULT '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12',
+  `vesting_contract` varchar(255) DEFAULT '0x393858957f0193b6aC9781f8b033E9196e37bdd4',
   `ico_remaining_tokens` varchar(255) DEFAULT '0',
   `referral_level1` decimal(5,2) DEFAULT 5.00,
   `kyc_enabled` tinyint(1) DEFAULT 0,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 
 -- Insert default settings
 INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `staking_contract`, `vesting_contract`, `referral_level1`, `admin_email`, `admin_password`)
-VALUES ('Trustive', 'Trustive', 'Trustive', 'Base Sepolia', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb', '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12', 5.00, 'admin@trustive.com', 'admin123');
+VALUES ('Trustive', 'Trustive', 'Trustive', 'Base Sepolia', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb', '0x393858957f0193b6aC9781f8b033E9196e37bdd4', 5.00, 'admin@trustive.com', 'admin123');
 
 -- ========================================
 -- Users Table

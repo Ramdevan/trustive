@@ -1,7 +1,7 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { metaMaskWallet } from '@rainbow-me/rainbowkit/wallets';
-import { sepolia } from 'wagmi/chains';
-import { http, createStorage, cookieStorage } from 'wagmi';
+import { bscTestnet } from 'wagmi/chains';
+import { http, fallback, createStorage, cookieStorage } from 'wagmi';
 
 export const config = getDefaultConfig({
     appName: 'Trustive ICO',
@@ -14,9 +14,15 @@ export const config = getDefaultConfig({
             wallets: [metaMaskWallet],
         },
     ],
-    chains: [sepolia],
+    chains: [bscTestnet],
     transports: {
-        [sepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'),
+        [bscTestnet.id]: fallback([
+            http(process.env.NEXT_PUBLIC_RPC_URL || 'https://bsc-testnet-rpc.publicnode.com'),
+            http('https://bsc-testnet-rpc.publicnode.com'),
+            http('https://data-seed-prebsc-1-s1.binance.org:8545'),
+            http('https://data-seed-prebsc-2-s1.binance.org:8545'),
+            http('https://bsc-testnet.drpc.org'),
+        ]),
     },
     // EIP-6963 discovery makes wagmi build a connector for every injected
     // extension, which the modal then lists under "Installed" (Phantom, etc.).

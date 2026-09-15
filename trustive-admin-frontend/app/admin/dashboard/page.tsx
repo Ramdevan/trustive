@@ -57,6 +57,7 @@ function AutoScalingText({ children }: { children: React.ReactNode }) {
 
 import { useQuery } from "@tanstack/react-query";
 import { useReadContract } from "wagmi";
+import { bscTestnet } from "wagmi/chains";
 import { formatUnits } from "viem";
 import { apiRequest } from "@/lib/api-client";
 import TxHashLink from "@/components/TxHashLink";
@@ -91,6 +92,7 @@ export default function Dashboard() {
         ] as const,
         functionName: "balanceOf",
         args: [icoAddress],
+        chainId: bscTestnet.id,
         query: {
             enabled: Boolean(tokenAddress && icoAddress),
             refetchInterval: 10000,
@@ -101,14 +103,16 @@ export default function Dashboard() {
         ? parseFloat(formatUnits(onChainICOBalanceWei, 18))
         : null;
 
-    const remainingTokens = (onChainICOBalance !== null && onChainICOBalance > 0)
+    const remainingTokens = (onChainICOBalance !== null && !isNaN(onChainICOBalance) && onChainICOBalance > 0)
         ? onChainICOBalance
-        : (Number(stats?.total_ico_remaining || 0));
+        : (stats?.total_ico_remaining !== undefined && stats?.total_ico_remaining !== null && Number(stats.total_ico_remaining) > 0
+            ? Number(stats.total_ico_remaining)
+            : (onChainICOBalance !== null && !isNaN(onChainICOBalance) ? onChainICOBalance : 0));
 
     const statCards = [
         { topLabel: "Tokens Remaining", bottomLabel: "Trustive ICO Balance", value: `${formatDecimal(remainingTokens, 5)} Trustive`, icon: Package, link: "/admin/sales" },
         { topLabel: "Tokens in Vesting", bottomLabel: "Vesting Balance", value: `${formatDecimal(stats?.tokens_in_vesting || 0, 5)} Trustive`, icon: ShieldCheck, link: "/admin/vesting" },
-        { topLabel: "Total Tokens Earned", bottomLabel: "Staking Balance", value: `${formatDecimal(stats?.total_rewards_distributed || 0, 5)} Trustive`, icon: Coins, link: "/admin/staking-transactions" },
+        // { topLabel: "Total Tokens Earned", bottomLabel: "Staking Balance", value: `${formatDecimal(stats?.total_rewards_distributed || 0, 5)} Trustive`, icon: Coins, link: "/admin/staking-transactions" },
         { topLabel: "Sale Status", bottomLabel: activeSale?.computed_status === "active" ? "SALE IS LIVE" : activeSale?.computed_status === "scheduled" ? "SCHEDULED" : activeSale?.name ? "PHASE ENDED" : "INACTIVE", value: activeSale?.name || "No Sale", icon: Sparkles, link: "/admin/sales" },
         { topLabel: "No of Sold Token", bottomLabel: "Allotted / Sold Trustive", value: `${formatDecimal(stats?.purchased_tokens || 0, 5)} Trustive`, icon: Sparkles, link: "/admin/sales" },
         { topLabel: "No. of Users", bottomLabel: "Registered Sign-ups", value: formatDecimal(stats?.total_users || 0, 0), icon: Users, link: "/admin/users" },

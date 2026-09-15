@@ -33,7 +33,7 @@ export default function TxHashLink({ hash, fallback = "—", className }: TxHash
 
     return (
         <a
-            href={`https://sepolia.etherscan.io/tx/${hash}`}
+            href={`https://testnet.bscscan.com/tx/${hash}`}
             target="_blank"
             rel="noopener noreferrer"
             title={hash}

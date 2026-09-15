@@ -1,4 +1,5 @@
 const ethers = require('ethers');
+const { getProvider, withFailover } = require('../Utils/rpcProvider');
 const BN = require('bignumber.js');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -1007,9 +1008,10 @@ module.exports = async function (fastify, opts) {
         const activeSale = activeSaleRows[0];
 
         if (activeSale) {
-          const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com');
-          const icoContract = new ethers.Contract(ICO_ADDRESS, ['function getToken(uint256, uint256) view returns (uint256)'], provider);
-          const tokensWei = await icoContract.getToken(index, amountWei);
+          const tokensWei = await withFailover(async (provider) => {
+            const c = new ethers.Contract(ICO_ADDRESS, ['function getToken(uint256, uint256) view returns (uint256)'], provider);
+            return await c.getToken(index, amountWei);
+          });
           const tokens = parseFloat(ethers.formatUnits(tokensWei, 18));
 
           const minVal = parseFloat(activeSale.minimum_purchase || 0);
@@ -1116,18 +1118,17 @@ module.exports = async function (fastify, opts) {
       let finalUsdValue = USDvalue_of_crypto_purchased || '0';
       try {
         const cryptoAmt = parseFloat(CryptoValue || '0');
-        if (payment_type === 'ETH' && cryptoAmt > 0) {
-          // Use Chainlink ETH/USD feed on Sepolia
-          const { ethers: _ethers } = require('ethers');
-          const _provider = new _ethers.JsonRpcProvider(process.env.RPC_URL || 'https://eth-sepolia-testnet.api.pocket.network');
-          const _feed = new _ethers.Contract(
-            '0x694AA1769357215DE4FAC081bf1f309aDC325306',
+        if ((payment_type === 'ETH' || payment_type === 'BNB') && cryptoAmt > 0) {
+          // Use Chainlink BNB/USD feed on BSC Testnet
+          const _provider = await getProvider();
+          const _feed = new ethers.Contract(
+            '0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526',
             ['function latestRoundData() view returns (uint80, int256, uint256, uint256, uint80)'],
             _provider
           );
           const [, _price] = await _feed.latestRoundData();
-          const ethUsd = parseFloat(_ethers.formatUnits(_price, 8));
-          finalUsdValue = (cryptoAmt * ethUsd).toFixed(2);
+          const cryptoUsd = parseFloat(ethers.formatUnits(_price, 8));
+          finalUsdValue = (cryptoAmt * cryptoUsd).toFixed(2);
         } else if ((payment_type === 'USDT' || payment_type === 'USDC') && cryptoAmt > 0) {
           // Stablecoins: USD value = crypto amount directly
           finalUsdValue = cryptoAmt.toFixed(2);
@@ -1354,25 +1355,8 @@ module.exports = async function (fastify, opts) {
   const { ethers: stakingEthers } = require('ethers');
   const stakingFs = require('fs');
   const stakingPath = require('path');
-  // Ordered by measured latency: publicnode answers a 15-call batch in ~130ms,
-  // pocket in ~1.4s cold. sepolia.gateway.tenderly.co no longer resolves.
-  const stakingRpcUrls = [
-    process.env.RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com',
-    'https://ethereum-sepolia-rpc.publicnode.com',
-    'https://eth-sepolia-testnet.api.pocket.network',
-  ];
-  let stakingProvider = new stakingEthers.JsonRpcProvider(stakingRpcUrls[0]);
-  // Try to find a working RPC at startup
-  (async () => {
-    for (const rpc of stakingRpcUrls) {
-      try {
-        const p = new stakingEthers.JsonRpcProvider(rpc);
-        await p.getBlockNumber();
-        stakingProvider = p;
-        break;
-      } catch { /* try next */ }
-    }
-  })().catch(() => { });
+  // RPC provider: uses centralized Utils/rpcProvider.js with 5-endpoint
+  // rotational failover (no local RPC lists or startup probes needed).
 
   // Ensure staking tables exist
   await fastify.mysql.query(`CREATE TABLE IF NOT EXISTS staking_records (
@@ -1431,39 +1415,15 @@ module.exports = async function (fastify, opts) {
   // Ensure staking plan name and min_stake are updated
   await fastify.mysql.query("UPDATE staking_plans SET name = 'GOLD', min_stake = '1000' WHERE name = 'Flexible' OR name LIKE 'Level %' OR name = '3 min lock period' OR min_stake = '100' OR min_stake = '0'").catch(() => { });
 
-  function getStakingContract(provider) {
+  async function getStakingContract(provider) {
     const addr = process.env.STAKING_CONTRACT_ADDRESS || '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
     const abi = JSON.parse(stakingFs.readFileSync(stakingPath.join(__dirname, "../abi's/staking.json"), 'utf8'));
-    return new stakingEthers.Contract(addr, abi, provider || stakingProvider);
-  }
-
-  // Probing every RPC on each call costs a full round trip per request, so the
-  // winner is cached the way AdminController's getWorkingProvider does it.
-  let _cachedStakingProvider = null;
-  let _stakingProviderCheckedAt = 0;
-  const STAKING_PROVIDER_TTL = 300000; // 5 minutes
-
-  async function getWorkingStakingProvider() {
-    if (_cachedStakingProvider && Date.now() - _stakingProviderCheckedAt < STAKING_PROVIDER_TTL) {
-      return _cachedStakingProvider;
-    }
-    for (const rpc of stakingRpcUrls) {
-      try {
-        const p = new stakingEthers.JsonRpcProvider(rpc);
-        await Promise.race([
-          p.getBlockNumber(),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
-        ]);
-        _cachedStakingProvider = p;
-        _stakingProviderCheckedAt = Date.now();
-        return p;
-      } catch { /* try next */ }
-    }
-    return _cachedStakingProvider || stakingProvider; // fallback to the startup provider
+    const p = provider || await getProvider();
+    return new stakingEthers.Contract(addr, abi, p);
   }
 
   async function getWorkingStakingContract() {
-    return getStakingContract(await getWorkingStakingProvider());
+    return getStakingContract(await getProvider());
   }
 
   fastify.get('/staking/plans', async (request, reply) => {
@@ -1546,7 +1506,8 @@ module.exports = async function (fastify, opts) {
       const { stake_id, tx_hash, reward_amount, emergency } = request.body;
       if (!stake_id || !tx_hash) return reply.send({ status: false, msg: "Missing required fields" });
       try {
-        const receipt = await stakingProvider.waitForTransaction(tx_hash, 1, 30000);
+        const _unstakeProvider = await getProvider();
+        const receipt = await _unstakeProvider.waitForTransaction(tx_hash, 1, 30000);
         if (receipt.status !== 1) return reply.send({ status: false, msg: "Transaction failed on-chain" });
       } catch (e) {
         return reply.send({ status: false, msg: "Unable to verify transaction on-chain" });
@@ -1808,19 +1769,9 @@ module.exports = async function (fastify, opts) {
     INDEX idx_beneficiary (beneficiary)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci`).catch(() => { });
 
-  // One provider for every vesting call. Building a new JsonRpcProvider per
-  // request threw away ethers' request batching, so parallel reads went out as
-  // separate round trips.
-  let vestingProviderInstance = null;
+  // Vesting uses the centralized RPC provider with failover
   async function getVestingProvider() {
-    if (vestingProviderInstance) return vestingProviderInstance;
-    for (const url of stakingRpcUrls) {
-      try {
-        vestingProviderInstance = new stakingEthers.JsonRpcProvider(url, undefined, { staticNetwork: true });
-        return vestingProviderInstance;
-      } catch (_) { }
-    }
-    return stakingProvider;
+    return getProvider();
   }
 
   let vestingAbiCache = null;
@@ -1831,7 +1782,7 @@ module.exports = async function (fastify, opts) {
     return vestingAbiCache;
   }
 
-  const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0xBd4Ae52CE44A42FC7794938000Bb3147fC037B12';
+  const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
   async function getVestingContract() {
     return new stakingEthers.Contract(VESTING_ADDRESS, getVestingAbi(), await getVestingProvider());
   }

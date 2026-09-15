@@ -5,7 +5,7 @@
 # Copy any curl command and paste it in Postman or terminal
 # ============================================================
 
-WALLET="0x1DE6383befD31A8700ba4EC3bAfc1aA4356FB00B"
+WALLET="0x861b38d9E97ebE86883A55eB4b2b70cca795785E"
 BASE="http://localhost:3007"
 
 echo ""
@@ -265,7 +265,7 @@ echo ""
 echo "--- 45. Create Withdraw ---"
 curl -s -X POST "$BASE/api/admin/createWithdraw" \
   -H "Content-Type: application/json" \
-  -d '{"tx_hash":"0xTEST_WITHDRAW_TX","amount":"100","token":"ETH","to_address":"0x1DE6383befD31A8700ba4EC3bAfc1aA4356FB00B"}'
+  -d '{"tx_hash":"0xTEST_WITHDRAW_TX","amount":"100","token":"ETH","to_address":"0x861b38d9E97ebE86883A55eB4b2b70cca795785E"}'
 
 # ----- Referrals -----
 

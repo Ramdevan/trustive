@@ -25,8 +25,11 @@ const ERC20_ABI = [
 
 const FALLBACK_RPCS = [
     process.env.NEXT_PUBLIC_RPC_URL,
-    "https://ethereum-sepolia-rpc.publicnode.com",
-    "https://sepolia.drpc.org"
+    "https://bsc-testnet-rpc.publicnode.com",
+    "https://data-seed-prebsc-1-s1.binance.org:8545",
+    "https://data-seed-prebsc-2-s1.binance.org:8545",
+    "https://data-seed-prebsc-1-s3.binance.org:8545",
+    "https://bsc-testnet.drpc.org"
 ].filter(Boolean) as string[];
 
 async function getWorkingProvider() {
@@ -42,7 +45,7 @@ async function getWorkingProvider() {
             // try next RPC
         }
     }
-    return new ethers.JsonRpcProvider(FALLBACK_RPCS[0] || "https://ethereum-sepolia-rpc.publicnode.com");
+    return new ethers.JsonRpcProvider(FALLBACK_RPCS[0] || "https://bsc-testnet-rpc.publicnode.com");
 }
 
 interface WithdrawRecord {
