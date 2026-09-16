@@ -40,7 +40,7 @@ interface UserProfileStats {
     total_staked: string;
     total_rewards: string;
     total_vested: string;
-    total_eth: string;
+    total_bnb: string;
     total_usdt: string;
     unclaimed_boxes: number;
     nft_assets: number;

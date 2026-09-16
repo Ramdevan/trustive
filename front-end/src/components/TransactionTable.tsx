@@ -77,7 +77,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
               <th className="px-6 py-4 min-w-[8rem] text-left">Users</th>
               <th className="px-6 py-4 min-w-[8rem] text-center">Payment Type</th>
               <th className="px-6 py-4 min-w-[8rem] text-center">Amount Paid</th>
-              <th className="px-6 py-4 min-w-[8rem] text-center">Received Trustive</th>
+              <th className="px-6 py-4 min-w-[8rem] text-center">Received TRSIV</th>
               <th className="px-6 py-4 min-w-[8rem] text-center">USD Value</th>
               <th className="px-6 py-4 min-w-[8rem] text-center">Status</th>
               <th className="px-6 py-4 min-w-[12rem] text-center">Transaction Hash</th>
@@ -110,7 +110,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                   </td>
                   <td className="px-6 py-4 text-[#212E73] uppercase font-bold text-center">{tx.payment_type}</td>
                   <td className="px-6 py-4 text-zinc-900 font-medium whitespace-nowrap text-center">{Number(tx.crypto_value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</td>
-                  <td className="px-6 py-4 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} Trustive</td>
+                  <td className="px-6 py-4 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} TRSIV</td>
                   <td className="px-6 py-4 text-zinc-900 font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="px-6 py-4 text-center">
                     <span className={`inline-flex items-center justify-center gap-1.5 px-3.5 py-1 rounded-full text-[0.75rem] font-bold ${s.wrapper}`}>

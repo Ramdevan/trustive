@@ -138,7 +138,7 @@ export default function SalesManagement() {
 
         const qtyNum = Number(editForm.quantity);
         if (availableIcoBalance !== null && qtyNum > availableIcoBalance) {
-            toast.error(`Allocated tokens (${formatDecimal(qtyNum, 5)} Trustive) cannot exceed the available tokens in the ICO contract (${formatDecimal(availableIcoBalance, 5)} Trustive)`);
+            toast.error(`Allocated tokens (${formatDecimal(qtyNum, 5)} TRSIV) cannot exceed the available tokens in the ICO contract (${formatDecimal(availableIcoBalance, 5)} TRSIV)`);
             return;
         }
 
@@ -222,11 +222,11 @@ export default function SalesManagement() {
             return;
         }
         if (minNum > qtyNum) {
-            toast.error(`Minimum purchase (${minNum.toLocaleString()} Trustive) cannot exceed phase allocation (${qtyNum.toLocaleString()} Trustive)`);
+            toast.error(`Minimum purchase (${minNum.toLocaleString()} TRSIV) cannot exceed phase allocation (${qtyNum.toLocaleString()} TRSIV)`);
             return;
         }
         if (maxNum > qtyNum) {
-            toast.error(`Maximum purchase (${maxNum.toLocaleString()} Trustive) cannot exceed phase allocation (${qtyNum.toLocaleString()} Trustive)`);
+            toast.error(`Maximum purchase (${maxNum.toLocaleString()} TRSIV) cannot exceed phase allocation (${qtyNum.toLocaleString()} TRSIV)`);
             return;
         }
         if (new Date(newPhaseForm.start_at) >= new Date(newPhaseForm.end_at)) {
@@ -235,7 +235,7 @@ export default function SalesManagement() {
         }
 
         if (availableIcoBalance !== null && qtyNum > availableIcoBalance) {
-            toast.error(`Allocated tokens (${formatDecimal(qtyNum, 5)} Trustive) cannot exceed the available tokens in the ICO contract (${formatDecimal(availableIcoBalance, 5)} Trustive)`);
+            toast.error(`Allocated tokens (${formatDecimal(qtyNum, 5)} TRSIV) cannot exceed the available tokens in the ICO contract (${formatDecimal(availableIcoBalance, 5)} TRSIV)`);
             return;
         }
 
@@ -446,13 +446,13 @@ export default function SalesManagement() {
                                             <div className="space-y-1 min-w-0">
                                                 <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Min Purchase</p>
                                                 <p className="text-lg sm:text-xl font-bold text-zinc-900 tracking-tight break-all">
-                                                    {formatDecimal(activeSale.minimum_purchase, 5)} Trustive
+                                                    {formatDecimal(activeSale.minimum_purchase, 5)} TRSIV
                                                 </p>
                                             </div>
                                             <div className="space-y-1 text-right min-w-0">
                                                 <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Max Purchase</p>
                                                 <p className="text-lg sm:text-xl font-bold text-zinc-900 tracking-tight break-all">
-                                                    {formatDecimal(activeSale.maximum_purchase, 5)} Trustive
+                                                    {formatDecimal(activeSale.maximum_purchase, 5)} TRSIV
                                                 </p>
                                             </div>
                                         </div>

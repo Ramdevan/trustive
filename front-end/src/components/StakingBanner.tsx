@@ -34,8 +34,8 @@ const StakingBanner: React.FC<StakingBannerProps> = ({ onStakeClick, hasActiveSt
     : 'GOLD';
   const apyLabel = flexPlan?.apy ? `${Number(flexPlan.apy).toFixed(0)}% APY` : '8% APY';
   const minStake = (flexPlan?.min_stake && flexPlan.min_stake !== '100' && flexPlan.min_stake !== '0') 
-    ? `${Number(flexPlan.min_stake).toLocaleString()} Trustive` 
-    : '1,000 Trustive';
+    ? `${Number(flexPlan.min_stake).toLocaleString()} TRSIV` 
+    : '1,000 TRSIV';
 
   return (
     <div className="rounded-3xl bg-card p-6 border border-[#282726] relative overflow-hidden">

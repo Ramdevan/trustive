@@ -1,7 +1,7 @@
 /**
  * Centralized RPC Provider with rotational failover.
  *
- * Maintains a list of 5 public Sepolia RPC endpoints and automatically
+ * Maintains a list of 5 public BSC Testnet RPC endpoints and automatically
  * rotates to the next one when a call fails.  The working provider is
  * cached for CACHE_TTL ms so every request doesn't probe all endpoints.
  *

@@ -110,11 +110,11 @@ export default function Dashboard() {
             : (onChainICOBalance !== null && !isNaN(onChainICOBalance) ? onChainICOBalance : 0));
 
     const statCards = [
-        { topLabel: "Tokens Remaining", bottomLabel: "Trustive ICO Balance", value: `${formatDecimal(remainingTokens, 5)} Trustive`, icon: Package, link: "/admin/sales" },
-        { topLabel: "Tokens in Vesting", bottomLabel: "Vesting Balance", value: `${formatDecimal(stats?.tokens_in_vesting || 0, 5)} Trustive`, icon: ShieldCheck, link: "/admin/vesting" },
-        // { topLabel: "Total Tokens Earned", bottomLabel: "Staking Balance", value: `${formatDecimal(stats?.total_rewards_distributed || 0, 5)} Trustive`, icon: Coins, link: "/admin/staking-transactions" },
+        { topLabel: "Tokens Remaining", bottomLabel: "TRSIV ICO Balance", value: `${formatDecimal(remainingTokens, 5)} TRSIV`, icon: Package, link: "/admin/sales" },
+        { topLabel: "Tokens in Vesting", bottomLabel: "Vesting Balance", value: `${formatDecimal(stats?.tokens_in_vesting || 0, 5)} TRSIV`, icon: ShieldCheck, link: "/admin/vesting" },
+        // { topLabel: "Total Tokens Earned", bottomLabel: "Staking Balance", value: `${formatDecimal(stats?.total_rewards_distributed || 0, 5)} TRSIV`, icon: Coins, link: "/admin/staking-transactions" },
         { topLabel: "Sale Status", bottomLabel: activeSale?.computed_status === "active" ? "SALE IS LIVE" : activeSale?.computed_status === "scheduled" ? "SCHEDULED" : activeSale?.name ? "PHASE ENDED" : "INACTIVE", value: activeSale?.name || "No Sale", icon: Sparkles, link: "/admin/sales" },
-        { topLabel: "No of Sold Token", bottomLabel: "Allotted / Sold Trustive", value: `${formatDecimal(stats?.purchased_tokens || 0, 5)} Trustive`, icon: Sparkles, link: "/admin/sales" },
+        { topLabel: "No of Sold Token", bottomLabel: "Allotted / Sold TRSIV", value: `${formatDecimal(stats?.purchased_tokens || 0, 5)} TRSIV`, icon: Sparkles, link: "/admin/sales" },
         { topLabel: "No. of Users", bottomLabel: "Registered Sign-ups", value: formatDecimal(stats?.total_users || 0, 0), icon: Users, link: "/admin/users" },
     ].filter(Boolean);
 

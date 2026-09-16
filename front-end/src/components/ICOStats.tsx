@@ -62,7 +62,7 @@ const ICOStats: React.FC = () => {
     };
   }, []);
 
-  // Fetch token price from contract: how many Trustive for 1 USDT (index 1, 6 decimals)
+  // Fetch token price from contract: how many TRSIV for 1 USDT (index 1, 6 decimals)
   useEffect(() => {
     const fetchPrice = async () => {
       const settingsRes = await fetch(`${API_URL}/api/user/getSettings`).then(r => r.json()).catch(() => null);
@@ -98,7 +98,7 @@ const ICOStats: React.FC = () => {
 
   const formatTokens = (n?: number) => {
     if (n === undefined || n === null) return '—';
-    return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Trustive';
+    return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TRSIV';
   };
 
   const endsOn = formatDate(sale?.end_at_utc);

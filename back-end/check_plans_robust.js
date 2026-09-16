@@ -2,9 +2,9 @@ const { ethers } = require('ethers');
 
 async function checkPlans() {
     const urls = [
-        'https://eth-sepolia-testnet.api.pocket.network',
-        'https://rpc.sepolia.org',
-        'https://ethereum-sepolia-rpc.publicnode.com'
+        'https://bsc-testnet-rpc.publicnode.com',
+        'https://data-seed-prebsc-1-s1.binance.org:8545',
+        'https://bsc-testnet.drpc.org'
     ];
 
     const addr = '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';

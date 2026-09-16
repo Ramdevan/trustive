@@ -18,9 +18,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 const TRUSTIVE_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || "0xe12F60d7c0bc493b033c789Aa533E772541041eA") as `0x${string}`;
 
 const sanitizeTokenSymbol = (symbol?: string): string => {
-  if (!symbol) return 'Trustive';
+  if (!symbol) return 'TRSIV';
   const clean = symbol.replace(/\0/g, '').replace(/[^\x20-\x7E]/g, '').trim();
-  return clean || 'Trustive';
+  return clean || 'TRSIV';
 };
 
 interface UserStats {
@@ -129,7 +129,7 @@ export default function Dashboard() {
           const [val, decimals, sym] = await Promise.all([
             contract.balanceOf(account),
             contract.decimals(),
-            contract.symbol().catch(() => 'Trustive')
+            contract.symbol().catch(() => 'TRSIV')
           ]);
           const num = parseFloat(ethers.formatUnits(val, decimals));
           const formatted = isNaN(num) ? '0.00' : num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -191,17 +191,17 @@ export default function Dashboard() {
           : tokensPurchased; // Fallback
 
         const balanceInSale = saleData.status && saleData.sale?.available_tokens != null
-          ? `${Number(saleData.sale.available_tokens).toLocaleString("en-US", { maximumFractionDigits: 2 })} Trustive`
+          ? `${Number(saleData.sale.available_tokens).toLocaleString("en-US", { maximumFractionDigits: 2 })} TRSIV`
           : "—";
 
         setStats(prev => ({
           ...prev,
-          tokensPurchased: tokensPurchased.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Trustive",
+          tokensPurchased: tokensPurchased.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TRSIV",
           totalTransactions: transactions.length,
           tokenPrice,
           saleName,
           saleEndDate,
-          totalAllocated: totalAllocatedNum.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Trustive",
+          totalAllocated: totalAllocatedNum.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TRSIV",
           balanceInSale,
         }));
         setRecentTxs(transactions.slice(0, 5));
@@ -310,7 +310,7 @@ export default function Dashboard() {
                       <th className="px-4 sm:px-6 py-4 text-left">Users</th>
                       <th className="px-4 sm:px-6 py-4 text-center">Payment Type</th>
                       <th className="px-4 sm:px-6 py-4 text-center">Amount Paid</th>
-                      <th className="px-4 sm:px-6 py-4 text-center">Received Trustive</th>
+                      <th className="px-4 sm:px-6 py-4 text-center">Received TRSIV</th>
                       <th className="px-4 sm:px-6 py-4 text-center">USD Value</th>
                       <th className="px-4 sm:px-6 py-4 text-center">Status</th>
                       <th className="px-4 sm:px-6 py-4 text-center">Transaction Hash</th>
@@ -330,7 +330,7 @@ export default function Dashboard() {
                           </td>
                           <td className="px-4 sm:px-6 py-3.5 text-[#212E73] font-bold whitespace-nowrap text-center">{tx.payment_type}</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-medium whitespace-nowrap text-center">{tx.crypto_value}</td>
-                          <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} Trustive</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} TRSIV</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                           <td className="px-4 sm:px-6 py-3.5 text-center">
                             <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.7rem] font-bold mx-auto ${isSuccess ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>

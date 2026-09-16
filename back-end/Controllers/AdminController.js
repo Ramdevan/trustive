@@ -591,7 +591,7 @@ module.exports = async function (fastify, opts) {
                 const trustiveTokens = ethers.formatEther(log.args[1]);
 
                 let createdAt = new Date();
-                let paymentType = 'ETH';
+                let paymentType = 'BNB';
                 let cryptoValue = '0.001';
                 let usdValue = '2.50';
 
@@ -602,11 +602,11 @@ module.exports = async function (fastify, opts) {
                     ]);
                     if (block) createdAt = new Date(block.timestamp * 1000);
                     if (tx) {
-                        const ethVal = parseFloat(ethers.formatEther(tx.value));
-                        if (ethVal > 0) {
-                            paymentType = 'ETH';
-                            cryptoValue = ethVal.toString();
-                            usdValue = (ethVal * 2500).toFixed(2);
+                        const nativeVal = parseFloat(ethers.formatEther(tx.value));
+                        if (nativeVal > 0) {
+                            paymentType = 'BNB';
+                            cryptoValue = nativeVal.toString();
+                            usdValue = (nativeVal * 700).toFixed(2);
                         } else {
                             paymentType = 'USDT';
                             cryptoValue = '1';
@@ -925,7 +925,7 @@ module.exports = async function (fastify, opts) {
                         total_staked: stakingRows[0]?.total_staked || 0,
                         total_rewards: stakingRows[0]?.total_rewards || 0,
                         total_vested: vestingRows[0]?.total_vested || 0,
-                        total_eth: cryptoTotals['ETH'] || 0,
+                        total_bnb: parseFloat(cryptoTotals['BNB'] || 0).toString(),
                         total_usdt: (parseFloat(cryptoTotals['USDT'] || 0) + parseFloat(cryptoTotals['USDC'] || 0)).toString(),
                         unclaimed_boxes: 0,
                         nft_assets: 0,
@@ -943,7 +943,7 @@ module.exports = async function (fastify, opts) {
                     total_staked: '0',
                     total_rewards: '0',
                     total_vested: '0',
-                    total_eth: '0',
+                    total_bnb: '0',
                     total_usdt: '0',
                     unclaimed_boxes: 0,
                     nft_assets: 0,
@@ -985,7 +985,7 @@ module.exports = async function (fastify, opts) {
                     "SELECT COALESCE(SUM(CAST(total_amount AS DECIMAL(36,18))), 0) AS total_vested FROM vesting_schedules WHERE LOWER(beneficiary) = LOWER(?) AND status = 'active'",
                     [address]
                 ),
-                // Crypto totals (ETH, USDT/USDC)
+                // Crypto totals (BNB, USDT/USDC)
                 fastify.mysql.query(
                     "SELECT payment_type, COALESCE(SUM(CAST(crypto_value AS DECIMAL(36,18))), 0) AS total FROM ico_purchases WHERE LOWER(address) = LOWER(?) AND status = 'success' GROUP BY payment_type",
                     [address]
@@ -1017,7 +1017,7 @@ module.exports = async function (fastify, opts) {
                     total_staked: stakingRows[0]?.total_staked || 0,
                     total_rewards: stakingRows[0]?.total_rewards || 0,
                     total_vested: vestingRows[0]?.total_vested || 0,
-                    total_eth: cryptoTotals['ETH'] || 0,
+                    total_bnb: parseFloat(cryptoTotals['BNB'] || 0).toString(),
                     total_usdt: (parseFloat(cryptoTotals['USDT'] || 0) + parseFloat(cryptoTotals['USDC'] || 0)).toString(),
                     unclaimed_boxes: 0, // Placeholder
                     nft_assets: 0,      // Placeholder
@@ -1465,7 +1465,7 @@ module.exports = async function (fastify, opts) {
                 'site_name', 'owner_address', 'kyc_enabled',
                 'token_name', 'token_symbol', 'chain', 'token_decimal',
                 'contract_address', 'crypto_decimal', 'fiat_decimal',
-                'ico_contract', 'usdt_address', 'usdc_address', 'eth_address',
+                'ico_contract', 'usdt_address', 'usdc_address', 'bnb_address',
                 'staking_contract', 'vesting_contract',
                 'admin_email', 'admin_password'
             ];
@@ -1546,7 +1546,7 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get("/payment-settings", async (request, reply) => {
         try {
-            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, eth_address, staking_contract, vesting_contract FROM settings LIMIT 1");
+            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, staking_contract, vesting_contract FROM settings LIMIT 1");
             const settings = rows[0] || {};
 
             // Fetch current active token sale price matching user dashboard
@@ -1589,17 +1589,17 @@ module.exports = async function (fastify, opts) {
 
             if (existing) {
                 await fastify.mysql.query(
-                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, eth_address = ?, staking_contract = ?, vesting_contract = ? WHERE id = ?",
-                    [data.ico_contract, data.usdt_address, data.usdc_address, data.eth_address, data.staking_contract, data.vesting_contract, existing.id]
+                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, bnb_address = ?, staking_contract = ?, vesting_contract = ? WHERE id = ?",
+                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.staking_contract, data.vesting_contract, existing.id]
                 );
             } else {
                 await fastify.mysql.query(
-                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, eth_address, staking_contract, vesting_contract) VALUES (?, ?, ?, ?, ?, ?)",
-                    [data.ico_contract, data.usdt_address, data.usdc_address, data.eth_address, data.staking_contract, data.vesting_contract]
+                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, bnb_address, staking_contract, vesting_contract) VALUES (?, ?, ?, ?, ?, ?)",
+                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.staking_contract, data.vesting_contract]
                 );
             }
 
-            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'eth_address', 'staking_contract', 'vesting_contract'];
+            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'bnb_address', 'staking_contract', 'vesting_contract'];
             for (const key of keys) {
                 if (data[key] !== oldData[key]) {
                     await fastify.mysql.query(
@@ -1858,7 +1858,7 @@ module.exports = async function (fastify, opts) {
                             let bestHash = null;
                             try {
                                 const filter = contract.filters.TokenVested(addr);
-                                // Look back 20,000 blocks (~4 days on Sepolia) to find the creation event
+                                // Look back 20,000 blocks (~16 hours on BSC) to find the creation event
                                 const events = await contract.queryFilter(filter, -20000);
                                 if (events && events.length > i) {
                                     bestHash = events[i].transactionHash;

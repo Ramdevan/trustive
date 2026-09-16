@@ -1,6 +1,6 @@
 const { ethers } = require('ethers');
 
-const RPC_URL = 'https://eth-sepolia-testnet.api.pocket.network';
+const RPC_URL = 'https://bsc-testnet-rpc.publicnode.com';
 const TOKEN_ADDRESS = '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
 
 async function checkToken() {

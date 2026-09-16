@@ -50,7 +50,7 @@ export default function Staking() {
   const handleClaim = async (stake: StakeRecord) => {
     if (!signer || !account || stake.chain_stake_index == null) return;
     
-    if (!(await confirmAction(`Are you sure you want to withdraw your staked tokens and rewards for this plan?\nStaked: ${parseFloat(stake.amount).toLocaleString()} Trustive`))) return;
+    if (!(await confirmAction(`Are you sure you want to withdraw your staked tokens and rewards for this plan?\nStaked: ${parseFloat(stake.amount).toLocaleString()} TRSIV`))) return;
 
     setClaimingId(stake.id);
     setClaimingMode('claim');
@@ -86,7 +86,7 @@ export default function Staking() {
       });
 
       const totalWithdrawn = parseFloat(stake.amount) + parseFloat(pendingReward);
-      const successMsg = `Successfully withdrawn! Total: ${totalWithdrawn.toFixed(4)} Trustive (Stake: ${parseFloat(stake.amount).toLocaleString()} + Reward: ${parseFloat(pendingReward).toFixed(4)})`;
+      const successMsg = `Successfully withdrawn! Total: ${totalWithdrawn.toFixed(4)} TRSIV (Stake: ${parseFloat(stake.amount).toLocaleString()} + Reward: ${parseFloat(pendingReward).toFixed(4)})`;
       setClaimStatus(successMsg);
       toast.success('Withdrawal successful!', { duration: 5000 });
       setTimeout(() => { setClaimStatus(''); fetchStakes(); }, 5000);
@@ -147,7 +147,7 @@ export default function Staking() {
       setEmergencyTarget(null);
       setEmergencyStatus('');
       toast.success(
-        `Emergency withdrawal complete. ${parseFloat(stake.amount).toLocaleString()} Trustive released, rewards forfeited.`,
+        `Emergency withdrawal complete. ${parseFloat(stake.amount).toLocaleString()} TRSIV released, rewards forfeited.`,
         { duration: 6000 }
       );
       fetchStakes();

@@ -14,8 +14,8 @@ import TxHashLink from "@/components/TxHashLink";
 
 // Minimal ABIs
 const ICO_ABI = [
-    { "inputs": [{ "internalType": "address", "name": "walletAddress", "type": "address" }], "name": "recoverETH", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
-    { "inputs": [{ "internalType": "address", "name": "_tokenAddress", "type": "address" }, { "internalType": "address", "name": "walletAddress", "type": "address" }], "name": "recoverToken", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
+    { "inputs": [{ "internalType": "address", "name": "walletAddress", "type": "address" }], "name": "proposeRecoverBNB", "outputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "address", "name": "tokenAddr", "type": "address" }, { "internalType": "address", "name": "walletAddress", "type": "address" }], "name": "proposeRecoverToken", "outputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }
 ];
 
 const ERC20_ABI = [
@@ -60,7 +60,7 @@ interface WithdrawRecord {
 export default function AdminWallet() {
     const queryClient = useQueryClient();
     const { address, isConnected } = useAccount();
-    const [balances, setBalances] = useState({ eth: "0.00000", usdt: "0.00000", usdc: "0.00000", trustive: "0.00000" });
+    const [balances, setBalances] = useState({ bnb: "0.00000", usdt: "0.00000", usdc: "0.00000", trustive: "0.00000" });
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const { writeContractAsync } = useWriteContract();
@@ -98,17 +98,17 @@ export default function AdminWallet() {
                 }
             };
 
-            let formattedEth = "0.00000";
+            let formattedBnb = "0.00000";
             try {
-                const ethBal = await provider.getBalance(settings.ico_contract);
-                formattedEth = parseFloat(ethers.formatEther(ethBal)).toFixed(5);
+                const bnbBal = await provider.getBalance(settings.ico_contract);
+                formattedBnb = parseFloat(ethers.formatEther(bnbBal)).toFixed(5);
             } catch { }
 
             const usdtBal = await fetchTokenBal(settings.usdt_address, 6);
             const usdcBal = await fetchTokenBal(settings.usdc_address, 6);
             const trustiveBal = await fetchTokenBal(settings.contract_address, Number(settings.token_decimal || 18));
 
-            setBalances({ eth: formattedEth, usdt: usdtBal, usdc: usdcBal, trustive: trustiveBal });
+            setBalances({ bnb: formattedBnb, usdt: usdtBal, usdc: usdcBal, trustive: trustiveBal });
         } catch (err) {
             console.error("Failed to read on-chain balances:", err);
         } finally {
@@ -133,7 +133,7 @@ export default function AdminWallet() {
         toast.success("Wallet balances & history updated");
     };
 
-    const handleWithdraw = async (coinId: 'ETH' | 'USDT' | 'USDC' | 'TRUSTIVE', currentBal: string) => {
+    const handleWithdraw = async (coinId: 'BNB' | 'USDT' | 'USDC' | 'TRUSTIVE' | 'TRSIV', currentBal: string) => {
         if (!isConnected || !address) return toast.warn("Please connect your wallet first.");
         if (!settings?.ico_contract) return toast.error("ICO contract not mapped in settings.");
         if (parseFloat(currentBal) <= 0) return toast.warn("No available balance to withdraw.");
@@ -143,18 +143,18 @@ export default function AdminWallet() {
         try {
             let hash: string;
 
-            if (coinId === 'ETH') {
+            if (coinId === 'BNB') {
                 hash = await writeContractAsync({
                     address: settings.ico_contract as `0x${string}`,
                     abi: ICO_ABI,
-                    functionName: 'recoverETH',
+                    functionName: 'proposeRecoverBNB',
                     args: [address as `0x${string}`],
                 });
             } else {
                 let tokenAddr = "";
                 if (coinId === 'USDT') tokenAddr = settings.usdt_address;
                 else if (coinId === 'USDC') tokenAddr = settings.usdc_address;
-                else if (coinId === 'TRUSTIVE') tokenAddr = settings.contract_address;
+                else if (coinId === 'TRUSTIVE' || coinId === 'TRSIV') tokenAddr = settings.contract_address;
 
                 if (!tokenAddr) return toast.error(`${coinId} address not found in settings!`);
 
@@ -210,19 +210,19 @@ export default function AdminWallet() {
             {/* Withdraw Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                {/* ETH CARD */}
+                {/* BNB CARD */}
                 <div className="bg-white p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
                     <div className="flex justify-center items-center">
-                        <div className="px-4 py-1.5 bg-blue-500/10 text-blue-600 rounded-xl text-xs font-black uppercase tracking-widest border border-blue-500/20 shadow-sm">ETH</div>
+                        <div className="px-4 py-1.5 bg-amber-500/10 text-amber-600 rounded-xl text-xs font-black uppercase tracking-widest border border-amber-500/20 shadow-sm">BNB</div>
                     </div>
                     <div className="mt-8 space-y-1 text-center">
                         <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em]">Available Balance</p>
                         <div className="font-space-grotesk font-bold text-4xl text-zinc-900 tracking-tight">
-                            {balances.eth} <span className="text-lg text-zinc-500">ETH</span>
+                            {balances.bnb} <span className="text-lg text-zinc-500">BNB</span>
                         </div>
                     </div>
-                    <button onClick={() => handleWithdraw('ETH', balances.eth)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
-                        <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw ETH
+                    <button onClick={() => handleWithdraw('BNB', balances.bnb)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                        <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw BNB
                     </button>
                 </div>
 
@@ -258,19 +258,19 @@ export default function AdminWallet() {
                     </button>
                 </div>
 
-                {/* TRUSTIVE CARD */}
+                {/* TRSIV CARD */}
                 <div className="bg-white p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
                     <div className="flex justify-center items-center">
-                        <div className="px-4 py-1.5 bg-[#212E73]/10 text-[#212E73] rounded-xl text-xs font-black uppercase tracking-widest border border-[#212E73]/20 shadow-sm">TRUSTIVE</div>
+                        <div className="px-4 py-1.5 bg-[#212E73]/10 text-[#212E73] rounded-xl text-xs font-black uppercase tracking-widest border border-[#212E73]/20 shadow-sm">TRSIV</div>
                     </div>
                     <div className="mt-8 space-y-1 text-center">
                         <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em]">System Inventory</p>
                         <div className="font-space-grotesk font-bold text-4xl text-zinc-900 tracking-tight">
-                            {balances.trustive} <span className="text-lg text-zinc-500">TRUSTIVE</span>
+                            {balances.trustive} <span className="text-lg text-zinc-500">TRSIV</span>
                         </div>
                     </div>
-                    <button onClick={() => handleWithdraw('TRUSTIVE', balances.trustive)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
-                        <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw Trustive
+                    <button onClick={() => handleWithdraw('TRSIV', balances.trustive)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                        <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw TRSIV
                     </button>
                 </div>
 

@@ -18,7 +18,7 @@ const ConnectWalletPrompt: React.FC = () => {
       <div className="space-y-3 relative z-10 max-w-md mx-auto">
         <h2 className="text-[2rem] font-medium text-[#FAF7F2]">Connect Your Wallet to View</h2>
         <p className="text-[1rem] font-normal text-zinc-500 leading-relaxed px-4">
-          Link your wallet to view your personalized portfolio analytics, history, and start trading Trustive tokens
+          Link your wallet to view your personalized portfolio analytics, history, and start trading TRSIV tokens
         </p>
       </div>
 

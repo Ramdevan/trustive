@@ -135,7 +135,7 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                     <div>
                         <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Allocated Token</div>
                         <div className="text-[#212E73] font-bold text-base">
-                            {totalAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })} Trustive
+                            {totalAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })} TRSIV
                         </div>
                     </div>
                     <div>
@@ -149,7 +149,7 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                     <div>
                         <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Claimed</div>
                         <div className="text-emerald-600 font-bold text-base">
-                            {claimedAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })} Trustive
+                            {claimedAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })} TRSIV
                         </div>
                     </div>
                     <div className="col-span-2 md:col-span-3 pt-3 border-t border-zinc-200">
@@ -182,7 +182,7 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                                     <tr key={row.period} className="hover:bg-zinc-50/70 transition-colors">
                                         <td className="px-6 py-4 text-center text-zinc-900 font-bold">{row.period}</td>
                                         <td className="px-6 py-4 text-center text-emerald-600 font-bold">
-                                            {row.amount.toLocaleString("en-US", { maximumFractionDigits: 2 })} Trustive
+                                            {row.amount.toLocaleString("en-US", { maximumFractionDigits: 2 })} TRSIV
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <div className="flex flex-col items-center">

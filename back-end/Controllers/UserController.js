@@ -1033,7 +1033,7 @@ module.exports = async function (fastify, opts) {
       const domain = {
         name: 'TRUSTIVEICO',
         version: '1',
-        chainId: 11155111,
+        chainId: parseInt(process.env.CHAIN_ID || '97', 10),
         verifyingContract: ICO_ADDRESS,
       };
 
@@ -1118,7 +1118,7 @@ module.exports = async function (fastify, opts) {
       let finalUsdValue = USDvalue_of_crypto_purchased || '0';
       try {
         const cryptoAmt = parseFloat(CryptoValue || '0');
-        if ((payment_type === 'ETH' || payment_type === 'BNB') && cryptoAmt > 0) {
+        if (payment_type === 'BNB' && cryptoAmt > 0) {
           // Use Chainlink BNB/USD feed on BSC Testnet
           const _provider = await getProvider();
           const _feed = new ethers.Contract(

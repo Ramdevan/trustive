@@ -1,16 +1,5 @@
 import React from "react";
 
-export function EthIcon({ className = "w-5 h-5" }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#627EEA" />
-            <path d="M16 4.5L9.5 15.5L16 19.5L22.5 15.5L16 4.5Z" fill="white" fillOpacity="0.9" />
-            <path d="M16 4.5L9.5 15.5L16 19.5V4.5Z" fill="white" />
-            <path d="M16 20.5L9.5 16.5L16 27.5L22.5 16.5L16 20.5Z" fill="white" fillOpacity="0.9" />
-            <path d="M16 20.5L9.5 16.5L16 27.5V20.5Z" fill="white" />
-        </svg>
-    );
-}
 
 export function UsdtIcon({ className = "w-5 h-5" }: { className?: string }) {
     return (
@@ -53,10 +42,22 @@ export function TrustiveIcon({ className = "w-5 h-5" }: { className?: string }) 
     );
 }
 
+export function BnbIcon({ className = "w-5 h-5" }: { className?: string }) {
+    return (
+        <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="16" fill="#F3BA2F" />
+            <path
+                d="M12.116 14.404L16 10.52l3.886 3.886 2.26-2.26L16 6 9.856 12.144l2.26 2.26zm-6.116 1.596l2.26-2.26 2.26 2.26-2.26 2.26-2.26-2.26zm6.116 1.596L16 21.48l3.886-3.886 2.26 2.262L16 26l-6.144-6.144 2.26-2.26zm7.768-1.596l2.26-2.26 2.26 2.26-2.26 2.26-2.26-2.26zm-5.508 0L16 14.38l1.624 1.62-1.624 1.624-1.624-1.624z"
+                fill="white"
+            />
+        </svg>
+    );
+}
+
 export function CryptoIcon({ coin, className = "w-5 h-5" }: { coin: string; className?: string }) {
     const symbol = (coin || "").toUpperCase().trim();
-    if (symbol === "ETH" || symbol.includes("ETH") || symbol.includes("ETHEREUM")) {
-        return <EthIcon className={className} />;
+    if (symbol === "BNB" || symbol.includes("BNB") || symbol.includes("BINANCE")) {
+        return <BnbIcon className={className} />;
     }
     if (symbol === "USDT" || symbol.includes("USDT") || symbol.includes("TETHER")) {
         return <UsdtIcon className={className} />;
@@ -67,5 +68,5 @@ export function CryptoIcon({ coin, className = "w-5 h-5" }: { coin: string; clas
     if (symbol === "TRSIV" || symbol.includes("TRSIV") || symbol === "TRUSTIVE" || symbol.includes("TRUSTIVE") || symbol === "TRUSTIVE" || symbol.includes("TRUSTIVE") || symbol.includes("PTC")) {
         return <TrustiveIcon className={className} />;
     }
-    return <EthIcon className={className} />;
+    return <BnbIcon className={className} />;
 }

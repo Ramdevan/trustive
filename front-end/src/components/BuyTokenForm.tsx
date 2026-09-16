@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { bscTestnet } from 'wagmi/chains';
-import ethIcon from '@/assets/images/eth-icon.svg';
+import bnbIcon from '@/assets/images/bnb-icon.svg';
 import usdtIcon from '@/assets/images/usdt-icon.svg';
 import usdcIcon from '@/assets/images/usdc-icon.svg';
 import { useWeb3 } from '@/context/Web3Context';
@@ -14,11 +14,11 @@ import { getFriendlyErrorMessage, isUserRejection } from '@/utils/errors';
 import { confirmAction } from '@/utils/confirm';
 
 // Payment type indexes matching the ICO contract
-// 0 = ETH, 1 = USDT, 2 = USDC
-type PaymentMethod = 'ETH' | 'USDT' | 'USDC';
+// 0 = BNB, 1 = USDT, 2 = USDC
+type PaymentMethod = 'BNB' | 'USDT' | 'USDC';
 
 const PAYMENT_CONFIG: Record<PaymentMethod, { index: number; decimals: number; label: string }> = {
-  ETH: { index: 0, decimals: 18, label: 'ETH' },
+  BNB: { index: 0, decimals: 18, label: 'BNB' },
   USDT: { index: 1, decimals: 8, label: 'USDT' },
   USDC: { index: 2, decimals: 8, label: 'USDC' },
 };
@@ -48,10 +48,10 @@ interface Settings {
   token_symbol: string;
 }
 
-const PAYMENT_METHODS: PaymentMethod[] = ['ETH', 'USDT', 'USDC'];
+const PAYMENT_METHODS: PaymentMethod[] = ['BNB', 'USDT', 'USDC'];
 
 const getIcon = (method: PaymentMethod) => {
-  if (method === 'ETH') return ethIcon;
+  if (method === 'BNB') return bnbIcon;
   if (method === 'USDT') return usdtIcon;
   return usdcIcon;
 };
@@ -60,7 +60,7 @@ const BuyTokenForm: React.FC = () => {
   const { account: contextAccount, provider, signer, isConnected, isCorrectChain, switchToCorrectChain } = useWeb3();
   const { address } = useWagmiAccount();
   const account = address || contextAccount;
-  const [method, setMethod] = useState<PaymentMethod>('ETH');
+  const [method, setMethod] = useState<PaymentMethod>('BNB');
   const [amount, setAmount] = useState('');
   const [trustiveTokens, setTrustiveTokens] = useState('');
   const [settings, setSettings] = useState<Settings | null>(null);
@@ -115,7 +115,7 @@ const BuyTokenForm: React.FC = () => {
       let success = false;
       for (const p of providers) {
         try {
-          if (method === 'ETH') {
+          if (method === 'BNB') {
             const b = await p.getBalance(account);
             const newBal = parseFloat(ethers.formatEther(b)).toFixed(2);
             setBalance(prev => prev !== newBal ? newBal : prev);
@@ -188,8 +188,8 @@ const BuyTokenForm: React.FC = () => {
 
     let finalAmount = (balanceNum * percent) / 100;
 
-    // For ETH Max, leave a small buffer for gas (e.g., 0.005 ETH)
-    if (method === 'ETH' && percent === 100) {
+    // For BNB Max, leave a small buffer for gas (e.g., 0.005 BNB)
+    if (method === 'BNB' && percent === 100) {
       finalAmount = Math.max(0, balanceNum - 0.005);
     }
 
@@ -336,16 +336,16 @@ const BuyTokenForm: React.FC = () => {
     }
 
     if (effectiveMinLimit > 0 && (trustiveVal + EPSILON) < effectiveMinLimit) {
-      setTxStatus(`Minimum purchase is ${effectiveMinLimit.toLocaleString('en-US')} Trustive tokens`);
+      setTxStatus(`Minimum purchase is ${effectiveMinLimit.toLocaleString('en-US')} TRSIV tokens`);
       setIsError(true);
-      toast.error(`Minimum purchase is ${effectiveMinLimit.toLocaleString('en-US')} Trustive tokens`);
+      toast.error(`Minimum purchase is ${effectiveMinLimit.toLocaleString('en-US')} TRSIV tokens`);
       return;
     }
 
     if (maxLimit > 0 && (trustiveVal - EPSILON) > maxLimit) {
-      setTxStatus(`Maximum purchase is ${maxLimit.toLocaleString('en-US')} Trustive tokens`);
+      setTxStatus(`Maximum purchase is ${maxLimit.toLocaleString('en-US')} TRSIV tokens`);
       setIsError(true);
-      toast.error(`Maximum purchase is ${maxLimit.toLocaleString('en-US')} Trustive tokens`);
+      toast.error(`Maximum purchase is ${maxLimit.toLocaleString('en-US')} TRSIV tokens`);
       return;
     }
 
@@ -354,7 +354,7 @@ const BuyTokenForm: React.FC = () => {
       return;
     }
 
-    if (!(await confirmAction(`Confirm your purchase of ${amount} ${method} for approximately ${trustiveTokens} Trustive tokens?`))) return;
+    if (!(await confirmAction(`Confirm your purchase of ${amount} ${method} for approximately ${trustiveTokens} TRSIV tokens?`))) return;
 
     // Verify wallet link with currently logged in user
     const userToken = typeof window !== 'undefined' ? localStorage.getItem('user_token') : null;
@@ -386,7 +386,7 @@ const BuyTokenForm: React.FC = () => {
       const paymentAmountWei = ethers.parseUnits(amount, decimals);
 
       // 1. Get signature from backend
-      // For ETH: backend signs over msg.value (ETH amount, 18 decimals)
+      // For BNB: backend signs over msg.value (BNB amount, 18 decimals)
       // For USDT/USDC: backend signs over payment token amount (6 decimals)
       setTxStatus('Requesting signature...');
       const signRes = await fetch(`${API_URL}/api/user/createSign`, {
@@ -405,8 +405,8 @@ const BuyTokenForm: React.FC = () => {
       const icoContract = new ethers.Contract(settings.ico_contract, ICO_ABI, signer);
       let tx: ethers.TransactionResponse;
 
-      if (method === 'ETH') {
-        // ETH: contract signs over msg.value, tokenAmount param unused (pass 0)
+      if (method === 'BNB') {
+        // BNB: contract signs over msg.value, tokenAmount param unused (pass 0)
         setTxStatus('Confirm transaction in your wallet...');
         tx = await icoContract.buyToken(account, index, 0, nonce, signature, { value: paymentAmountWei });
       } else {
@@ -442,7 +442,7 @@ const BuyTokenForm: React.FC = () => {
           payment_type: method,
           trustive_tokens: rawTrustive,
           transHash: txHash,
-          USDvalue_of_crypto_purchased: method !== 'ETH' ? amount : '0',
+          USDvalue_of_crypto_purchased: method !== 'BNB' ? amount : '0',
           sale_type: (sale as any)?.type || (sale as any)?.name || '',
           status: 'success',
         }),
@@ -456,7 +456,7 @@ const BuyTokenForm: React.FC = () => {
       setIsSuccess(true);
       setAmount('');
       setTrustiveTokens('');
-      const successMsg = `Successfully purchased ${purchasedTokens} Trustive tokens!`;
+      const successMsg = `Successfully purchased ${purchasedTokens} TRSIV tokens!`;
       setTxStatus(successMsg);
       toast.success(successMsg, { duration: 5000 });
     } catch (err: unknown) {
@@ -580,7 +580,7 @@ const BuyTokenForm: React.FC = () => {
           <label className="text-[0.875rem] font-semibold text-zinc-700 block">Receive</label>
           {minLimit > 0 && (
             <span className="text-[0.75rem] text-zinc-500 font-medium">
-              Min: {minLimit.toLocaleString('en-US')} Trustive{maxLimit > 0 ? ` • Max: ${maxLimit.toLocaleString('en-US')} Trustive` : ''}
+              Min: {minLimit.toLocaleString('en-US')} TRSIV{maxLimit > 0 ? ` • Max: ${maxLimit.toLocaleString('en-US')} TRSIV` : ''}
             </span>
           )}
         </div>
@@ -620,13 +620,13 @@ const BuyTokenForm: React.FC = () => {
           {!isInsufficientBalance && isBelowMin && (
             <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[0.85rem]">
               <LuTriangleAlert className="h-4 w-4 flex-shrink-0" />
-              <span>Minimum purchase requirement is {effectiveMinLimit.toLocaleString('en-US')} Trustive tokens</span>
+              <span>Minimum purchase requirement is {effectiveMinLimit.toLocaleString('en-US')} TRSIV tokens</span>
             </div>
           )}
           {!isInsufficientBalance && isAboveMax && (
             <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[0.85rem]">
               <LuTriangleAlert className="h-4 w-4 flex-shrink-0" />
-              <span>Maximum purchase limit is {maxLimit.toLocaleString('en-US')} Trustive tokens</span>
+              <span>Maximum purchase limit is {maxLimit.toLocaleString('en-US')} TRSIV tokens</span>
             </div>
           )}
         </div>
@@ -678,11 +678,11 @@ const BuyTokenForm: React.FC = () => {
             btnClass = 'bg-red-50 text-red-600 border border-red-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isBelowMin) {
-            btnLabel = `Minimum Buy is ${minLimit.toLocaleString('en-US')} Trustive`;
+            btnLabel = `Minimum Buy is ${minLimit.toLocaleString('en-US')} TRSIV`;
             btnClass = 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isAboveMax) {
-            btnLabel = `Maximum Buy is ${maxLimit.toLocaleString('en-US')} Trustive`;
+            btnLabel = `Maximum Buy is ${maxLimit.toLocaleString('en-US')} TRSIV`;
             btnClass = 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed';
             isDisabled = true;
           } else if (isInvalidTokenAmount) {

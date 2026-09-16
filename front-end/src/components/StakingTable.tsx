@@ -69,7 +69,7 @@ const stakeReward = (stake: StakeRecord) => {
 };
 
 const formatTrustive = (value: number) =>
-  `${value.toLocaleString(undefined, { maximumFractionDigits: 2 })} Trustive`;
+  `${value.toLocaleString(undefined, { maximumFractionDigits: 2 })} TRSIV`;
 
 const isRealHash = (hash?: string | null): hash is string =>
   Boolean(hash) && !hash!.startsWith('sync-') && !hash!.startsWith('chain-sync-');
@@ -178,7 +178,7 @@ const StakingTable: React.FC<StakingTableProps> = ({ stakes, loading, onClaim, o
                   <td className="px-6 py-4 align-middle whitespace-nowrap font-bold text-zinc-900">{s.plan_name}</td>
                   <td className="px-6 py-4 align-middle whitespace-nowrap text-[#212E73] font-bold">{Number(s.apy || 8).toFixed(0)}%</td>
                   <td className="px-6 py-4 align-middle whitespace-nowrap text-zinc-900 font-semibold">
-                    {Number(s.amount).toLocaleString(undefined, { maximumFractionDigits: 2 })} Trustive
+                    {Number(s.amount).toLocaleString(undefined, { maximumFractionDigits: 2 })} TRSIV
                   </td>
                   <td className="px-6 py-4 align-middle whitespace-nowrap text-zinc-500">{formatDate(s.end_at)}</td>
                   <td className="px-6 py-4 align-middle whitespace-nowrap">

@@ -6,8 +6,8 @@
  * writes the same hash against all three rows, and periods claimed one at a
  * time each get their own hash — which is exactly what the detail modal shows.
  *
- * Claim transactions are found via the TokenClaimed event. Public Sepolia RPCs
- * prune logs, so pass an Etherscan key (ETHERSCAN_API_KEY in .env) when the log
+ * Claim transactions are found via the TokenClaimed event. Public BSC RPCs
+ * prune logs, so pass a BscScan key (BSCSCAN_API_KEY in .env) when the log
  * scan comes up empty for claims that are known to exist.
  *
  * Usage:
@@ -25,7 +25,7 @@ const ONLY_ADDRESS = process.argv.slice(2).find(a => a.startsWith('0x'));
 
 const PERIOD_SECONDS = 120; // 1 contract unit = 2 real minutes
 const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
-const ETHERSCAN_KEY = process.env.ETHERSCAN_API_KEY;
+const BSCSCAN_KEY = process.env.BSCSCAN_API_KEY;
 
 const dbConfig = {
     host: process.env.DB_HOST || '127.0.0.1',
@@ -91,15 +91,15 @@ async function scanClaimLogs(providers, fromBlock, toBlock, { chunk = 2000, pass
     return [...found.values()];
 }
 
-// Etherscan keeps the full history, so with a key set this recovers claims the
-// pruned public nodes have already dropped. Free key: etherscan.io/apis
-async function fetchEtherscanClaims(address, allIndexes) {
-    const url = `https://api.etherscan.io/v2/api?chainid=11155111&module=account&action=txlist`
-        + `&address=${address}&sort=asc&apikey=${ETHERSCAN_KEY}`;
+// BscScan keeps the full history, so with a key set this recovers claims the
+// pruned public nodes have already dropped. Free key: bscscan.com/apis
+async function fetchBscScanClaims(address, allIndexes) {
+    const url = `https://api-testnet.bscscan.com/api?module=account&action=txlist`
+        + `&address=${address}&sort=asc&apikey=${BSCSCAN_KEY}`;
     const res = await fetch(url);
     const body = await res.json();
     if (body.status !== '1' && body.message !== 'No transactions found') {
-        throw new Error(`Etherscan: ${body.result || body.message}`);
+        throw new Error(`BscScan: ${body.result || body.message}`);
     }
     return (body.result || [])
         .filter(tx => (tx.to || '').toLowerCase() === VESTING_ADDRESS.toLowerCase() && tx.isError === '0')
@@ -176,11 +176,11 @@ async function fetchEtherscanClaims(address, allIndexes) {
         );
         const recorded = new Set((already || []).map(r => `${r.vesting_index}:${r.period_index}`));
 
-        // Prefer Etherscan when a key is configured — the public nodes prune
+        // Prefer BscScan when a key is configured — the public nodes prune
         let claimTxs = [];
-        if (ETHERSCAN_KEY) {
+        if (BSCSCAN_KEY) {
             try {
-                claimTxs = await fetchEtherscanClaims(beneficiary, allIndexes);
+                claimTxs = await fetchBscScanClaims(beneficiary, allIndexes);
             } catch (e) {
                 console.warn(`  ${beneficiary}: ${e.message} — falling back to the log scan`);
             }

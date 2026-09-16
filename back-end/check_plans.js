@@ -1,7 +1,7 @@
 const { ethers } = require('ethers');
 
 async function checkPlans() {
-    const RPC_URL = 'https://eth-sepolia-testnet.api.pocket.network';
+    const RPC_URL = 'https://bsc-testnet-rpc.publicnode.com';
     const provider = new ethers.JsonRpcProvider(RPC_URL);
     const addr = '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
 

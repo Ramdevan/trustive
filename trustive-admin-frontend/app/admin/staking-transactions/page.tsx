@@ -214,7 +214,7 @@ export default function StakingManagement() {
                                     {(activePlan.name && activePlan.name !== 'Flexible' && !activePlan.name.startsWith('Level ')) ? activePlan.name : "GOLD"}
                                 </div>
                                 <div className="text-xs text-zinc-500 font-mono">
-                                    Min Stake: {formatDecimal(activePlan.min_stake && activePlan.min_stake !== '100' && activePlan.min_stake !== '0' ? activePlan.min_stake : "1000", 0)} Trustive
+                                    Min Stake: {formatDecimal(activePlan.min_stake && activePlan.min_stake !== '100' && activePlan.min_stake !== '0' ? activePlan.min_stake : "1000", 0)} TRSIV
                                 </div>
                             </div>
                             
@@ -244,7 +244,7 @@ export default function StakingManagement() {
                                     {stats?.active_stakes || 0}
                                 </div>
                                 <div className="text-xs text-zinc-500 font-mono">
-                                    {formatDecimal(stats?.total_staked || "0", 2, 2)} Trustive
+                                    {formatDecimal(stats?.total_staked || "0", 2, 2)} TRSIV
                                 </div>
                             </div>
 
@@ -271,7 +271,7 @@ export default function StakingManagement() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="p-1 hover:text-[#212E73] text-zinc-400 transition-colors"
-                                        title="View on Etherscan"
+                                        title="View on Bscscan"
                                     >
                                         <ExternalLink className="w-3.5 h-3.5" />
                                     </a>
@@ -421,7 +421,7 @@ export default function StakingManagement() {
                                                 {/* Staked Amount */}
                                                 <td className="px-6 py-4 text-right">
                                                     <div className="font-bold text-[#212E73]">
-                                                        {formatDecimal(tx.amount, 2, 2)} Trustive
+                                                        {formatDecimal(tx.amount, 2, 2)} TRSIV
                                                     </div>
                                                 </td>
 
@@ -446,9 +446,9 @@ export default function StakingManagement() {
                                                 {/* Reward Claimed */}
                                                 <td className="px-6 py-4 text-right font-medium">
                                                     {tx.reward_claimed && parseFloat(tx.reward_claimed) > 0 ? (
-                                                        <span className="text-emerald-600 font-semibold">+{formatDecimal(tx.reward_claimed, 4, 2)} Trustive</span>
+                                                        <span className="text-emerald-600 font-semibold">+{formatDecimal(tx.reward_claimed, 4, 2)} TRSIV</span>
                                                     ) : (
-                                                        <span className="text-zinc-400">0.00 Trustive</span>
+                                                        <span className="text-zinc-400">0.00 TRSIV</span>
                                                     )}
                                                 </td>
 

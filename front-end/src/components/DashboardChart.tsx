@@ -132,7 +132,7 @@ const DashboardChart: React.FC = () => {
               itemStyle={{ color: '#212E73', fontWeight: 'bold' }}
               labelStyle={{ color: '#64748B', marginBottom: '4px' }}
               formatter={(v) => [
-                `${Number(v ?? 0).toLocaleString()} Trustive`,
+                `${Number(v ?? 0).toLocaleString()} TRSIV`,
                 "Purchased",
               ]}
             />

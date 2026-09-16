@@ -39,7 +39,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
       return;
     }
 
-    if (!(await confirmAction(`Are you sure you want to claim ${Number(claimableAmount).toLocaleString()} Trustive tokens?`))) return;
+    if (!(await confirmAction(`Are you sure you want to claim ${Number(claimableAmount).toLocaleString()} TRSIV tokens?`))) return;
 
 
     setLoading(true);
@@ -66,7 +66,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
         }),
       }).catch(err => console.error('Claim record error:', err));
 
-      const successMsg = `Successfully claimed ${Number(claimableAmount).toLocaleString()} Trustive!`;
+      const successMsg = `Successfully claimed ${Number(claimableAmount).toLocaleString()} TRSIV!`;
       setStatus(successMsg);
       toast.success(successMsg, { duration: 5000 });
       if (onClaim) onClaim();

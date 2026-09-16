@@ -1,7 +1,7 @@
 const { ethers } = require('ethers');
 
-async function checkBaseSepolia() {
-    const RPC_URL = 'https://sepolia.base.org';
+async function checkBscTestnet() {
+    const RPC_URL = 'https://bsc-testnet-rpc.publicnode.com';
     const provider = new ethers.JsonRpcProvider(RPC_URL);
     const addr = '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
 
@@ -14,7 +14,7 @@ async function checkBaseSepolia() {
 
     try {
         const count = await contract.planCount();
-        console.log(`Plan count on Base Sepolia: ${count}`);
+        console.log(`Plan count on BSC Testnet: ${count}`);
 
         for (let i = 0; i < Number(count); i++) {
             const plan = await contract.plans(i);
@@ -26,11 +26,11 @@ async function checkBaseSepolia() {
         }
     } catch (err) {
         if (err.code === 'CALL_EXCEPTION') {
-            console.log('Reverted on Base Sepolia too');
+            console.log('Reverted on BSC Testnet too');
         } else {
             console.error(err);
         }
     }
 }
 
-checkBaseSepolia();
+checkBscTestnet();

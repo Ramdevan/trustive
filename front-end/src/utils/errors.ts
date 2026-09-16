@@ -34,10 +34,10 @@ export function getFriendlyErrorMessage(error: any): string {
         return "Transaction nonce too low. Please reset your account or wait for previous transactions.";
     }
 
-    // Return reason if available (common in ethers)
+    // Return reason if available (common in ers)
     if (error.reason) return error.reason;
 
-    // Clean up long ethers strings
+    // Clean up long ers strings
     if (error.message) {
         // If it's a long technical string with JSON, take the first part
         if (error.message.includes("action=\"sendTransaction\"")) {

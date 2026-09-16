@@ -109,7 +109,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
         }),
       }).catch(err => console.error('Claim record error:', err));
 
-      toast.success(`Successfully claimed ${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive!`, { duration: 5000 });
+      toast.success(`Successfully claimed ${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV!`, { duration: 5000 });
       // Stay open on the refreshed schedule so the next period can be claimed
       if (onClaimed) onClaimed();
     } catch (err: unknown) {
@@ -135,8 +135,8 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
       .reduce((sum, r) => sum + r.amount, 0);
 
     const message = periodsToClaim > 1
-      ? `Claim periods ${claimedPeriods + 1}–${row.period} (${claimTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive)?`
-      : `Claim ${row.amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive for period ${row.period}?`;
+      ? `Claim periods ${claimedPeriods + 1}–${row.period} (${claimTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV)?`
+      : `Claim ${row.amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV for period ${row.period}?`;
     if (!(await confirmAction(message))) return;
 
     await submitClaim(row.period, claimTotal, contract =>
@@ -146,7 +146,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
   const handleClaimAll = async () => {
     if (unlockedRows.length === 0) return;
 
-    const message = `Claim all ${unlockedRows.length} unlocked period${unlockedRows.length > 1 ? 's' : ''} (${unlockedTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive) for ${formatVestId(vesting)}?`;
+    const message = `Claim all ${unlockedRows.length} unlocked period${unlockedRows.length > 1 ? 's' : ''} (${unlockedTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV) for ${formatVestId(vesting)}?`;
     if (!(await confirmAction(message))) return;
 
     // claim() releases every unlocked period of this schedule in one transaction
@@ -192,7 +192,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Allocated Token</div>
             <div className="text-[0.95rem] font-bold text-[#E5A93E]">
-              {totalAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive
+              {totalAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV
             </div>
           </div>
           <div>
@@ -206,7 +206,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Claimed</div>
             <div className="text-[0.95rem] font-bold text-[#10B981]">
-              {claimedAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive
+              {claimedAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV
             </div>
           </div>
         </div>
@@ -215,7 +215,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <span className="text-[0.75rem] text-zinc-500">
             {unlockedRows.length > 0
-              ? `${unlockedRows.length} period${unlockedRows.length > 1 ? 's' : ''} unlocked · ${unlockedTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive available`
+              ? `${unlockedRows.length} period${unlockedRows.length > 1 ? 's' : ''} unlocked · ${unlockedTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV available`
               : claimedPeriods >= vestPeriods && vestPeriods > 0
                 ? 'All periods claimed'
                 : 'Nothing unlocked yet'}
@@ -249,7 +249,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
                 <tr key={row.period} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
                   <td className="px-5 py-4 align-middle whitespace-nowrap text-[#FAF7F2]">{row.period}</td>
                   <td className="px-5 py-4 align-middle whitespace-nowrap text-[#10B981]">
-                    {row.amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} Trustive
+                    {row.amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV
                   </td>
                   <td className="px-5 py-4 align-middle whitespace-nowrap">
                     <div className="flex flex-col">

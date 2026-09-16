@@ -214,7 +214,7 @@ async function sync() {
             uniqueUsers.add(recipient.toLowerCase());
 
             let createdAt = new Date();
-            let paymentType = 'ETH';
+            let paymentType = 'BNB';
             let cryptoValue = '0.001';
             let usdValue = '2.50';
 
@@ -227,11 +227,11 @@ async function sync() {
                     createdAt = new Date(block.timestamp * 1000);
                 }
                 if (tx) {
-                    const ethVal = parseFloat(ethers.formatEther(tx.value));
-                    if (ethVal > 0) {
-                        paymentType = 'ETH';
-                        cryptoValue = ethVal.toString();
-                        usdValue = (ethVal * 2500).toFixed(2);
+                    const nativeVal = parseFloat(ethers.formatEther(tx.value));
+                    if (nativeVal > 0) {
+                        paymentType = 'BNB';
+                        cryptoValue = nativeVal.toString();
+                        usdValue = (nativeVal * 700).toFixed(2);
                     } else {
                         paymentType = 'USDT';
                         cryptoValue = '1';

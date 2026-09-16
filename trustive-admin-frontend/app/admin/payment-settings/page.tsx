@@ -137,7 +137,7 @@ export default function PaymentSettings() {
         const calculatedTokensPerUSD = 1 / priceNum;
         const tokensPerUSDFormatted = formatDecimal(calculatedTokensPerUSD, 5);
 
-        if (!(await confirmAction(`Are you sure you want to update the token price?\n\n• New Price: $${priceNum} per Trustive\n• Rate: 1 USD = ${tokensPerUSDFormatted} Trustive`))) return;
+        if (!(await confirmAction(`Are you sure you want to update the token price?\n\n• New Price: $${priceNum} per TRSIV\n• Rate: 1 USD = ${tokensPerUSDFormatted} TRSIV`))) return;
 
         try {
             // Convert to 18 decimals string representation for the smart contract
@@ -240,13 +240,13 @@ export default function PaymentSettings() {
                                             <td className="px-10 py-6">
                                                 <div className="flex items-baseline gap-2">
                                                     <span className="text-zinc-600 font-bold text-lg font-mono">{formatUSD(rawOld)}</span>
-                                                    <span className="text-xs text-zinc-400">/ Trustive</span>
+                                                    <span className="text-xs text-zinc-400">/ TRSIV</span>
                                                 </div>
                                             </td>
                                             <td className="px-10 py-6">
                                                 <div className="flex items-baseline gap-2">
                                                     <span className="text-[#212E73] font-bold text-xl font-mono">{formatUSD(rawNew)}</span>
-                                                    <span className="text-xs text-[#212E73]/70">/ Trustive</span>
+                                                    <span className="text-xs text-[#212E73]/70">/ TRSIV</span>
                                                 </div>
                                             </td>
                                             <td className="px-10 py-6">
@@ -297,12 +297,12 @@ export default function PaymentSettings() {
                                         <p className="text-3xl font-extrabold text-[#212E73] font-mono tracking-tight truncate">
                                             {currentPriceUSD !== null ? formatUSD(currentPriceUSD) : "—"}
                                         </p>
-                                        <p className="text-xs text-zinc-500 font-medium">per 1 Trustive token</p>
+                                        <p className="text-xs text-zinc-500 font-medium">per 1 TRSIV token</p>
                                     </div>
                                     <div className="text-right shrink-0">
                                         <p className="text-base font-bold text-zinc-900 font-mono">
                                             {currentTokensPerUSD !== null && currentTokensPerUSD < 1e9
-                                                ? `${formatDecimal(currentTokensPerUSD, 5)} Trustive`
+                                                ? `${formatDecimal(currentTokensPerUSD, 5)} TRSIV`
                                                 : "—"}
                                         </p>
                                         <p className="text-xs text-zinc-500 font-medium">per 1 USD</p>
@@ -328,7 +328,7 @@ export default function PaymentSettings() {
                                         className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-24 py-4 text-zinc-900 font-mono text-lg focus:outline-none focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder:text-zinc-400 shadow-sm"
                                     />
                                     <span className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-bold uppercase tracking-wider">
-                                        USD / Trustive
+                                        USD / TRSIV
                                     </span>
                                 </div>
 
@@ -337,7 +337,7 @@ export default function PaymentSettings() {
                                     <div className="bg-[#212E73]/5 border border-[#212E73]/20 rounded-xl p-3.5 flex items-center justify-between text-xs animate-in fade-in duration-200">
                                         <span className="text-zinc-600 font-medium">Resulting Conversion:</span>
                                         <span className="font-mono font-bold text-[#212E73]">
-                                            1 USD = {formatDecimal(previewTokensPerUSD, 5)} Trustive
+                                            1 USD = {formatDecimal(previewTokensPerUSD, 5)} TRSIV
                                         </span>
                                     </div>
                                 )}

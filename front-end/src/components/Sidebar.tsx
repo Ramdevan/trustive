@@ -30,13 +30,13 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const { account } = useWeb3();
-  const [balance, setBalance] = useState<string>('— Trustive');
+  const [balance, setBalance] = useState<string>('— TRSIV');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchBalance = async () => {
       if (!account) {
-        setBalance('— Trustive');
+        setBalance('— TRSIV');
         return;
       }
       setLoading(true);
@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           const [val, decimals, symbol] = await Promise.all([
             contract.balanceOf(account),
             contract.decimals(),
-            contract.symbol().catch(() => 'Trustive')
+            contract.symbol().catch(() => 'TRSIV')
           ]);
 
           const formatted = parseFloat(ethers.formatUnits(val, decimals)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -73,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     return () => clearInterval(interval);
   }, [account]);
 
-  const balanceDisplay = loading && balance === '— Trustive' ? 'Loading...' : balance;
+  const balanceDisplay = loading && balance === '— TRSIV' ? 'Loading...' : balance;
 
   return (
     <aside className={`fixed left-0 top-[5rem] z-40 h-[calc(100vh-5rem)] w-70 bg-white/95 border-r border-zinc-200/80 p-4 flex flex-col justify-between transition-transform duration-300 ease-in-out lg:translate-x-0 backdrop-blur-md ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>

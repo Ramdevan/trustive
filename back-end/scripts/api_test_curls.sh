@@ -47,7 +47,7 @@ curl -s "$BASE/api/user/RegisterNewUser?wallet_address=$WALLET"
 # ----- ICO Purchase Flow -----
 
 echo ""
-echo "--- 6. Create Signature (ETH, index 0) ---"
+echo "--- 6. Create Signature (BNB, index 0) ---"
 curl -s -X POST "$BASE/api/user/createSign" \
   -H "Content-Type: application/json" \
   -d "{\"index\":0,\"address\":\"$WALLET\",\"caller\":\"$WALLET\",\"amount\":\"0.01\"}"
@@ -68,7 +68,7 @@ echo ""
 echo "--- 9. Create Purchase ---"
 curl -s -X POST "$BASE/api/user/createPurchase" \
   -H "Content-Type: application/json" \
-  -d "{\"address\":\"$WALLET\",\"CryptoValue\":\"0.01\",\"payment_type\":\"ETH\",\"trustive_tokens\":\"222.22\",\"transHash\":\"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab\",\"USDvalue_of_crypto_purchased\":\"0\",\"status\":\"success\"}"
+  -d "{\"address\":\"$WALLET\",\"CryptoValue\":\"0.01\",\"payment_type\":\"BNB\",\"trustive_tokens\":\"222.22\",\"transHash\":\"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890ab\",\"USDvalue_of_crypto_purchased\":\"0\",\"status\":\"success\"}"
 
 # ----- User Data -----
 
@@ -231,7 +231,7 @@ echo ""
 echo "--- 39. Update Settings ---"
 curl -s -X POST "$BASE/api/admin/updateSettings" \
   -H "Content-Type: application/json" \
-  -d '{"token_name":"Trustive","token_symbol":"Trustive","chain":"Sepolia","token_decimal":"18"}'
+  -d '{"token_name":"Trustive","token_symbol":"TRSIV","chain":"BSC Testnet","token_decimal":"18"}'
 
 echo ""
 echo "--- 40. Update Token Price ---"
@@ -249,7 +249,7 @@ echo ""
 echo "--- 42. Update Payment Settings ---"
 curl -s -X POST "$BASE/api/admin/payment-settings" \
   -H "Content-Type: application/json" \
-  -d '{"payment_type":"ETH","is_active":true,"index":0}'
+  -d '{"payment_type":"BNB","is_active":true,"index":0}'
 
 echo ""
 echo "--- 43. Get Payment Settings History ---"
@@ -265,7 +265,7 @@ echo ""
 echo "--- 45. Create Withdraw ---"
 curl -s -X POST "$BASE/api/admin/createWithdraw" \
   -H "Content-Type: application/json" \
-  -d '{"tx_hash":"0xTEST_WITHDRAW_TX","amount":"100","token":"ETH","to_address":"0x861b38d9E97ebE86883A55eB4b2b70cca795785E"}'
+  -d '{"tx_hash":"0xTEST_WITHDRAW_TX","amount":"100","token":"BNB","to_address":"0x861b38d9E97ebE86883A55eB4b2b70cca795785E"}'
 
 # ----- Referrals -----
 
@@ -288,7 +288,7 @@ curl -s "$BASE/api/admin/getGlobalClaimHistory"
 # ----- Price Oracle -----
 
 echo ""
-echo "--- 50. Fetch And Update ETH Price ---"
+echo "--- 50. Fetch And Update BNB Price ---"
 curl -s "$BASE/api/admin/fetchAndUpdatePrice"
 
 # ----- Admin Vesting -----

@@ -130,7 +130,7 @@ const EmergencyWithdrawModal: React.FC<EmergencyWithdrawModalProps> = ({
           </div>
           <div className="flex items-center justify-between px-4 py-3">
             <span className="text-[0.8rem] text-zinc-500">Staked amount</span>
-            <span className="text-[0.875rem] font-medium text-[#FAF7F2]">{fmt(stake.amount)} Trustive</span>
+            <span className="text-[0.875rem] font-medium text-[#FAF7F2]">{fmt(stake.amount)} TRSIV</span>
           </div>
           <div className="flex items-center justify-between px-4 py-3">
             <span className="text-[0.8rem] text-zinc-500">Time remaining</span>
@@ -139,19 +139,19 @@ const EmergencyWithdrawModal: React.FC<EmergencyWithdrawModalProps> = ({
           <div className="flex items-center justify-between px-4 py-3">
             <span className="text-[0.8rem] text-zinc-500">Reward forfeited</span>
             <span className="text-[0.875rem] font-medium text-red-400">
-              {pendingReward == null && !previewFailed ? '—' : `-${fmt(forfeitedReward, 4)} Trustive`}
+              {pendingReward == null && !previewFailed ? '—' : `-${fmt(forfeitedReward, 4)} TRSIV`}
             </span>
           </div>
           {penalty > 0 && (
             <div className="flex items-center justify-between px-4 py-3">
               <span className="text-[0.8rem] text-zinc-500">Early exit penalty</span>
-              <span className="text-[0.875rem] font-medium text-red-400">-{fmt(penalty, 4)} Trustive</span>
+              <span className="text-[0.875rem] font-medium text-red-400">-{fmt(penalty, 4)} TRSIV</span>
             </div>
           )}
           <div className="flex items-center justify-between px-4 py-3">
             <span className="text-[0.8rem] text-zinc-500">You receive</span>
             <span className="text-[0.9rem] font-bold text-[#FAF7F2]">
-              {returned != null ? `${fmt(returned, 4)} Trustive` : `~${fmt(stake.amount)} Trustive`}
+              {returned != null ? `${fmt(returned, 4)} TRSIV` : `~${fmt(stake.amount)} TRSIV`}
             </span>
           </div>
         </div>
