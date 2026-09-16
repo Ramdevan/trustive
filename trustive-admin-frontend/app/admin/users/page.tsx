@@ -17,7 +17,8 @@ import {
     DollarSign,
     Zap,
     Copy,
-    Check
+    Check,
+    Gift
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
@@ -348,6 +349,13 @@ function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { ad
                                 unit="Trustive"
                                 icon={ShieldCheck}
                                 color="text-blue-600"
+                            />
+                            <StatCard
+                                label="Referral Bonus"
+                                value={formatDecimal(stats.referral_bonus, 5, 2)}
+                                unit="TRSIV"
+                                icon={Gift}
+                                color="text-amber-600"
                             />
                         </div>
                     ) : (

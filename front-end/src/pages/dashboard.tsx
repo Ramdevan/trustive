@@ -8,7 +8,7 @@ import DashboardChart from "@/components/DashboardChart";
 import PromoCard from "@/components/PromoCard";
 import { useWeb3 } from "@/context/Web3Context";
 import { useBalance } from "wagmi";
-import { LuArrowRight, LuWallet } from "react-icons/lu";
+import { LuArrowRight, LuWallet, LuGift } from "react-icons/lu";
 
 import { ethers } from "ethers";
 
@@ -286,6 +286,35 @@ export default function Dashboard() {
           <PromoCard />
         </div>
         */}
+
+          {/* Referral Banner */}
+          <div className="rounded-3xl bg-gradient-to-r from-card via-[#161311] to-card border border-white/5 p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-accent/10 border border-accent/20 text-accent shrink-0">
+                <LuGift className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold text-white">Referral Rewards Program</h3>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    5% Reward
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Share your invite link, grow the Trustive community, and claim instant on-chain TRSIV bonuses.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <Link
+                href="/referral"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-accent hover:bg-accent/90 text-black transition-all shadow-md shadow-accent/10 shrink-0"
+              >
+                <span>Open Referral Dashboard</span>
+                <LuArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </div>
 
           {/* Recent Transactions */}
           <div className="rounded-3xl bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden">

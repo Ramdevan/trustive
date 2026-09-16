@@ -44,7 +44,7 @@ module.exports = async function (fastify, opts) {
     const [settingCols] = await fastify.mysql.query(`
       SELECT COLUMN_NAME 
       FROM INFORMATION_SCHEMA.COLUMNS 
-      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'settings' AND COLUMN_NAME IN ('moonpay_enabled', 'moonpay_api_key', 'moonpay_secret_key', 'moonpay_environment')
+      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'settings' AND COLUMN_NAME IN ('moonpay_enabled', 'moonpay_api_key', 'moonpay_secret_key', 'moonpay_environment', 'referral_contract')
     `);
     const settingColNames = (settingCols || []).map(c => c.COLUMN_NAME);
     if (!settingColNames.includes('moonpay_enabled')) {
@@ -59,8 +59,34 @@ module.exports = async function (fastify, opts) {
     if (!settingColNames.includes('moonpay_environment')) {
       await fastify.mysql.query('ALTER TABLE settings ADD COLUMN moonpay_environment VARCHAR(50) DEFAULT "sandbox"');
     }
+    if (!settingColNames.includes('referral_contract')) {
+      await fastify.mysql.query('ALTER TABLE settings ADD COLUMN referral_contract VARCHAR(255) DEFAULT "0x66ae3C6846C0a340936B127BBBec4f3FC2C08935"');
+    }
   } catch (schemaErr) {
-    console.error('Error ensuring settings MoonPay schema:', schemaErr);
+    console.error('Error ensuring settings MoonPay & Referral schema:', schemaErr);
+  }
+
+  // Ensure referral_claims table exists
+  try {
+    await fastify.mysql.query(`
+      CREATE TABLE IF NOT EXISTS referral_claims (
+        id int unsigned NOT NULL AUTO_INCREMENT,
+        user_id int unsigned DEFAULT NULL,
+        wallet_address varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+        amount decimal(30,8) NOT NULL DEFAULT 0,
+        nonce bigint unsigned NOT NULL,
+        tx_hash varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+        status varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'success',
+        created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        UNIQUE KEY unique_nonce (nonce),
+        UNIQUE KEY unique_tx_hash (tx_hash),
+        INDEX idx_wallet (wallet_address),
+        INDEX idx_user_id (user_id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `);
+  } catch (schemaErr) {
+    console.error('Error ensuring referral_claims table:', schemaErr);
   }
 
 
@@ -70,7 +96,7 @@ module.exports = async function (fastify, opts) {
   // ========================================
   fastify.post('/signup', async (request, reply) => {
     try {
-      const { name, email, password, confirmPassword } = request.body || {};
+      const { name, email, password, confirmPassword, referral_code } = request.body || {};
 
       if (!name || !name.trim()) {
         return reply.code(400).send({ status: false, msg: 'Username is required' });
@@ -118,10 +144,25 @@ module.exports = async function (fastify, opts) {
       const displayName = name.trim();
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      // Check referral code if provided
+      let referredBy = null;
+      let referrerAddress = null;
+      if (referral_code && String(referral_code).trim()) {
+        const cleanRef = String(referral_code).trim();
+        const [refRows] = await fastify.mysql.query('SELECT id, wallet_address, PTC_REF_ID FROM users WHERE PTC_REF_ID = ? LIMIT 1', [cleanRef]);
+        if (refRows && refRows.length > 0) {
+          referredBy = refRows[0].PTC_REF_ID;
+          referrerAddress = refRows[0].wallet_address || null;
+        }
+      }
+
+      // Generate a unique referral ID for the new user
+      const newRefId = 'REF' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
       // Save user directly with verified status (no third-party verification service)
       const [result] = await fastify.mysql.query(
-        'INSERT INTO users (name, email, password, is_verified, verification_token, wallet_address, kyc_status) VALUES (?, ?, ?, 1, NULL, NULL, "unverified")',
-        [displayName, normalizedEmail, hashedPassword]
+        'INSERT INTO users (name, email, password, is_verified, verification_token, wallet_address, kyc_status, PTC_REF_ID, referred_by, referrer_address) VALUES (?, ?, ?, 1, NULL, NULL, "unverified", ?, ?, ?)',
+        [displayName, normalizedEmail, hashedPassword, newRefId, referredBy, referrerAddress]
       );
 
       return reply.code(201).send({
@@ -132,7 +173,8 @@ module.exports = async function (fastify, opts) {
             id: result.insertId,
             name: displayName,
             email: normalizedEmail,
-            kyc_status: 'unverified'
+            kyc_status: 'unverified',
+            PTC_REF_ID: newRefId
           }
         }
       });
@@ -1181,12 +1223,38 @@ module.exports = async function (fastify, opts) {
         }
       }
 
+      // Check for referral attribution
+      let refBonus = 0;
+      let refAddress = '';
+      try {
+        const [buyerRows] = await fastify.mysql.query(
+          'SELECT referred_by, referrer_address FROM users WHERE LOWER(wallet_address) = LOWER(?) LIMIT 1',
+          [address]
+        );
+        if (buyerRows && buyerRows.length > 0 && buyerRows[0].referred_by) {
+          const [settRows] = await fastify.mysql.query('SELECT referral_level1 FROM settings LIMIT 1');
+          const refPct = settRows && settRows[0]?.referral_level1 != null ? parseFloat(settRows[0].referral_level1) : 5.0;
+          refBonus = (parseFloat(tokenAmount || '0') * (refPct / 100));
+
+          if (buyerRows[0].referrer_address) {
+            refAddress = buyerRows[0].referrer_address;
+          } else {
+            const [uRef] = await fastify.mysql.query('SELECT wallet_address FROM users WHERE PTC_REF_ID = ? LIMIT 1', [buyerRows[0].referred_by]);
+            if (uRef && uRef.length > 0 && uRef[0].wallet_address) {
+              refAddress = uRef[0].wallet_address;
+            }
+          }
+        }
+      } catch (refErr) {
+        console.error('Error calculating referral bonus for purchase:', refErr.message);
+      }
+
       // Insert purchase record
       const [insertResult] = await fastify.mysql.query(
         `INSERT INTO ico_purchases
-        (address, crypto_value, payment_type, ptc_tokens, trans_hash, usd_value_of_crypto, sale_type, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [address, CryptoValue, payment_type, tokenAmount, transHash, finalUsdValue, resolvedSaleType || '', status]
+        (address, crypto_value, payment_type, ptc_tokens, trans_hash, usd_value_of_crypto, sale_type, status, referrer_bonus, referrer_address)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [address, CryptoValue, payment_type, tokenAmount, transHash, finalUsdValue, resolvedSaleType || '', status, refBonus, refAddress]
       );
 
 
@@ -1363,7 +1431,7 @@ module.exports = async function (fastify, opts) {
   // ========================================
   fastify.get('/getSettings', async (req, reply) => {
     try {
-      const [rows] = await fastify.mysql.query("SELECT site_name, token_name, token_symbol, chain, token_decimal, contract_address, ico_contract, usdt_address, usdc_address, site_logo, token_logo, vesting_contract, moonpay_enabled, moonpay_api_key, moonpay_environment FROM settings LIMIT 1");
+      const [rows] = await fastify.mysql.query("SELECT site_name, token_name, token_symbol, chain, token_decimal, contract_address, ico_contract, usdt_address, usdc_address, site_logo, token_logo, vesting_contract, referral_contract, referral_level1, moonpay_enabled, moonpay_api_key, moonpay_environment FROM settings LIMIT 1");
       return reply.send({ status: true, data: rows[0] || {} });
     } catch (err) {
       return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
@@ -1895,6 +1963,305 @@ module.exports = async function (fastify, opts) {
     } catch (err) {
       console.error('Public CMS fetch error:', err);
       return reply.code(500).send({ status: false, msg: 'Failed to fetch CMS sections' });
+    }
+  });
+
+  // ========================================
+  // Referral Program Endpoints
+  // ========================================
+
+  // GET /referral/stats - returns code, link, bonus percentage, stats, friends list, claimable balance, claims history
+  fastify.get('/referral/stats', async (req, reply) => {
+    try {
+      let user = null;
+      const token = req.headers.authorization?.split(' ')[1];
+      if (token) {
+        try {
+          const decoded = await fastify.jwt.verify(token);
+          if (decoded && decoded.id) {
+            const [u] = await fastify.mysql.query('SELECT * FROM users WHERE id = ?', [decoded.id]);
+            if (u && u.length > 0) user = u[0];
+          }
+        } catch { }
+      }
+      if (!user && req.query.address) {
+        const [u] = await fastify.mysql.query('SELECT * FROM users WHERE LOWER(wallet_address) = LOWER(?)', [req.query.address]);
+        if (u && u.length > 0) user = u[0];
+      }
+      if (!user && req.query.userId) {
+        const [u] = await fastify.mysql.query('SELECT * FROM users WHERE id = ?', [req.query.userId]);
+        if (u && u.length > 0) user = u[0];
+      }
+
+      // If user exists and doesn't have PTC_REF_ID yet, assign one
+      if (user && !user.PTC_REF_ID) {
+        const newRefId = 'REF' + Math.random().toString(36).substring(2, 8).toUpperCase();
+        await fastify.mysql.query('UPDATE users SET PTC_REF_ID = ? WHERE id = ?', [newRefId, user.id]);
+        user.PTC_REF_ID = newRefId;
+      }
+
+      const [settRows] = await fastify.mysql.query(
+        'SELECT referral_level1, referral_contract, contract_address, token_symbol FROM settings LIMIT 1'
+      );
+      const sett = settRows[0] || {};
+      const commissionRate = sett.referral_level1 != null ? parseFloat(sett.referral_level1) : 5.0;
+      const referralContract = sett.referral_contract || process.env.REFERRAL_CONTRACT_ADDRESS || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935';
+      const tokenSymbol = sett.token_symbol || 'TRSIV';
+
+      const userWallet = user?.wallet_address || (req.query.address ? String(req.query.address).toLowerCase() : '');
+      const userRefId = user?.PTC_REF_ID || '';
+
+      // Referred users list
+      let referredUsers = [];
+      if (userRefId) {
+        const [rRows] = await fastify.mysql.query(`
+          SELECT u.id, u.name, u.email, u.wallet_address, u.created_at,
+                 COALESCE(SUM(CAST(ip.ptc_tokens AS DECIMAL(36,18))), 0) AS total_purchased,
+                 COALESCE(SUM(CAST(ip.referrer_bonus AS DECIMAL(36,18))), 0) AS bonus_generated
+          FROM users u
+          LEFT JOIN ico_purchases ip ON (
+            LOWER(ip.address) = LOWER(u.wallet_address) AND ip.status = 'success'
+          )
+          WHERE u.referred_by = ?
+          GROUP BY u.id
+          ORDER BY u.created_at DESC
+        `, [userRefId]);
+        referredUsers = (rRows || []).map(r => ({
+          ...r,
+          total_purchased: parseFloat(r.total_purchased).toFixed(2),
+          bonus_generated: parseFloat(r.bonus_generated).toFixed(4)
+        }));
+      }
+
+      // Total earned bonus tokens: sum from ico_purchases
+      let totalEarned = 0;
+      const [earnedRows] = await fastify.mysql.query(`
+        SELECT COALESCE(SUM(CAST(ip.referrer_bonus AS DECIMAL(36,18))), 0) AS total_earned
+        FROM ico_purchases ip
+        WHERE (
+          (? != '' AND LOWER(ip.referrer_address) = LOWER(?))
+          OR (? != '' AND ip.address IN (SELECT wallet_address FROM users WHERE referred_by = ? AND wallet_address IS NOT NULL))
+        ) AND ip.status = 'success'
+      `, [userWallet, userWallet, userRefId, userRefId]);
+      totalEarned = parseFloat(earnedRows[0]?.total_earned || 0);
+
+      // Total claimed bonus tokens: sum from referral_claims
+      let totalClaimed = 0;
+      const [claimedRows] = await fastify.mysql.query(`
+        SELECT COALESCE(SUM(CAST(amount AS DECIMAL(36,18))), 0) AS total_claimed
+        FROM referral_claims
+        WHERE (
+          (? > 0 AND user_id = ?)
+          OR (? != '' AND LOWER(wallet_address) = LOWER(?))
+        ) AND status = 'success'
+      `, [user?.id || 0, user?.id || 0, userWallet, userWallet]);
+      totalClaimed = parseFloat(claimedRows[0]?.total_claimed || 0);
+
+      const claimableBalance = Math.max(0, totalEarned - totalClaimed);
+
+      // Past claims
+      const [claimList] = await fastify.mysql.query(`
+        SELECT id, amount, nonce, tx_hash, status, created_at
+        FROM referral_claims
+        WHERE (
+          (? > 0 AND user_id = ?)
+          OR (? != '' AND LOWER(wallet_address) = LOWER(?))
+        ) AND status = 'success'
+        ORDER BY created_at DESC
+      `, [user?.id || 0, user?.id || 0, userWallet, userWallet]);
+
+      const frontendBase = process.env.FRONTEND_URL || 'http://localhost:3000';
+      const referralLink = userRefId ? `${frontendBase}/register?ref=${userRefId}` : '';
+
+      return reply.send({
+        status: true,
+        data: {
+          referral_code: userRefId || null,
+          referral_link: referralLink,
+          commission_rate: commissionRate,
+          total_referred_users: referredUsers.length,
+          total_earned: totalEarned.toFixed(4),
+          total_claimed: totalClaimed.toFixed(4),
+          claimable_balance: claimableBalance.toFixed(4),
+          token_symbol: tokenSymbol,
+          referral_contract: referralContract,
+          wallet_address: userWallet || null,
+          referred_users: referredUsers,
+          claims_history: claimList || []
+        }
+      });
+    } catch (err) {
+      console.error('Error in /referral/stats:', err);
+      return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
+    }
+  });
+
+  // POST /referral/create-claim-sign - generates signed ECDSA claim payload for ReferralClaim contract
+  fastify.post('/referral/create-claim-sign', async (req, reply) => {
+    try {
+      const { caller, to } = req.body || {};
+
+      if (!caller || !ethers.isAddress(caller)) {
+        return reply.code(400).send({ status: false, msg: 'Valid caller address is required' });
+      }
+      const targetTo = (to && ethers.isAddress(to)) ? to : caller;
+
+      // Identify user either by token or by caller address
+      let user = null;
+      const token = req.headers.authorization?.split(' ')[1];
+      if (token) {
+        try {
+          const decoded = await fastify.jwt.verify(token);
+          if (decoded && decoded.id) {
+            const [u] = await fastify.mysql.query('SELECT * FROM users WHERE id = ?', [decoded.id]);
+            if (u && u.length > 0) user = u[0];
+          }
+        } catch { }
+      }
+      if (!user) {
+        const [u] = await fastify.mysql.query('SELECT * FROM users WHERE LOWER(wallet_address) = LOWER(?)', [caller]);
+        if (u && u.length > 0) user = u[0];
+      }
+
+      const userWallet = user?.wallet_address || caller.toLowerCase();
+      const userRefId = user?.PTC_REF_ID || '';
+
+      // Compute total earned
+      const [earnedRows] = await fastify.mysql.query(`
+        SELECT COALESCE(SUM(CAST(ip.referrer_bonus AS DECIMAL(36,18))), 0) AS total_earned
+        FROM ico_purchases ip
+        WHERE (
+          (? != '' AND LOWER(ip.referrer_address) = LOWER(?))
+          OR (? != '' AND ip.address IN (SELECT wallet_address FROM users WHERE referred_by = ? AND wallet_address IS NOT NULL))
+        ) AND ip.status = 'success'
+      `, [userWallet, userWallet, userRefId, userRefId]);
+      const totalEarned = parseFloat(earnedRows[0]?.total_earned || 0);
+
+      // Compute total claimed
+      const [claimedRows] = await fastify.mysql.query(`
+        SELECT COALESCE(SUM(CAST(amount AS DECIMAL(36,18))), 0) AS total_claimed
+        FROM referral_claims
+        WHERE (
+          (? > 0 AND user_id = ?)
+          OR (? != '' AND LOWER(wallet_address) = LOWER(?))
+        ) AND status = 'success'
+      `, [user?.id || 0, user?.id || 0, userWallet, userWallet]);
+      const totalClaimed = parseFloat(claimedRows[0]?.total_claimed || 0);
+
+      const claimable = Math.max(0, totalEarned - totalClaimed);
+      if (claimable <= 0.000001) {
+        return reply.code(400).send({ status: false, msg: 'No claimable referral rewards available at this time.' });
+      }
+
+      // Read contract addresses
+      const [settRows] = await fastify.mysql.query(
+        'SELECT referral_contract, contract_address FROM settings LIMIT 1'
+      );
+      const sett = settRows[0] || {};
+      const referralContract = sett.referral_contract || process.env.REFERRAL_CONTRACT_ADDRESS || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935';
+      const tokenAddress = sett.contract_address || process.env.TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
+
+      const amountWei = ethers.parseEther(claimable.toFixed(6));
+
+      // Verify server has SIGNER_PRIVATE_KEY
+      const signerKey = process.env.SIGNER_PRIVATE_KEY;
+      if (!signerKey || signerKey.trim() === '') {
+        return reply.code(500).send({
+          status: false,
+          msg: 'Server is missing SIGNER_PRIVATE_KEY. Please configure the authorized signer key in the backend environment.'
+        });
+      }
+
+      // Check on-chain referral contract balance
+      try {
+        const provider = await getProvider();
+        const tokenContract = new ethers.Contract(tokenAddress, ['function balanceOf(address) view returns (uint256)'], provider);
+        const contractBalance = await tokenContract.balanceOf(referralContract);
+        if (contractBalance < amountWei) {
+          const availFormatted = ethers.formatEther(contractBalance);
+          return reply.code(400).send({
+            status: false,
+            msg: `Referral contract reward pool has insufficient balance (Available: ${parseFloat(availFormatted).toFixed(2)} TRSIV, Requested: ${claimable.toFixed(2)} TRSIV). Please notify the administrator to fund the referral contract.`
+          });
+        }
+      } catch (rpcErr) {
+        console.warn('Could not verify referral contract token balance:', rpcErr.message);
+      }
+
+      // Generate unique nonce
+      const nonce = BigInt(Date.now()) * 1000n + BigInt(Math.floor(Math.random() * 1000));
+
+      // Hash: keccak256(abi.encodePacked(address(this), block.chainid, caller, to, amount, nonce))
+      // On BSC Testnet, chainid = 97
+      const claimHash = ethers.solidityPackedKeccak256(
+        ['address', 'uint256', 'address', 'address', 'uint256', 'uint256'],
+        [referralContract, 97n, caller, targetTo, amountWei, nonce]
+      );
+
+      const signerWallet = new ethers.Wallet(signerKey);
+      const signatureBytes = await signerWallet.signMessage(ethers.getBytes(claimHash));
+      const sig = ethers.Signature.from(signatureBytes);
+
+      return reply.send({
+        status: true,
+        data: {
+          referralContract,
+          amount: amountWei.toString(),
+          displayAmount: claimable.toFixed(6),
+          caller,
+          to: targetTo,
+          nonce: nonce.toString(),
+          signature: {
+            v: sig.v,
+            r: sig.r,
+            s: sig.s,
+            nonce: nonce.toString()
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error in /referral/create-claim-sign:', err);
+      return reply.code(500).send({ status: false, msg: err.message || 'Internal Server Error' });
+    }
+  });
+
+  // POST /referral/record-claim - records confirmed on-chain claim transaction
+  fastify.post('/referral/record-claim', async (req, reply) => {
+    try {
+      const { txHash, amount, nonce, walletAddress } = req.body || {};
+      if (!txHash) {
+        return reply.code(400).send({ status: false, msg: 'Transaction hash is required' });
+      }
+      if (!amount || isNaN(parseFloat(amount))) {
+        return reply.code(400).send({ status: false, msg: 'Valid amount is required' });
+      }
+
+      // Find user if available
+      let userId = null;
+      const token = req.headers.authorization?.split(' ')[1];
+      if (token) {
+        try {
+          const decoded = await fastify.jwt.verify(token);
+          if (decoded && decoded.id) userId = decoded.id;
+        } catch { }
+      }
+      if (!userId && walletAddress) {
+        const [u] = await fastify.mysql.query('SELECT id FROM users WHERE LOWER(wallet_address) = LOWER(?) LIMIT 1', [walletAddress]);
+        if (u && u.length > 0) userId = u[0].id;
+      }
+
+      await fastify.mysql.query(
+        'INSERT INTO referral_claims (user_id, wallet_address, amount, nonce, tx_hash, status) VALUES (?, ?, ?, ?, ?, "success")',
+        [userId, walletAddress || '', parseFloat(amount), nonce || Date.now(), txHash]
+      );
+
+      return reply.send({ status: true, msg: 'Referral claim recorded successfully' });
+    } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return reply.send({ status: true, msg: 'Claim already recorded' });
+      }
+      console.error('Error in /referral/record-claim:', err);
+      return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
     }
   });
 };

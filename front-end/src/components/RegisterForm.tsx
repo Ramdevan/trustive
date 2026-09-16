@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { LuMail, LuLock, LuCheck, LuUser, LuEye, LuEyeOff } from 'react-icons/lu';
+import { LuMail, LuLock, LuCheck, LuUser, LuEye, LuEyeOff, LuGift } from 'react-icons/lu';
 
 const RegisterForm: React.FC = () => {
   const router = useRouter();
@@ -11,12 +11,20 @@ const RegisterForm: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [referralCode, setReferralCode] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [acceptedTerms, setAcceptedTerms] = React.useState(false);
+
+  // Read ?ref= query param
+  React.useEffect(() => {
+    if (router.isReady && router.query.ref) {
+      setReferralCode(String(router.query.ref).trim().toUpperCase());
+    }
+  }, [router.isReady, router.query.ref]);
 
   // Redirect if already logged in
   React.useEffect(() => {
@@ -98,7 +106,8 @@ const RegisterForm: React.FC = () => {
           name: name.trim(),
           email: email.trim(),
           password,
-          confirmPassword
+          confirmPassword,
+          referral_code: referralCode.trim() || undefined
         })
       });
       const data = await res.json();
@@ -280,6 +289,28 @@ const RegisterForm: React.FC = () => {
               {isPasswordMismatch && (
                 <p className="text-xs text-red-600 font-medium px-2">Passwords do not match</p>
               )}
+            </div>
+
+            {/* Referral Code (Optional) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between ml-1">
+                <label className="block text-[1rem] font-medium text-zinc-700">Referral Code <span className="text-xs text-zinc-400 font-normal">(Optional)</span></label>
+                {router.query.ref && (
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
+                    Invite Applied
+                  </span>
+                )}
+              </div>
+              <div className="relative group">
+                <LuGift className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
+                <input
+                  type="text"
+                  placeholder="e.g. REF123456"
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-5 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium tracking-wide uppercase"
+                />
+              </div>
             </div>
 
             <label className="flex items-center gap-3 ml-1 mt-6 cursor-pointer group/check w-fit">

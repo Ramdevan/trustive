@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { LuLayoutDashboard, LuTarget, LuArrowRightLeft, LuRocket, LuUser } from 'react-icons/lu';
+import { LuLayoutDashboard, LuTarget, LuArrowRightLeft, LuRocket, LuGift, LuUser } from 'react-icons/lu';
 import { useBalance } from 'wagmi';
 import { useWeb3 } from '@/context/Web3Context';
 import { ethers } from 'ethers';
@@ -11,6 +11,7 @@ const menuItems = [
   { name: 'ICO', icon: LuTarget, path: '/ico' },
   { name: 'Transactions', icon: LuArrowRightLeft, path: '/transactions' },
   { name: 'Vesting Claim', icon: LuRocket, path: '/vesting' },
+  { name: 'Referral', icon: LuGift, path: '/referral' },
 ];
 
 const TRUSTIVE_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA') as `0x${string}`;

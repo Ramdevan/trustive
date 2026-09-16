@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DollarSign, Activity, CheckCircle2, TrendingUp, RefreshCw, CreditCard, ShieldCheck, Eye, EyeOff, Save, Key, Globe } from "lucide-react";
+import { DollarSign, Activity, CheckCircle2, TrendingUp, RefreshCw, CreditCard, ShieldCheck, Eye, EyeOff, Save, Key, Globe, Gift, AlertTriangle } from "lucide-react";
 import { useWriteContract, useAccount, useReadContract } from "wagmi";
 import { parseUnits, formatUnits } from "viem";
 import { toast } from "react-toastify";
@@ -47,6 +47,12 @@ export default function PaymentSettings() {
     const [moonpayEnv, setMoonpayEnv] = useState<string>("sandbox");
     const [showSecretKey, setShowSecretKey] = useState<boolean>(false);
     const [isSavingMoonpay, setIsSavingMoonpay] = useState<boolean>(false);
+
+    // Referral Program State
+    const [referralContract, setReferralContract] = useState<string>("0x66ae3C6846C0a340936B127BBBec4f3FC2C08935");
+    const [referralCommission, setReferralCommission] = useState<string>("5.00");
+    const [referralContractBalance, setReferralContractBalance] = useState<string>("0");
+    const [isSavingReferral, setIsSavingReferral] = useState<boolean>(false);
 
     const { writeContractAsync, isPending: isWriting } = useWriteContract();
 
@@ -120,6 +126,15 @@ export default function PaymentSettings() {
                     setMoonpayApiKey(s.moonpay_api_key || "");
                     setMoonpaySecretKey(s.moonpay_secret_key || "");
                     setMoonpayEnv(s.moonpay_environment || "sandbox");
+                    if (s.referral_contract) {
+                        setReferralContract(s.referral_contract);
+                    }
+                    if (s.referral_level1 !== undefined) {
+                        setReferralCommission(String(s.referral_level1));
+                    }
+                }
+                if (settingsData.referral_contract_balance !== undefined) {
+                    setReferralContractBalance(settingsData.referral_contract_balance);
                 }
                 if (settingsData.current_price) {
                     setBackendPrice(settingsData.current_price);
@@ -166,6 +181,33 @@ export default function PaymentSettings() {
             toast.error("Failed to update MoonPay settings");
         } finally {
             setIsSavingMoonpay(false);
+        }
+    };
+
+    const handleSaveReferral = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        setIsSavingReferral(true);
+        try {
+            const res = await apiRequest("/payment-settings", {
+                method: 'POST',
+                body: JSON.stringify({
+                    referral_contract: referralContract.trim(),
+                    referral_level1: parseFloat(referralCommission) || 5.0
+                })
+            });
+
+            if (res && res.status) {
+                toast.success("Referral program settings successfully updated!");
+                fetchHistory();
+                fetchSettings();
+            } else {
+                toast.error(res?.msg || "Failed to update referral settings");
+            }
+        } catch (err: any) {
+            console.error("Save Referral error:", err);
+            toast.error("Failed to update referral settings");
+        } finally {
+            setIsSavingReferral(false);
         }
     };
 
@@ -380,6 +422,123 @@ export default function PaymentSettings() {
                                 <Save className="w-4 h-4 text-white/90" />
                             )}
                             Save MoonPay Configuration
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {/* Referral Program Configuration */}
+            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
+                <div className="p-8 border-b border-zinc-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-zinc-50/50">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-sm">
+                            <Gift className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-3">
+                                <h2 className="text-xl font-bold text-zinc-900">Referral Program Configuration</h2>
+                                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    Active
+                                </span>
+                            </div>
+                            <p className="text-sm text-zinc-500 mt-0.5">
+                                Configure the on-chain referral claim contract address and direct buyer commission rate.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Live Contract TRSIV Balance Indicator */}
+                    <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-white border border-zinc-200 shadow-sm">
+                        <div className="text-right">
+                            <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Claim Pool Balance</div>
+                            <div className="text-sm font-bold font-mono text-zinc-900">
+                                {parseFloat(referralContractBalance || '0').toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} TRSIV
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => fetchSettings()}
+                            title="Refresh balance"
+                            className="p-1.5 rounded-lg hover:bg-zinc-100 text-zinc-500 hover:text-zinc-800 transition-colors"
+                        >
+                            <RefreshCw className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+                </div>
+
+                <form onSubmit={handleSaveReferral} className="p-8 space-y-6">
+                    {/* Contract Warning Banner if Pool Balance is 0 */}
+                    {parseFloat(referralContractBalance || '0') <= 0 && (
+                        <div className="flex items-start gap-3 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed">
+                            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                            <div>
+                                <p className="font-bold">Referral Contract Funding Notice</p>
+                                <p className="text-amber-800 mt-0.5">
+                                    The referral claim contract (<code className="font-mono bg-amber-100/70 px-1 py-0.5 rounded text-amber-900">{referralContract || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935'}</code>) currently holds 0.00 TRSIV tokens on BSC Testnet. Transfer TRSIV tokens to this address from your owner wallet so users can claim their referral earnings on-chain without revert errors.
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Referral Contract Address */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase tracking-wider text-zinc-700">
+                                Referral Claim Contract Address
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                value={referralContract}
+                                onChange={(e) => setReferralContract(e.target.value.trim())}
+                                placeholder="0x..."
+                                className="w-full px-4 py-3.5 rounded-xl border border-zinc-200 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 font-mono text-xs text-zinc-900 transition-all bg-zinc-50/50"
+                            />
+                            <p className="text-[11px] text-zinc-400">
+                                Smart contract implementing claim() with authorized ECDSA signatures on BSC Testnet.
+                            </p>
+                        </div>
+
+                        {/* Referral Commission Level 1 (%) */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase tracking-wider text-zinc-700">
+                                Direct Referral Bonus (%)
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    max="100"
+                                    required
+                                    value={referralCommission}
+                                    onChange={(e) => setReferralCommission(e.target.value)}
+                                    placeholder="5.00"
+                                    className="w-full px-4 py-3.5 pr-10 rounded-xl border border-zinc-200 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 font-mono text-sm text-zinc-900 transition-all bg-zinc-50/50"
+                                />
+                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-zinc-400">
+                                    %
+                                </span>
+                            </div>
+                            <p className="text-[11px] text-zinc-400">
+                                Percentage of tokens awarded to referrer when an invited buyer makes an ICO purchase.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Save Button */}
+                    <div className="flex items-center justify-end pt-2">
+                        <button
+                            type="submit"
+                            disabled={isSavingReferral}
+                            className="bg-[#212E73] hover:bg-[#1a255c] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                        >
+                            {isSavingReferral ? (
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            ) : (
+                                <Save className="w-4 h-4 text-white/90" />
+                            )}
+                            Save Referral Configuration
                         </button>
                     </div>
                 </form>

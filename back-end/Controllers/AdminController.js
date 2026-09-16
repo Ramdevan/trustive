@@ -802,6 +802,16 @@ module.exports = async function (fastify, opts) {
                     onChainBalance = balanceRows[0]?.balance || 0;
                 }
 
+                // Query referral bonus
+                let referralBonus = '0';
+                try {
+                    const [refRows] = await fastify.mysql.query(
+                        "SELECT COALESCE(SUM(CAST(referrer_bonus AS DECIMAL(36,18))), 0) AS ref_bonus FROM ico_purchases WHERE LOWER(referrer_address) = LOWER(?) AND status = 'success'",
+                        [address]
+                    );
+                    referralBonus = parseFloat(refRows[0]?.ref_bonus || 0).toString();
+                } catch (_) { }
+
                 return reply.send({
                     status: true,
                     stats: {
@@ -811,13 +821,25 @@ module.exports = async function (fastify, opts) {
                         total_usdt: (parseFloat(cryptoTotals['USDT'] || 0) + parseFloat(cryptoTotals['USDC'] || 0)).toString(),
                         unclaimed_boxes: 0,
                         nft_assets: 0,
-                        referral_bonus: 0,
+                        referral_bonus: referralBonus,
                         profile_pic: user.profile_pic || null
                     }
                 });
             }
 
-            // User has no wallet — return zeroed stats with profile info
+            // User has no wallet — check if user has PTC_REF_ID and earned bonus
+            let noWalletRefBonus = '0';
+            try {
+                const [uRows] = await fastify.mysql.query('SELECT PTC_REF_ID FROM users WHERE id = ?', [userId]);
+                if (uRows && uRows[0]?.PTC_REF_ID) {
+                    const [refRows] = await fastify.mysql.query(
+                        "SELECT COALESCE(SUM(CAST(ip.referrer_bonus AS DECIMAL(36,18))), 0) AS ref_bonus FROM ico_purchases ip WHERE ip.address IN (SELECT wallet_address FROM users WHERE referred_by = ? AND wallet_address IS NOT NULL) AND ip.status = 'success'",
+                        [uRows[0].PTC_REF_ID]
+                    );
+                    noWalletRefBonus = parseFloat(refRows[0]?.ref_bonus || 0).toString();
+                }
+            } catch (_) { }
+
             return reply.send({
                 status: true,
                 stats: {
@@ -827,7 +849,7 @@ module.exports = async function (fastify, opts) {
                     total_usdt: '0',
                     unclaimed_boxes: 0,
                     nft_assets: 0,
-                    referral_bonus: 0,
+                    referral_bonus: noWalletRefBonus,
                     profile_pic: user.profile_pic || null
                 }
             });
@@ -884,6 +906,16 @@ module.exports = async function (fastify, opts) {
                 onChainBalance = balanceRows[0]?.balance || 0; // fallback to db sum
             }
 
+            // Query referral bonus
+            let referralBonus = '0';
+            try {
+                const [refRows] = await fastify.mysql.query(
+                    "SELECT COALESCE(SUM(CAST(referrer_bonus AS DECIMAL(36,18))), 0) AS ref_bonus FROM ico_purchases WHERE LOWER(referrer_address) = LOWER(?) AND status = 'success'",
+                    [address]
+                );
+                referralBonus = parseFloat(refRows[0]?.ref_bonus || 0).toString();
+            } catch (_) { }
+
             return reply.send({
                 status: true,
                 stats: {
@@ -893,7 +925,7 @@ module.exports = async function (fastify, opts) {
                     total_usdt: (parseFloat(cryptoTotals['USDT'] || 0) + parseFloat(cryptoTotals['USDC'] || 0)).toString(),
                     unclaimed_boxes: 0, // Placeholder
                     nft_assets: 0,      // Placeholder
-                    referral_bonus: 0,  // Placeholder
+                    referral_bonus: referralBonus,
                     profile_pic: userRows[0]?.profile_pic || null
                 }
             });
@@ -1419,8 +1451,21 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get("/payment-settings", async (request, reply) => {
         try {
-            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment FROM settings LIMIT 1");
+            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, referral_contract, referral_level1, moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment FROM settings LIMIT 1");
             const settings = rows[0] || {};
+
+            // Fetch live Referral Contract balance
+            let referralContractBalance = '0';
+            try {
+                const refContractAddr = settings.referral_contract || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935';
+                const tokenAddr = process.env.TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
+                const provider = await getWorkingProvider();
+                const tokenContract = new ethers.Contract(tokenAddr, ['function balanceOf(address) view returns (uint256)'], provider);
+                const bal = await tokenContract.balanceOf(refContractAddr);
+                referralContractBalance = ethers.formatEther(bal);
+            } catch (balErr) {
+                console.warn('Error fetching referral contract balance:', balErr.message);
+            }
 
             // Fetch current active token sale price matching user dashboard
             await updateSaleStatuses(fastify.mysql);
@@ -1443,6 +1488,7 @@ module.exports = async function (fastify, opts) {
             return reply.send({
                 status: true,
                 settings,
+                referral_contract_balance: referralContractBalance,
                 current_price: {
                     usd_per_token: activePrice,
                     tokens_per_usd: tokensPerUsd
@@ -1462,9 +1508,11 @@ module.exports = async function (fastify, opts) {
 
             if (existing) {
                 await fastify.mysql.query(
-                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, bnb_address = ?, vesting_contract = ?, moonpay_enabled = ?, moonpay_api_key = ?, moonpay_secret_key = ?, moonpay_environment = ? WHERE id = ?",
+                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, bnb_address = ?, vesting_contract = ?, referral_contract = ?, referral_level1 = ?, moonpay_enabled = ?, moonpay_api_key = ?, moonpay_secret_key = ?, moonpay_environment = ? WHERE id = ?",
                     [
                         data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract,
+                        data.referral_contract !== undefined ? data.referral_contract : existing.referral_contract,
+                        data.referral_level1 !== undefined ? data.referral_level1 : existing.referral_level1,
                         data.moonpay_enabled !== undefined ? (data.moonpay_enabled ? 1 : 0) : existing.moonpay_enabled,
                         data.moonpay_api_key !== undefined ? data.moonpay_api_key : existing.moonpay_api_key,
                         data.moonpay_secret_key !== undefined ? data.moonpay_secret_key : existing.moonpay_secret_key,
@@ -1474,9 +1522,11 @@ module.exports = async function (fastify, opts) {
                 );
             } else {
                 await fastify.mysql.query(
-                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, referral_contract, referral_level1, moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     [
                         data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract,
+                        data.referral_contract || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935',
+                        data.referral_level1 || 5.00,
                         data.moonpay_enabled !== undefined ? (data.moonpay_enabled ? 1 : 0) : 1,
                         data.moonpay_api_key || 'pk_test_123',
                         data.moonpay_secret_key || null,
@@ -1485,7 +1535,7 @@ module.exports = async function (fastify, opts) {
                 );
             }
 
-            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'bnb_address', 'vesting_contract', 'moonpay_enabled', 'moonpay_api_key', 'moonpay_secret_key', 'moonpay_environment'];
+            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'bnb_address', 'vesting_contract', 'referral_contract', 'referral_level1', 'moonpay_enabled', 'moonpay_api_key', 'moonpay_secret_key', 'moonpay_environment'];
             for (const key of keys) {
                 if (data[key] !== undefined && data[key] !== oldData[key]) {
                     await fastify.mysql.query(

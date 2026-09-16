@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `vesting_contract` varchar(255) DEFAULT '0x393858957f0193b6aC9781f8b033E9196e37bdd4',
   `ico_remaining_tokens` varchar(255) DEFAULT '0',
   `referral_level1` decimal(5,2) DEFAULT 5.00,
+  `referral_contract` varchar(255) DEFAULT '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935',
   `kyc_enabled` tinyint(1) DEFAULT 0,
   `moonpay_enabled` tinyint(1) DEFAULT 1,
   `moonpay_api_key` varchar(255) DEFAULT 'pk_test_123',
@@ -43,8 +44,8 @@ CREATE TABLE IF NOT EXISTS `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert default settings
-INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `vesting_contract`, `referral_level1`, `moonpay_enabled`, `moonpay_api_key`, `moonpay_environment`, `admin_email`, `admin_password`)
-VALUES ('Trustive', 'Trustive', 'TRSIV', 'BSC Testnet', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x393858957f0193b6aC9781f8b033E9196e37bdd4', 5.00, 1, 'pk_test_123', 'sandbox', 'admin@trustive.com', 'admin123');
+INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `vesting_contract`, `referral_contract`, `referral_level1`, `moonpay_enabled`, `moonpay_api_key`, `moonpay_environment`, `admin_email`, `admin_password`)
+VALUES ('Trustive', 'Trustive', 'TRSIV', 'BSC Testnet', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x393858957f0193b6aC9781f8b033E9196e37bdd4', '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935', 5.00, 1, 'pk_test_123', 'sandbox', 'admin@trustive.com', 'admin123');
 
 -- ========================================
 -- Users Table
@@ -194,4 +195,23 @@ CREATE TABLE IF NOT EXISTS `cms_sections` (
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `section_key_unique` (`section_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ========================================
+-- Referral Claims Table
+-- ========================================
+CREATE TABLE IF NOT EXISTS `referral_claims` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned DEFAULT NULL,
+  `wallet_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` decimal(30,8) NOT NULL DEFAULT 0,
+  `nonce` bigint unsigned NOT NULL,
+  `tx_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'success',
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_nonce` (`nonce`),
+  UNIQUE KEY `unique_tx_hash` (`tx_hash`),
+  INDEX `idx_wallet` (`wallet_address`),
+  INDEX `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
