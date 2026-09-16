@@ -1339,6 +1339,7 @@ module.exports = async function (fastify, opts) {
                 'contract_address', 'crypto_decimal', 'fiat_decimal',
                 'ico_contract', 'usdt_address', 'usdc_address', 'bnb_address',
                 'vesting_contract',
+                'moonpay_enabled', 'moonpay_api_key', 'moonpay_secret_key', 'moonpay_environment',
                 'admin_email', 'admin_password'
             ];
 
@@ -1418,7 +1419,7 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get("/payment-settings", async (request, reply) => {
         try {
-            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract FROM settings LIMIT 1");
+            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment FROM settings LIMIT 1");
             const settings = rows[0] || {};
 
             // Fetch current active token sale price matching user dashboard
@@ -1461,22 +1462,35 @@ module.exports = async function (fastify, opts) {
 
             if (existing) {
                 await fastify.mysql.query(
-                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, bnb_address = ?, vesting_contract = ? WHERE id = ?",
-                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract, existing.id]
+                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, bnb_address = ?, vesting_contract = ?, moonpay_enabled = ?, moonpay_api_key = ?, moonpay_secret_key = ?, moonpay_environment = ? WHERE id = ?",
+                    [
+                        data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract,
+                        data.moonpay_enabled !== undefined ? (data.moonpay_enabled ? 1 : 0) : existing.moonpay_enabled,
+                        data.moonpay_api_key !== undefined ? data.moonpay_api_key : existing.moonpay_api_key,
+                        data.moonpay_secret_key !== undefined ? data.moonpay_secret_key : existing.moonpay_secret_key,
+                        data.moonpay_environment !== undefined ? data.moonpay_environment : existing.moonpay_environment,
+                        existing.id
+                    ]
                 );
             } else {
                 await fastify.mysql.query(
-                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract) VALUES (?, ?, ?, ?, ?)",
-                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract]
+                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [
+                        data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract,
+                        data.moonpay_enabled !== undefined ? (data.moonpay_enabled ? 1 : 0) : 1,
+                        data.moonpay_api_key || 'pk_test_123',
+                        data.moonpay_secret_key || null,
+                        data.moonpay_environment || 'sandbox'
+                    ]
                 );
             }
 
-            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'bnb_address', 'vesting_contract'];
+            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'bnb_address', 'vesting_contract', 'moonpay_enabled', 'moonpay_api_key', 'moonpay_secret_key', 'moonpay_environment'];
             for (const key of keys) {
-                if (data[key] !== oldData[key]) {
+                if (data[key] !== undefined && data[key] !== oldData[key]) {
                     await fastify.mysql.query(
                         `INSERT INTO payment_settings_history (setting_key, old_value, new_value, changed_by) VALUES (?, ?, ?, ?)`,
-                        [key, String(oldData[key] || 'NULL'), String(data[key]), 'Admin']
+                        [key, String(oldData[key] !== undefined ? oldData[key] : 'NULL'), String(data[key]), 'Admin']
                     );
                 }
             }

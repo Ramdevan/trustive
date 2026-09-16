@@ -39,6 +39,30 @@ module.exports = async function (fastify, opts) {
     console.error('Error ensuring users schema:', schemaErr);
   }
 
+  // Ensure MoonPay columns exist in settings
+  try {
+    const [settingCols] = await fastify.mysql.query(`
+      SELECT COLUMN_NAME 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'settings' AND COLUMN_NAME IN ('moonpay_enabled', 'moonpay_api_key', 'moonpay_secret_key', 'moonpay_environment')
+    `);
+    const settingColNames = (settingCols || []).map(c => c.COLUMN_NAME);
+    if (!settingColNames.includes('moonpay_enabled')) {
+      await fastify.mysql.query('ALTER TABLE settings ADD COLUMN moonpay_enabled TINYINT(1) DEFAULT 1');
+    }
+    if (!settingColNames.includes('moonpay_api_key')) {
+      await fastify.mysql.query('ALTER TABLE settings ADD COLUMN moonpay_api_key VARCHAR(255) DEFAULT "pk_test_123"');
+    }
+    if (!settingColNames.includes('moonpay_secret_key')) {
+      await fastify.mysql.query('ALTER TABLE settings ADD COLUMN moonpay_secret_key VARCHAR(255) DEFAULT NULL');
+    }
+    if (!settingColNames.includes('moonpay_environment')) {
+      await fastify.mysql.query('ALTER TABLE settings ADD COLUMN moonpay_environment VARCHAR(50) DEFAULT "sandbox"');
+    }
+  } catch (schemaErr) {
+    console.error('Error ensuring settings MoonPay schema:', schemaErr);
+  }
+
 
   // ========================================
   // ========================================
@@ -1339,10 +1363,114 @@ module.exports = async function (fastify, opts) {
   // ========================================
   fastify.get('/getSettings', async (req, reply) => {
     try {
-      const [rows] = await fastify.mysql.query("SELECT site_name, token_name, token_symbol, chain, token_decimal, contract_address, ico_contract, usdt_address, usdc_address, site_logo, token_logo, vesting_contract FROM settings LIMIT 1");
+      const [rows] = await fastify.mysql.query("SELECT site_name, token_name, token_symbol, chain, token_decimal, contract_address, ico_contract, usdt_address, usdc_address, site_logo, token_logo, vesting_contract, moonpay_enabled, moonpay_api_key, moonpay_environment FROM settings LIMIT 1");
       return reply.send({ status: true, data: rows[0] || {} });
     } catch (err) {
       return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
+    }
+  });
+
+  // ========================================
+  // MoonPay Gateway Endpoints
+  // ========================================
+
+  // GET /moonpay/config - public MoonPay onramp configuration
+  fastify.get('/moonpay/config', async (request, reply) => {
+    try {
+      const [rows] = await fastify.mysql.query(
+        "SELECT moonpay_enabled, moonpay_api_key, moonpay_environment FROM settings LIMIT 1"
+      );
+      const s = rows[0] || {};
+      const enabled = s.moonpay_enabled !== undefined ? Boolean(s.moonpay_enabled) : true;
+      const apiKey = s.moonpay_api_key || process.env.MOONPAY_API_KEY || 'pk_test_123';
+      const environment = s.moonpay_environment || process.env.MOONPAY_ENV || 'sandbox';
+
+      return reply.send({
+        status: true,
+        data: {
+          enabled,
+          apiKey,
+          environment,
+          supportedCurrencies: [
+            { code: 'bnb_bsc', name: 'BNB', network: 'BSC', symbol: 'BNB' },
+            { code: 'usdt_bsc', name: 'USDT', network: 'BSC', symbol: 'USDT' }
+          ]
+        }
+      });
+    } catch (err) {
+      console.error('Error fetching MoonPay config:', err);
+      return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
+    }
+  });
+
+  // POST /moonpay/generate-url - generate and sign MoonPay onramp URL
+  fastify.post('/moonpay/generate-url', async (request, reply) => {
+    try {
+      const { walletAddress, currencyCode, baseCurrencyAmount, baseCurrencyCode, redirectURL } = request.body || {};
+
+      if (!walletAddress) {
+        return reply.code(400).send({ status: false, msg: 'Wallet address is required' });
+      }
+
+      // Fetch current MoonPay configuration from settings
+      const [rows] = await fastify.mysql.query(
+        "SELECT moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment FROM settings LIMIT 1"
+      );
+      const s = rows[0] || {};
+      if (s.moonpay_enabled !== undefined && !Boolean(s.moonpay_enabled)) {
+        return reply.code(400).send({ status: false, msg: 'MoonPay payment gateway is currently disabled' });
+      }
+
+      const apiKey = s.moonpay_api_key || process.env.MOONPAY_API_KEY || 'pk_test_123';
+      const secretKey = s.moonpay_secret_key || process.env.MOONPAY_SECRET_KEY || null;
+      const environment = s.moonpay_environment || process.env.MOONPAY_ENV || 'sandbox';
+
+      // Standardize BSC currency code
+      let targetCurrency = 'bnb_bsc';
+      if (currencyCode) {
+        const lower = currencyCode.toLowerCase();
+        if (lower.includes('usdt')) targetCurrency = 'usdt_bsc';
+        else if (lower.includes('usdc')) targetCurrency = 'usdc_bsc';
+        else targetCurrency = 'bnb_bsc';
+      }
+
+      const baseUrl = environment === 'production'
+        ? 'https://buy.moonpay.com'
+        : 'https://buy-sandbox.moonpay.com';
+
+      const urlObj = new URL(baseUrl);
+      urlObj.searchParams.set('apiKey', apiKey);
+      urlObj.searchParams.set('currencyCode', targetCurrency);
+      urlObj.searchParams.set('walletAddress', walletAddress);
+      urlObj.searchParams.set('baseCurrencyCode', (baseCurrencyCode || 'usd').toLowerCase());
+      if (baseCurrencyAmount && parseFloat(baseCurrencyAmount) > 0) {
+        urlObj.searchParams.set('baseCurrencyAmount', parseFloat(baseCurrencyAmount).toString());
+      }
+      urlObj.searchParams.set('colorCode', '#212E73');
+      if (redirectURL) {
+        urlObj.searchParams.set('redirectURL', redirectURL);
+      }
+
+      // HMAC-SHA256 signature if secretKey is present
+      if (secretKey && secretKey.trim()) {
+        const queryString = urlObj.search;
+        const signature = crypto
+          .createHmac('sha256', secretKey.trim())
+          .update(queryString)
+          .digest('base64');
+        urlObj.searchParams.set('signature', signature);
+      }
+
+      return reply.send({
+        status: true,
+        url: urlObj.toString(),
+        apiKey,
+        environment,
+        currencyCode: targetCurrency
+      });
+    } catch (err) {
+      console.error('Error generating MoonPay URL:', err);
+      return reply.code(500).send({ status: false, msg: 'Failed to generate MoonPay URL: ' + err.message });
     }
   });
 

@@ -10,7 +10,7 @@ async function seed() {
         database: process.env.DB_NAME || ''
     });
 
-    const email = 'Demo@trustive.com';
+    const email = 'demo@trustive.com';
     const password = 'Demo@123';
     const hash = await bcrypt.hash(password, 10);
 

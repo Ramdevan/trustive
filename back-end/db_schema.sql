@@ -33,14 +33,18 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `ico_remaining_tokens` varchar(255) DEFAULT '0',
   `referral_level1` decimal(5,2) DEFAULT 5.00,
   `kyc_enabled` tinyint(1) DEFAULT 0,
+  `moonpay_enabled` tinyint(1) DEFAULT 1,
+  `moonpay_api_key` varchar(255) DEFAULT 'pk_test_123',
+  `moonpay_secret_key` varchar(255) DEFAULT NULL,
+  `moonpay_environment` varchar(50) DEFAULT 'sandbox',
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert default settings
-INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `vesting_contract`, `referral_level1`, `admin_email`, `admin_password`)
-VALUES ('Trustive', 'Trustive', 'TRSIV', 'BSC Testnet', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x393858957f0193b6aC9781f8b033E9196e37bdd4', 5.00, 'admin@trustive.com', 'admin123');
+INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `vesting_contract`, `referral_level1`, `moonpay_enabled`, `moonpay_api_key`, `moonpay_environment`, `admin_email`, `admin_password`)
+VALUES ('Trustive', 'Trustive', 'TRSIV', 'BSC Testnet', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x393858957f0193b6aC9781f8b033E9196e37bdd4', 5.00, 1, 'pk_test_123', 'sandbox', 'admin@trustive.com', 'admin123');
 
 -- ========================================
 -- Users Table

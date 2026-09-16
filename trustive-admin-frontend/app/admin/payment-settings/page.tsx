@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DollarSign, Activity, CheckCircle2, TrendingUp, RefreshCw } from "lucide-react";
+import { DollarSign, Activity, CheckCircle2, TrendingUp, RefreshCw, CreditCard, ShieldCheck, Eye, EyeOff, Save, Key, Globe } from "lucide-react";
 import { useWriteContract, useAccount, useReadContract } from "wagmi";
 import { parseUnits, formatUnits } from "viem";
 import { toast } from "react-toastify";
@@ -39,6 +39,14 @@ export default function PaymentSettings() {
         usd_per_token: null,
         tokens_per_usd: null
     });
+
+    // MoonPay Gateway State
+    const [moonpayEnabled, setMoonpayEnabled] = useState<boolean>(true);
+    const [moonpayApiKey, setMoonpayApiKey] = useState<string>("");
+    const [moonpaySecretKey, setMoonpaySecretKey] = useState<string>("");
+    const [moonpayEnv, setMoonpayEnv] = useState<string>("sandbox");
+    const [showSecretKey, setShowSecretKey] = useState<boolean>(false);
+    const [isSavingMoonpay, setIsSavingMoonpay] = useState<boolean>(false);
 
     const { writeContractAsync, isPending: isWriting } = useWriteContract();
 
@@ -103,8 +111,15 @@ export default function PaymentSettings() {
             ]);
 
             if (settingsData && settingsData.status) {
-                if (settingsData.settings?.ico_contract) {
-                    setContractAddress(settingsData.settings.ico_contract);
+                if (settingsData.settings) {
+                    const s = settingsData.settings;
+                    if (s.ico_contract) {
+                        setContractAddress(s.ico_contract);
+                    }
+                    setMoonpayEnabled(s.moonpay_enabled !== undefined ? Boolean(s.moonpay_enabled) : true);
+                    setMoonpayApiKey(s.moonpay_api_key || "");
+                    setMoonpaySecretKey(s.moonpay_secret_key || "");
+                    setMoonpayEnv(s.moonpay_environment || "sandbox");
                 }
                 if (settingsData.current_price) {
                     setBackendPrice(settingsData.current_price);
@@ -122,6 +137,35 @@ export default function PaymentSettings() {
             }
         } catch (err) {
             console.error("Failed to fetch settings:", err);
+        }
+    };
+
+    const handleSaveMoonPay = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        setIsSavingMoonpay(true);
+        try {
+            const res = await apiRequest("/payment-settings", {
+                method: 'POST',
+                body: JSON.stringify({
+                    moonpay_enabled: moonpayEnabled ? 1 : 0,
+                    moonpay_api_key: moonpayApiKey.trim(),
+                    moonpay_secret_key: moonpaySecretKey.trim(),
+                    moonpay_environment: moonpayEnv
+                })
+            });
+
+            if (res && res.status) {
+                toast.success("MoonPay gateway settings successfully updated!");
+                fetchHistory();
+                fetchSettings();
+            } else {
+                toast.error(res?.msg || "Failed to update MoonPay settings");
+            }
+        } catch (err: any) {
+            console.error("Save MoonPay error:", err);
+            toast.error("Failed to update MoonPay settings");
+        } finally {
+            setIsSavingMoonpay(false);
         }
     };
 
@@ -201,6 +245,144 @@ export default function PaymentSettings() {
                         Refresh
                     </button>
                 </div>
+            </div>
+
+            {/* MoonPay Fiat Gateway Configuration Card */}
+            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
+                <div className="p-8 border-b border-zinc-100 bg-zinc-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3.5">
+                        <div className="p-3 bg-[#7D00FF]/10 rounded-2xl text-[#7D00FF] border border-[#7D00FF]/20">
+                            <CreditCard className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2.5">
+                                <h2 className="text-xl font-bold text-zinc-900 tracking-tight">MoonPay Fiat Onramp Gateway</h2>
+                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                                    moonpayEnabled 
+                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                                        : 'bg-zinc-100 text-zinc-500 border-zinc-200'
+                                }`}>
+                                    {moonpayEnabled ? 'Active' : 'Disabled'}
+                                </span>
+                            </div>
+                            <p className="text-zinc-500 text-xs mt-0.5">
+                                Manage credit card, Apple Pay & Google Pay crypto onramps for the ICO buy page.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={moonpayEnabled}
+                                onChange={(e) => setMoonpayEnabled(e.target.checked)}
+                                className="sr-only peer"
+                            />
+                            <div className="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#7D00FF]"></div>
+                            <span className="ml-2.5 text-xs font-bold text-zinc-700 uppercase tracking-wider">
+                                {moonpayEnabled ? 'Gateway Enabled' : 'Gateway Disabled'}
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <form onSubmit={handleSaveMoonPay} className="p-8 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Environment selector */}
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest px-1 flex items-center gap-1.5">
+                                <Globe className="w-3.5 h-3.5 text-[#212E73]" /> Gateway Environment
+                            </label>
+                            <select
+                                value={moonpayEnv}
+                                onChange={(e) => setMoonpayEnv(e.target.value)}
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-semibold text-sm focus:border-[#212E73] focus:bg-white outline-none cursor-pointer"
+                            >
+                                <option value="sandbox">Sandbox (Testing / Staging)</option>
+                                <option value="production">Production (Live Payments)</option>
+                            </select>
+                            <p className="text-[11px] text-zinc-400 px-1">
+                                {moonpayEnv === 'sandbox' 
+                                    ? 'Using Sandbox: Uses test credit cards without real charges.' 
+                                    : 'Using Production: Real transactions with Visa, Mastercard, and Apple Pay.'}
+                            </p>
+                        </div>
+
+                        {/* Publishable API Key */}
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest px-1 flex items-center gap-1.5">
+                                <Key className="w-3.5 h-3.5 text-[#212E73]" /> Publishable API Key
+                            </label>
+                            <input
+                                type="text"
+                                value={moonpayApiKey}
+                                onChange={(e) => setMoonpayApiKey(e.target.value)}
+                                placeholder="pk_test_... or pk_live_..."
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#212E73] focus:bg-white outline-none"
+                            />
+                            <p className="text-[11px] text-zinc-400 px-1">
+                                Safe for client-side widget rendering.
+                            </p>
+                        </div>
+
+                        {/* Secret Key (Full Width) */}
+                        <div className="space-y-2 md:col-span-2">
+                            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest px-1 flex items-center justify-between">
+                                <span className="flex items-center gap-1.5">
+                                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Secret Key (HMAC-SHA256 URL Signing)
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowSecretKey(!showSecretKey)}
+                                    className="text-zinc-500 hover:text-zinc-800 text-[10px] uppercase font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                    {showSecretKey ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                                    {showSecretKey ? 'Hide Key' : 'Reveal Key'}
+                                </button>
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={showSecretKey ? "text" : "password"}
+                                    value={moonpaySecretKey}
+                                    onChange={(e) => setMoonpaySecretKey(e.target.value)}
+                                    placeholder="sk_test_... or sk_live_..."
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#212E73] focus:bg-white outline-none pr-12"
+                                />
+                            </div>
+                            <p className="text-[11px] text-zinc-400 px-1">
+                                Securely stored on backend. Used to sign iframe query parameters so wallet addresses cannot be tampered with.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Information Note */}
+                    <div className="p-4 bg-purple-50/60 rounded-2xl border border-purple-100 flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-[#7D00FF] mt-1.5 shrink-0" />
+                        <div className="text-xs text-zinc-600 space-y-1">
+                            <p className="font-bold text-zinc-900">Configured Delivery Currencies: BNB (<code className="font-mono text-[11px] text-[#7D00FF]">bnb_bsc</code>) & USDT (<code className="font-mono text-[11px] text-[#7D00FF]">usdt_bsc</code>)</p>
+                            <p className="text-zinc-500 leading-relaxed">
+                                MoonPay delivers purchased BEP-20 assets directly to the buyer's connected Web3 wallet address on Binance Smart Chain.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Save Button */}
+                    <div className="flex items-center justify-end pt-2">
+                        <button
+                            type="submit"
+                            disabled={isSavingMoonpay}
+                            className="bg-[#212E73] hover:bg-[#1a255c] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                        >
+                            {isSavingMoonpay ? (
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            ) : (
+                                <Save className="w-4 h-4 text-white/90" />
+                            )}
+                            Save MoonPay Configuration
+                        </button>
+                    </div>
+                </form>
             </div>
 
             {/* Price Change Ledger Table */}

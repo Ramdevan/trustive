@@ -4,10 +4,12 @@ import { bscTestnet } from 'wagmi/chains';
 import bnbIcon from '@/assets/images/bnb-icon.svg';
 import usdtIcon from '@/assets/images/usdt-icon.svg';
 import usdcIcon from '@/assets/images/usdc-icon.svg';
+import moonpayIcon from '@/assets/images/moonpay-icon.svg';
+import MoonPayModal from './MoonPayModal';
 import { useWeb3 } from '@/context/Web3Context';
 import { ethers } from 'ethers';
 import { useAccount as useWagmiAccount } from 'wagmi';
-import { LuWallet, LuTriangleAlert, LuLoader, LuCoins } from 'react-icons/lu';
+import { LuWallet, LuTriangleAlert, LuLoader, LuCoins, LuCreditCard, LuShieldCheck, LuSparkles } from 'react-icons/lu';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { toast } from 'react-hot-toast';
 import { getFriendlyErrorMessage, isUserRejection } from '@/utils/errors';
@@ -15,9 +17,9 @@ import { confirmAction } from '@/utils/confirm';
 
 // Payment type indexes matching the ICO contract
 // 0 = BNB, 1 = USDT, 2 = USDC
-type PaymentMethod = 'BNB' | 'USDT' | 'USDC';
+type PaymentMethod = 'BNB' | 'USDT' | 'USDC' | 'CARD';
 
-const PAYMENT_CONFIG: Record<PaymentMethod, { index: number; decimals: number; label: string }> = {
+const PAYMENT_CONFIG: Record<'BNB' | 'USDT' | 'USDC', { index: number; decimals: number; label: string }> = {
   BNB: { index: 0, decimals: 18, label: 'BNB' },
   USDT: { index: 1, decimals: 8, label: 'USDT' },
   USDC: { index: 2, decimals: 8, label: 'USDC' },
@@ -46,14 +48,17 @@ interface Settings {
   usdc_address: string;
   token_name: string;
   token_symbol: string;
+  moonpay_enabled?: boolean | number;
+  moonpay_api_key?: string;
 }
 
-const PAYMENT_METHODS: PaymentMethod[] = ['BNB', 'USDT', 'USDC'];
+const PAYMENT_METHODS: PaymentMethod[] = ['BNB', 'USDT', 'USDC', 'CARD'];
 
 const getIcon = (method: PaymentMethod) => {
   if (method === 'BNB') return bnbIcon;
   if (method === 'USDT') return usdtIcon;
-  return usdcIcon;
+  if (method === 'USDC') return usdcIcon;
+  return moonpayIcon;
 };
 
 const BuyTokenForm: React.FC = () => {
@@ -72,6 +77,8 @@ const BuyTokenForm: React.FC = () => {
   const [balance, setBalance] = useState('0.00');
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [isMoonPayOpen, setIsMoonPayOpen] = useState(false);
+  const [moonpayTargetCrypto, setMoonpayTargetCrypto] = useState<'bnb_bsc' | 'usdt_bsc'>('bnb_bsc');
 
   // Fetch contract addresses from backend
   useEffect(() => {
@@ -93,7 +100,7 @@ const BuyTokenForm: React.FC = () => {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      if (!account || !isConnected) {
+      if (!account || !isConnected || method === 'CARD') {
         setBalance('0.00');
         setBalanceLoading(false);
         return;
@@ -261,7 +268,12 @@ const BuyTokenForm: React.FC = () => {
       return;
     }
     setIsCalculating(true);
-    const { index, decimals } = PAYMENT_CONFIG[paymentMethod];
+
+    // For CARD mode, simulate using USDT pricing (1 USD ~ 1 USDT, index 1, decimals 8)
+    const { index, decimals } = paymentMethod === 'CARD'
+      ? PAYMENT_CONFIG.USDT
+      : PAYMENT_CONFIG[paymentMethod];
+
     try {
       const amountWei = ethers.parseUnits(inputAmount, decimals);
       for (const rpc of RPC_URLS) {
@@ -304,7 +316,7 @@ const BuyTokenForm: React.FC = () => {
   const effectiveMinLimit = (availableAllocation > 0 && availableAllocation < minLimit) ? availableAllocation : minLimit;
   const balanceNum = parseFloat(balance);
   const isInsufficientBalance = Boolean(
-    isConnected && !balanceLoading && !isNaN(balanceNum) && hasAmount && inputAmountNum > balanceNum
+    method !== 'CARD' && isConnected && !balanceLoading && !isNaN(balanceNum) && hasAmount && inputAmountNum > balanceNum
   );
   const EPSILON = 0.01;
   const isBelowMin = Boolean(hasAmount && !isCalculating && effectiveMinLimit > 0 && (trustiveVal > 0 ? (trustiveVal + EPSILON) < effectiveMinLimit : true));
@@ -312,6 +324,16 @@ const BuyTokenForm: React.FC = () => {
   const isInvalidTokenAmount = Boolean(hasAmount && !isCalculating && !isBelowMin && !isAboveMax && trustiveVal <= 0);
 
   const handleBuy = async () => {
+    // If CARD payment method is selected, launch MoonPay checkout
+    if (method === 'CARD') {
+      if (!account) {
+        toast.error('Please connect your wallet first');
+        return;
+      }
+      setIsMoonPayOpen(true);
+      return;
+    }
+
     if (!isConnected || !signer || !account || !settings?.ico_contract) return;
     if (!isCorrectChain) { switchToCorrectChain(); return; }
     
@@ -387,7 +409,7 @@ const BuyTokenForm: React.FC = () => {
 
       // 1. Get signature from backend
       // For BNB: backend signs over msg.value (BNB amount, 18 decimals)
-      // For USDT/USDC: backend signs over payment token amount (6 decimals)
+      // For USDT/USDC: backend signs over payment token amount (8 decimals)
       setTxStatus('Requesting signature...');
       const signRes = await fetch(`${API_URL}/api/user/createSign`, {
         method: 'POST',
@@ -395,8 +417,6 @@ const BuyTokenForm: React.FC = () => {
         body: JSON.stringify({ index, address: account, caller: account, amount }),
       });
       const signData = await signRes.json();
-      // Surface the server's reason (purchase-limit rejections, signing failures)
-      // instead of a generic message that hides why the request was refused.
       if (!signData.status) {
         throw new Error(signData.message || 'Failed to get signature from server');
       }
@@ -482,27 +502,29 @@ const BuyTokenForm: React.FC = () => {
       {/* Payment method selector */}
       <div className="space-y-2">
         <label className="text-[0.875rem] font-semibold text-zinc-700 block">Select payment method</label>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
           {PAYMENT_METHODS.map(m => (
             <button
               key={m}
               onClick={() => { setMethod(m); setAmount(''); setTrustiveTokens(''); setTxStatus(''); setIsError(false); setIsSuccess(false); }}
-              className={`flex items-center justify-center gap-2 py-4 rounded-xl transition-all cursor-pointer border ${method === m
+              className={`flex items-center justify-center gap-2 py-3.5 px-3 rounded-xl transition-all cursor-pointer border ${method === m
                 ? 'bg-[#212E73] border-[#212E73] text-white font-bold shadow-md shadow-[#212E73]/20'
                 : 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
                 }`}
             >
-              <div className="w-6 h-6 relative">
-                <Image src={getIcon(m)} alt={m} fill className={method === m ? '' : 'grayscale opacity-70'} />
+              <div className="w-5 h-5 relative shrink-0">
+                <Image src={getIcon(m)} alt={m} fill className={method === m ? '' : m === 'CARD' ? 'opacity-85' : 'grayscale opacity-70'} />
               </div>
-              {m}
+              <span className="text-sm font-semibold truncate">
+                {m === 'CARD' ? 'MoonPay' : m}
+              </span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Wrong chain warning */}
-      {isConnected && !isCorrectChain && (
+      {/* Wrong chain warning (only for direct crypto on-chain methods) */}
+      {isConnected && !isCorrectChain && method !== 'CARD' && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-[0.875rem]">
           <LuTriangleAlert className="h-4 w-4 flex-shrink-0" />
           Please switch to BSC Testnet to purchase tokens
@@ -511,67 +533,149 @@ const BuyTokenForm: React.FC = () => {
 
       {/* Enter Amount */}
       <div className="space-y-3">
-        <label className="text-[0.875rem] font-semibold text-zinc-700 block">Enter Amount</label>
+        <label className="text-[0.875rem] font-semibold text-zinc-700 block">
+          {method === 'CARD' ? 'Enter USD Amount to Pay' : 'Enter Amount'}
+        </label>
 
-        {/* Balance Display - Compact Premium Card */}
-        <div
-          className={`overflow-hidden transition-all duration-500 ease-out ${isConnected
-            ? 'max-h-24 opacity-100 mb-4 scale-100'
-            : 'max-h-0 opacity-0 mb-0 scale-95'
-            }`}
-        >
-          <div className="bg-zinc-50 rounded-2xl border border-zinc-200 shadow-sm px-5 py-3.5 transform transition-all duration-500">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#212E73] animate-pulse"></div>
-                  <span className="text-zinc-500 text-[0.75rem] font-bold uppercase tracking-widest">
-                    Available Balance
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-zinc-900 text-[1rem] font-bold tracking-tight">
-                    {currentBalance}
-                  </span>
-                  <span className="text-[#212E73] text-[0.75rem] font-bold uppercase tracking-wider px-2 py-0.5 bg-blue-50 rounded-lg border border-blue-200">
-                    {method}
-                  </span>
+        {/* Balance Display or MoonPay Card Banner */}
+        {method === 'CARD' ? (
+          <div className="bg-gradient-to-r from-[#212E73]/5 via-purple-500/5 to-[#7D00FF]/5 rounded-2xl border border-purple-200/60 p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#7D00FF] animate-pulse"></div>
+                <span className="text-zinc-700 text-[0.75rem] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <LuSparkles className="w-3.5 h-3.5 text-[#7D00FF]" /> Instant Card Onramp via MoonPay
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[0.75rem]">
+                <span className="text-zinc-500 font-medium">Delivery:</span>
+                <div className="inline-flex rounded-lg bg-white p-0.5 border border-zinc-200 shadow-xs">
+                  <button
+                    type="button"
+                    onClick={() => setMoonpayTargetCrypto('bnb_bsc')}
+                    className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${
+                      moonpayTargetCrypto === 'bnb_bsc'
+                        ? 'bg-[#212E73] text-white shadow-xs'
+                        : 'text-zinc-600 hover:text-zinc-900'
+                    }`}
+                  >
+                    BNB (BSC)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMoonpayTargetCrypto('usdt_bsc')}
+                    className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${
+                      moonpayTargetCrypto === 'usdt_bsc'
+                        ? 'bg-[#212E73] text-white shadow-xs'
+                        : 'text-zinc-600 hover:text-zinc-900'
+                    }`}
+                  >
+                    USDT (BSC)
+                  </button>
                 </div>
               </div>
+            </div>
 
-              {/* Percentage Buttons */}
-              <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-zinc-200 shadow-xs">
-                {[25, 50, 75, 100].map((p) => (
+            {/* Quick Amount presets */}
+            <div className="flex items-center justify-between pt-1 border-t border-purple-100/70">
+              <span className="text-zinc-500 text-xs font-medium">Quick Amount:</span>
+              <div className="flex items-center gap-1.5">
+                {[50, 100, 250, 500].map((preset) => (
                   <button
-                    key={p}
-                    onClick={() => handlePercentageClick(p)}
-                    className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-600 hover:text-[#212E73] hover:bg-zinc-100 rounded-md transition-all cursor-pointer"
+                    key={preset}
+                    type="button"
+                    onClick={() => handleAmountChange(preset.toString())}
+                    className={`px-2.5 py-1 text-[0.75rem] font-bold rounded-lg border transition-all cursor-pointer ${
+                      amount === preset.toString()
+                        ? 'bg-[#212E73] border-[#212E73] text-white'
+                        : 'bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300'
+                    }`}
                   >
-                    {p === 100 ? 'MAX' : `${p}%`}
+                    ${preset}
                   </button>
                 ))}
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div
+            className={`overflow-hidden transition-all duration-500 ease-out ${isConnected
+              ? 'max-h-24 opacity-100 mb-4 scale-100'
+              : 'max-h-0 opacity-0 mb-0 scale-95'
+              }`}
+          >
+            <div className="bg-zinc-50 rounded-2xl border border-zinc-200 shadow-sm px-5 py-3.5 transform transition-all duration-500">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#212E73] animate-pulse"></div>
+                    <span className="text-zinc-500 text-[0.75rem] font-bold uppercase tracking-widest">
+                      Available Balance
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-zinc-900 text-[1rem] font-bold tracking-tight">
+                      {currentBalance}
+                    </span>
+                    <span className="text-[#212E73] text-[0.75rem] font-bold uppercase tracking-wider px-2 py-0.5 bg-blue-50 rounded-lg border border-blue-200">
+                      {method}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Percentage Buttons */}
+                <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-zinc-200 shadow-xs">
+                  {[25, 50, 75, 100].map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => handlePercentageClick(p)}
+                      className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-600 hover:text-[#212E73] hover:bg-zinc-100 rounded-md transition-all cursor-pointer"
+                    >
+                      {p === 100 ? 'MAX' : `${p}%`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="relative group">
           <input
             type="text"
             inputMode="decimal"
-            placeholder="0.00"
+            placeholder={method === 'CARD' ? '100.00' : '0.00'}
             value={amount}
             onChange={e => handleAmountChange(e.target.value)}
             disabled={loading}
             className="w-full bg-white border border-zinc-200 rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all font-medium disabled:opacity-50"
           />
           <div className="absolute min-w-[8rem] right-4 top-1/2 -translate-y-1/2 flex items-center justify-center gap-2 px-3 py-2 border-l border-zinc-200 pointer-events-none">
-            <div className="w-7 h-7 relative">
-              <Image src={getIcon(method)} alt={method} fill />
-            </div>
-            <span className="text-[0.875rem] font-bold text-zinc-900">{method}</span>
+            {method === 'CARD' ? (
+              <div className="flex items-center gap-2">
+                <LuCreditCard className="w-5 h-5 text-[#7D00FF]" />
+                <span className="text-[0.875rem] font-bold text-zinc-900">USD ($)</span>
+              </div>
+            ) : (
+              <>
+                <div className="w-7 h-7 relative">
+                  <Image src={getIcon(method)} alt={method} fill />
+                </div>
+                <span className="text-[0.875rem] font-bold text-zinc-900">{method}</span>
+              </>
+            )}
           </div>
         </div>
+
+        {method === 'CARD' && (
+          <div className="flex items-center justify-between px-3.5 py-2.5 bg-zinc-50 rounded-xl border border-zinc-100 text-[0.75rem] text-zinc-500">
+            <div className="flex items-center gap-1.5 font-medium">
+              <LuShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>Supports Visa, Mastercard, Apple Pay, Google Pay</span>
+            </div>
+            <span className="font-semibold text-[#7D00FF]">Instant Onramp</span>
+          </div>
+        )}
       </div>
 
       {/* Receive */}
@@ -612,9 +716,22 @@ const BuyTokenForm: React.FC = () => {
       {hasAmount && !isCalculating && (
         <div className="space-y-2">
           {isInsufficientBalance && (
-            <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[0.85rem]">
-              <LuTriangleAlert className="h-4 w-4 flex-shrink-0" />
-              <span>Insufficient {method} balance for this purchase</span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-[0.85rem]">
+              <div className="flex items-center gap-2">
+                <LuTriangleAlert className="h-4 w-4 flex-shrink-0" />
+                <span>Insufficient {method} balance for this purchase</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMoonpayTargetCrypto(method === 'BNB' ? 'bnb_bsc' : 'usdt_bsc');
+                  setMethod('CARD');
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#212E73] hover:bg-[#16225B] text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
+              >
+                <LuCreditCard className="w-3.5 h-3.5" />
+                <span>Top up with Card</span>
+              </button>
             </div>
           )}
           {!isInsufficientBalance && isBelowMin && (
@@ -653,6 +770,32 @@ const BuyTokenForm: React.FC = () => {
             btnLabel = 'Connect Wallet';
             btnClass = 'bg-[#212E73] hover:bg-[#16225B] text-white shadow-md shadow-[#212E73]/20 cursor-pointer';
             isDisabled = false;
+          } else if (method === 'CARD') {
+            if (saleLoaded && !isSaleActive) {
+              btnLabel = sale?.computed_status === 'scheduled' ? 'Sale Coming Soon' : 'ICO Not Active';
+              btnClass = 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed';
+              isDisabled = true;
+            } else if (!hasAmount) {
+              btnLabel = 'Enter Amount (USD)';
+              btnClass = 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed';
+              isDisabled = true;
+            } else if (isCalculating) {
+              btnLabel = 'Calculating Tokens...';
+              btnClass = 'bg-zinc-100 text-zinc-500 border border-zinc-200 cursor-not-allowed';
+              isDisabled = true;
+            } else if (isBelowMin) {
+              btnLabel = `Minimum Buy is ${minLimit.toLocaleString('en-US')} TRSIV`;
+              btnClass = 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed';
+              isDisabled = true;
+            } else if (isAboveMax) {
+              btnLabel = `Maximum Buy is ${maxLimit.toLocaleString('en-US')} TRSIV`;
+              btnClass = 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed';
+              isDisabled = true;
+            } else {
+              btnLabel = 'Pay with Card (MoonPay)';
+              btnClass = 'bg-[#7D00FF] hover:bg-[#6c00dd] text-white shadow-lg shadow-[#7D00FF]/25 cursor-pointer';
+              isDisabled = false;
+            }
           } else if (chain.unsupported) {
             btnLabel = 'Switch to BSC Testnet';
             btnClass = 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 cursor-pointer';
@@ -696,22 +839,37 @@ const BuyTokenForm: React.FC = () => {
               type="button"
               onClick={() => {
                 if (!connected) { openConnectModal(); return; }
-                if (chain.unsupported) { openChainModal(); return; }
+                if (method !== 'CARD' && chain.unsupported) { openChainModal(); return; }
                 if (isDisabled) return;
                 handleBuy();
               }}
-              disabled={isDisabled && !!connected && !chain.unsupported}
+              disabled={isDisabled && !!connected && (method === 'CARD' || !chain.unsupported)}
               className={`w-full flex items-center justify-center gap-2 font-bold py-5 rounded-2xl transition-all shadow-xl active:scale-[0.98] text-[1.125rem] ${btnClass}`}
             >
               {!connected && <LuWallet className="h-5 w-5" />}
+              {connected && method === 'CARD' && !loading && !isCalculating && <LuCreditCard className="h-5 w-5" />}
               {(loading || (isCalculating && hasAmount)) && <LuLoader className="h-5 w-5 animate-spin" />}
               {btnLabel}
             </button>
           );
         }}
       </ConnectButton.Custom>
+
+      {/* MoonPay Modal */}
+      <MoonPayModal
+        isOpen={isMoonPayOpen}
+        onClose={() => setIsMoonPayOpen(false)}
+        walletAddress={account || ''}
+        defaultCurrency={moonpayTargetCrypto}
+        initialAmountUSD={amount}
+        onSuccess={() => {
+          setIsMoonPayOpen(false);
+          toast.success('MoonPay order initiated! Your crypto will arrive to your wallet shortly.', { duration: 6000 });
+        }}
+      />
     </div>
   );
 };
 
 export default BuyTokenForm;
+
