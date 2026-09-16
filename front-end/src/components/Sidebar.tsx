@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { LuLayoutDashboard, LuTarget, LuCoins, LuArrowRightLeft, LuRocket, LuUser } from 'react-icons/lu';
+import { LuLayoutDashboard, LuTarget, LuArrowRightLeft, LuRocket, LuUser } from 'react-icons/lu';
 import { useBalance } from 'wagmi';
 import { useWeb3 } from '@/context/Web3Context';
 import { ethers } from 'ethers';
@@ -9,7 +9,6 @@ import { ethers } from 'ethers';
 const menuItems = [
   { name: 'Dashboard', icon: LuLayoutDashboard, path: '/dashboard' },
   { name: 'ICO', icon: LuTarget, path: '/ico' },
-  // { name: 'Stake', icon: LuCoins, path: '/staking' },
   { name: 'Transactions', icon: LuArrowRightLeft, path: '/transactions' },
   { name: 'Vesting Claim', icon: LuRocket, path: '/vesting' },
 ];

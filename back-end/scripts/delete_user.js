@@ -27,15 +27,11 @@ async function main() {
   if (target.startsWith('0x') || target.length === 42) {
     console.log(`Searching for wallet address ${target}...`);
     const [delPurchases] = await connection.query('DELETE FROM ico_purchases WHERE address LIKE ?', [`%${target}%`]);
-    const [delStakes] = await connection.query('DELETE FROM staking_records WHERE user_address LIKE ?', [`%${target}%`]);
-    const [delRewards] = await connection.query('DELETE FROM staking_reward_history WHERE user_address LIKE ?', [`%${target}%`]);
     const [delVestings] = await connection.query('DELETE FROM vesting_schedules WHERE beneficiary LIKE ?', [`%${target}%`]);
     const [delUsers] = await connection.query('DELETE FROM users WHERE wallet_address LIKE ?', [`%${target}%`]);
 
     console.log(`  ✓ Removed ${delUsers.affectedRows} user account(s) matching wallet.`);
     console.log(`  ✓ Removed ${delPurchases.affectedRows} purchase record(s).`);
-    console.log(`  ✓ Removed ${delStakes.affectedRows} staking record(s).`);
-    console.log(`  ✓ Removed ${delRewards.affectedRows} staking reward(s).`);
     console.log(`  ✓ Removed ${delVestings.affectedRows} vesting schedule(s).`);
   } else {
     // Search users by name or email
@@ -51,8 +47,6 @@ async function main() {
         console.log(`  - Found: ID ${user.id} | "${user.name}" | "${user.email}" | Wallet: "${user.wallet_address || 'None'}"`);
         if (user.wallet_address) {
           await connection.query('DELETE FROM ico_purchases WHERE address = ?', [user.wallet_address]);
-          await connection.query('DELETE FROM staking_records WHERE user_address = ?', [user.wallet_address]);
-          await connection.query('DELETE FROM staking_reward_history WHERE user_address = ?', [user.wallet_address]);
           await connection.query('DELETE FROM vesting_schedules WHERE beneficiary = ?', [user.wallet_address]);
         }
         await connection.query('DELETE FROM users WHERE id = ?', [user.id]);

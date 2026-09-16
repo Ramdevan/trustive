@@ -94,42 +94,6 @@ echo ""
 echo "--- 14. Get Settings ---"
 curl -s "$BASE/api/user/getSettings"
 
-# ----- Staking (User) -----
-
-echo ""
-echo "--- 15. Get Staking Plans ---"
-curl -s "$BASE/api/user/staking/plans"
-
-echo ""
-echo "--- 16. Create Stake Record ---"
-curl -s -X POST "$BASE/api/user/staking/stake" \
-  -H "Content-Type: application/json" \
-  -d "{\"user_address\":\"$WALLET\",\"amount\":\"1000\",\"plan_id\":1,\"tx_hash\":\"0xTEST_STAKE_TX_HASH\"}"
-
-echo ""
-echo "--- 17. Create Unstake Record ---"
-curl -s -X POST "$BASE/api/user/staking/unstake" \
-  -H "Content-Type: application/json" \
-  -d '{"stake_id":1,"tx_hash":"0xTEST_UNSTAKE_TX_HASH","reward_amount":"50"}'
-
-echo ""
-echo "--- 18. Claim Staking Reward ---"
-curl -s -X POST "$BASE/api/user/staking/claim-reward" \
-  -H "Content-Type: application/json" \
-  -d "{\"user_address\":\"$WALLET\",\"stake_id\":1,\"reward_amount\":\"25\",\"tx_hash\":\"0xTEST_CLAIM_TX_HASH\"}"
-
-echo ""
-echo "--- 19. Get User Stakes ---"
-curl -s "$BASE/api/user/staking/user/$WALLET"
-
-echo ""
-echo "--- 20. Get User Staking Rewards ---"
-curl -s "$BASE/api/user/staking/rewards/$WALLET"
-
-echo ""
-echo "--- 21. Get Staking Contract Info ---"
-curl -s "$BASE/api/user/staking/contract-info"
-
 # ----- Vesting (User) -----
 
 echo ""
@@ -319,35 +283,9 @@ curl -s -X POST "$BASE/api/admin/vesting/settings/toggle" \
   -H "Content-Type: application/json" \
   -d '{"key":"auto_vesting","value":true}'
 
-# ----- Admin Staking -----
-
-echo ""
-echo "--- 56. Get All Staking Plans (Admin) ---"
-curl -s "$BASE/api/admin/staking/plans"
-
-echo ""
-echo "--- 57. Create/Update Staking Plan ---"
-curl -s -X POST "$BASE/api/admin/staking/plans" \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Flexible","duration_days":0,"apy":8,"min_stake":"1000","is_active":1}'
-
-echo ""
-echo "--- 58. Toggle Staking Plan ---"
-curl -s -X POST "$BASE/api/admin/staking/plans/toggle" \
-  -H "Content-Type: application/json" \
-  -d '{"id":1,"is_active":true}'
-
-echo ""
-echo "--- 59. Get All Stakes (Admin) ---"
-curl -s "$BASE/api/admin/staking/all-stakes?page=1&limit=10"
-
-echo ""
-echo "--- 60. Get Staking Stats (Admin) ---"
-curl -s "$BASE/api/admin/staking/stats"
-
 
 echo ""
 echo ""
 echo "========================================"
-echo "  DONE — 60 endpoints tested"
+echo "  DONE — API endpoints tested"
 echo "========================================"

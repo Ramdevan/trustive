@@ -37,8 +37,6 @@ interface User {
 
 interface UserProfileStats {
     balance: string;
-    total_staked: string;
-    total_rewards: string;
     total_vested: string;
     total_bnb: string;
     total_usdt: string;
@@ -336,14 +334,6 @@ function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { ad
                                 unit="Trustive"
                                 icon={TrendingUp}
                                 color="text-[#212E73]"
-                            />
-
-                            <StatCard
-                                label="Total Staked Reward"
-                                value={formatDecimal(stats.total_rewards, 5, 2)}
-                                unit="Trustive"
-                                icon={TrendingUp}
-                                color="text-purple-600"
                             />
                             <StatCard
                                 label="Total USDT"

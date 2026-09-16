@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `usdt_address` varchar(255) DEFAULT '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3',
   `usdc_address` varchar(255) DEFAULT '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b',
   `bnb_address` varchar(255) DEFAULT NULL,
-  `staking_contract` varchar(255) DEFAULT '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb',
   `vesting_contract` varchar(255) DEFAULT '0x393858957f0193b6aC9781f8b033E9196e37bdd4',
   `ico_remaining_tokens` varchar(255) DEFAULT '0',
   `referral_level1` decimal(5,2) DEFAULT 5.00,
@@ -40,8 +39,8 @@ CREATE TABLE IF NOT EXISTS `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert default settings
-INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `staking_contract`, `vesting_contract`, `referral_level1`, `admin_email`, `admin_password`)
-VALUES ('Trustive', 'Trustive', 'TRSIV', 'BSC Testnet', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb', '0x393858957f0193b6aC9781f8b033E9196e37bdd4', 5.00, 'admin@trustive.com', 'admin123');
+INSERT INTO `settings` (`site_name`, `token_name`, `token_symbol`, `chain`, `token_decimal`, `contract_address`, `ico_contract`, `usdt_address`, `usdc_address`, `vesting_contract`, `referral_level1`, `admin_email`, `admin_password`)
+VALUES ('Trustive', 'Trustive', 'TRSIV', 'BSC Testnet', 18, '0xe12F60d7c0bc493b033c789Aa533E772541041eA', '0x300C8EEB80Af24FF831015cF667f670077Fe1564', '0xFF891d2335d111fb71Eecec16255a6F285eF9aD3', '0xFC266AF032A9243dba4f9Dfe0BE69e6f76d1b80b', '0x393858957f0193b6aC9781f8b033E9196e37bdd4', 5.00, 'admin@trustive.com', 'admin123');
 
 -- ========================================
 -- Users Table
@@ -171,72 +170,6 @@ CREATE TABLE IF NOT EXISTS `vesting_claims` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_claim_period` (`beneficiary`, `vesting_index`, `period_index`),
   INDEX `idx_beneficiary` (`beneficiary`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- ========================================
--- Staking Plans Table
--- ========================================
-CREATE TABLE IF NOT EXISTS `staking_plans` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `duration_days` int NOT NULL DEFAULT 0,
-  `duration_seconds` int DEFAULT 0,
-  `apy` decimal(10,2) NOT NULL DEFAULT 0,
-  `min_stake` varchar(255) DEFAULT '0',
-  `is_active` tinyint(1) DEFAULT 1,
-  `total_staked` varchar(255) DEFAULT '0',
-  `chain_level` int DEFAULT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Insert default staking plans
-INSERT INTO `staking_plans` (`name`, `duration_days`, `duration_seconds`, `apy`, `min_stake`, `is_active`, `chain_level`) VALUES
-('GOLD', 0, 180, 8.00, '1000', 1, 1);
-
--- ========================================
--- Staking Records Table
--- ========================================
-CREATE TABLE IF NOT EXISTS `staking_records` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_address` varchar(255) NOT NULL,
-  `amount` varchar(255) NOT NULL,
-  `plan_id` int NOT NULL DEFAULT 0,
-  `plan_name` varchar(100) DEFAULT 'Flexible',
-  `apy` decimal(10,2) DEFAULT 0,
-  `duration_days` int DEFAULT 0,
-  `duration_seconds` int DEFAULT 0,
-  `chain_stake_index` int DEFAULT NULL,
-  `stake_tx_hash` varchar(255) NOT NULL,
-  `unstake_tx_hash` varchar(255) DEFAULT NULL,
-  `is_emergency` tinyint(1) NOT NULL DEFAULT 0,
-  `start_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `end_at` timestamp NULL DEFAULT NULL,
-  `reward_claimed` varchar(255) DEFAULT '0',
-  `status` enum('active','completed','unstaked') DEFAULT 'active',
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_stake_tx` (`stake_tx_hash`),
-  INDEX `idx_user_address` (`user_address`),
-  INDEX `idx_status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- ========================================
--- Staking Reward History Table
--- ========================================
-CREATE TABLE IF NOT EXISTS `staking_reward_history` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_address` varchar(255) NOT NULL,
-  `stake_id` int NOT NULL,
-  `reward_amount` varchar(255) NOT NULL,
-  `tx_hash` varchar(255) NOT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_reward_tx` (`tx_hash`),
-  INDEX `idx_user_address` (`user_address`),
-  INDEX `idx_stake_id` (`stake_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ========================================

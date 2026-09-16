@@ -115,106 +115,6 @@ module.exports = async function (fastify, opts) {
         }
     }
 
-    // ========================================
-    // Staking Contract Helper
-    // ========================================
-    const STAKING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/staking.json"), 'utf8'));
-    const STAKING_CONTRACT_ADDRESS = process.env.STAKING_CONTRACT_ADDRESS || '0x5F5B51defEF8F508212042AE15f2ee4ABb21dfcb';
-
-    async function getStakingContract() {
-        const provider = await getProvider();
-        return new ethers.Contract(STAKING_CONTRACT_ADDRESS, STAKING_ABI, provider);
-    }
-
-    // Sync on-chain staking plans to DB
-    async function syncStakingPlansFromChain(mysql) {
-        try {
-            const contract = await getStakingContract();
-            const totalPlans = Number(await contract.totalPlans());
-            if (totalPlans === 0) return [];
-
-            const synced = [];
-            for (let level = 1; level <= totalPlans; level++) {
-                try {
-                    const plan = await contract.getPlanDetails(level);
-                    if (!plan.exists) continue;
-
-                    const rewardPercent = Number(plan.rewardPercent); // APY as integer (e.g. 8 = 8%)
-                    const durationSeconds = Number(plan.durationLimit);
-                    const active = plan.active;
-
-                    // Upsert into DB using level as the chain_level identifier
-                    const [existing] = await mysql.query(
-                        "SELECT id FROM staking_plans WHERE chain_level = ? LIMIT 1",
-                        [level]
-                    );
-                    const existingRow = existing[0];
-
-                    if (existingRow) {
-                        await mysql.query(
-                            "UPDATE staking_plans SET apy = ?, duration_seconds = ?, is_active = ?, name = CASE WHEN name = 'Flexible' OR name LIKE 'Level %' OR name = '3 min lock period' THEN 'GOLD' ELSE name END, min_stake = '1000' WHERE chain_level = ?",
-                            [rewardPercent, durationSeconds, active ? 1 : 0, level]
-                        );
-                    } else {
-                        await mysql.query(
-                            "INSERT INTO staking_plans (name, chain_level, apy, duration_seconds, is_active, min_stake) VALUES (?, ?, ?, ?, ?, ?)",
-                            ['GOLD', level, Number(plan.rewardPercent), Number(plan.durationLimit), plan.active ? 1 : 0, '1000']
-                        );
-                    }
-
-                    synced.push({ level, rewardPercent, durationSeconds, active });
-                } catch (e) {
-                    console.error(`Error syncing plan level ${level}:`, e.message);
-                }
-            }
-
-            // Clean up DB plans that exceed on-chain total plans
-            if (totalPlans > 0) {
-                await mysql.query("DELETE FROM staking_plans WHERE chain_level > ? OR chain_level IS NULL", [totalPlans]).catch(() => { });
-            }
-
-            return synced;
-        } catch (err) {
-            console.error('syncStakingPlansFromChain error:', err.message);
-            return [];
-        }
-    }
-
-    // Ensure chain_level and duration_seconds columns exist in staking_plans
-    try {
-        const [columns] = await fastify.mysql.query("SHOW COLUMNS FROM staking_plans");
-        const columnNames = columns.map(c => c.Field || c.field);
-
-        if (!columnNames.includes('chain_level')) {
-            await fastify.mysql.query("ALTER TABLE staking_plans ADD COLUMN chain_level INT DEFAULT NULL");
-        }
-        if (!columnNames.includes('duration_seconds')) {
-            await fastify.mysql.query("ALTER TABLE staking_plans ADD COLUMN duration_seconds INT DEFAULT 0");
-        }
-
-        // Set chain_level=1 for the existing plan if not set
-        await fastify.mysql.query("UPDATE staking_plans SET chain_level = 1 WHERE chain_level IS NULL AND id = (SELECT id FROM (SELECT MIN(id) AS id FROM staking_plans) t)");
-    } catch (err) {
-        console.error("staking_plans migration error:", err.message);
-    }
-
-    // Ensure duration_seconds and chain_stake_index columns exist in staking_records
-    try {
-        const [recCols] = await fastify.mysql.query("SHOW COLUMNS FROM staking_records");
-        const recColNames = recCols.map(c => c.Field || c.field);
-
-        if (!recColNames.includes('duration_seconds')) {
-            await fastify.mysql.query("ALTER TABLE staking_records ADD COLUMN duration_seconds INT DEFAULT 0");
-            console.log("Added duration_seconds column to staking_records");
-        }
-        if (!recColNames.includes('chain_stake_index')) {
-            await fastify.mysql.query("ALTER TABLE staking_records ADD COLUMN chain_stake_index INT DEFAULT NULL");
-            console.log("Added chain_stake_index column to staking_records");
-        }
-    } catch (err) {
-        console.error("staking_records migration error:", err.message);
-    }
-
     // Ensure kyc_status column exists in users. MySQL has no
     // "ALTER TABLE ... ADD COLUMN IF NOT EXISTS" (that is MariaDB syntax), so
     // the column has to be checked before it is added.
@@ -638,7 +538,6 @@ module.exports = async function (fastify, opts) {
 
             const [
                 [statsRows],
-                [stakingStats],
                 [activeSaleRows],
                 [lastTxRows],
                 [historyRows]
@@ -651,15 +550,8 @@ module.exports = async function (fastify, opts) {
                         (SELECT COUNT(*) FROM ico_purchases WHERE status = 'failed') AS failed_transactions,
                         (SELECT COALESCE(SUM(ptc_tokens), 0) FROM ico_purchases WHERE status IN ('success', 'paid')) AS purchased_tokens,
                         (SELECT COALESCE(SUM(CAST(token_quantity AS DECIMAL(30,8))), 0) FROM token_sales) AS total_ico_allocation,
-                        (SELECT COALESCE(SUM(CAST(token_quantity AS DECIMAL(30,8))), 0) FROM token_sales) - (SELECT COALESCE(SUM(CAST(ptc_tokens AS DECIMAL(30,8))), 0) FROM ico_purchases WHERE status IN ('success', 'paid')) AS total_ico_remaining;
-                `),
-                fastify.mysql.query(`
-                    SELECT
-                        (SELECT COUNT(*) FROM staking_records WHERE status IN ('active', 'completed')) AS active_stakes,
-                        (SELECT COUNT(DISTINCT user_address) FROM staking_records) AS total_stakers,
-                        (SELECT COALESCE(SUM(CAST(amount AS DECIMAL(36,18))), 0) FROM staking_records WHERE status IN ('active', 'completed')) AS total_staked,
-                        (SELECT COALESCE(SUM(CAST(reward_claimed AS DECIMAL(36,18))), 0) FROM staking_records) AS total_rewards_distributed,
-                        (SELECT COALESCE(SUM(CAST(total_amount AS DECIMAL(36,18))), 0) FROM vesting_schedules WHERE status = 'active') AS tokens_in_vesting
+                        (SELECT COALESCE(SUM(CAST(token_quantity AS DECIMAL(30,8))), 0) FROM token_sales) - (SELECT COALESCE(SUM(CAST(ptc_tokens AS DECIMAL(30,8))), 0) FROM ico_purchases WHERE status IN ('success', 'paid')) AS total_ico_remaining,
+                        (SELECT COALESCE(SUM(CAST(total_amount AS DECIMAL(36,18))), 0) FROM vesting_schedules WHERE status = 'active') AS tokens_in_vesting;
                 `),
                 fastify.mysql.query(`
                     SELECT *,
@@ -777,20 +669,17 @@ module.exports = async function (fastify, opts) {
             }
 
             const statsObj = (statsRows && statsRows[0]) ? statsRows[0] : {};
-            const stakingObj = (stakingStats && stakingStats[0]) ? stakingStats[0] : {};
 
             return reply.send({
                 status: true,
                 settings: currentSettings,
                 stats: {
                     ...statsObj,
-                    ...stakingObj,
                     total_ico_remaining: statsObj.total_ico_remaining !== undefined && statsObj.total_ico_remaining !== null
                         ? parseFloat(statsObj.total_ico_remaining)
                         : (contractBal !== null ? contractBal : 0),
                 },
                 activeSale: activeSale,
-                stakingStats: stakingObj,
                 lastTransactions: Array.isArray(lastTxRows) ? lastTxRows.map(tx => ({ ...tx, created_at_utc: toUtcISOString(tx.created_at) })) : [],
                 history: Array.isArray(historyRows) ? historyRows.map(h => ({ ...h, timestamp_utc: toUtcISOString(h.timestamp) })) : []
             });
@@ -882,16 +771,11 @@ module.exports = async function (fastify, opts) {
                 const address = user.wallet_address;
                 const [
                     [balanceRows],
-                    [stakingRows],
                     [vestingRows],
                     [purchaseRows]
                 ] = await Promise.all([
                     fastify.mysql.query(
                         "SELECT COALESCE(SUM(CAST(ptc_tokens AS DECIMAL(36,18))), 0) AS balance FROM ico_purchases WHERE LOWER(address) = LOWER(?) AND status = 'success'",
-                        [address]
-                    ),
-                    fastify.mysql.query(
-                        "SELECT COALESCE(SUM(CAST(amount AS DECIMAL(36,18))), 0) AS total_staked, COALESCE(SUM(CAST(reward_claimed AS DECIMAL(36,18))), 0) AS total_rewards FROM staking_records WHERE LOWER(user_address) = LOWER(?)",
                         [address]
                     ),
                     fastify.mysql.query(
@@ -922,8 +806,6 @@ module.exports = async function (fastify, opts) {
                     status: true,
                     stats: {
                         balance: onChainBalance,
-                        total_staked: stakingRows[0]?.total_staked || 0,
-                        total_rewards: stakingRows[0]?.total_rewards || 0,
                         total_vested: vestingRows[0]?.total_vested || 0,
                         total_bnb: parseFloat(cryptoTotals['BNB'] || 0).toString(),
                         total_usdt: (parseFloat(cryptoTotals['USDT'] || 0) + parseFloat(cryptoTotals['USDC'] || 0)).toString(),
@@ -940,8 +822,6 @@ module.exports = async function (fastify, opts) {
                 status: true,
                 stats: {
                     balance: '0',
-                    total_staked: '0',
-                    total_rewards: '0',
                     total_vested: '0',
                     total_bnb: '0',
                     total_usdt: '0',
@@ -964,7 +844,6 @@ module.exports = async function (fastify, opts) {
             const [
                 [userRows],
                 [balanceRows],
-                [stakingRows],
                 [vestingRows],
                 [purchaseRows]
             ] = await Promise.all([
@@ -973,11 +852,6 @@ module.exports = async function (fastify, opts) {
                 // Trustive Balance from success purchases
                 fastify.mysql.query(
                     "SELECT COALESCE(SUM(CAST(ptc_tokens AS DECIMAL(36,18))), 0) AS balance FROM ico_purchases WHERE LOWER(address) = LOWER(?) AND status = 'success'",
-                    [address]
-                ),
-                // Staking stats
-                fastify.mysql.query(
-                    "SELECT COALESCE(SUM(CAST(amount AS DECIMAL(36,18))), 0) AS total_staked, COALESCE(SUM(CAST(reward_claimed AS DECIMAL(36,18))), 0) AS total_rewards FROM staking_records WHERE LOWER(user_address) = LOWER(?)",
                     [address]
                 ),
                 // Vesting stats
@@ -1014,8 +888,6 @@ module.exports = async function (fastify, opts) {
                 status: true,
                 stats: {
                     balance: onChainBalance,
-                    total_staked: stakingRows[0]?.total_staked || 0,
-                    total_rewards: stakingRows[0]?.total_rewards || 0,
                     total_vested: vestingRows[0]?.total_vested || 0,
                     total_bnb: parseFloat(cryptoTotals['BNB'] || 0).toString(),
                     total_usdt: (parseFloat(cryptoTotals['USDT'] || 0) + parseFloat(cryptoTotals['USDC'] || 0)).toString(),
@@ -1466,7 +1338,7 @@ module.exports = async function (fastify, opts) {
                 'token_name', 'token_symbol', 'chain', 'token_decimal',
                 'contract_address', 'crypto_decimal', 'fiat_decimal',
                 'ico_contract', 'usdt_address', 'usdc_address', 'bnb_address',
-                'staking_contract', 'vesting_contract',
+                'vesting_contract',
                 'admin_email', 'admin_password'
             ];
 
@@ -1546,7 +1418,7 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get("/payment-settings", async (request, reply) => {
         try {
-            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, staking_contract, vesting_contract FROM settings LIMIT 1");
+            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract FROM settings LIMIT 1");
             const settings = rows[0] || {};
 
             // Fetch current active token sale price matching user dashboard
@@ -1589,17 +1461,17 @@ module.exports = async function (fastify, opts) {
 
             if (existing) {
                 await fastify.mysql.query(
-                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, bnb_address = ?, staking_contract = ?, vesting_contract = ? WHERE id = ?",
-                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.staking_contract, data.vesting_contract, existing.id]
+                    "UPDATE settings SET ico_contract = ?, usdt_address = ?, usdc_address = ?, bnb_address = ?, vesting_contract = ? WHERE id = ?",
+                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract, existing.id]
                 );
             } else {
                 await fastify.mysql.query(
-                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, bnb_address, staking_contract, vesting_contract) VALUES (?, ?, ?, ?, ?, ?)",
-                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.staking_contract, data.vesting_contract]
+                    "INSERT INTO settings (ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract) VALUES (?, ?, ?, ?, ?)",
+                    [data.ico_contract, data.usdt_address, data.usdc_address, data.bnb_address, data.vesting_contract]
                 );
             }
 
-            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'bnb_address', 'staking_contract', 'vesting_contract'];
+            const keys = ['ico_contract', 'usdt_address', 'usdc_address', 'bnb_address', 'vesting_contract'];
             for (const key of keys) {
                 if (data[key] !== oldData[key]) {
                     await fastify.mysql.query(
@@ -2054,395 +1926,6 @@ module.exports = async function (fastify, opts) {
             return reply.send({ status: true, msg: "Vesting status updated to revoked" });
         } catch (err) {
             return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
-        }
-    });
-
-    // ========================================
-    // Staking - Admin Routes
-    // ========================================
-
-    // GET /staking/plans — return DB plans merged with on-chain data
-    fastify.get('/staking/plans', async (request, reply) => {
-        try {
-            // Attempt a quick on-chain sync
-            await syncStakingPlansFromChain(fastify.mysql).catch(() => { });
-
-            const [plans] = await fastify.mysql.query(
-                "SELECT * FROM staking_plans ORDER BY COALESCE(chain_level, id) ASC"
-            );
-            const normalized = Array.isArray(plans) ? plans : [];
-            return reply.send({ status: true, plans: normalized });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
-        }
-    });
-
-    // GET /staking/plans/sync — force sync on-chain plans to DB
-    fastify.get('/staking/plans/sync', async (request, reply) => {
-        try {
-            const synced = await syncStakingPlansFromChain(fastify.mysql);
-            const [plans] = await fastify.mysql.query(
-                "SELECT * FROM staking_plans ORDER BY COALESCE(chain_level, id) ASC"
-            );
-            return reply.send({
-                status: true,
-                msg: `Synced ${synced.length} plan(s) from chain`,
-                plans: Array.isArray(plans) ? plans : []
-            });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Sync failed: ' + err.message });
-        }
-    });
-
-    // GET /staking/plans/on-chain — read raw on-chain plans without DB sync
-    fastify.get('/staking/plans/on-chain', async (request, reply) => {
-        try {
-            const contract = await getStakingContract();
-            const totalPlans = Number(await contract.totalPlans());
-            const plans = [];
-            for (let level = 1; level <= totalPlans; level++) {
-                try {
-                    const plan = await contract.getPlanDetails(level);
-                    plans.push({
-                        level,
-                        rewardPercent: Number(plan.rewardPercent),
-                        durationSeconds: Number(plan.durationLimit),
-                        active: plan.active,
-                        exists: plan.exists
-                    });
-                } catch (e) { }
-            }
-            return reply.send({ status: true, totalPlans, plans });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Failed to read on-chain plans: ' + err.message });
-        }
-    });
-
-    // POST /staking/plans — update DB plan metadata (name, min_stake)
-    // On-chain plan changes require admin to call contract directly via MetaMask
-    fastify.post('/staking/plans', async (request, reply) => {
-        try {
-            const { id, name, min_stake, chain_level, duration_seconds, apy, is_active } = request.body;
-            if (!name) return reply.send({ status: false, msg: "Name is required" });
-
-            if (id) {
-                // Update existing DB plan metadata
-                const fields = ['name = ?'];
-                const params = [name];
-                if (min_stake !== undefined) { fields.push('min_stake = ?'); params.push(min_stake); }
-                if (duration_seconds !== undefined) { fields.push('duration_seconds = ?'); params.push(duration_seconds); }
-                if (apy !== undefined) { fields.push('apy = ?'); params.push(apy); }
-                if (is_active !== undefined) { fields.push('is_active = ?'); params.push(is_active ? 1 : 0); }
-                if (chain_level !== undefined) { fields.push('chain_level = ?'); params.push(chain_level); }
-                params.push(id);
-                await fastify.mysql.query(`UPDATE staking_plans SET ${fields.join(', ')} WHERE id = ?`, params);
-                return reply.send({ status: true, msg: "Plan updated successfully" });
-            } else {
-                // Insert new DB plan record
-                await fastify.mysql.query(
-                    "INSERT INTO staking_plans (name, chain_level, duration_seconds, apy, min_stake, is_active) VALUES (?, ?, ?, ?, ?, ?)",
-                    [name, chain_level || null, duration_seconds || 0, apy || 0, min_stake || '1000', is_active !== undefined ? (is_active ? 1 : 0) : 1]
-                );
-                return reply.send({ status: true, msg: "Plan created successfully" });
-            }
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
-        }
-    });
-
-    // POST /staking/plans/toggle — toggle DB is_active flag
-    fastify.post('/staking/plans/toggle', async (request, reply) => {
-        try {
-            const { id, is_active } = request.body;
-            if (!id) return reply.send({ status: false, msg: "Plan ID is required" });
-            await fastify.mysql.query("UPDATE staking_plans SET is_active = ? WHERE id = ?", [is_active ? 1 : 0, id]);
-            return reply.send({ status: true, msg: `Plan ${is_active ? 'activated' : 'deactivated'} successfully` });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
-        }
-    });
-
-    // POST /staking/plans/add-on-chain — returns tx calldata for addPlan (admin signs via MetaMask)
-    fastify.post('/staking/plans/add-on-chain', async (request, reply) => {
-        try {
-            const { rewardPercent, durationSeconds, active } = request.body;
-            if (rewardPercent === undefined || durationSeconds === undefined) {
-                return reply.send({ status: false, msg: "rewardPercent and durationSeconds are required" });
-            }
-            // Return call data for admin frontend to send via MetaMask
-            const iface = new ethers.Interface(STAKING_ABI);
-            const calldata = iface.encodeFunctionData('addPlan', [
-                BigInt(rewardPercent),
-                BigInt(durationSeconds),
-                active !== false
-            ]);
-            return reply.send({
-                status: true,
-                contractAddress: STAKING_CONTRACT_ADDRESS,
-                calldata,
-                functionName: 'addPlan',
-                args: { rewardPercent, durationSeconds, active: active !== false }
-            });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Failed to encode tx: ' + err.message });
-        }
-    });
-
-    // POST /staking/plans/update-on-chain — returns tx calldata for updatePlan
-    fastify.post('/staking/plans/update-on-chain', async (request, reply) => {
-        try {
-            const { level, rewardPercent, durationSeconds, active } = request.body;
-            if (!level || rewardPercent === undefined || durationSeconds === undefined) {
-                return reply.send({ status: false, msg: "level, rewardPercent, and durationSeconds are required" });
-            }
-            const iface = new ethers.Interface(STAKING_ABI);
-            const calldata = iface.encodeFunctionData('updatePlan', [
-                BigInt(level),
-                BigInt(rewardPercent),
-                BigInt(durationSeconds),
-                active !== false
-            ]);
-            return reply.send({
-                status: true,
-                contractAddress: STAKING_CONTRACT_ADDRESS,
-                calldata,
-                functionName: 'updatePlan',
-                args: { level, rewardPercent, durationSeconds, active: active !== false }
-            });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Failed to encode tx: ' + err.message });
-        }
-    });
-
-    // POST /staking/plans/remove-on-chain — returns tx calldata for removePlan
-    fastify.post('/staking/plans/remove-on-chain', async (request, reply) => {
-        try {
-            const { level } = request.body;
-            if (!level) return reply.send({ status: false, msg: "level is required" });
-            const iface = new ethers.Interface(STAKING_ABI);
-            const calldata = iface.encodeFunctionData('removePlan', [BigInt(level)]);
-            return reply.send({
-                status: true,
-                contractAddress: STAKING_CONTRACT_ADDRESS,
-                calldata,
-                functionName: 'removePlan',
-                args: { level }
-            });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Failed to encode tx: ' + err.message });
-        }
-    });
-
-    // Sync all stakes from on-chain events and user details
-    async function syncAllStakesFromChain(mysql) {
-        try {
-            const provider = await getWorkingProvider();
-            const contract = new ethers.Contract(STAKING_CONTRACT_ADDRESS, STAKING_ABI, provider);
-            const currentBlock = await provider.getBlockNumber();
-            const fromBlock = Math.max(0, currentBlock - 50000);
-
-            const stakingFilter = contract.filters.Staking();
-            const withdrawFilter = contract.filters.Withdraw();
-
-            const [stakingLogs, withdrawLogs] = await Promise.all([
-                contract.queryFilter(stakingFilter, fromBlock, currentBlock).catch(e => { console.error("Staking filter error:", e.message); return []; }),
-                contract.queryFilter(withdrawFilter, fromBlock, currentBlock).catch(e => { console.error("Withdraw filter error:", e.message); return []; })
-            ]);
-
-            // Withdraw carries no level, so track the blocks a user withdrew at:
-            // a stake is only withdrawn if a Withdraw came after it
-            const withdrawBlocks = new Map();
-            withdrawLogs.forEach(log => {
-                if (log.args && log.args.userAddress) {
-                    const key = log.args.userAddress.toLowerCase();
-                    if (!withdrawBlocks.has(key)) withdrawBlocks.set(key, []);
-                    withdrawBlocks.get(key).push(log.blockNumber);
-                }
-            });
-
-            for (const log of stakingLogs) {
-                try {
-                    const userAddress = log.args.userAddress;
-                    const level = Number(log.args.level || 1);
-                    const amt = ethers.formatEther(log.args.amount);
-                    const hash = log.transactionHash;
-                    const endtime = Number(log.args.endtime || 0);
-                    const endAt = endtime > 0 ? new Date(endtime * 1000) : null;
-                    const startAt = endtime > 180 ? new Date((endtime - 180) * 1000) : new Date();
-
-                    const isWithdrawn = (withdrawBlocks.get(userAddress.toLowerCase()) || []).some(b => b >= log.blockNumber);
-                    const isEnded = endAt && new Date() > endAt;
-                    const status = isWithdrawn ? 'unstaked' : (isEnded ? 'completed' : 'active');
-
-                    await mysql.query(
-                        `INSERT INTO staking_records (user_address, amount, plan_id, plan_name, apy, duration_seconds, stake_tx_hash, start_at, end_at, status, chain_stake_index) 
-                         VALUES (?, ?, ?, 'GOLD', 8, 180, ?, ?, ?, ?, ?) 
-                         ON DUPLICATE KEY UPDATE amount = VALUES(amount), status = VALUES(status), end_at = VALUES(end_at), plan_name = 'GOLD'`,
-                        [userAddress, amt, level, hash, startAt, endAt, status, level]
-                    );
-                } catch (e) {
-                    console.error("Error inserting log stake:", e.message);
-                }
-            }
-
-            // Check registered users for active details
-            const [users] = await mysql.query("SELECT wallet_address FROM users WHERE wallet_address IS NOT NULL AND wallet_address != ''").catch(() => [[]]);
-            for (const user of users) {
-                try {
-                    const addr = user.wallet_address;
-                    const raw = await contract.getUserDetails(addr, 1);
-                    const tuple = raw && raw[0];
-                    if (!tuple) continue;
-                    const rawAmount = tuple[1];
-                    const endTime = Number(tuple[3]);
-                    const rewardAmount = tuple[4];
-                    const withdrawAmount = tuple[5];
-                    const isActive = Boolean(tuple[6]);
-                    const reward = ethers.formatEther(rewardAmount || 0n);
-
-                    // getUserDetails holds one slot per (user, level) and so only
-                    // describes the newest stake - never rewrite the whole history
-                    const [latest] = await mysql.query(
-                        "SELECT id FROM staking_records WHERE LOWER(user_address) = LOWER(?) AND chain_stake_index = 1 ORDER BY start_at DESC, id DESC LIMIT 1",
-                        [addr]
-                    ).catch(() => [[]]);
-                    if (!latest || latest.length === 0) continue;
-                    const latestId = latest[0].id;
-
-                    if (rawAmount === 0n && withdrawAmount > 0n) {
-                        await mysql.query("UPDATE staking_records SET status = 'unstaked', reward_claimed = ? WHERE id = ?", [reward, latestId]).catch(() => { });
-                    } else if (rawAmount > 0n) {
-                        const amt = ethers.formatEther(rawAmount);
-                        const endAt = endTime > 0 ? new Date(endTime * 1000) : null;
-                        const status = !isActive ? 'unstaked' : (endAt && new Date() > endAt ? 'completed' : 'active');
-                        await mysql.query("UPDATE staking_records SET status = ?, amount = ?, reward_claimed = ? WHERE id = ?", [status, amt, reward, latestId]).catch(() => { });
-                    }
-                } catch (e) { }
-            }
-        } catch (e) {
-            console.error("syncAllStakesFromChain error:", e.message);
-        }
-    }
-
-    // GET /staking/all-stakes — paginated list of all stakes
-    fastify.get('/staking/all-stakes', async (request, reply) => {
-        try {
-            // Trigger sync in background
-            syncAllStakesFromChain(fastify.mysql).catch(() => { });
-
-            const page = parseInt(request.query.page) || 1;
-            const limit = parseInt(request.query.limit) || 10;
-            const search = request.query.search || '';
-            const statusFilter = request.query.status || 'active';
-            const offset = (page - 1) * limit;
-
-            let countQuery = "SELECT COUNT(*) as total FROM staking_records sr LEFT JOIN users u ON LOWER(sr.user_address) = LOWER(u.wallet_address) COLLATE utf8mb4_general_ci";
-            let dataQuery = "SELECT sr.*, u.name as username, u.email as user_email FROM staking_records sr LEFT JOIN users u ON LOWER(sr.user_address) = LOWER(u.wallet_address) COLLATE utf8mb4_general_ci";
-            const conditions = []; const queryParams = [];
-
-            // 'completed' = lock expired but the tokens are still in the contract,
-            // so those stakes stay in the Active tab until they are withdrawn
-            if (statusFilter === 'active') {
-                conditions.push("sr.status IN ('active', 'completed')");
-            } else if (statusFilter === 'completed' || statusFilter === 'unstaked') {
-                conditions.push("sr.status = 'unstaked'");
-            }
-
-            if (search) {
-                conditions.push("(LOWER(sr.user_address) LIKE LOWER(?) OR LOWER(sr.stake_tx_hash) LIKE LOWER(?) OR LOWER(u.name) LIKE LOWER(?))");
-                queryParams.push(`%${search}%`, `%${search}%`, `%${search}%`);
-            }
-
-            if (conditions.length > 0) {
-                const w = " WHERE " + conditions.join(" AND ");
-                countQuery += w;
-                dataQuery += w;
-            }
-
-            dataQuery += " ORDER BY sr.created_at DESC LIMIT ? OFFSET ?";
-            const countParams = [...queryParams];
-            queryParams.push(limit, offset);
-
-            const [countResult] = await fastify.mysql.query(countQuery, countParams);
-            const totalPages = Math.ceil(((countResult[0]?.total) || 0) / limit);
-            const [rows] = await fastify.mysql.query(dataQuery, queryParams);
-            const stakes = Array.isArray(rows) ? rows : [];
-
-            return reply.send({
-                status: true,
-                stakes: stakes.map(s => ({
-                    ...s,
-                    start_at: toUtcISOString(s.start_at),
-                    end_at: s.end_at ? toUtcISOString(s.end_at) : null,
-                    created_at: toUtcISOString(s.created_at)
-                })),
-                totalPages,
-                currentPage: page
-            });
-        } catch (err) {
-            console.error("all-stakes error:", err);
-            return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
-        }
-    });
-
-    // GET /staking/stats — aggregate staking statistics
-    fastify.get('/staking/stats', async (request, reply) => {
-        try {
-            const [stats] = await fastify.mysql.query(`
-                SELECT
-                    (SELECT COUNT(*) FROM staking_records WHERE status IN ('active', 'completed')) AS active_stakes,
-                    (SELECT COUNT(DISTINCT user_address) FROM staking_records) AS total_stakers,
-                    (SELECT COALESCE(SUM(CAST(amount AS DECIMAL(36,18))), 0) FROM staking_records WHERE status IN ('active', 'completed')) AS total_staked,
-                    (SELECT COALESCE(SUM(CAST(reward_claimed AS DECIMAL(36,18))), 0) FROM staking_records) AS total_rewards_distributed,
-                    (SELECT COUNT(*) FROM staking_records WHERE status = 'unstaked') AS total_withdrawn
-            `);
-
-            const [plans] = await fastify.mysql.query(
-                "SELECT * FROM staking_plans ORDER BY COALESCE(chain_level, id) ASC"
-            );
-
-            return reply.send({
-                status: true,
-                stats: stats[0] || {},
-                plans: Array.isArray(plans) ? plans : [],
-            });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
-        }
-    });
-
-    // GET /staking/user/:address — get stakes for a specific user (admin view)
-    fastify.get('/staking/user/:address', async (request, reply) => {
-        try {
-            const { address } = request.params;
-            const [stakes] = await fastify.mysql.query(
-                "SELECT * FROM staking_records WHERE LOWER(user_address) = LOWER(?) ORDER BY created_at DESC",
-                [address]
-            );
-            const normalized = Array.isArray(stakes) ? stakes : [];
-            return reply.send({
-                status: true,
-                stakes: normalized.map(s => ({
-                    ...s,
-                    start_at: toUtcISOString(s.start_at),
-                    end_at: s.end_at ? toUtcISOString(s.end_at) : null,
-                    created_at: toUtcISOString(s.created_at)
-                }))
-            });
-        } catch (err) {
-            return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
-        }
-    });
-
-    // GET /staking/sync-all-users — force sync all users' stakes from chain
-    fastify.get('/staking/sync-all-users', async (request, reply) => {
-        try {
-            await syncAllStakesFromChain(fastify.mysql);
-            const [count] = await fastify.mysql.query("SELECT COUNT(*) as total FROM staking_records");
-            return reply.send({ status: true, msg: `Synchronized protocol records. Total stakes: ${count[0]?.total || 0}` });
-        } catch (err) {
-            console.error('Global sync error:', err);
-            return reply.code(500).send({ status: false, msg: 'Sync failed: ' + err.message });
         }
     });
 

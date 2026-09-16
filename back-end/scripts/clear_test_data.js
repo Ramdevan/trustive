@@ -22,14 +22,12 @@ async function main() {
     'token_sales',
     'ico_purchases',
     'vesting_schedules',
-    'staking_records',
-    'staking_reward_history',
     'admin_withdraw',
     'payment_settings_history'
   ];
 
   // Preserved tables
-  const preservedTables = ['users', 'settings', 'cms_sections', 'staking_plans'];
+  const preservedTables = ['users', 'settings', 'cms_sections'];
 
   console.log('Checking current row counts:');
   for (const table of [...preservedTables, ...tablesToClear]) {

@@ -146,7 +146,7 @@ export default function Dashboard() {
     };
     fetchBalanceFallback();
 
-    // Fetch user data, sale info, and staking plans
+    // Fetch user data, sale info, and vesting schedules
     Promise.all([
       fetch(`${API_URL}/api/user/getUserData?address=${account}`).then(r => r.json()),
       fetch(`${API_URL}/api/user/getActiveSale`).then(r => r.json()),

@@ -106,14 +106,6 @@ export default function AdminSettings() {
                                 className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none font-mono text-xs"
                             />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest px-1">Staking Protocol Contract</label>
-                            <input
-                                value={settings?.staking_contract || ""}
-                                onChange={(e) => setLocalSettings({ ...settings, staking_contract: e.target.value })}
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none font-mono text-xs"
-                            />
-                        </div>
                     </div>
                 </div>
 

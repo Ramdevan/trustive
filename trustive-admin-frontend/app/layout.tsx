@@ -26,7 +26,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "Trustive Administrator Panel",
-  description: "Administrative dashboard for Trustive ICO and Staking platform",
+  description: "Administrative dashboard for Trustive ICO platform",
   icons: {
     icon: [
       { url: "/logo.svg", type: "image/svg+xml" },
