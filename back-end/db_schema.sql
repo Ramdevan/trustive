@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `is_verified` tinyint(1) DEFAULT 0,
   `verification_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `wallet_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_pic` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `PTC_REF_ID` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `referred_by` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `referrer_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

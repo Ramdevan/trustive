@@ -115,15 +115,17 @@ module.exports = async function (fastify, opts) {
         }
     }
 
-    // Ensure kyc_status column exists in users. MySQL has no
-    // "ALTER TABLE ... ADD COLUMN IF NOT EXISTS" (that is MariaDB syntax), so
-    // the column has to be checked before it is added.
+    // Ensure kyc_status & profile_pic columns exist in users
     try {
         const [userCols] = await fastify.mysql.query("SHOW COLUMNS FROM users");
         const userColNames = userCols.map(c => c.Field || c.field);
         if (!userColNames.includes('kyc_status')) {
             await fastify.mysql.query("ALTER TABLE users ADD COLUMN kyc_status VARCHAR(50) DEFAULT 'unverified'");
             console.log("Added kyc_status column to users");
+        }
+        if (!userColNames.includes('profile_pic')) {
+            await fastify.mysql.query("ALTER TABLE users ADD COLUMN profile_pic VARCHAR(500) DEFAULT NULL");
+            console.log("Added profile_pic column to users");
         }
     } catch (err) {
         console.error("users migration error:", err.message);
