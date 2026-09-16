@@ -89,6 +89,76 @@ module.exports = async function (fastify, opts) {
     console.error('Error ensuring referral_claims table:', schemaErr);
   }
 
+  // Ensure login_history table exists
+  try {
+    await fastify.mysql.query(`
+      CREATE TABLE IF NOT EXISTS login_history (
+        id int unsigned NOT NULL AUTO_INCREMENT,
+        user_id int unsigned NOT NULL,
+        ip_address varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+        country varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT '',
+        os varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+        browser varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+        user_agent text COLLATE utf8mb4_unicode_ci,
+        created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        INDEX idx_user_id (user_id),
+        INDEX idx_created_at (created_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `);
+  } catch (schemaErr) {
+    console.error('Error ensuring login_history table:', schemaErr);
+  }
+
+  // User-Agent, IP and Country parsers for session history
+  function parseUserAgent(ua) {
+    if (!ua) return { os: 'Linux x86_64', browser: 'Chrome' };
+    let os = 'Unknown OS';
+    if (/windows nt 10\.0/i.test(ua)) os = 'Windows 10';
+    else if (/windows nt 6\.3/i.test(ua)) os = 'Windows 8.1';
+    else if (/windows nt 6\.2/i.test(ua)) os = 'Windows 8';
+    else if (/windows nt 6\.1/i.test(ua)) os = 'Windows 7';
+    else if (/windows/i.test(ua)) os = 'Windows';
+    else if (/android/i.test(ua)) os = 'Android';
+    else if (/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+    else if (/macintosh|mac os x/i.test(ua)) os = 'macOS';
+    else if (/linux/i.test(ua)) {
+      if (/x86_64/i.test(ua)) os = 'Linux x86_64';
+      else if (/arm|aarch64/i.test(ua)) os = 'Linux ARM';
+      else os = 'Linux';
+    }
+
+    let browser = 'Unknown Browser';
+    if (/edg/i.test(ua)) browser = 'Edge';
+    else if (/opr|opera/i.test(ua)) browser = 'Opera';
+    else if (/brave/i.test(ua)) browser = 'Brave';
+    else if (/chrome|crios/i.test(ua)) browser = 'Chrome';
+    else if (/firefox|fxios/i.test(ua)) browser = 'Firefox';
+    else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = 'Safari';
+    else if (/msie|trident/i.test(ua)) browser = 'Internet Explorer';
+
+    return { os, browser };
+  }
+
+  function getClientIp(req) {
+    const forwarded = req.headers['x-forwarded-for'];
+    if (forwarded) {
+      const first = forwarded.split(',')[0].trim();
+      if (first) return first.replace(/^::ffff:/, '');
+    }
+    const raw = req.ip || req.socket?.remoteAddress || '127.0.0.1';
+    const clean = (raw === '::1' ? '127.0.0.1' : raw).replace(/^::ffff:/, '');
+    return clean || '127.0.0.1';
+  }
+
+  function getCountry(req, ip) {
+    const isPrivate = !ip || ip === '127.0.0.1' || ip === '::1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.16.');
+    if (isPrivate) return '';
+    const cfCountry = req.headers['cf-ipcountry'] || req.headers['x-country-code'] || req.headers['x-country'];
+    if (cfCountry && cfCountry !== 'XX') return String(cfCountry).toUpperCase();
+    return '';
+  }
+
 
   // ========================================
   // ========================================
@@ -257,6 +327,20 @@ module.exports = async function (fastify, opts) {
           window: 2
         });
         if (!verified) return reply.send({ status: false, msg: 'Invalid 2FA code' });
+      }
+
+      // Record successful user session in login_history
+      try {
+        const ip = getClientIp(request);
+        const ua = request.headers['user-agent'] || '';
+        const { os, browser } = parseUserAgent(ua);
+        const country = getCountry(request, ip);
+        await fastify.mysql.query(
+          'INSERT INTO login_history (user_id, ip_address, country, os, browser, user_agent) VALUES (?, ?, ?, ?, ?, ?)',
+          [user.id, ip, country, os, browser, ua]
+        );
+      } catch (sessionErr) {
+        console.error('[SessionHistory] Error logging session:', sessionErr.message);
       }
 
       const token = fastify.jwt.sign({ id: user.id, email: user.email, name: user.name }, { expiresIn: '7d' });
@@ -896,6 +980,71 @@ module.exports = async function (fastify, opts) {
       return reply.send({ status: true, user });
     } catch (err) {
       console.error('Error in /me:', err);
+      return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
+    }
+  });
+
+  // ========================================
+  // User Session History (Recent Activity)
+  // ========================================
+  fastify.get('/session-history', async (request, reply) => {
+    try {
+      const token = request.headers.authorization?.split(' ')[1];
+      let userId = null;
+      if (token) {
+        try {
+          const decoded = await fastify.jwt.verify(token);
+          if (decoded && decoded.id) userId = decoded.id;
+        } catch {
+          try {
+            const decoded = fastify.jwt.decode(token);
+            if (decoded && decoded.id) userId = decoded.id;
+          } catch {}
+        }
+      }
+
+      if (!userId && request.query.userId) {
+        userId = Number(request.query.userId);
+      }
+
+      if (!userId && request.query.address) {
+        const [u] = await fastify.mysql.query(
+          'SELECT id FROM users WHERE LOWER(wallet_address) = LOWER(?) LIMIT 1',
+          [request.query.address]
+        );
+        if (u && u.length > 0) userId = u[0].id;
+      }
+
+      if (!userId) {
+        return reply.code(401).send({ status: false, msg: 'Unauthorized' });
+      }
+
+      const [rows] = await fastify.mysql.query(
+        'SELECT id, ip_address, country, os, browser, created_at FROM login_history WHERE user_id = ? ORDER BY created_at DESC LIMIT 50',
+        [userId]
+      );
+
+      const pad = (n) => String(n).padStart(2, '0');
+      const formatTime = (d) => {
+        if (!d) return '';
+        const date = new Date(d);
+        if (isNaN(date.getTime())) return String(d);
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+      };
+
+      return reply.send({
+        status: true,
+        history: (rows || []).map(r => ({
+          id: r.id,
+          ip: r.ip_address || '127.0.0.1',
+          country: r.country || '',
+          os: r.os || 'Linux x86_64',
+          browser: r.browser || 'Chrome',
+          login_time: formatTime(r.created_at)
+        }))
+      });
+    } catch (err) {
+      console.error('Error in /session-history:', err);
       return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
     }
   });

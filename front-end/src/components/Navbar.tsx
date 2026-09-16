@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LuWallet, LuMenu, LuSettings, LuLogOut, LuTriangleAlert, LuUser, LuShieldCheck, LuShieldAlert } from 'react-icons/lu';
+import { LuWallet, LuMenu, LuSettings, LuLogOut, LuTriangleAlert, LuUser, LuShieldCheck, LuShieldAlert, LuHistory } from 'react-icons/lu';
 import Image from 'next/image';
 import Link from 'next/link';
 import userProfile from '@/assets/images/user.png';
@@ -250,6 +250,15 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                         >
                           <LuUser className="h-5 w-5 text-zinc-500 group-hover:text-[#212E73] transition-colors" />
                           Profile
+                        </Link>
+
+                        <Link
+                          href="/session-history"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-800 hover:bg-zinc-100 transition-colors text-left group cursor-pointer"
+                        >
+                          <LuHistory className="h-5 w-5 text-zinc-500 group-hover:text-[#212E73] transition-colors" />
+                          Session History
                         </Link>
 
                         {connected && (
