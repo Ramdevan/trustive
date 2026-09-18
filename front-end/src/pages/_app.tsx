@@ -10,6 +10,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { useState, useEffect } from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { Space_Grotesk } from "next/font/google";
 import { Web3Provider } from "@/context/Web3Context";
 import { WagmiProvider } from "wagmi";
@@ -27,12 +28,59 @@ const spaceGrotesk = Space_Grotesk({
 
 const queryClient = new QueryClient();
 
+const TOAST_OPTIONS = {
+  duration: 5000,
+  style: {
+    background: '#0D0D0D',
+    color: '#FFFFFF',
+    border: '1px solid rgba(229, 169, 62, 0.2)',
+    padding: '16px',
+    borderRadius: '16px',
+    fontSize: '14px',
+    fontWeight: '600',
+    maxWidth: '26rem',
+    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(229, 169, 62, 0.05)',
+  },
+  success: {
+    duration: 5000,
+    iconTheme: {
+      primary: '#E5A93E',
+      secondary: '#0D0D0D',
+    },
+    style: {
+      border: '1px solid rgba(16, 185, 129, 0.2)',
+    },
+  },
+  error: {
+    duration: 5000,
+    iconTheme: {
+      primary: '#EF4444',
+      secondary: '#0D0D0D',
+    },
+    style: {
+      border: '1px solid rgba(239, 68, 68, 0.2)',
+    },
+  },
+};
+
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Dismiss any active toast notifications when navigating between pages
+  useEffect(() => {
+    const handleRouteChange = () => {
+      toast.dismiss();
+    };
+    router.events.on('routeChangeStart', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router]);
 
   if (!mounted) {
     return (
@@ -56,37 +104,7 @@ export default function App({ Component, pageProps }: AppProps) {
               </AuthGuard>
               <Toaster
                 position="top-right"
-                toastOptions={{
-                  style: {
-                    background: '#0D0D0D',
-                    color: '#FFFFFF',
-                    border: '1px solid rgba(229, 169, 62, 0.2)',
-                    padding: '16px',
-                    borderRadius: '16px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    maxWidth: '26rem',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(229, 169, 62, 0.05)',
-                  },
-                  success: {
-                    iconTheme: {
-                      primary: '#E5A93E',
-                      secondary: '#0D0D0D',
-                    },
-                    style: {
-                      border: '1px solid rgba(16, 185, 129, 0.2)',
-                    }
-                  },
-                  error: {
-                    iconTheme: {
-                      primary: '#EF4444',
-                      secondary: '#0D0D0D',
-                    },
-                    style: {
-                      border: '1px solid rgba(239, 68, 68, 0.2)',
-                    }
-                  }
-                }}
+                toastOptions={TOAST_OPTIONS}
               >
                 {/* Every toast carries a dismiss button so a message can be cut
                     short instead of waiting for it to time out. */}

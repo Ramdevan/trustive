@@ -33,7 +33,7 @@ const RPC_URLS = [
 ];
 
 const ICO_ABI = [
-  'function buyToken(address recipient, uint256 paymentType, uint256 tokenAmount, uint256 nonce, bytes calldata signature) payable',
+  'function buyToken(address recipient, uint256 paymentType, uint256 tokenAmount, uint256 minTokensOut, tuple(uint8 v, bytes32 r, bytes32 s, uint256 nonce, uint256 deadline) sign) payable',
   'function getToken(uint256 paymentType, uint256 tokenAmount) view returns (uint256)',
 ];
 
@@ -420,15 +420,26 @@ const BuyTokenForm: React.FC = () => {
       if (!signData.status) {
         throw new Error(signData.message || 'Failed to get signature from server');
       }
-      const { signature, nonce } = signData;
+
+      const signTuple = signData.signTuple || (() => {
+        const s = ethers.Signature.from(signData.signature);
+        return {
+          v: s.v,
+          r: s.r,
+          s: s.s,
+          nonce: signData.nonce,
+          deadline: signData.deadline || Math.floor(Date.now() / 1000) + 3600,
+        };
+      })();
 
       const icoContract = new ethers.Contract(settings.ico_contract, ICO_ABI, signer);
       let tx: ethers.TransactionResponse;
+      const minTokensOut = 0; // Accept calculated tokens without strict client slippage cut
 
       if (method === 'BNB') {
         // BNB: contract signs over msg.value, tokenAmount param unused (pass 0)
         setTxStatus('Confirm transaction in your wallet...');
-        tx = await icoContract.buyToken(account, index, 0, nonce, signature, { value: paymentAmountWei });
+        tx = await icoContract.buyToken(account, index, 0, minTokensOut, signTuple, { value: paymentAmountWei });
       } else {
         // USDT/USDC: approve payment amount first, then call buyToken with payment amount
         const tokenAddress = method === 'USDT' ? settings.usdt_address : settings.usdc_address;
@@ -443,7 +454,7 @@ const BuyTokenForm: React.FC = () => {
         }
 
         setTxStatus('Confirm purchase in your wallet...');
-        tx = await icoContract.buyToken(account, index, paymentAmountWei, nonce, signature);
+        tx = await icoContract.buyToken(account, index, paymentAmountWei, minTokensOut, signTuple);
       }
 
       setTxStatus('Transaction submitted, confirming...');
@@ -478,7 +489,14 @@ const BuyTokenForm: React.FC = () => {
       setTrustiveTokens('');
       const successMsg = `Successfully purchased ${purchasedTokens} TRSIV tokens!`;
       setTxStatus(successMsg);
-      toast.success(successMsg, { duration: 5000 });
+      const toastId = toast.success(successMsg, { duration: 5000 });
+
+      // Automatically clear inline success message & dismiss toast after 5 seconds
+      setTimeout(() => {
+        toast.dismiss(toastId);
+        setTxStatus((prev) => (prev === successMsg ? '' : prev));
+        setIsSuccess(false);
+      }, 5000);
     } catch (err: unknown) {
       if (isUserRejection(err)) {
         setTxStatus('');
@@ -864,7 +882,7 @@ const BuyTokenForm: React.FC = () => {
         initialAmountUSD={amount}
         onSuccess={() => {
           setIsMoonPayOpen(false);
-          toast.success('MoonPay order initiated! Your crypto will arrive to your wallet shortly.', { duration: 6000 });
+          toast.success('MoonPay order initiated! Your crypto will arrive to your wallet shortly.', { duration: 10000 });
         }}
       />
     </div>

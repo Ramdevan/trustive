@@ -69,6 +69,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
       const successMsg = `Successfully claimed ${Number(claimableAmount).toLocaleString()} TRSIV!`;
       setStatus(successMsg);
       toast.success(successMsg, { duration: 5000 });
+      setTimeout(() => setStatus(''), 5000);
       if (onClaim) onClaim();
     } catch (err: any) {
       if (isUserRejection(err)) {

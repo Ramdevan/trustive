@@ -1202,7 +1202,14 @@ module.exports = async function (fastify, opts) {
   }, async (req, reply) => {
     const { index, address, caller, amount } = req.body;
     try {
-      let wallet = new ethers.Wallet(process.env.SIGN_KEY);
+      const privateKey = process.env.SIGNER_PRIVATE_KEY || process.env.SIGN_KEY;
+      if (!privateKey || !privateKey.trim()) {
+        return reply.code(500).send({
+          status: false,
+          message: 'Server is missing SIGNER_PRIVATE_KEY. Please configure it in back-end/.env'
+        });
+      }
+      let wallet = new ethers.Wallet(privateKey.trim());
 
       const checksumAddress = ethers.getAddress(address);
       const checksumCaller = ethers.getAddress(caller);
@@ -1210,6 +1217,7 @@ module.exports = async function (fastify, opts) {
       const decimals = index === 0 ? 18 : 8;
       const amountWei = ethers.parseUnits(amount.toString(), decimals);
       const nonce = Math.floor(Date.now() / 1000);
+      const deadline = Math.floor(Date.now() / 1000) + 3600;
 
       const ICO_ADDRESS = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
 
@@ -1246,21 +1254,22 @@ module.exports = async function (fastify, opts) {
         console.warn('Backend limit-check warning:', err.message);
       }
 
-      // EIP712 domain matching the contract constructor: EIP712("TRUSTIVEICO", "1")
+      // EIP712 domain matching the contract: TRSIV_ICO
       const domain = {
-        name: 'TRUSTIVEICO',
+        name: 'TRSIV_ICO',
         version: '1',
         chainId: parseInt(process.env.CHAIN_ID || '97', 10),
         verifyingContract: ICO_ADDRESS,
       };
 
       const types = {
-        Buy: [
+        Purchase: [
           { name: 'assetType', type: 'uint256' },
           { name: 'recipient', type: 'address' },
           { name: 'caller', type: 'address' },
           { name: 'amount', type: 'uint256' },
           { name: 'nonce', type: 'uint256' },
+          { name: 'deadline', type: 'uint256' },
         ],
       };
 
@@ -1270,11 +1279,25 @@ module.exports = async function (fastify, opts) {
         caller: checksumCaller,
         amount: amountWei,
         nonce: nonce,
+        deadline: deadline,
       };
 
       const signature = await wallet.signTypedData(domain, types, value);
+      const splitSig = ethers.Signature.from(signature);
 
-      return reply.code(200).send({ status: true, signature, nonce });
+      return reply.code(200).send({
+        status: true,
+        signature,
+        nonce,
+        deadline,
+        signTuple: {
+          v: splitSig.v,
+          r: splitSig.r,
+          s: splitSig.s,
+          nonce: nonce,
+          deadline: deadline,
+        }
+      });
     } catch (error) {
       console.log('Signature generation error:', error);
       return reply.code(500).send({ status: false, message: "Unable to Generate Signature" });
