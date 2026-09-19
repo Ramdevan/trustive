@@ -166,42 +166,42 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-card border border-white/10 p-6 space-y-6">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-6 space-y-6 shadow-2xl">
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
-          <h2 className="text-[1.25rem] font-medium text-[#FAF7F2]">Vesting Details</h2>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors cursor-pointer">
+          <h2 className="text-[1.25rem] font-bold text-[#001060]">Vesting Details</h2>
+          <button onClick={onClose} className="text-zinc-400 hover:text-zinc-900 transition-colors cursor-pointer">
             <LuX className="h-5 w-5" />
           </button>
         </div>
 
         {/* Summary */}
-        <div className="rounded-2xl bg-black/40 border border-white/5 p-5 grid grid-cols-2 sm:grid-cols-3 gap-5">
+        <div className="rounded-2xl bg-white border border-zinc-200 shadow-xs p-5 grid grid-cols-2 sm:grid-cols-3 gap-5">
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Vest ID</div>
-            <div className="text-[0.95rem] font-bold text-[#FAF7F2]">{formatVestId(vesting)}</div>
+            <div className="text-[0.95rem] font-bold text-zinc-900 font-mono">{formatVestId(vesting)}</div>
           </div>
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Status</div>
-            <div className="text-[0.95rem] font-bold text-accent">{statusLabel}</div>
+            <div className="text-[0.95rem] font-bold text-[#315EFB]">{statusLabel}</div>
           </div>
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Allocated Token</div>
-            <div className="text-[0.95rem] font-bold text-[#E5A93E]">
+            <div className="text-[0.95rem] font-bold text-[#315EFB]">
               {totalAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV
             </div>
           </div>
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Cliff</div>
-            <div className="text-[0.95rem] font-bold text-[#FAF7F2]">{cliffPeriods}</div>
+            <div className="text-[0.95rem] font-bold text-zinc-900">{cliffPeriods}</div>
           </div>
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Vest Period</div>
-            <div className="text-[0.95rem] font-bold text-[#FAF7F2]">{vestPeriods}</div>
+            <div className="text-[0.95rem] font-bold text-zinc-900">{vestPeriods}</div>
           </div>
           <div>
             <div className="text-[0.75rem] text-zinc-500 uppercase tracking-wider mb-1">Claimed</div>
@@ -223,7 +223,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
           <button
             onClick={handleClaimAll}
             disabled={claimingPeriod !== null || unlockedRows.length === 0}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent/90 text-black text-[0.8rem] font-bold transition-all shadow-lg shadow-accent/10 active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#315EFB] hover:bg-[#2548D0] text-white text-[0.8rem] font-bold transition-all shadow-lg shadow-[#315EFB]/20 active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
           >
             {claimingPeriod === 'all' && <LuLoader className="h-4 w-4 animate-spin" />}
             {claimingPeriod === 'all' ? 'Claiming All' : 'Claim All'}
@@ -231,10 +231,10 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
         </div>
 
         {/* Period breakdown */}
-        <div className="overflow-x-auto rounded-2xl border border-white/5">
+        <div className="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-xs">
           <table className="w-full text-left border-collapse min-w-[40rem]">
             <thead>
-              <tr className="text-[#FAF7F2] text-[0.8rem] font-medium border-b border-white/5 bg-black/30 align-middle whitespace-nowrap">
+              <tr className="text-zinc-500 text-[0.8rem] font-semibold border-b border-zinc-200 bg-zinc-100/60 align-middle whitespace-nowrap">
                 <th className="px-5 py-4 w-[10%] min-w-[4rem]">S.No</th>
                 <th className="px-5 py-4 w-[22%] min-w-[9rem]">Claimable Token</th>
                 <th className="px-5 py-4 w-[26%] min-w-[10rem]">Cliff Period</th>
@@ -242,18 +242,18 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
                 <th className="px-5 py-4 w-[22%] min-w-[8rem]">Tx Hash</th>
               </tr>
             </thead>
-            <tbody className="text-[0.8rem] font-medium text-[#94A3B8]">
+            <tbody className="text-[0.8rem] font-medium text-zinc-600">
               {rows.length === 0 ? (
                 <tr><td colSpan={5} className="px-5 py-10 text-center text-zinc-500">No vesting periods found</td></tr>
               ) : rows.map(row => (
-                <tr key={row.period} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
-                  <td className="px-5 py-4 align-middle whitespace-nowrap text-[#FAF7F2]">{row.period}</td>
-                  <td className="px-5 py-4 align-middle whitespace-nowrap text-[#10B981]">
+                <tr key={row.period} className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50/80 transition-colors">
+                  <td className="px-5 py-4 align-middle whitespace-nowrap text-zinc-900 font-bold">{row.period}</td>
+                  <td className="px-5 py-4 align-middle whitespace-nowrap text-[#10B981] font-bold">
                     {row.amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV
                   </td>
                   <td className="px-5 py-4 align-middle whitespace-nowrap">
                     <div className="flex flex-col">
-                      <span className="text-[#FAF7F2]">{row.unlockSeconds}s</span>
+                      <span className="text-zinc-900 font-bold">{row.unlockSeconds}s</span>
                       <span className="text-[0.65rem] text-zinc-500">{formatDateTime(row.unlockAt)}</span>
                     </div>
                   </td>
@@ -266,7 +266,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
                       <button
                         onClick={() => handleClaim(row)}
                         disabled={claimingPeriod !== null}
-                        className="inline-flex items-center justify-center gap-1.5 w-[5.5rem] px-4 py-1.5 rounded-lg bg-accent hover:bg-accent/90 text-black text-[0.7rem] font-bold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="inline-flex items-center justify-center gap-1.5 w-[5.5rem] px-4 py-1.5 rounded-lg bg-[#315EFB] hover:bg-[#2548D0] text-white text-[0.7rem] font-bold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                       >
                         {claimingPeriod === row.period && <LuLoader className="h-3 w-3 animate-spin" />}
                         {claimingPeriod === row.period ? 'Claiming' : 'Claim'}

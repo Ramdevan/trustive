@@ -1,14 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #EBE9EB;
-  --foreground: #181B22;
-  --sidebar-bg: #FFFFFF;
-  --card-bg: #FFFFFF;
+  --background: #FFFFFF;
+  --foreground: #1E1E1E;
+  --sidebar-bg: #ECE9EA;
+  --card-bg: #ECE9EA;
   --accent: #E5B258;
-  --accent-foreground: #181B22;
+  --accent-foreground: #1E1E1E;
   --muted: #6B7280;
-  --brand-navy: #212E73;
+  --brand-navy: #315EFB;
+  --heading: #001060;
 }
 
 @theme inline {
@@ -20,17 +21,38 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
   --color-navy: var(--brand-navy);
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui;
+  --color-heading: var(--heading);
+  --color-zinc-900: #1E1E1E;
+  --color-zinc-800: #1E1E1E;
+  --color-zinc-700: #1E1E1E;
+  --color-zinc-600: #1E1E1E;
+  --color-zinc-500: #1E1E1E;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-manrope), sans-serif;
+  --font-manrope: var(--font-manrope), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
 }
 
 body {
-  background-color: var(--background);
-  background-image: radial-gradient(120% 120% at 85% 10%, #F5F4F6 0%, #EBE9EB 45%, #DFDDE2 100%);
-  background-attachment: fixed;
+  background-color: #FFFFFF;
+  background-image: none;
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #001060;
+  font-family: var(--font-manrope), var(--font-heading), sans-serif;
+}
+
+.font-manrope {
+  font-family: var(--font-manrope), sans-serif;
+}
+
+.font-inter {
+  font-family: var(--font-inter), sans-serif;
 }
 
 
@@ -73,15 +95,15 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active {
   -webkit-background-clip: text;
-  -webkit-text-fill-color: #181B22 !important;
+  -webkit-text-fill-color: #1E1E1E !important;
   box-shadow: 0 0 0 1000px #FFFFFF inset !important;
   -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
   transition: background-color 5000s ease-in-out 0s;
-  caret-color: #181B22;
+  caret-color: #1E1E1E;
 }
 
 input:-moz-autofill,
 input:-moz-autofill-preview {
   background-color: #FFFFFF !important;
-  color: #181B22 !important;
+  color: #1E1E1E !important;
 }

@@ -39,13 +39,13 @@ const ModalContent = ({ t, resolve, message }: { t: any; resolve: (val: boolean)
         } max-w-sm w-full bg-[#0D0D0D] border border-white/10 rounded-[28px] overflow-hidden pointer-events-auto flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.8),0_0_30px_rgba(229,178,88,0.05)] relative z-10 transition-all`}
       >
         {/* Visual Accent Bar */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-accent rounded-b-full opacity-50" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-[#315EFB] rounded-b-full opacity-80" />
 
         <div className="p-8 pb-6">
           <div className="flex flex-col items-center text-center space-y-5">
             {/* Icon Container */}
-            <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center border border-accent/20 rotate-3 shadow-[0_0_20px_rgba(229,178,88,0.1)]">
-              <svg className="h-8 w-8 text-accent -rotate-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-16 h-16 rounded-2xl bg-[#315EFB]/10 flex items-center justify-center border border-[#315EFB]/20 rotate-3 shadow-[0_0_20px_rgba(49,94,251,0.15)]">
+              <svg className="h-8 w-8 text-[#315EFB] -rotate-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
@@ -77,7 +77,7 @@ const ModalContent = ({ t, resolve, message }: { t: any; resolve: (val: boolean)
               toast.dismiss(t.id);
               resolve(true);
             }}
-            className="flex-1 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-black bg-accent hover:opacity-90 transition-all cursor-pointer shadow-[0_10px_20px_rgba(229,178,88,0.2)]"
+            className="flex-1 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-white bg-[#315EFB] hover:bg-[#2548D0] transition-all cursor-pointer shadow-[0_10px_20px_rgba(49,94,251,0.2)]"
           >
             Confirm
           </button>

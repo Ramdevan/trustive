@@ -34,7 +34,7 @@ export default function Providers({
     return (
         <WagmiProvider config={wagmiConfig} initialState={initialState}>
             <QueryClientProvider client={queryClient}>
-                <RainbowKitProvider theme={darkTheme()}>
+                <RainbowKitProvider theme={darkTheme({ accentColor: '#315EFB', accentColorForeground: '#ffffff' })}>
                     <Web3Provider>
                         {children}
                     </Web3Provider>

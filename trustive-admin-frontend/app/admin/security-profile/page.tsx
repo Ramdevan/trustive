@@ -157,19 +157,19 @@ export default function AdminProfile() {
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header */}
             <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-paytone text-zinc-900 uppercase tracking-tight">Security & Profile</h1>
+                <h1 className="text-3xl font-manrope font-extrabold text-[#001060] uppercase tracking-tight">Security & Profile</h1>
                 <p className="text-zinc-500 text-sm font-medium">Manage your administrative credentials and multi-factor authentication</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Password Management */}
-                <div className="bg-white rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-8 space-y-8">
+                <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-8 space-y-8">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-[#212E73]/10 rounded-2xl flex items-center justify-center border border-[#212E73]/20">
-                            <Lock className="w-6 h-6 text-[#212E73]" />
+                        <div className="w-12 h-12 bg-[#315EFB]/10 rounded-2xl flex items-center justify-center border border-[#315EFB]/20">
+                            <Lock className="w-6 h-6 text-[#315EFB]" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold text-zinc-900 uppercase tracking-wider">Change Password</h3>
+                            <h3 className="text-lg font-bold text-[#001060] uppercase tracking-wider">Change Password</h3>
                             <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest">Update your access token</p>
                         </div>
                     </div>
@@ -184,7 +184,7 @@ export default function AdminProfile() {
                                         required
                                         value={passwords.current}
                                         onChange={(e) => setPasswords({...passwords, current: e.target.value})}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                                         placeholder="••••••••••••"
                                     />
                                     <button
@@ -205,7 +205,7 @@ export default function AdminProfile() {
                                         required
                                         value={passwords.new}
                                         onChange={(e) => setPasswords({...passwords, new: e.target.value})}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                                         placeholder="Enter new password"
                                     />
                                     <button
@@ -226,7 +226,7 @@ export default function AdminProfile() {
                                         required
                                         value={passwords.confirm}
                                         onChange={(e) => setPasswords({...passwords, confirm: e.target.value})}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                                         placeholder="Confirm new password"
                                     />
                                     <button
@@ -244,7 +244,7 @@ export default function AdminProfile() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#212E73] hover:bg-[#1a255c] text-white py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md"
+                            className="w-full bg-[#315EFB] hover:bg-[#2548D0] text-white py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md shadow-[#315EFB]/20"
                         >
                             {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Update Credentials"}
                         </button>
@@ -252,14 +252,14 @@ export default function AdminProfile() {
                 </div>
 
                 {/* 2FA Management */}
-                <div className="bg-white rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-8 space-y-8 flex flex-col">
+                <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-8 space-y-8 flex flex-col">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center border border-blue-200">
                                 <Shield className="w-6 h-6 text-blue-600" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-zinc-900 uppercase tracking-wider">Multi-Factor Auth</h3>
+                                <h3 className="text-lg font-bold text-[#001060] uppercase tracking-wider">Multi-Factor Auth</h3>
                                 <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest">Enhanced Identity Verification</p>
                             </div>
                         </div>
@@ -278,7 +278,7 @@ export default function AdminProfile() {
                                 <Smartphone className={`w-16 h-16 ${twoFaStatus ? 'text-green-600' : 'text-zinc-400'}`} />
                             </div>
                             <div className="max-w-[18rem] space-y-4">
-                                <h4 className="text-zinc-900 font-bold text-sm uppercase tracking-wider">
+                                <h4 className="text-[#001060] font-bold text-sm uppercase tracking-wider">
                                     {twoFaStatus ? "Verification Active" : "Level Up Security"}
                                 </h4>
                                 <p className="text-zinc-500 text-xs leading-relaxed uppercase tracking-widest font-medium">
@@ -294,7 +294,7 @@ export default function AdminProfile() {
                                 className={`w-full py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] cursor-pointer ${
                                     twoFaStatus 
                                         ? "bg-zinc-100 text-zinc-800 hover:bg-zinc-200 border border-zinc-200" 
-                                        : "bg-[#212E73] text-white hover:bg-[#1a255c] shadow-md"
+                                        : "bg-[#315EFB] text-white hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20"
                                 }`}
                             >
                                 {verifying ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (twoFaStatus ? "Disable 2FA" : "Enable Multi-Factor")}
@@ -307,7 +307,7 @@ export default function AdminProfile() {
                                     <img src={setupData?.qrCode} alt="Setup QR" className="w-40 h-40" />
                                 </div>
                                 <div className="text-center space-y-2">
-                                    <p className="text-[10px] font-black text-[#212E73] uppercase tracking-[4px]">Backup Secret</p>
+                                    <p className="text-[10px] font-black text-[#315EFB] uppercase tracking-[4px]">Backup Secret</p>
                                     <code className="bg-zinc-100 px-4 py-2 rounded-xl text-zinc-900 font-mono text-xs border border-zinc-200 inline-block select-all">
                                         {setupData?.secret}
                                     </code>
@@ -324,13 +324,13 @@ export default function AdminProfile() {
                                         maxLength={6}
                                         value={verificationCode}
                                         onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ""))}
-                                        className="flex-1 bg-zinc-50 border border-zinc-200 rounded-2xl p-4 text-zinc-900 text-center text-xl font-black tracking-widest focus:border-[#212E73] outline-none transition-all"
+                                        className="flex-1 bg-zinc-50 border border-zinc-200 rounded-2xl p-4 text-zinc-900 text-center text-xl font-black tracking-widest focus:border-[#315EFB] outline-none transition-all"
                                         placeholder="000 000"
                                     />
                                     <button
                                         onClick={verifyAndEnable2FA}
                                         disabled={verificationCode.length !== 6 || verifying}
-                                        className="bg-[#212E73] text-white p-4 rounded-2xl hover:bg-[#1a255c] transition-all disabled:opacity-50 active:scale-95 cursor-pointer shadow-md"
+                                        className="bg-[#315EFB] text-white p-4 rounded-2xl hover:bg-[#2548D0] transition-all disabled:opacity-50 active:scale-95 cursor-pointer shadow-md shadow-[#315EFB]/20"
                                     >
                                         {verifying ? <Loader2 className="w-6 h-6 animate-spin" /> : <ArrowRight className="w-6 h-6" />}
                                     </button>
@@ -365,13 +365,13 @@ export default function AdminProfile() {
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
                     onClick={e => { if (e.target === e.currentTarget && !verifying) closeDisable(); }}
                 >
-                    <div className="w-full max-w-md rounded-[32px] bg-white border border-zinc-200/90 shadow-2xl p-8 space-y-6">
+                    <div className="w-full max-w-md rounded-[32px] bg-[#ECE9EA] border border-zinc-200/90 shadow-2xl p-8 space-y-6">
                         <div className="flex items-start gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center shrink-0">
                                 <AlertCircle className="w-6 h-6 text-red-500" />
                             </div>
                             <div className="space-y-1">
-                                <h3 className="text-zinc-900 font-bold text-lg uppercase tracking-wider leading-tight">Disable 2FA?</h3>
+                                <h3 className="text-[#001060] font-bold text-lg uppercase tracking-wider leading-tight">Disable 2FA?</h3>
                                 <p className="text-zinc-500 text-xs leading-relaxed">
                                     The admin panel will be protected by the password alone. Confirm it is you with
                                     your password and a current code from your authenticator app.
@@ -389,7 +389,7 @@ export default function AdminProfile() {
                                         onChange={e => setDisablePassword(e.target.value)}
                                         autoComplete="current-password"
                                         placeholder="Enter your password"
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl pl-4 pr-11 py-3 text-zinc-900 text-sm focus:border-[#212E73] outline-none placeholder:text-zinc-400"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl pl-4 pr-11 py-3 text-zinc-900 text-sm focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
                                     />
                                     <button
                                         type="button"
@@ -412,7 +412,7 @@ export default function AdminProfile() {
                                     onChange={e => setDisableCode(e.target.value.replace(/\D/g, ""))}
                                     onKeyDown={e => { if (e.key === "Enter") disable2FA(); }}
                                     placeholder="000000"
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4em] focus:border-[#212E73] outline-none placeholder:text-zinc-400"
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4em] focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
                                 />
                             </div>
                         </div>

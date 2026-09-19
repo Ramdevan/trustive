@@ -88,19 +88,19 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
   };
 
   return (
-    <div className="flex flex-col justify-between items-center text-center rounded-2xl bg-card p-6 border border-white/5 h-full min-h-[160px]">
+    <div className="flex flex-col justify-between items-center text-center rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] h-full min-h-[160px]">
       <div className="flex flex-col items-center gap-1">
-        <h3 className="text-[0.875rem] font-bold text-zinc-500 uppercase tracking-widest">Withdraw / Claim</h3>
+        <h3 className="text-[0.875rem] font-bold text-[#001060] uppercase tracking-widest">Withdraw / Claim</h3>
         <span className="text-[0.65rem] text-zinc-600 font-mono">INDEX: {vestingIndex}</span>
       </div>
 
       <div className="flex flex-col items-center">
         <span className="text-[0.75rem] text-zinc-500 uppercase tracking-wider">Claimable Now</span>
         <div className="flex items-baseline justify-center gap-2">
-          <span className="text-[2.25rem] font-bold text-accent leading-tight tracking-tighter">
+          <span className="text-[2.25rem] font-bold text-[#315EFB] leading-tight tracking-tighter">
             {Number(claimableAmount).toLocaleString('en-US', { maximumFractionDigits: 2 })}
           </span>
-          <span className="text-[1.125rem] font-black text-[#E5A93E] uppercase tracking-wider">Trustive</span>
+          <span className="text-[1.125rem] font-black text-zinc-900 uppercase tracking-wider">Trustive</span>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
         <button
           onClick={handleClaim}
           disabled={loading || Number(claimableAmount) <= 0}
-          className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-black font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-accent/10 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+          className="w-full flex items-center justify-center gap-2 bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#315EFB]/20 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
           {loading && <LuLoader className="h-4 w-4 animate-spin" />}
           Claim Tokens

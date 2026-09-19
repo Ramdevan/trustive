@@ -101,8 +101,8 @@ export default function UsersPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                 <div>
                     <div className="flex items-center gap-3">
-                        <h1 className="text-3xl font-black text-zinc-900 uppercase tracking-tight">User Registry</h1>
-                        <span className="px-3 py-1 bg-[#212E73]/10 border border-[#212E73]/20 rounded-full text-[10px] font-bold text-[#212E73] uppercase tracking-widest">
+                        <h1 className="text-3xl font-black text-[#001060] uppercase tracking-tight">User Registry</h1>
+                        <span className="px-3 py-1 bg-[#315EFB]/10 border border-[#315EFB]/20 rounded-full text-[10px] font-bold text-[#315EFB] uppercase tracking-widest">
                             Global Asset Directory
                         </span>
                     </div>
@@ -117,17 +117,17 @@ export default function UsersPage() {
                         placeholder="Search wallet, name or email..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-white border border-zinc-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] transition-colors shadow-sm"
+                        className="w-full bg-white border border-zinc-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] transition-colors shadow-sm"
                     />
                 </div>
             </div>
 
             {/* Users Table */}
-            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
+            <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-[#212E73] text-white uppercase font-bold text-xs tracking-widest">
+                            <tr className="bg-[#315EFB] text-white uppercase font-bold text-xs tracking-widest">
                                 <th className="px-10 py-6 text-center rounded-tl-[32px]">S/No</th>
                                 <th className="px-10 py-6 text-center">WALLET ADDRESS</th>
                                 <th className="px-10 py-6 text-center">TRUSTIVE BALANCE</th>
@@ -135,11 +135,11 @@ export default function UsersPage() {
                                 <th className="px-12 py-6 text-center rounded-tr-[32px]">ACCOUNT PROFILE</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-zinc-200">
+                        <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                             {isLoading ? (
                                 <tr>
                                     <td colSpan={5} className="py-24 text-center">
-                                        <div className="animate-spin h-10 w-10 border-b-2 border-[#212E73] mx-auto rounded-full" />
+                                        <div className="animate-spin h-10 w-10 border-b-2 border-[#315EFB] mx-auto rounded-full" />
                                         <p className="mt-4 text-zinc-400 font-bold uppercase tracking-widest text-xs">Querying Database Registry...</p>
                                     </td>
                                 </tr>
@@ -151,7 +151,7 @@ export default function UsersPage() {
                                 </tr>
                             ) : (
                                 filteredUsers.map((u, i) => (
-                                    <tr key={u.id} className="hover:bg-zinc-50/70 transition-colors group">
+                                    <tr key={u.id} className="hover:bg-zinc-200/50 transition-colors group">
                                         <td className="px-10 py-6 text-center">
                                             <span className="text-zinc-400 font-mono text-base">
                                                 {(i + 1).toString().padStart(2, '0')}
@@ -167,7 +167,7 @@ export default function UsersPage() {
                                                             className="w-full h-full object-cover"
                                                         />
                                                     ) : (
-                                                        <UserIcon className="w-6 h-6 text-[#212E73]/60" />
+                                                        <UserIcon className="w-6 h-6 text-[#315EFB]/60" />
                                                     )}
                                                 </div>
                                                 <div className="flex flex-col min-w-0 items-start">
@@ -188,7 +188,7 @@ export default function UsersPage() {
                                                 <span className="text-zinc-900 font-bold text-lg">
                                                     {formatDecimal(u.ptc_tokens_purchased, 5, 2)}
                                                 </span>
-                                                <span className="text-[10px] text-[#212E73] font-bold uppercase tracking-wider mt-0.5">Trustive Tokens</span>
+                                                <span className="text-[10px] text-[#315EFB] font-bold uppercase tracking-wider mt-0.5">Trustive Tokens</span>
                                             </div>
                                         </td>
                                         <td className="px-10 py-6 text-center">
@@ -217,7 +217,7 @@ export default function UsersPage() {
                                         <td className="px-12 py-6 text-center">
                                             <button
                                                 onClick={() => setSelectedUser({ id: u.id, wallet_address: u.wallet_address || null })}
-                                                className="px-6 py-2.5 bg-[#212E73] hover:bg-[#1a255c] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer"
+                                                className="px-6 py-2.5 bg-[#315EFB] hover:bg-[#2548D0] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer"
                                             >
                                                 View Profile
                                             </button>
@@ -259,7 +259,7 @@ function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { ad
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/50 backdrop-blur-sm px-4" onClick={onClose} />
 
-            <div className="relative w-full max-w-4xl bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="relative w-full max-w-4xl bg-[#ECE9EA] rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
                 {/* Header */}
                 <div className="p-8 border-b border-zinc-200 bg-zinc-50/50 flex items-center justify-between">
                     <div className="flex items-center gap-6">
@@ -278,7 +278,7 @@ function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { ad
 
                         <div>
                             <div className="flex items-center gap-3 mb-1">
-                                <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">
+                                <h2 className="text-2xl font-bold text-[#001060] tracking-tight">
                                     {name || "User Profile"}
                                 </h2>
                                 {kycStatus === 'verified' ? (
@@ -308,7 +308,7 @@ function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { ad
                                     <p className="text-zinc-500 font-mono text-sm">{address || 'No Wallet Linked'}</p>
                                     {address && <CopyAddressButton address={address} />}
                                 </div>
-                                <p className="text-[#212E73] text-xs font-semibold">{email}</p>
+                                <p className="text-[#315EFB] text-xs font-semibold">{email}</p>
                             </div>
                         </div>
                     </div>
@@ -324,7 +324,7 @@ function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { ad
                 <div className="p-8">
                     {isLoading ? (
                         <div className="py-24 text-center">
-                            <div className="animate-spin h-10 w-10 border-b-2 border-[#212E73] mx-auto rounded-full" />
+                            <div className="animate-spin h-10 w-10 border-b-2 border-[#315EFB] mx-auto rounded-full" />
                             <p className="mt-4 text-zinc-400 font-bold uppercase tracking-widest text-xs">Assembling Data...</p>
                         </div>
                     ) : stats ? (
@@ -334,7 +334,7 @@ function ProfileModal({ address, userId, name, email, kycStatus, onClose }: { ad
                                 value={formatDecimal(stats.balance, 5, 2)}
                                 unit="Trustive"
                                 icon={TrendingUp}
-                                color="text-[#212E73]"
+                                color="text-[#315EFB]"
                             />
                             <StatCard
                                 label="Total USDT"
@@ -398,7 +398,7 @@ function StatCard({ label, value, unit, icon: Icon, color }: {
                 <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.1em] mb-1">{label}</span>
                 <div className="flex items-baseline gap-1.5">
                     <span className="text-2xl font-bold text-zinc-900 tracking-tight">{value}</span>
-                    <span className="text-[10px] font-bold text-[#212E73] uppercase tracking-widest">{unit}</span>
+                    <span className="text-[10px] font-bold text-[#315EFB] uppercase tracking-widest">{unit}</span>
                 </div>
             </div>
         </div>

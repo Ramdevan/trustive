@@ -6,7 +6,7 @@ if (typeof global !== "undefined" && global.localStorage && typeof global.localS
 }
 
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Manrope } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import AdminLayout from "@/components/AdminLayout";
@@ -21,6 +21,11 @@ const inter = Inter({
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
 });
 
@@ -43,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${manrope.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
         <Providers>
           <AdminLayout>

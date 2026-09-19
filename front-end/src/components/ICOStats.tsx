@@ -19,8 +19,8 @@ interface StatItemProps {
 
 const StatItem: React.FC<StatItemProps> = ({ label, value }) => (
   <div className="space-y-1">
-    <div className="text-[1rem] font-normal text-[#FAF7F2] uppercase tracking-wider">{label}</div>
-    <div className="text-[1.5rem] font-medium text-[#FAF7F2]">{value}</div>
+    <div className="text-[0.875rem] font-semibold text-zinc-500 uppercase tracking-wider">{label}</div>
+    <div className="text-[1.5rem] font-bold text-zinc-900">{value}</div>
   </div>
 );
 
@@ -108,7 +108,7 @@ const ICOStats: React.FC = () => {
   const maxPurchase = formatTokens(sale?.maximum_purchase);
 
   return (
-    <div className="rounded-3xl bg-card p-6 sm:p-10 border border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-y-8 sm:gap-y-12 gap-x-8">
+    <div className="rounded-3xl bg-[#ECE9EA] p-6 sm:p-10 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] grid grid-cols-1 sm:grid-cols-2 gap-y-8 sm:gap-y-12 gap-x-8">
       <div className="text-left"><StatItem label="Token Price" value={tokenPrice} /></div>
       <div className="text-right"><StatItem label="Ends-On" value={endsOn} /></div>
 

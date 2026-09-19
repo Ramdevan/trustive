@@ -394,33 +394,33 @@ export default function Profile() {
         <Layout>
             <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <header className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-bold text-white tracking-tight">Account Settings</h1>
+                    <h1 className="text-3xl font-bold text-[#001060] tracking-tight">Account Settings</h1>
                     <p className="text-zinc-500">Manage your profile and security preferences</p>
                 </header>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column: Avatar & Basic Info */}
                     <div className="lg:col-span-1 space-y-6">
-                        <div className="bg-card border border-white/5 rounded-3xl p-8 flex flex-col items-center text-center shadow-xl shadow-black/20">
+                        <div className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl p-8 flex flex-col items-center text-center shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                             <div className="relative group">
-                                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-accent/20 bg-zinc-900 flex items-center justify-center">
+                                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-zinc-300 bg-white flex items-center justify-center">
                                     {user.profile_pic ? (
                                         <img src={user.profile_pic} alt="Avatar" className="w-full h-full object-cover" />
                                     ) : (
-                                        <LuUser className="w-12 h-12 text-accent/40" />
+                                        <LuUser className="w-12 h-12 text-[#315EFB]/40" />
                                     )}
                                 </div>
-                                <label className="absolute bottom-0 right-0 w-10 h-10 bg-accent rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform border-4 border-card">
-                                    <LuCamera className="w-4 h-4 text-black" />
+                                <label className="absolute bottom-0 right-0 w-10 h-10 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform border-4 border-[#ECE9EA]">
+                                    <LuCamera className="w-4 h-4 text-white" />
                                     <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                                 </label>
                             </div>
-                            <h2 className="mt-6 text-xl font-bold text-white uppercase tracking-tight">{user.name}</h2>
+                            <h2 className="mt-6 text-xl font-bold text-[#001060] uppercase tracking-tight">{user.name}</h2>
                             
                             <div className="mt-4 w-full space-y-3">
                                 <div className="flex flex-col items-center gap-1">
                                     <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Account Wallet</p>
-                                    <p className="text-sm text-zinc-300 font-mono break-all px-2">
+                                    <p className="text-sm text-zinc-700 font-mono break-all px-2">
                                         {user.wallet_address || 'No wallet linked'}
                                     </p>
                                 </div>
@@ -430,7 +430,7 @@ export default function Profile() {
                                     <button
                                         onClick={handleLinkWallet}
                                         disabled={saving}
-                                        className="w-full flex items-center justify-center gap-2 py-3 bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 rounded-xl text-xs font-bold transition-all"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-[#315EFB]/10 hover:bg-[#315EFB]/20 text-[#315EFB] border border-[#315EFB]/30 rounded-xl text-xs font-bold transition-all"
                                     >
                                         <LuWallet className="w-4 h-4" />
                                         {saving ? 'Linking...' : 'Link Current Wallet'}
@@ -454,12 +454,12 @@ export default function Profile() {
                     {/* Right Column: Settings Forms */}
                     <div className="lg:col-span-2 space-y-8">
                         {/* Personal Details */}
-                        <section className="bg-card border border-white/5 rounded-3xl overflow-hidden shadow-xl shadow-black/20">
-                            <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-                                    <LuMail className="w-4 h-4 text-accent" />
+                        <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                            <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-[#315EFB]/10 flex items-center justify-center">
+                                    <LuMail className="w-4 h-4 text-[#315EFB]" />
                                 </div>
-                                <h3 className="text-lg font-bold text-white">Personal Information</h3>
+                                <h3 className="text-lg font-bold text-[#001060]">Personal Information</h3>
                             </div>
                             <div className="p-8 space-y-6">
                                 <div>
@@ -470,12 +470,12 @@ export default function Profile() {
                                             value={newName}
                                             onChange={(e) => setNewName(e.target.value)}
                                             placeholder="Enter your full name"
-                                            className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-accent/50 focus:ring-0 transition-colors"
+                                            className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:ring-0 transition-colors"
                                         />
                                         <button
                                             onClick={handleUpdateName}
                                             disabled={saving || !newName || newName === user.name}
-                                            className="px-8 py-3 bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 rounded-xl text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="px-8 py-3 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#315EFB]/20"
                                         >
                                             Update Name
                                         </button>
@@ -489,7 +489,7 @@ export default function Profile() {
                                             type="text"
                                             disabled
                                             value={user.email}
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-zinc-400 cursor-not-allowed"
+                                            className="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-500 cursor-not-allowed"
                                         />
                                         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-[10px] text-zinc-500 uppercase font-bold">
                                             <LuCircleCheck className="w-3 h-3 text-green-500" />
@@ -502,12 +502,12 @@ export default function Profile() {
                         </section>
 
                         {/* Change Password */}
-                        <section className="bg-card border border-white/5 rounded-3xl overflow-hidden shadow-xl shadow-black/20">
-                            <div className="px-6 py-5 border-b border-white/5 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-                                    <LuLock className="w-4 h-4 text-accent" />
+                        <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                            <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-[#315EFB]/10 flex items-center justify-center">
+                                    <LuLock className="w-4 h-4 text-[#315EFB]" />
                                 </div>
-                                <h3 className="text-lg font-bold text-white">Security & Password</h3>
+                                <h3 className="text-lg font-bold text-[#001060]">Security & Password</h3>
                             </div>
                             <form onSubmit={handlePasswordChange} className="p-8 space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -519,13 +519,13 @@ export default function Profile() {
                                                 required
                                                 value={passwords.currentPassword}
                                                 onChange={(e) => setPasswords(p => ({ ...p, currentPassword: e.target.value }))}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 pr-11 text-white focus:border-accent/50 focus:ring-0 transition-colors"
+                                                className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#315EFB] focus:ring-0 transition-colors"
                                                 placeholder="••••••••"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors cursor-pointer p-1"
+                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer p-1"
                                                 title={showCurrentPassword ? "Hide password" : "Show password"}
                                             >
                                                 {showCurrentPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -540,13 +540,13 @@ export default function Profile() {
                                                 required
                                                 value={passwords.newPassword}
                                                 onChange={(e) => setPasswords(p => ({ ...p, newPassword: e.target.value }))}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 pr-11 text-white focus:border-accent/50 focus:ring-0 transition-colors"
+                                                className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#315EFB] focus:ring-0 transition-colors"
                                                 placeholder="••••••••"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowNewPassword(!showNewPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors cursor-pointer p-1"
+                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer p-1"
                                                 title={showNewPassword ? "Hide password" : "Show password"}
                                             >
                                                 {showNewPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -561,13 +561,13 @@ export default function Profile() {
                                                 required
                                                 value={passwords.confirmPassword}
                                                 onChange={(e) => setPasswords(p => ({ ...p, confirmPassword: e.target.value }))}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 pr-11 text-white focus:border-accent/50 focus:ring-0 transition-colors"
+                                                className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-colors"
                                                 placeholder="••••••••"
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors cursor-pointer p-1"
+                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer p-1"
                                                 title={showConfirmPassword ? "Hide password" : "Show password"}
                                             >
                                                 {showConfirmPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -578,7 +578,7 @@ export default function Profile() {
                                 <button
                                     type="submit"
                                     disabled={saving}
-                                    className="w-full md:w-auto px-12 py-4 bg-accent hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-accent/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                    className="w-full md:w-auto px-12 py-4 bg-[#315EFB] hover:bg-[#2548D0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-[#315EFB]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                                 >
                                     {saving ? 'Saving...' : 'Update Password'}
                                 </button>
@@ -586,16 +586,16 @@ export default function Profile() {
                         </section>
 
                         {/* Multi-Factor Authentication */}
-                        <section className="bg-card border border-white/5 rounded-3xl overflow-hidden shadow-xl shadow-black/20">
-                            <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+                        <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                            <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
                                         <Shield className="w-4 h-4 text-blue-500" />
                                     </div>
-                                    <h3 className="text-lg font-bold text-white">Multi-Factor Auth</h3>
+                                    <h3 className="text-lg font-bold text-[#001060]">Multi-Factor Auth</h3>
                                 </div>
                                 <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
-                                    twoFaEnabled ? "bg-green-500/10 border-green-500/20 text-green-500" : "bg-red-500/10 border-red-500/20 text-red-500"
+                                    twoFaEnabled ? "bg-green-500/10 border-green-500/20 text-green-600" : "bg-red-500/10 border-red-500/20 text-red-500"
                                 }`}>
                                     {twoFaEnabled ? "Active" : "Inactive"}
                                 </div>
@@ -604,11 +604,11 @@ export default function Profile() {
                             <div className="p-8">
                                 {!show2FASetup ? (
                                     <div className="flex flex-col md:flex-row items-center gap-8">
-                                        <div className="w-20 h-20 bg-zinc-900 border border-white/5 rounded-3xl flex items-center justify-center shrink-0">
-                                            <Smartphone className={`w-10 h-10 ${twoFaEnabled ? "text-green-500" : "text-zinc-600"}`} />
+                                        <div className="w-20 h-20 bg-white border border-zinc-200 rounded-3xl flex items-center justify-center shrink-0">
+                                            <Smartphone className={`w-10 h-10 ${twoFaEnabled ? "text-green-500" : "text-zinc-400"}`} />
                                         </div>
                                         <div className="space-y-2 flex-1 text-center md:text-left">
-                                            <h4 className="text-white font-bold uppercase tracking-wider text-sm">
+                                            <h4 className="text-[#001060] font-bold uppercase tracking-wider text-sm">
                                                 {twoFaEnabled ? "Encryption Active" : "Add extra layer of security"}
                                             </h4>
                                             <p className="text-zinc-500 text-xs leading-relaxed max-w-[28rem]">
@@ -622,7 +622,7 @@ export default function Profile() {
                                             onClick={twoFaEnabled ? () => setShowDisable2FA(true) : initiate2FASetup}
                                             disabled={saving}
                                             className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[2px] transition-all active:scale-95 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed ${
-                                                twoFaEnabled ? "bg-zinc-800 text-white hover:bg-zinc-700" : "bg-blue-500 text-white hover:bg-blue-600 shadow-lg shadow-blue-500/20"
+                                                twoFaEnabled ? "bg-zinc-800 text-white hover:bg-zinc-700" : "bg-[#315EFB] text-white hover:bg-[#2548D0] shadow-lg shadow-[#315EFB]/20"
                                             }`}
                                         >
                                             {saving ? "Please wait..." : twoFaEnabled ? "Disable 2FA" : "Set Up 2FA"}
@@ -631,16 +631,16 @@ export default function Profile() {
                                 ) : (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in zoom-in-95 duration-500">
                                         <div className="flex flex-col items-center justify-center space-y-3">
-                                            <div className="p-2 bg-white rounded-2xl">
+                                            <div className="p-2 bg-white rounded-2xl border border-zinc-200">
                                                 <img src={qrCode} alt="Setup QR" className="w-32 h-32" />
                                             </div>
                                             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-center">
                                                 Scan with Google <br /> Authenticator
                                             </p>
                                             {twoFaSecret && (
-                                                <div className="w-full max-w-[14rem] bg-black/40 border border-white/10 rounded-xl p-2.5 text-center space-y-1">
+                                                <div className="w-full max-w-[14rem] bg-white border border-zinc-200 rounded-xl p-2.5 text-center space-y-1">
                                                     <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider block">Manual Entry Key</span>
-                                                    <span className="font-mono text-[11px] text-accent font-bold select-all tracking-wider break-all block">{twoFaSecret}</span>
+                                                    <span className="font-mono text-[11px] text-[#315EFB] font-bold select-all tracking-wider break-all block">{twoFaSecret}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -653,13 +653,13 @@ export default function Profile() {
                                                         maxLength={6}
                                                         value={twoFaCodeInput}
                                                         onChange={(e) => setTwoFaCodeInput(e.target.value.replace(/\D/g, ""))}
-                                                        className="flex-1 min-w-0 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-center font-bold tracking-[0.4rem] focus:border-blue-500 outline-none"
+                                                        className="flex-1 min-w-0 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4rem] focus:border-[#315EFB] outline-none"
                                                         placeholder="000000"
                                                     />
                                                     <button
                                                         onClick={verifyAndEnable2FA}
                                                         disabled={twoFaCodeInput.length !== 6 || saving}
-                                                        className="shrink-0 bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50"
+                                                        className="shrink-0 bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 shadow-md shadow-[#315EFB]/20"
                                                     >
                                                         {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify"}
                                                     </button>
@@ -667,7 +667,7 @@ export default function Profile() {
                                             </div>
                                             <button 
                                                 onClick={() => setShow2FASetup(false)}
-                                                className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest hover:text-white transition-colors"
+                                                className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest hover:text-zinc-900 transition-colors"
                                             >
                                                 Cancel Setup
                                             </button>
@@ -685,13 +685,13 @@ export default function Profile() {
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
                     onClick={e => { if (e.target === e.currentTarget && !saving) closeDisable2FA(); }}
                 >
-                    <div className="w-full max-w-md rounded-3xl bg-card border border-white/10 p-6 space-y-6">
+                    <div className="w-full max-w-md rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-6 space-y-6 shadow-xl">
                         <div className="flex items-start gap-3">
                             <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
                                 <LuTriangleAlert className="w-5 h-5 text-red-500" />
                             </div>
                             <div className="space-y-1">
-                                <h3 className="text-white font-bold text-lg leading-tight">Disable two-factor auth?</h3>
+                                <h3 className="text-[#001060] font-bold text-lg leading-tight">Disable two-factor auth?</h3>
                                 <p className="text-zinc-500 text-xs leading-relaxed">
                                     Your account will be protected by your password alone. Confirm it is you by
                                     entering your password and a current code from your authenticator app.
@@ -709,12 +709,12 @@ export default function Profile() {
                                         onChange={e => setDisablePassword(e.target.value)}
                                         autoComplete="current-password"
                                         placeholder="Enter your password"
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl pl-4 pr-11 py-3 text-white text-sm focus:border-blue-500 outline-none placeholder:text-zinc-700"
+                                        className="w-full bg-white border border-zinc-200 rounded-xl pl-4 pr-11 py-3 text-zinc-900 text-sm focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowDisablePassword(v => !v)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors"
                                         aria-label={showDisablePassword ? 'Hide password' : 'Show password'}
                                     >
                                         {showDisablePassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -732,7 +732,7 @@ export default function Profile() {
                                     onChange={e => setDisableCode(e.target.value.replace(/\D/g, ''))}
                                     onKeyDown={e => { if (e.key === 'Enter') disable2FA(); }}
                                     placeholder="000000"
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-center font-bold tracking-[0.4rem] focus:border-blue-500 outline-none placeholder:text-zinc-700"
+                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4rem] focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
                                 />
                             </div>
                         </div>
@@ -741,14 +741,14 @@ export default function Profile() {
                             <button
                                 onClick={closeDisable2FA}
                                 disabled={saving}
-                                className="flex-1 py-3.5 rounded-xl bg-white/5 border border-white/5 text-zinc-300 hover:text-white hover:bg-white/10 font-bold text-[0.8rem] transition-all disabled:opacity-40"
+                                className="flex-1 py-3.5 rounded-xl bg-zinc-200/70 border border-zinc-300/80 text-zinc-700 hover:text-zinc-900 hover:bg-zinc-200 font-bold text-[0.8rem] transition-all disabled:opacity-40 cursor-pointer"
                             >
                                 Keep 2FA On
                             </button>
                             <button
                                 onClick={disable2FA}
                                 disabled={saving || !disablePassword || disableCode.length !== 6}
-                                className="flex-1 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-[0.8rem] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="flex-1 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-[0.8rem] transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                             >
                                 {saving ? 'Verifying...' : 'Disable 2FA'}
                             </button>

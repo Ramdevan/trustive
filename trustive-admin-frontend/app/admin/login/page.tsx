@@ -76,17 +76,17 @@ export default function AdminLogin() {
             <div className="w-full max-w-[420px] relative z-10 space-y-8">
                 {/* Logo and Header */}
                 <div className="text-center space-y-6">
-                    <div className="relative inline-flex items-center justify-center w-20 h-20 bg-[#212E73] rounded-2xl rotate-12 shadow-lg shadow-[#212E73]/20">
+                    <div className="relative inline-flex items-center justify-center w-20 h-20 bg-[#315EFB] rounded-2xl rotate-12 shadow-lg shadow-[#315EFB]/20">
                         <ShieldCheck className="w-10 h-10 text-white -rotate-12" />
                     </div>
                     <div className="space-y-2">
-                        <h1 className="text-4xl font-paytone text-zinc-900 tracking-tight uppercase">TRUSTIVE ADMIN</h1>
+                        <h1 className="text-4xl font-manrope font-extrabold text-[#001060] tracking-tight uppercase">TRUSTIVE ADMIN</h1>
                         <p className="text-zinc-500 font-medium text-[10px] uppercase tracking-[6px]">Secure Access Terminal</p>
                     </div>
                 </div>
 
                 {/* Login Card */}
-                <div className="bg-white rounded-[32px] border border-zinc-200/90 p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-500">
+                <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all duration-500">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {error && (
                             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center animate-shake">
@@ -106,7 +106,7 @@ export default function AdminLogin() {
                                             required
                                             value={credentials.email}
                                             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                                            className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-xl focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none transition-all text-zinc-900 text-sm placeholder:text-zinc-400 font-medium"
+                                            className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-xl focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none transition-all text-zinc-900 text-sm placeholder:text-zinc-400 font-medium"
                                             placeholder="admin@trustive.com"
                                         />
                                     </div>
@@ -121,7 +121,7 @@ export default function AdminLogin() {
                                                 required
                                                 value={credentials.password}
                                                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                                                className="w-full px-5 py-4 pr-12 bg-zinc-50 border border-zinc-200 rounded-xl focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none transition-all text-zinc-900 text-sm placeholder:text-zinc-400 font-medium"
+                                                className="w-full px-5 py-4 pr-12 bg-zinc-50 border border-zinc-200 rounded-xl focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none transition-all text-zinc-900 text-sm placeholder:text-zinc-400 font-medium"
                                                 placeholder="••••••••••••"
                                             />
                                             <button
@@ -141,7 +141,7 @@ export default function AdminLogin() {
                                 </>
                             ) : (
                                 <div className="space-y-2 py-4 animate-in fade-in duration-300">
-                                    <label className="text-[10px] font-bold text-[#212E73] uppercase tracking-[4px] px-1 block text-center mb-4">
+                                    <label className="text-[10px] font-bold text-[#315EFB] uppercase tracking-[4px] px-1 block text-center mb-4">
                                         Verification Required
                                     </label>
                                     <div className="relative">
@@ -152,7 +152,7 @@ export default function AdminLogin() {
                                             autoFocus
                                             value={twoFaCode}
                                             onChange={(e) => setTwoFaCode(e.target.value.replace(/\D/g, ""))}
-                                            className="w-full px-5 py-6 bg-zinc-50 border-2 border-[#212E73]/30 rounded-2xl focus:border-[#212E73] outline-none transition-all text-zinc-900 text-3xl text-center tracking-[1rem] font-bold placeholder:text-zinc-300"
+                                            className="w-full px-5 py-6 bg-zinc-50 border-2 border-[#315EFB]/30 rounded-2xl focus:border-[#315EFB] outline-none transition-all text-zinc-900 text-3xl text-center tracking-[1rem] font-bold placeholder:text-zinc-300"
                                             placeholder="000000"
                                         />
                                     </div>
@@ -173,7 +173,7 @@ export default function AdminLogin() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#212E73] hover:bg-[#1a255c] text-white py-4 rounded-xl font-paytone text-sm transition-all active:scale-[0.98] disabled:opacity-50 shadow-md shadow-[#212E73]/20 mt-4 cursor-pointer"
+                            className="w-full bg-[#315EFB] hover:bg-[#2548D0] text-white py-4 rounded-xl font-paytone text-sm transition-all active:scale-[0.98] disabled:opacity-50 shadow-md shadow-[#315EFB]/20 mt-4 cursor-pointer"
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center gap-2">

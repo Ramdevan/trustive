@@ -237,15 +237,15 @@ export default function ReferralPage() {
 
         <div className="flex flex-col gap-8 max-w-7xl mx-auto pb-12">
           {/* Header Section */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200/90 pb-6">
             <div>
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-accent/10 border border-accent/20 text-accent">
+                <div className="p-2.5 rounded-xl bg-[#315EFB]/10 border border-[#315EFB]/20 text-[#315EFB]">
                   <LuGift className="h-6 w-6" />
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Referral Rewards</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-[#001060] tracking-tight">Referral Rewards</h1>
               </div>
-              <p className="text-zinc-400 text-sm mt-1">
+              <p className="text-zinc-500 text-sm mt-1">
                 Share your referral link, invite friends, and earn instant {stats?.commission_rate ?? 5}% rewards in TRSIV tokens on every token purchase.
               </p>
             </div>
@@ -256,7 +256,7 @@ export default function ReferralPage() {
                 href={`${BSC_SCAN_BASE}/address/${stats?.referral_contract || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935'}`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-medium text-zinc-300 hover:text-white hover:border-white/20 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECE9EA] border border-zinc-200 text-xs font-medium text-zinc-700 hover:text-zinc-900 hover:border-zinc-300 transition-colors"
               >
                 <span>Contract: {shortenAddress(stats?.referral_contract || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935')}</span>
                 <LuExternalLink className="h-3 w-3 text-zinc-500" />
@@ -267,15 +267,15 @@ export default function ReferralPage() {
           {/* 4 Stat Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Commission Rate */}
-            <div className="flex flex-col justify-between rounded-2xl bg-card p-6 border border-white/5 hover:border-accent/20 transition-all">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/30 transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Commission Rate</span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Commission Rate</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                   Level 1 Direct
                 </span>
               </div>
               <div className="mt-4">
-                <div className="text-3xl font-bold text-white tracking-tight">
+                <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats ? `${stats.commission_rate}%` : '5%'}
                 </div>
                 <p className="text-xs text-zinc-500 mt-1">Of every TRSIV bought by referrals</p>
@@ -283,15 +283,15 @@ export default function ReferralPage() {
             </div>
 
             {/* Total Referred Users */}
-            <div className="flex flex-col justify-between rounded-2xl bg-card p-6 border border-white/5 hover:border-accent/20 transition-all">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/30 transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Referred Friends</span>
-                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Referred Friends</span>
+                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600">
                   <LuUsers className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-4">
-                <div className="text-3xl font-bold text-white tracking-tight">
+                <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats?.total_referred_users ?? 0}
                 </div>
                 <p className="text-xs text-zinc-500 mt-1">Registered with your invite link</p>
@@ -299,38 +299,38 @@ export default function ReferralPage() {
             </div>
 
             {/* Total Earned */}
-            <div className="flex flex-col justify-between rounded-2xl bg-card p-6 border border-white/5 hover:border-accent/20 transition-all">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/30 transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Total Earned</span>
-                <div className="p-2 rounded-lg bg-accent/10 text-accent">
+                <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Total Earned</span>
+                <div className="p-2 rounded-lg bg-[#315EFB]/10 text-[#315EFB]">
                   <LuCoins className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-4">
-                <div className="text-3xl font-bold text-[#FAF7F2] tracking-tight">
+                <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats ? parseFloat(stats.total_earned).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : '0.00'}
                 </div>
-                <p className="text-xs text-[#E5A93E] font-medium mt-1 uppercase tracking-wider">
+                <p className="text-xs text-[#315EFB] font-semibold mt-1 uppercase tracking-wider">
                   {stats?.token_symbol || 'TRSIV'} Lifetime
                 </p>
               </div>
             </div>
 
             {/* Claimable Balance & Button */}
-            <div className="flex flex-col justify-between rounded-2xl bg-gradient-to-br from-card via-card to-accent/5 p-6 border border-accent/20 hover:border-accent/40 transition-all relative overflow-hidden">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/40 transition-all relative overflow-hidden">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-accent uppercase tracking-wider flex items-center gap-1">
+                <span className="text-xs font-semibold text-[#315EFB] uppercase tracking-wider flex items-center gap-1">
                   <LuSparkles className="h-3.5 w-3.5" /> Claimable Rewards
                 </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#315EFB]/10 text-[#315EFB] border border-[#315EFB]/20">
                   On-Chain
                 </span>
               </div>
               <div className="mt-2">
-                <div className="text-3xl font-bold text-white tracking-tight">
+                <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats ? parseFloat(stats.claimable_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : '0.00'}
                 </div>
-                <div className="text-xs text-zinc-400 mt-0.5">
+                <div className="text-xs text-zinc-500 mt-0.5">
                   {stats?.token_symbol || 'TRSIV'} available now
                 </div>
               </div>
@@ -340,7 +340,7 @@ export default function ReferralPage() {
                   type="button"
                   onClick={handleClaim}
                   disabled={claiming || !stats || parseFloat(stats.claimable_balance || '0') <= 0}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm bg-accent hover:bg-accent/90 text-black transition-all shadow-lg shadow-accent/10 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm bg-[#315EFB] hover:bg-[#2548D0] text-white transition-all shadow-lg shadow-[#315EFB]/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {claiming ? (
                     <>
@@ -359,28 +359,26 @@ export default function ReferralPage() {
           </div>
 
           {/* Referral Link & Share Banner */}
-          <div className="rounded-3xl bg-gradient-to-r from-[#141210] via-card to-[#141210] border border-white/10 p-6 md:p-8 relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-
+          <div className="rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-6 md:p-8 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
               <div className="space-y-2 max-w-xl">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-semibold">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#315EFB]/10 border border-[#315EFB]/20 text-[#315EFB] text-xs font-semibold">
                   <LuSparkles className="h-3.5 w-3.5" />
                   <span>Instant 5% Commission Pool</span>
                 </div>
-                <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                <h2 className="text-xl md:text-2xl font-bold text-[#001060] tracking-tight">
                   Your Personal Invitation Link
                 </h2>
-                <p className="text-sm text-zinc-400 leading-relaxed">
+                <p className="text-sm text-zinc-600 leading-relaxed">
                   Anyone who signs up using this link or code is automatically bound to your account. You will receive {stats?.commission_rate ?? 5}% of their TRSIV purchase amount directly into your claimable rewards balance.
                 </p>
               </div>
 
               <div className="w-full lg:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 {/* Code badge */}
-                <div className="flex items-center justify-between sm:justify-start gap-2 px-4 py-3 rounded-2xl bg-black/50 border border-white/10">
+                <div className="flex items-center justify-between sm:justify-start gap-2 px-4 py-3 rounded-2xl bg-white border border-zinc-200">
                   <span className="text-xs text-zinc-500 font-medium">CODE:</span>
-                  <span className="font-mono text-sm font-bold text-accent tracking-wider">
+                  <span className="font-mono text-sm font-bold text-[#315EFB] tracking-wider">
                     {stats?.referral_code || '------'}
                   </span>
                   <CopyButton
@@ -392,13 +390,13 @@ export default function ReferralPage() {
                 </div>
 
                 {/* Full Link Input with 1-click copy */}
-                <div className="flex items-center gap-2 flex-1 sm:w-80 px-4 py-2 rounded-2xl bg-black/50 border border-white/10">
+                <div className="flex items-center gap-2 flex-1 sm:w-80 px-4 py-2 rounded-2xl bg-white border border-zinc-200">
                   <input
                     type="text"
                     readOnly
                     value={stats?.referral_link || ''}
                     placeholder="Generating referral link..."
-                    className="bg-transparent text-xs text-zinc-300 font-mono focus:outline-none w-full truncate"
+                    className="bg-transparent text-xs text-zinc-800 font-mono focus:outline-none w-full truncate"
                   />
                   <CopyButton
                     text={stats?.referral_link || ''}
@@ -414,7 +412,7 @@ export default function ReferralPage() {
                     type="button"
                     onClick={handleShareTwitter}
                     disabled={!stats?.referral_link}
-                    className="p-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-40"
+                    className="p-3 rounded-2xl bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 transition-all hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-40"
                     title="Share on X (Twitter)"
                   >
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
@@ -438,16 +436,16 @@ export default function ReferralPage() {
           </div>
 
           {/* Tables Section with Tabs */}
-          <div className="rounded-3xl bg-card border border-white/5 overflow-hidden">
+          <div className="rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
             {/* Tab Controls */}
-            <div className="flex items-center gap-2 p-3 border-b border-white/5 bg-white/[0.02]">
+            <div className="flex items-center gap-2 p-3 border-b border-zinc-200/90 bg-zinc-200/30">
               <button
                 type="button"
                 onClick={() => setActiveTab('friends')}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                   activeTab === 'friends'
-                    ? 'bg-accent text-black shadow-lg shadow-accent/10'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#315EFB] text-white shadow-lg shadow-[#315EFB]/20'
+                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                 }`}
               >
                 <LuUsers className="h-4 w-4" />
@@ -458,8 +456,8 @@ export default function ReferralPage() {
                 onClick={() => setActiveTab('history')}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                   activeTab === 'history'
-                    ? 'bg-accent text-black shadow-lg shadow-accent/10'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-[#315EFB] text-white shadow-lg shadow-[#315EFB]/20'
+                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                 }`}
               >
                 <LuClock className="h-4 w-4" />
@@ -473,7 +471,7 @@ export default function ReferralPage() {
                 {stats?.referred_users && stats.referred_users.length > 0 ? (
                   <table className="w-full text-left border-collapse text-sm">
                     <thead>
-                      <tr className="border-b border-white/5 text-zinc-400 text-xs uppercase tracking-wider font-semibold bg-white/[0.01]">
+                      <tr className="border-b border-zinc-200/90 text-zinc-500 text-xs uppercase tracking-wider font-semibold bg-zinc-200/50">
                         <th className="py-4 px-6">User / Friend</th>
                         <th className="py-4 px-6">Wallet Address</th>
                         <th className="py-4 px-6">Date Joined</th>
@@ -481,30 +479,30 @@ export default function ReferralPage() {
                         <th className="py-4 px-6 text-right">Bonus Earned ({stats.commission_rate}%)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5 text-zinc-300">
+                    <tbody className="divide-y divide-zinc-200/90 text-zinc-700 bg-[#ECE9EA]">
                       {stats.referred_users.map((u) => (
-                        <tr key={u.id} className="hover:bg-white/[0.02] transition-colors">
+                        <tr key={u.id} className="hover:bg-zinc-200/50 transition-colors">
                           <td className="py-4 px-6">
-                            <div className="font-medium text-white">{u.name || 'Anonymous User'}</div>
+                            <div className="font-medium text-zinc-900">{u.name || 'Anonymous User'}</div>
                             <div className="text-xs text-zinc-500">{maskEmail(u.email)}</div>
                           </td>
-                          <td className="py-4 px-6 font-mono text-xs text-zinc-400">
+                          <td className="py-4 px-6 font-mono text-xs text-zinc-600">
                             {u.wallet_address ? (
                               <div className="flex items-center gap-1.5">
                                 <span>{shortenAddress(u.wallet_address)}</span>
                                 <CopyButton text={u.wallet_address} />
                               </div>
                             ) : (
-                              <span className="text-zinc-600 italic">Not connected</span>
+                              <span className="text-zinc-400 italic">Not connected</span>
                             )}
                           </td>
-                          <td className="py-4 px-6 text-zinc-400 text-xs">
+                          <td className="py-4 px-6 text-zinc-500 text-xs">
                             {formatDate(u.created_at)}
                           </td>
-                          <td className="py-4 px-6 text-right font-medium text-white">
+                          <td className="py-4 px-6 text-right font-medium text-zinc-900">
                             {parseFloat(u.total_purchased || '0').toLocaleString('en-US', { minimumFractionDigits: 2 })} {stats.token_symbol}
                           </td>
-                          <td className="py-4 px-6 text-right font-bold text-emerald-400">
+                          <td className="py-4 px-6 text-right font-bold text-emerald-600">
                             +{parseFloat(u.bonus_generated || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats.token_symbol}
                           </td>
                         </tr>
@@ -513,10 +511,10 @@ export default function ReferralPage() {
                   </table>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-                    <div className="p-4 rounded-full bg-white/5 border border-white/10 text-zinc-500 mb-3">
+                    <div className="p-4 rounded-full bg-white border border-zinc-200 text-zinc-500 mb-3 shadow-sm">
                       <LuUsers className="h-8 w-8" />
                     </div>
-                    <h3 className="text-lg font-semibold text-white">No Friends Referred Yet</h3>
+                    <h3 className="text-lg font-semibold text-[#001060]">No Friends Referred Yet</h3>
                     <p className="text-sm text-zinc-500 max-w-md mt-1">
                       Share your personal invitation link above with friends or on social media to start earning TRSIV bonus rewards.
                     </p>
@@ -531,35 +529,35 @@ export default function ReferralPage() {
                 {stats?.claims_history && stats.claims_history.length > 0 ? (
                   <table className="w-full text-left border-collapse text-sm">
                     <thead>
-                      <tr className="border-b border-white/5 text-zinc-400 text-xs uppercase tracking-wider font-semibold bg-white/[0.01]">
+                      <tr className="border-b border-zinc-200/90 text-zinc-500 text-xs uppercase tracking-wider font-semibold bg-zinc-200/50">
                         <th className="py-4 px-6">Claim Date</th>
                         <th className="py-4 px-6">Claimed Amount</th>
                         <th className="py-4 px-6">Transaction Hash</th>
                         <th className="py-4 px-6 text-right">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5 text-zinc-300">
+                    <tbody className="divide-y divide-zinc-200/90 text-zinc-700 bg-[#ECE9EA]">
                       {stats.claims_history.map((c) => (
-                        <tr key={c.id} className="hover:bg-white/[0.02] transition-colors">
-                          <td className="py-4 px-6 text-xs text-zinc-400">
+                        <tr key={c.id} className="hover:bg-zinc-200/50 transition-colors">
+                          <td className="py-4 px-6 text-xs text-zinc-500">
                             {formatDate(c.created_at)}
                           </td>
-                          <td className="py-4 px-6 font-bold text-accent">
+                          <td className="py-4 px-6 font-bold text-[#315EFB]">
                             {parseFloat(c.amount || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats.token_symbol}
                           </td>
-                          <td className="py-4 px-6 font-mono text-xs text-zinc-400">
+                          <td className="py-4 px-6 font-mono text-xs text-zinc-600">
                             <a
                               href={`${BSC_SCAN_BASE}/tx/${c.tx_hash}`}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 hover:text-white transition-colors group"
+                              className="inline-flex items-center gap-1.5 hover:text-zinc-900 transition-colors group"
                             >
                               <span>{shortenAddress(c.tx_hash)}</span>
-                              <LuArrowUpRight className="h-3.5 w-3.5 text-zinc-500 group-hover:text-accent transition-colors" />
+                              <LuArrowUpRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-[#315EFB] transition-colors" />
                             </a>
                           </td>
                           <td className="py-4 px-6 text-right">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                               <LuCheck className="h-3 w-3" />
                               <span>Confirmed</span>
                             </span>
@@ -570,10 +568,10 @@ export default function ReferralPage() {
                   </table>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-                    <div className="p-4 rounded-full bg-white/5 border border-white/10 text-zinc-500 mb-3">
+                    <div className="p-4 rounded-full bg-white border border-zinc-200 text-zinc-500 mb-3 shadow-sm">
                       <LuClock className="h-8 w-8" />
                     </div>
-                    <h3 className="text-lg font-semibold text-white">No Claim History</h3>
+                    <h3 className="text-lg font-semibold text-[#001060]">No Claim History</h3>
                     <p className="text-sm text-zinc-500 max-w-md mt-1">
                       When your claimable balance is above 0, click &quot;Claim to Wallet&quot; to transfer your rewards on-chain.
                     </p>

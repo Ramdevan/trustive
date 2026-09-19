@@ -144,7 +144,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                       <button
                         onClick={openConnectModal}
                         type="button"
-                        className="hidden lg:flex items-center gap-2 rounded-xl bg-accent px-5 py-3 text-[1rem] font-medium text-[#0A0908] transition-colors hover:bg-accent/90 cursor-pointer"
+                        className="hidden lg:flex items-center gap-2 rounded-xl bg-[#315EFB] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 cursor-pointer"
                       >
                         <LuWallet className="h-4 w-4" />
                         Connect Wallet
@@ -169,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                     <button
                       onClick={openAccountModal}
                       type="button"
-                      className="hidden lg:flex items-center gap-2 rounded-xl bg-accent px-5 py-3 text-[1rem] font-medium text-[#0A0908] transition-colors hover:bg-accent/90 cursor-pointer"
+                      className="hidden lg:flex items-center gap-2 rounded-xl bg-[#315EFB] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 cursor-pointer"
                     >
                       <LuWallet className="h-4 w-4" />
                       {rbAccount.displayName}
@@ -204,7 +204,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           Connect
                         </div>
                         {!connected ? (
-                          <button onClick={openConnectModal} className="w-full flex items-center gap-2 rounded-xl bg-accent/10 px-4 py-2 text-[0.875rem] font-medium text-amber-700 border border-amber-300 hover:bg-accent/20 transition-colors cursor-pointer">
+                          <button onClick={openConnectModal} className="w-full flex items-center gap-2 rounded-xl bg-[#315EFB] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 transition-colors cursor-pointer">
                             <LuWallet className="h-4 w-4" />
                             Connect Wallet
                           </button>
@@ -214,7 +214,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                             Wrong Network
                           </button>
                         ) : (
-                          <button onClick={openAccountModal} className="w-full flex items-center gap-2 rounded-xl bg-accent/10 px-4 py-2 text-[0.875rem] font-medium text-amber-700 border border-amber-300 hover:bg-accent/20 transition-colors cursor-pointer">
+                          <button onClick={openAccountModal} className="w-full flex items-center gap-2 rounded-xl bg-[#315EFB] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 transition-colors cursor-pointer">
                             <LuWallet className="h-4 w-4" />
                             {rbAccount.displayName}
                           </button>
@@ -248,7 +248,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-800 hover:bg-zinc-100 transition-colors text-left group cursor-pointer"
                         >
-                          <LuUser className="h-5 w-5 text-zinc-500 group-hover:text-[#212E73] transition-colors" />
+                          <LuUser className="h-5 w-5 text-zinc-500 group-hover:text-[#315EFB] transition-colors" />
                           Profile
                         </Link>
 
@@ -257,7 +257,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-800 hover:bg-zinc-100 transition-colors text-left group cursor-pointer"
                         >
-                          <LuHistory className="h-5 w-5 text-zinc-500 group-hover:text-[#212E73] transition-colors" />
+                          <LuHistory className="h-5 w-5 text-zinc-500 group-hover:text-[#315EFB] transition-colors" />
                           Session History
                         </Link>
 

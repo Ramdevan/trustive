@@ -15,9 +15,9 @@ const LockedOverlay: React.FC<LockedOverlayProps> = ({ children, className = "" 
       </div>
 
       {/* Lock Overlay */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#141312E5]">
-        <div className="p-3 rounded-full bg-black/40 border border-white/10 shadow-2xl transition-transform group-hover:scale-110">
-          <LuLock className="h-5 w-5 text-zinc-400" />
+      <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-[2px]">
+        <div className="p-3 rounded-full bg-white border border-zinc-200 shadow-xl transition-transform group-hover:scale-110">
+          <LuLock className="h-5 w-5 text-zinc-600" />
         </div>
       </div>
     </div>

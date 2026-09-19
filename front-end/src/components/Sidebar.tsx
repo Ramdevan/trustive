@@ -17,9 +17,9 @@ const menuItems = [
 const TRUSTIVE_TOKEN_ADDRESS = (process.env.NEXT_PUBLIC_TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA') as `0x${string}`;
 
 const sanitizeTokenSymbol = (symbol?: string): string => {
-  if (!symbol) return 'Trustive';
+  if (!symbol) return 'TRSIV';
   const clean = symbol.replace(/\0/g, '').replace(/[^\x20-\x7E]/g, '').trim();
-  return clean || 'Trustive';
+  return clean || 'TRSIV';
 };
 
 interface SidebarProps {
@@ -86,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               href={item.path}
               onClick={onClose}
               className={`cursor-pointer flex items-center gap-3 rounded-xl px-4 py-3 text-[1.125rem] font-medium transition-all ${isActive
-                ? 'bg-[#212E73] text-white shadow-md shadow-[#212E73]/20'
+                ? 'bg-[#315EFB] text-white shadow-md shadow-[#315EFB]/20'
                 : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}`}
             >
               <item.icon className="h-5 w-5" />

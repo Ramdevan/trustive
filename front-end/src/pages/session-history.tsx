@@ -76,13 +76,13 @@ export default function SessionHistoryPage() {
           </div>
 
           {/* Recent Activity Card */}
-          <div className="bg-white rounded-3xl border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 sm:p-10">
+          <div className="bg-[#ECE9EA] rounded-3xl border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 sm:p-10">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600">
                 <LuHistory className="w-5 h-5" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Recent Activity</h1>
+                <h1 className="text-2xl font-bold text-[#001060] tracking-tight">Recent Activity</h1>
                 <p className="text-xs text-zinc-500">Monitor active and previous login sessions for your account</p>
               </div>
             </div>
@@ -90,7 +90,7 @@ export default function SessionHistoryPage() {
             <div className="overflow-x-auto rounded-2xl border border-zinc-200/90 shadow-sm">
               <table className="w-full text-left border-collapse min-w-[38rem]">
                 <thead>
-                  <tr className="bg-[#111827] text-white text-xs sm:text-sm font-semibold">
+                  <tr className="bg-zinc-200/50 text-zinc-500 text-xs uppercase tracking-wider font-semibold border-b border-zinc-200/90">
                     <th className="px-6 py-4 text-left">IP Address</th>
                     <th className="px-6 py-4 text-left">Country</th>
                     <th className="px-6 py-4 text-left">OS</th>
@@ -98,7 +98,7 @@ export default function SessionHistoryPage() {
                     <th className="px-6 py-4 text-left">Login Time</th>
                   </tr>
                 </thead>
-                <tbody className="text-sm text-zinc-700 divide-y divide-zinc-100">
+                <tbody className="text-sm text-zinc-700 divide-y divide-zinc-200/90 bg-[#ECE9EA]">
                   {loading ? (
                     <tr>
                       <td colSpan={5} className="px-6 py-12 text-center text-zinc-400">
@@ -116,8 +116,8 @@ export default function SessionHistoryPage() {
                     </tr>
                   ) : (
                     sessions.map((item, idx) => (
-                      <tr key={item.id || idx} className="hover:bg-zinc-50/70 transition-colors">
-                        <td className="px-6 py-4 font-medium text-zinc-800">{item.ip || '127.0.0.1'}</td>
+                      <tr key={item.id || idx} className="hover:bg-zinc-200/50 transition-colors">
+                        <td className="px-6 py-4 font-medium text-zinc-900">{item.ip || '127.0.0.1'}</td>
                         <td className="px-6 py-4 text-zinc-600">{item.country || ''}</td>
                         <td className="px-6 py-4 text-zinc-700">{item.os || 'Linux x86_64'}</td>
                         <td className="px-6 py-4 text-zinc-700">{item.browser || 'Chrome'}</td>

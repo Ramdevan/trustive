@@ -247,18 +247,7 @@ export default function KycPage() {
         <meta name="description" content="Complete your Sumsub identity verification to access Trustive platform." />
       </Head>
 
-      <div className="min-h-screen bg-[#000000] text-zinc-900 relative flex flex-col justify-between overflow-x-hidden">
-        {/* Background Overlay */}
-        <div className="absolute inset-0 z-0 opacity-40">
-          <Image
-            src="/assets/images/login-bg.svg"
-            alt="Background"
-            fill
-            priority
-            className="object-cover"
-          />
-        </div>
-
+      <div className="min-h-screen bg-white text-zinc-900 relative flex flex-col justify-between overflow-x-hidden">
         {/* Top Header */}
         <header className="relative z-10 w-full max-w-5xl mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -273,13 +262,13 @@ export default function KycPage() {
 
           <div className="flex items-center gap-4">
             {user?.email && (
-              <span className="text-zinc-400 text-xs md:text-sm font-medium hidden sm:inline">
+              <span className="text-zinc-600 text-xs md:text-sm font-medium hidden sm:inline">
                 {user.email}
               </span>
             )}
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-xs font-semibold transition-colors cursor-pointer border border-zinc-200"
             >
               <LuLogOut className="w-3.5 h-3.5" />
               <span>Log out</span>
@@ -289,14 +278,14 @@ export default function KycPage() {
 
         {/* Main Content Area */}
         <main className="relative z-10 w-full max-w-4xl mx-auto px-4 py-8 flex-1 flex flex-col items-center justify-center">
-          <div className="w-full bg-white rounded-[2rem] border border-zinc-200 shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden">
+          <div className="w-full bg-[#ECE9EA] rounded-[2rem] border border-zinc-200/90 shadow-[0_20px_60px_rgba(0,0,0,0.05)] overflow-hidden">
             
             {/* Banner / Title Header */}
-            <div className="p-8 md:p-10 border-b border-zinc-100 bg-gradient-to-b from-zinc-50/80 to-white text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#212E73]/10 text-[#212E73] mb-4 shadow-sm">
+            <div className="p-8 md:p-10 border-b border-zinc-200/90 bg-[#ECE9EA] text-center">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#315EFB]/10 text-[#315EFB] mb-4 shadow-sm">
                 <LuShieldCheck className="w-8 h-8" />
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight">
+              <h1 className="text-2xl md:text-3xl font-bold text-[#001060] tracking-tight">
                 Identity Verification
               </h1>
               <p className="text-sm md:text-base text-zinc-500 max-w-md mx-auto mt-2 font-medium">
@@ -311,7 +300,7 @@ export default function KycPage() {
                   <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
                     <LuCircleCheck className="w-10 h-10" />
                   </div>
-                  <h2 className="text-xl font-bold text-zinc-900">Verification Approved!</h2>
+                  <h2 className="text-xl font-bold text-[#001060]">Verification Approved!</h2>
                   <p className="text-sm text-zinc-500 font-medium">
                     Your KYC has been confirmed. Redirecting to your dashboard...
                   </p>
@@ -328,7 +317,7 @@ export default function KycPage() {
                       sdkInitialized.current = false;
                       window.location.reload();
                     }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#212E73] hover:bg-[#16225B] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-md shadow-[#315EFB]/20"
                   >
                     <LuRefreshCw className="w-4 h-4" />
                     Retry Verification
@@ -340,7 +329,7 @@ export default function KycPage() {
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider">
                       Sumsub Integration Active
                     </span>
-                    <h3 className="text-lg font-bold text-zinc-900">Development / Sandbox Notice</h3>
+                    <h3 className="text-lg font-bold text-[#001060]">Development / Sandbox Notice</h3>
                     <p className="text-xs md:text-sm text-zinc-600 max-w-lg mx-auto font-medium">
                       {devMessage || 'Your backend Sumsub service is running. Add your production/sandbox credentials to back-end/.env to render the live Sumsub WebSDK.'}
                     </p>
@@ -371,7 +360,7 @@ export default function KycPage() {
                 <div>
                   {loading && (
                     <div className="py-16 text-center space-y-3">
-                      <div className="animate-spin w-10 h-10 border-4 border-[#212E73] border-t-transparent rounded-full mx-auto" />
+                      <div className="animate-spin w-10 h-10 border-4 border-[#315EFB] border-t-transparent rounded-full mx-auto" />
                       <p className="text-sm font-bold uppercase tracking-wider text-zinc-500">
                         Initializing Sumsub Verification SDK...
                       </p>
@@ -384,7 +373,7 @@ export default function KycPage() {
             </div>
 
             {/* Footer Notice */}
-            <div className="px-8 py-4 bg-zinc-50 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-400 font-medium">
+            <div className="px-8 py-4 bg-zinc-200/50 border-t border-zinc-200/90 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-500 font-medium">
               <span>Trustive Security & Regulatory Compliance</span>
               <span>Encrypted & Verified via Sumsub</span>
             </div>

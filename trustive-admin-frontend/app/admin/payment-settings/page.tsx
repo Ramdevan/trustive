@@ -268,7 +268,7 @@ export default function PaymentSettings() {
                 <div className="flex flex-wrap items-center gap-4">
                     <button
                         onClick={() => setShowModal(true)}
-                        className="bg-[#212E73] hover:bg-[#1a255c] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                        className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                     >
                         <DollarSign className="w-4 h-4 text-white/90" />
                         Change Token Price
@@ -290,7 +290,7 @@ export default function PaymentSettings() {
             </div>
 
             {/* MoonPay Fiat Gateway Configuration Card */}
-            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
+            <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
                 <div className="p-8 border-b border-zinc-100 bg-zinc-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-3.5">
                         <div className="p-3 bg-[#7D00FF]/10 rounded-2xl text-[#7D00FF] border border-[#7D00FF]/20">
@@ -298,7 +298,7 @@ export default function PaymentSettings() {
                         </div>
                         <div>
                             <div className="flex items-center gap-2.5">
-                                <h2 className="text-xl font-bold text-zinc-900 tracking-tight">MoonPay Fiat Onramp Gateway</h2>
+                                <h2 className="text-xl font-bold text-[#001060] tracking-tight">MoonPay Fiat Onramp Gateway</h2>
                                 <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
                                     moonpayEnabled 
                                         ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
@@ -334,12 +334,12 @@ export default function PaymentSettings() {
                         {/* Environment selector */}
                         <div className="space-y-2">
                             <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest px-1 flex items-center gap-1.5">
-                                <Globe className="w-3.5 h-3.5 text-[#212E73]" /> Gateway Environment
+                                <Globe className="w-3.5 h-3.5 text-[#315EFB]" /> Gateway Environment
                             </label>
                             <select
                                 value={moonpayEnv}
                                 onChange={(e) => setMoonpayEnv(e.target.value)}
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-semibold text-sm focus:border-[#212E73] focus:bg-white outline-none cursor-pointer"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-semibold text-sm focus:border-[#315EFB] focus:bg-white outline-none cursor-pointer"
                             >
                                 <option value="sandbox">Sandbox (Testing / Staging)</option>
                                 <option value="production">Production (Live Payments)</option>
@@ -354,14 +354,14 @@ export default function PaymentSettings() {
                         {/* Publishable API Key */}
                         <div className="space-y-2">
                             <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest px-1 flex items-center gap-1.5">
-                                <Key className="w-3.5 h-3.5 text-[#212E73]" /> Publishable API Key
+                                <Key className="w-3.5 h-3.5 text-[#315EFB]" /> Publishable API Key
                             </label>
                             <input
                                 type="text"
                                 value={moonpayApiKey}
                                 onChange={(e) => setMoonpayApiKey(e.target.value)}
                                 placeholder="pk_test_... or pk_live_..."
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#212E73] focus:bg-white outline-none"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#315EFB] focus:bg-white outline-none"
                             />
                             <p className="text-[11px] text-zinc-400 px-1">
                                 Safe for client-side widget rendering.
@@ -389,7 +389,7 @@ export default function PaymentSettings() {
                                     value={moonpaySecretKey}
                                     onChange={(e) => setMoonpaySecretKey(e.target.value)}
                                     placeholder="sk_test_... or sk_live_..."
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#212E73] focus:bg-white outline-none pr-12"
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#315EFB] focus:bg-white outline-none pr-12"
                                 />
                             </div>
                             <p className="text-[11px] text-zinc-400 px-1">
@@ -414,7 +414,7 @@ export default function PaymentSettings() {
                         <button
                             type="submit"
                             disabled={isSavingMoonpay}
-                            className="bg-[#212E73] hover:bg-[#1a255c] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                            className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
                         >
                             {isSavingMoonpay ? (
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -428,7 +428,7 @@ export default function PaymentSettings() {
             </div>
 
             {/* Referral Program Configuration */}
-            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
+            <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
                 <div className="p-8 border-b border-zinc-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-zinc-50/50">
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-sm">
@@ -436,7 +436,7 @@ export default function PaymentSettings() {
                         </div>
                         <div>
                             <div className="flex items-center gap-3">
-                                <h2 className="text-xl font-bold text-zinc-900">Referral Program Configuration</h2>
+                                <h2 className="text-xl font-bold text-[#001060]">Referral Program Configuration</h2>
                                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
                                     Active
                                 </span>
@@ -492,7 +492,7 @@ export default function PaymentSettings() {
                                 value={referralContract}
                                 onChange={(e) => setReferralContract(e.target.value.trim())}
                                 placeholder="0x..."
-                                className="w-full px-4 py-3.5 rounded-xl border border-zinc-200 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 font-mono text-xs text-zinc-900 transition-all bg-zinc-50/50"
+                                className="w-full px-4 py-3.5 rounded-xl border border-zinc-200 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 font-mono text-xs text-zinc-900 transition-all bg-zinc-50/50"
                             />
                             <p className="text-[11px] text-zinc-400">
                                 Smart contract implementing claim() with authorized ECDSA signatures on BSC Testnet.
@@ -514,7 +514,7 @@ export default function PaymentSettings() {
                                     value={referralCommission}
                                     onChange={(e) => setReferralCommission(e.target.value)}
                                     placeholder="5.00"
-                                    className="w-full px-4 py-3.5 pr-10 rounded-xl border border-zinc-200 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 font-mono text-sm text-zinc-900 transition-all bg-zinc-50/50"
+                                    className="w-full px-4 py-3.5 pr-10 rounded-xl border border-zinc-200 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 font-mono text-sm text-zinc-900 transition-all bg-zinc-50/50"
                                 />
                                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-zinc-400">
                                     %
@@ -531,7 +531,7 @@ export default function PaymentSettings() {
                         <button
                             type="submit"
                             disabled={isSavingReferral}
-                            className="bg-[#212E73] hover:bg-[#1a255c] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                            className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
                         >
                             {isSavingReferral ? (
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -545,11 +545,11 @@ export default function PaymentSettings() {
             </div>
 
             {/* Price Change Ledger Table */}
-            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
+            <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative z-10">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-[#212E73] text-white uppercase font-bold text-xs tracking-widest">
+                            <tr className="bg-[#315EFB] text-white uppercase font-bold text-xs tracking-widest">
                                 <th className="px-12 py-6 rounded-tl-[32px]">ID</th>
                                 <th className="px-10 py-6">BEFORE</th>
                                 <th className="px-10 py-6">AFTER</th>
@@ -557,11 +557,11 @@ export default function PaymentSettings() {
                                 <th className="px-12 py-6 rounded-tr-[32px]">Transaction Hash</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-zinc-200">
+                        <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                             {loading ? (
                                 <tr>
                                     <td colSpan={5} className="px-10 py-24 text-center">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#212E73] mx-auto"></div>
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#315EFB] mx-auto"></div>
                                     </td>
                                 </tr>
                             ) : history.length === 0 ? (
@@ -586,8 +586,8 @@ export default function PaymentSettings() {
                                             </td>
                                             <td className="px-10 py-6">
                                                 <div className="flex items-baseline gap-2">
-                                                    <span className="text-[#212E73] font-bold text-xl font-mono">{formatUSD(rawNew)}</span>
-                                                    <span className="text-xs text-[#212E73]/70">/ TRSIV</span>
+                                                    <span className="text-[#315EFB] font-bold text-xl font-mono">{formatUSD(rawNew)}</span>
+                                                    <span className="text-xs text-[#315EFB]/70">/ TRSIV</span>
                                                 </div>
                                             </td>
                                             <td className="px-10 py-6">
@@ -610,15 +610,15 @@ export default function PaymentSettings() {
             {/* Change Price Modal */}
             {showModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
-                    <div className="bg-white w-full max-w-lg rounded-[32px] border border-zinc-200 overflow-hidden shadow-2xl relative">
+                    <div className="bg-[#ECE9EA] w-full max-w-lg rounded-[32px] border border-zinc-200 overflow-hidden shadow-2xl relative">
                         <div className="p-8 sm:p-10 space-y-6">
 
                             <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-[#212E73]/10 text-[#212E73] rounded-2xl flex items-center justify-center shrink-0 border border-[#212E73]/20">
+                                <div className="w-14 h-14 bg-[#315EFB]/10 text-[#315EFB] rounded-2xl flex items-center justify-center shrink-0 border border-[#315EFB]/20">
                                     <DollarSign className="w-6 h-6" />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                    <h2 className="text-2xl font-bold text-zinc-900 tracking-tight truncate">Modify Token Valuation</h2>
+                                    <h2 className="text-2xl font-bold text-[#001060] tracking-tight truncate">Modify Token Valuation</h2>
                                     <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Update on-chain ICO pricing engine</p>
                                 </div>
                             </div>
@@ -627,7 +627,7 @@ export default function PaymentSettings() {
                             <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-5 space-y-2 overflow-hidden">
                                 <div className="flex items-center justify-between">
                                     <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
-                                        <Activity className="w-3.5 h-3.5 text-[#212E73]" /> Current Token Price
+                                        <Activity className="w-3.5 h-3.5 text-[#315EFB]" /> Current Token Price
                                     </span>
                                     <span className="text-[9px] px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 font-bold uppercase tracking-widest border border-emerald-200">
                                         Active
@@ -635,7 +635,7 @@ export default function PaymentSettings() {
                                 </div>
                                 <div className="flex items-baseline justify-between pt-1 gap-4">
                                     <div className="min-w-0">
-                                        <p className="text-3xl font-extrabold text-[#212E73] font-mono tracking-tight truncate">
+                                        <p className="text-3xl font-extrabold text-[#315EFB] font-mono tracking-tight truncate">
                                             {currentPriceUSD !== null ? formatUSD(currentPriceUSD) : "—"}
                                         </p>
                                         <p className="text-xs text-zinc-500 font-medium">per 1 TRSIV token</p>
@@ -666,7 +666,7 @@ export default function PaymentSettings() {
                                         placeholder="0.01"
                                         value={newPriceUSD}
                                         onChange={(e) => setNewPriceUSD(e.target.value)}
-                                        className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-24 py-4 text-zinc-900 font-mono text-lg focus:outline-none focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder:text-zinc-400 shadow-sm"
+                                        className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-24 py-4 text-zinc-900 font-mono text-lg focus:outline-none focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder:text-zinc-400 shadow-sm"
                                     />
                                     <span className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-bold uppercase tracking-wider">
                                         USD / TRSIV
@@ -675,9 +675,9 @@ export default function PaymentSettings() {
 
                                 {/* Dynamic Preview */}
                                 {previewTokensPerUSD !== null && (
-                                    <div className="bg-[#212E73]/5 border border-[#212E73]/20 rounded-xl p-3.5 flex items-center justify-between text-xs animate-in fade-in duration-200">
+                                    <div className="bg-[#315EFB]/5 border border-[#315EFB]/20 rounded-xl p-3.5 flex items-center justify-between text-xs animate-in fade-in duration-200">
                                         <span className="text-zinc-600 font-medium">Resulting Conversion:</span>
-                                        <span className="font-mono font-bold text-[#212E73]">
+                                        <span className="font-mono font-bold text-[#315EFB]">
                                             1 USD = {formatDecimal(previewTokensPerUSD, 5)} TRSIV
                                         </span>
                                     </div>
@@ -697,7 +697,7 @@ export default function PaymentSettings() {
                             <button
                                 onClick={handleUpdate}
                                 disabled={isWriting || !newPriceUSD || Number(newPriceUSD) <= 0}
-                                className="flex-[2] px-6 py-3.5 bg-[#212E73] hover:bg-[#1a255c] text-white rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:scale-[1.01] active:scale-[0.99]"
+                                className="flex-[2] px-6 py-3.5 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:scale-[1.01] active:scale-[0.99]"
                             >
                                 {isWriting ? (
                                     <>

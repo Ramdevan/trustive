@@ -92,11 +92,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <main className="lg:pl-70 w-full transition-all min-h-[calc(100vh-5rem)] relative">
           {isConnected && account && userProfile?.wallet_address && userProfile.wallet_address.toLowerCase() !== account.toLowerCase() ? (
             <div className="absolute inset-0 z-[40] flex items-center justify-center bg-black/40 backdrop-blur-md p-4 sm:p-8">
-              <div className="max-w-md w-full bg-white border border-zinc-200 rounded-[2.5rem] p-10 text-center shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+              <div className="max-w-md w-full bg-[#ECE9EA] border border-zinc-200/90 rounded-[2.5rem] p-10 text-center shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
                 <div className="w-20 h-20 bg-red-50 rounded-3xl flex items-center justify-center mx-auto mb-8 border border-red-200">
                   <LuTriangleAlert className="w-10 h-10 text-red-500" />
                 </div>
-                <h1 className="text-2xl font-black text-zinc-900 uppercase tracking-tight mb-4">Wallet Mismatch</h1>
+                <h1 className="text-2xl font-black text-[#001060] uppercase tracking-tight mb-4">Wallet Mismatch</h1>
                 <p className="text-zinc-600 text-sm font-medium leading-relaxed mb-8">
                   Your account is linked to <span className="text-zinc-900 font-mono text-xs">{userProfile.wallet_address.slice(0, 10)}...{userProfile.wallet_address.slice(-8)}</span>. 
                   Please connect the correct wallet to use the dashboard.

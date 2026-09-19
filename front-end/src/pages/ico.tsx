@@ -55,12 +55,12 @@ export default function ICO() {
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
             <LuWallet className="h-16 w-16 text-zinc-600" />
             <div>
-              <h2 className="text-[1.5rem] font-medium text-white mb-2">Connect Your Wallet</h2>
+              <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
               <p className="text-zinc-500 text-[1rem]">Connect your wallet to view and participate in the ICO</p>
             </div>
             <button
               onClick={connectWallet}
-              className="bg-accent hover:bg-accent/90 text-black font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer"
+              className="bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#315EFB]/20"
             >
               Connect Wallet
             </button>
@@ -87,14 +87,14 @@ export default function ICO() {
           <div className="w-full max-w-[45rem] mx-auto space-y-6 sm:space-y-8">
             <CountdownTimer />
             <div className="w-full max-w-[35rem] mx-auto space-y-4">
-              <div className="rounded-3xl bg-[#121212] border border-white/10 p-8 text-center space-y-3 shadow-2xl animate-in fade-in duration-500">
-                <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto text-accent">
+              <div className="rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-8 text-center space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] animate-in fade-in duration-500">
+                <div className="w-12 h-12 rounded-full bg-[#315EFB]/10 border border-[#315EFB]/20 flex items-center justify-center mx-auto text-[#315EFB]">
                   <LuTriangleAlert className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold text-white uppercase tracking-wider">
+                <h3 className="text-xl font-bold text-[#001060] uppercase tracking-wider">
                   Upcoming Phase Scheduled
                 </h3>
-                <p className="text-zinc-400 text-sm max-w-sm mx-auto">
+                <p className="text-zinc-500 text-sm max-w-sm mx-auto">
                   The upcoming token sale phase is scheduled. Token purchase will automatically become available once the countdown timer reaches zero.
                 </p>
               </div>
@@ -102,14 +102,14 @@ export default function ICO() {
           </div>
         ) : (
           <div className="min-h-[70vh] flex items-center justify-center p-4">
-            <div className="w-full max-w-[35rem] rounded-3xl bg-[#121212] border border-white/10 p-8 text-center space-y-3 shadow-2xl animate-in fade-in duration-500">
-              <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto text-accent">
+            <div className="w-full max-w-[35rem] rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-8 text-center space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] animate-in fade-in duration-500">
+              <div className="w-12 h-12 rounded-full bg-[#315EFB]/10 border border-[#315EFB]/20 flex items-center justify-center mx-auto text-[#315EFB]">
                 <LuTriangleAlert className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white uppercase tracking-wider">
+              <h3 className="text-xl font-bold text-[#001060] uppercase tracking-wider">
                 No Active Sale
               </h3>
-              <p className="text-zinc-400 text-sm max-w-sm mx-auto">
+              <p className="text-zinc-500 text-sm max-w-sm mx-auto">
                 There is currently no active or scheduled token sale. Please check back later for upcoming sale phases.
               </p>
             </div>

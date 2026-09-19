@@ -194,7 +194,7 @@ export default function AdminWallet() {
         <div className="space-y-10 animate-in fade-in duration-200">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
                 <div>
-                    <h1 className="text-2xl font-bold uppercase tracking-tight text-zinc-900">Admin Wallet</h1>
+                    <h1 className="text-2xl font-bold uppercase tracking-tight text-[#001060]">Admin Wallet</h1>
                     <p className="text-xs text-zinc-500 mt-1">Admin Console / Admin Wallet</p>
                 </div>
                 <button
@@ -202,7 +202,7 @@ export default function AdminWallet() {
                     disabled={isRefreshing}
                     className="bg-white border border-zinc-200/90 hover:bg-zinc-50 text-zinc-900 px-6 py-3.5 rounded-xl flex items-center gap-3 font-black text-xs uppercase tracking-widest transition-all shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50"
                 >
-                    <RotateCw className={`w-4 h-4 opacity-80 ${isRefreshing ? "animate-spin text-[#212E73]" : ""}`} />
+                    <RotateCw className={`w-4 h-4 opacity-80 ${isRefreshing ? "animate-spin text-[#315EFB]" : ""}`} />
                     <span>{isRefreshing ? "Refreshing..." : "Refresh"}</span>
                 </button>
             </div>
@@ -211,7 +211,7 @@ export default function AdminWallet() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 {/* BNB CARD */}
-                <div className="bg-white p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
+                <div className="bg-[#ECE9EA] p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
                     <div className="flex justify-center items-center">
                         <div className="px-4 py-1.5 bg-amber-500/10 text-amber-600 rounded-xl text-xs font-black uppercase tracking-widest border border-amber-500/20 shadow-sm">BNB</div>
                     </div>
@@ -221,13 +221,13 @@ export default function AdminWallet() {
                             {balances.bnb} <span className="text-lg text-zinc-500">BNB</span>
                         </div>
                     </div>
-                    <button onClick={() => handleWithdraw('BNB', balances.bnb)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                    <button onClick={() => handleWithdraw('BNB', balances.bnb)} className="mt-8 w-full py-4 bg-[#315EFB] hover:bg-[#2548D0] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#315EFB]/20">
                         <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw BNB
                     </button>
                 </div>
 
                 {/* USDT CARD */}
-                <div className="bg-white p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
+                <div className="bg-[#ECE9EA] p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
                     <div className="flex justify-center items-center">
                         <div className="px-4 py-1.5 bg-emerald-500/10 text-emerald-600 rounded-xl text-xs font-black uppercase tracking-widest border border-emerald-500/20 shadow-sm">USDT</div>
                     </div>
@@ -237,13 +237,13 @@ export default function AdminWallet() {
                             {balances.usdt} <span className="text-lg text-zinc-500">USDT</span>
                         </div>
                     </div>
-                    <button onClick={() => handleWithdraw('USDT', balances.usdt)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                    <button onClick={() => handleWithdraw('USDT', balances.usdt)} className="mt-8 w-full py-4 bg-[#315EFB] hover:bg-[#2548D0] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#315EFB]/20">
                         <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw USDT
                     </button>
                 </div>
 
                 {/* USDC CARD */}
-                <div className="bg-white p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
+                <div className="bg-[#ECE9EA] p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
                     <div className="flex justify-center items-center">
                         <div className="px-4 py-1.5 bg-blue-500/10 text-blue-600 rounded-xl text-xs font-black uppercase tracking-widest border border-blue-500/20 shadow-sm">USDC</div>
                     </div>
@@ -253,15 +253,15 @@ export default function AdminWallet() {
                             {balances.usdc} <span className="text-lg text-zinc-500">USDC</span>
                         </div>
                     </div>
-                    <button onClick={() => handleWithdraw('USDC', balances.usdc)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                    <button onClick={() => handleWithdraw('USDC', balances.usdc)} className="mt-8 w-full py-4 bg-[#315EFB] hover:bg-[#2548D0] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#315EFB]/20">
                         <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw USDC
                     </button>
                 </div>
 
                 {/* TRSIV CARD */}
-                <div className="bg-white p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
+                <div className="bg-[#ECE9EA] p-8 rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between min-h-[220px]">
                     <div className="flex justify-center items-center">
-                        <div className="px-4 py-1.5 bg-[#212E73]/10 text-[#212E73] rounded-xl text-xs font-black uppercase tracking-widest border border-[#212E73]/20 shadow-sm">TRSIV</div>
+                        <div className="px-4 py-1.5 bg-[#315EFB]/10 text-[#315EFB] rounded-xl text-xs font-black uppercase tracking-widest border border-[#315EFB]/20 shadow-sm">TRSIV</div>
                     </div>
                     <div className="mt-8 space-y-1 text-center">
                         <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em]">System Inventory</p>
@@ -269,7 +269,7 @@ export default function AdminWallet() {
                             {balances.trustive} <span className="text-lg text-zinc-500">TRSIV</span>
                         </div>
                     </div>
-                    <button onClick={() => handleWithdraw('TRSIV', balances.trustive)} className="mt-8 w-full py-4 bg-[#212E73] hover:bg-[#1a255c] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md">
+                    <button onClick={() => handleWithdraw('TRSIV', balances.trustive)} className="mt-8 w-full py-4 bg-[#315EFB] hover:bg-[#2548D0] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#315EFB]/20">
                         <ArrowUpRight className="w-4 h-4 opacity-80" /> Withdraw TRSIV
                     </button>
                 </div>
@@ -277,10 +277,10 @@ export default function AdminWallet() {
             </div>
 
             {/* Treasury Ledger */}
-            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                <div className="p-8 border-b border-zinc-100 flex items-center justify-between">
+            <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                <div className="p-8 border-b border-zinc-200/80 bg-zinc-100/50 flex items-center justify-between">
                     <div>
-                        <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Treasury Ledger</h2>
+                        <h2 className="text-xl font-bold text-[#001060] tracking-tight">Treasury Ledger</h2>
                         <p className="text-[9px] text-zinc-500 uppercase tracking-[0.2em] font-black mt-1">Immutable Transaction History</p>
                     </div>
                 </div>
@@ -288,7 +288,7 @@ export default function AdminWallet() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-[#212E73] text-white">
+                            <tr className="bg-[#315EFB] text-white">
                                 <th className="px-10 py-6 text-center text-xs font-black uppercase tracking-widest">ID</th>
                                 <th className="px-10 py-6 text-center text-xs font-black uppercase tracking-widest">Address</th>
                                 <th className="px-10 py-6 text-center text-xs font-black uppercase tracking-widest">Transaction Hash</th>
@@ -297,11 +297,11 @@ export default function AdminWallet() {
                                 <th className="px-10 py-6 text-center text-xs font-black uppercase tracking-widest">Status</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-zinc-100">
+                        <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                             {loadingHistory ? (
                                 <tr>
                                     <td colSpan={6} className="px-10 py-24 text-center">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#212E73] mx-auto"></div>
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#315EFB] mx-auto"></div>
                                     </td>
                                 </tr>
                             ) : history.length === 0 ? (
@@ -310,7 +310,7 @@ export default function AdminWallet() {
                                 </tr>
                             ) : (
                                 history.map((record, i) => (
-                                    <tr key={record.id || i} className="hover:bg-zinc-50/70 transition-colors group">
+                                    <tr key={record.id || i} className="hover:bg-zinc-200/50 transition-colors group">
                                         <td className="px-10 py-8 text-center">
                                             <span className="text-zinc-600 font-mono text-base">{record.id}</span>
                                         </td>
@@ -333,7 +333,7 @@ export default function AdminWallet() {
                                             </div>
                                         </td>
                                         <td className="px-10 py-8 text-center">
-                                            <span className="text-[#212E73] font-bold text-base tracking-widest">{formatDecimal(record.amount, 5, 2)}</span>
+                                            <span className="text-[#315EFB] font-bold text-base tracking-widest">{formatDecimal(record.amount, 5, 2)}</span>
                                         </td>
                                         <td className="px-10 py-8 text-center">
                                             <span className={`inline-flex font-black text-xs uppercase tracking-[0.2em] items-center ${record.tx_hash ? 'text-green-600' : 'text-red-500'}`}>

@@ -243,12 +243,12 @@ export default function Dashboard() {
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
             <LuWallet className="h-16 w-16 text-zinc-600" />
             <div>
-              <h2 className="text-[1.5rem] font-medium text-white mb-2">Connect Your Wallet</h2>
+              <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
               <p className="text-zinc-500 text-[1rem]">Connect your wallet to view your dashboard</p>
             </div>
             <button
               onClick={connectWallet}
-              className="bg-accent hover:bg-accent/90 text-black font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer"
+              className="bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#315EFB]/20"
             >
               Connect Wallet
             </button>
@@ -280,46 +280,10 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Hidden: Chart and Promo Section
-        <div className="flex flex-col xl:flex-row gap-4">
-          <DashboardChart />
-          <PromoCard />
-        </div>
-        */}
-
-          {/* Referral Banner */}
-          <div className="rounded-3xl bg-gradient-to-r from-card via-[#161311] to-card border border-white/5 p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-accent/10 border border-accent/20 text-accent shrink-0">
-                <LuGift className="h-6 w-6" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base font-bold text-white">Referral Rewards Program</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    5% Reward
-                  </span>
-                </div>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Share your invite link, grow the Trustive community, and claim instant on-chain TRSIV bonuses.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 w-full md:w-auto">
-              <Link
-                href="/referral"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-accent hover:bg-accent/90 text-black transition-all shadow-md shadow-accent/10 shrink-0"
-              >
-                <span>Open Referral Dashboard</span>
-                <LuArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </div>
-
           {/* Recent Transactions */}
-          <div className="rounded-3xl bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-100">
-              <h2 className="text-[1.25rem] font-bold text-zinc-900">Recent Transactions</h2>
+          <div className="rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-zinc-200/80 bg-zinc-100/50">
+              <h2 className="text-[1.25rem] font-bold text-[#001060]">Recent Transactions</h2>
             </div>
 
             {!isConnected ? (
@@ -334,7 +298,7 @@ export default function Dashboard() {
               <div className="overflow-x-auto -mx-3 sm:mx-0">
                 <table className="w-full text-left border-collapse min-w-[36rem]">
                   <thead>
-                    <tr className="text-[0.75rem] font-semibold text-zinc-400 uppercase tracking-wider bg-zinc-50/50">
+                    <tr className="text-[0.75rem] font-semibold text-zinc-500 uppercase tracking-wider bg-zinc-200/50">
                       <th className="px-4 sm:px-6 py-4 text-left">S No</th>
                       <th className="px-4 sm:px-6 py-4 text-left">Users</th>
                       <th className="px-4 sm:px-6 py-4 text-center">Payment Type</th>
@@ -349,7 +313,7 @@ export default function Dashboard() {
                     {recentTxs.map((tx, i) => {
                       const isSuccess = tx.status === 'success' || tx.status === 'paid';
                       return (
-                        <tr key={tx.id ?? i} className="border-t border-zinc-100 hover:bg-zinc-50/60 transition-colors">
+                        <tr key={tx.id ?? i} className="border-t border-zinc-200/80 hover:bg-zinc-200/40 transition-colors">
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-medium">{i + 1}</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900">
                             <div className="flex items-center gap-1.5">
@@ -357,7 +321,7 @@ export default function Dashboard() {
                               {account && <CopyButton text={account} label="Copy Address" />}
                             </div>
                           </td>
-                          <td className="px-4 sm:px-6 py-3.5 text-[#212E73] font-bold whitespace-nowrap text-center">{tx.payment_type}</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-[#315EFB] font-bold whitespace-nowrap text-center">{tx.payment_type}</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-medium whitespace-nowrap text-center">{tx.crypto_value}</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} TRSIV</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -369,7 +333,7 @@ export default function Dashboard() {
                           </td>
                           <td className="px-4 sm:px-6 py-3.5 font-mono text-center">
                             {tx.trans_hash ? (
-                              <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline" title={tx.trans_hash}>
+                              <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#315EFB] font-semibold hover:underline" title={tx.trans_hash}>
                                 {shortenHash(tx.trans_hash)}
                               </a>
                             ) : '—'}
@@ -385,7 +349,7 @@ export default function Dashboard() {
             <div className="px-6 py-4 border-t border-zinc-100 flex justify-center bg-zinc-50/30">
               <Link
                 href="/transactions"
-                className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-[#212E73] hover:text-[#16225B] transition-colors"
+                className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-[#315EFB] hover:text-[#2548D0] transition-colors"
               >
                 Show all transactions
                 <LuArrowRight className="h-4 w-4" />

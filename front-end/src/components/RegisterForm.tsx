@@ -166,7 +166,7 @@ const RegisterForm: React.FC = () => {
         </div>
 
         {/* Form Section */}
-        <div className="flex flex-col justify-center p-8 md:p-16 space-y-6 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-zinc-200/80 rounded-[1.25rem]">
+        <div className="flex flex-col justify-center p-8 md:p-16 space-y-6 bg-[#ECE9EA] shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-zinc-200/90 rounded-[1.25rem]">
           <div className="space-y-4 text-center">
             {/* Mobile Logo */}
             <div className="flex justify-center md:hidden mb-4">
@@ -178,7 +178,7 @@ const RegisterForm: React.FC = () => {
                 className="object-contain"
               />
             </div>
-            <h1 className="text-[1.5rem] md:text-[2rem] font-bold text-zinc-900">Create New Account</h1>
+            <h1 className="text-[1.5rem] md:text-[2rem] font-bold text-[#001060]">Create New Account</h1>
             <p className="text-[0.875rem] font-medium text-zinc-500">Sign up to explore, play, and earn</p>
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-center animate-pulse">
@@ -197,14 +197,14 @@ const RegisterForm: React.FC = () => {
             <div className="space-y-2">
               <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Username</label>
               <div className="relative group">
-                <LuUser className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
+                <LuUser className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
                 <input
                   type="text"
                   required
                   placeholder="Enter your username"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium"
+                  className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all placeholder:text-zinc-400 font-medium"
                 />
               </div>
             </div>
@@ -213,14 +213,14 @@ const RegisterForm: React.FC = () => {
             <div className="space-y-2">
               <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Email</label>
               <div className="relative group">
-                <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
+                <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
                 <input
                   type="email"
                   required
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium"
+                  className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all placeholder:text-zinc-400 font-medium"
                 />
               </div>
             </div>
@@ -229,14 +229,14 @@ const RegisterForm: React.FC = () => {
             <div className="space-y-2">
               <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Password</label>
               <div className="relative group">
-                <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
+                <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
                 <input
                   type={showPassword ? "text" : "password"}
                   required
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium"
+                  className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all placeholder:text-zinc-400 font-medium"
                 />
                 <button
                   type="button"
@@ -260,17 +260,17 @@ const RegisterForm: React.FC = () => {
             <div className="space-y-2">
               <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Confirm Password</label>
               <div className="relative group">
-                <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
+                <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   required
                   placeholder="Confirm your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`w-full bg-zinc-50 border rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none transition-all placeholder:text-zinc-400 font-medium ${
+                  className={`w-full bg-white border rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none transition-all placeholder:text-zinc-400 font-medium ${
                     isPasswordMismatch
                       ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/10"
-                      : "border-zinc-200 focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10"
+                      : "border-zinc-200 focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10"
                   }`}
                 />
                 <button
@@ -302,38 +302,38 @@ const RegisterForm: React.FC = () => {
                 )}
               </div>
               <div className="relative group">
-                <LuGift className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#212E73] transition-colors" />
+                <LuGift className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
                 <input
                   type="text"
                   placeholder="e.g. REF123456"
                   value={referralCode}
                   onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                  className="w-full bg-zinc-50 border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-5 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#212E73] focus:ring-2 focus:ring-[#212E73]/10 transition-all placeholder:text-zinc-400 font-medium tracking-wide uppercase"
+                  className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-5 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all placeholder:text-zinc-400 font-medium tracking-wide uppercase"
                 />
               </div>
             </div>
 
             <label className="flex items-center gap-3 ml-1 mt-6 cursor-pointer group/check w-fit">
               <div className="relative flex items-center">
-                <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-zinc-300 rounded-md checked:bg-[#212E73] checked:border-[#212E73] transition-all cursor-pointer" />
+                <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-zinc-300 rounded-md checked:bg-[#315EFB] checked:border-[#315EFB] transition-all cursor-pointer" />
                 <LuCheck className="absolute left-0.5 md:left-1 top-0.5 md:top-1 h-3.5 w-3.5 md:h-4 md:w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[3]" />
               </div>
               <span className="text-[0.875rem] md:text-[1rem] font-medium text-zinc-600 select-none group-hover/check:text-zinc-900 transition-colors">
-                Accept <span className="underline underline-offset-4 text-[#212E73] hover:text-[#16225B]">terms and conditions</span>
+                Accept <span className="underline underline-offset-4 text-[#315EFB] hover:text-[#2548D0]">terms and conditions</span>
               </span>
             </label>
 
             <button
               type="submit"
               disabled={loading || !acceptedTerms || isPasswordMismatch}
-              className={`w-full font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#212E73]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] ${acceptedTerms && !isPasswordMismatch ? 'bg-[#212E73] hover:bg-[#16225B] text-white cursor-pointer' : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'} disabled:opacity-50`}
+              className={`w-full font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#315EFB]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] ${acceptedTerms && !isPasswordMismatch ? 'bg-[#315EFB] hover:bg-[#2548D0] text-white cursor-pointer' : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'} disabled:opacity-50`}
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
           <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-zinc-600">
-            Already have an account? <Link href="/login" className="text-[#212E73] font-bold hover:underline">Login</Link>
+            Already have an account? <Link href="/login" className="text-[#315EFB] font-bold hover:underline">Login</Link>
           </p>
         </div>
       </div>

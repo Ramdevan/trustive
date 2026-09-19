@@ -61,7 +61,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
   return (
     <div className="w-full space-y-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <h2 className="text-[1.5rem] font-bold text-zinc-900 whitespace-nowrap">Transaction history</h2>
+        <h2 className="text-[1.5rem] font-bold text-[#001060] whitespace-nowrap">Transaction history</h2>
         <SearchBar
           value={searchQuery}
           onChange={(v) => { setSearchQuery(v); setPage(1); }}
@@ -69,10 +69,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
         />
       </div>
 
-      <div className="overflow-x-auto rounded-2xl bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+      <div className="overflow-x-auto rounded-2xl bg-[#ECE9EA] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
         <table className="w-full border-collapse min-w-[38rem]">
           <thead>
-            <tr className="text-zinc-500 text-[0.875rem] font-semibold bg-zinc-50/80 border-b border-zinc-200">
+            <tr className="text-zinc-500 text-[0.875rem] font-semibold bg-zinc-200/50 border-b border-zinc-200">
               <th className="px-6 py-4 min-w-[4rem] text-center">S No</th>
               <th className="px-6 py-4 min-w-[8rem] text-left">Users</th>
               <th className="px-6 py-4 min-w-[8rem] text-center">Payment Type</th>
@@ -95,7 +95,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
             ) : paginated.map((tx, index) => {
               const s = getStatusStyle(tx.status);
               return (
-                <tr key={tx.id ?? index} className="hover:bg-zinc-50/70 transition-colors border-b border-zinc-100 last:border-0">
+                <tr key={tx.id ?? index} className="hover:bg-zinc-200/40 transition-colors border-b border-zinc-200/70 last:border-0">
                   <td className="px-6 py-4 text-zinc-800 text-center">{(page - 1) * PAGE_SIZE + index + 1}</td>
                   <td className="px-6 py-4 text-zinc-900 font-medium text-left">
                     <div className="flex flex-col">
@@ -108,7 +108,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-[#212E73] uppercase font-bold text-center">{tx.payment_type}</td>
+                  <td className="px-6 py-4 text-[#315EFB] uppercase font-bold text-center">{tx.payment_type}</td>
                   <td className="px-6 py-4 text-zinc-900 font-medium whitespace-nowrap text-center">{Number(tx.crypto_value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</td>
                   <td className="px-6 py-4 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} TRSIV</td>
                   <td className="px-6 py-4 text-zinc-900 font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -120,7 +120,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                   </td>
                   <td className="px-6 py-4 font-mono text-center">
                     {tx.trans_hash && tx.trans_hash.startsWith('0x') && tx.trans_hash.length >= 64 ? (
-                      <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#212E73] font-semibold hover:underline inline-block" title={tx.trans_hash}>
+                      <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#315EFB] font-semibold hover:underline inline-block" title={tx.trans_hash}>
                         {shortenHash(tx.trans_hash)}
                       </a>
                     ) : (
@@ -152,7 +152,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                   key={p}
                   onClick={() => setPage(p)}
                   className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold transition-all cursor-pointer ${p === page
-                    ? 'bg-[#212E73] text-white shadow-md shadow-[#212E73]/20'
+                    ? 'bg-[#315EFB] text-white shadow-md shadow-[#315EFB]/20'
                     : 'bg-white border border-zinc-200 text-zinc-700 hover:bg-zinc-100 shadow-sm'
                     }`}
                 >

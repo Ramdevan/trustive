@@ -279,7 +279,7 @@ export default function SalesManagement() {
             <div className="flex items-center justify-between">
                 <button
                     onClick={() => setIsNewPhaseOpen(true)}
-                    className="bg-[#212E73] hover:bg-[#1a255c] text-white px-8 py-3 rounded-full flex items-center gap-2 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+                    className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2.5 font-bold text-sm transition-all shadow-md shadow-[#315EFB]/20 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
                     New Phase
@@ -288,13 +288,13 @@ export default function SalesManagement() {
 
             {/* ── Active Phases Table ── */}
             <div className="space-y-6">
-                <h3 className="text-zinc-900 font-bold text-lg px-2">Active Phases</h3>
+                <h3 className="text-[#001060] font-bold text-lg px-2">Active Phases</h3>
 
-                <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="bg-[#212E73] text-white">
+                                <tr className="bg-[#315EFB] text-white">
                                     <th className="px-12 py-6 text-center text-xs font-bold uppercase tracking-widest rounded-tl-[32px]">Phase</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-widest">Allocation</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-widest">Purchased</th>
@@ -303,13 +303,13 @@ export default function SalesManagement() {
                                     <th className="px-12 py-6 text-center text-xs font-bold uppercase tracking-widest rounded-tr-[32px]">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-zinc-200">
+                            <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                                 {sales.length === 0 ? (
                                     <tr>
                                         <td colSpan={6} className="px-10 py-24 text-center text-zinc-500 font-medium italic">No phases found in system ledger.</td>
                                     </tr>
                                 ) : sales.map((sale) => (
-                                    <tr key={sale.id} className="hover:bg-zinc-50/70 transition-colors group">
+                                    <tr key={sale.id} className="hover:bg-zinc-200/50 transition-colors group">
                                         <td className="px-12 py-6 text-center">
                                             <span className="text-zinc-900 font-bold text-xl tracking-tight uppercase font-space-grotesk">{sale.name}</span>
                                         </td>
@@ -321,7 +321,7 @@ export default function SalesManagement() {
                                         </td>
                                         <td className="px-10 py-6 text-center">
                                             <div className="flex flex-col">
-                                                <span className="text-[#212E73] font-bold text-lg tracking-tighter">{formatDecimal(sale.total_tokens_sold, 5)}</span>
+                                                <span className="text-[#315EFB] font-bold text-lg tracking-tighter">{formatDecimal(sale.total_tokens_sold, 5)}</span>
                                                 <span className="text-xs text-zinc-400 font-bold uppercase tracking-[0.1em] mt-0.5">Sold</span>
                                             </div>
                                         </td>
@@ -344,7 +344,7 @@ export default function SalesManagement() {
                                             <div className="flex items-center justify-center gap-3">
                                                 <button
                                                     onClick={() => setSelectedSale(sale)}
-                                                    className="p-2.5 bg-white border border-zinc-200 text-zinc-600 hover:text-[#212E73] hover:border-[#212E73]/30 rounded-xl transition-all shadow-sm cursor-pointer"
+                                                    className="p-2.5 bg-white border border-zinc-200 text-zinc-600 hover:text-[#315EFB] hover:border-[#315EFB]/30 rounded-xl transition-all shadow-sm cursor-pointer"
                                                     title="View Details"
                                                 >
                                                     <Eye className="w-4 h-4" />
@@ -400,12 +400,12 @@ export default function SalesManagement() {
 
                 return (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-                        <div className="bg-white w-full max-w-4xl rounded-[40px] border border-zinc-200 overflow-hidden relative shadow-2xl">
+                        <div className="bg-[#ECE9EA] w-full max-w-4xl rounded-[40px] border border-zinc-200 overflow-hidden relative shadow-2xl">
                             {/* Modal Header */}
                             <div className="p-8 sm:p-10 flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50">
                                 <div className="flex items-center gap-4 min-w-0">
-                                    <div className="w-1.5 h-10 bg-[#212E73] rounded-full shrink-0" />
-                                    <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight uppercase font-space-grotesk truncate">{activeSale.name}</h2>
+                                    <div className="w-1.5 h-10 bg-[#315EFB] rounded-full shrink-0" />
+                                    <h2 className="text-3xl sm:text-4xl font-extrabold text-[#001060] tracking-tight uppercase font-manrope truncate">{activeSale.name}</h2>
                                 </div>
                                 <div className="flex items-center gap-4 shrink-0">
                                     <span className={cn(
@@ -429,7 +429,7 @@ export default function SalesManagement() {
                                     {/* Pricing & Limits Card */}
                                     <div className="bg-zinc-50 border border-zinc-200 rounded-[28px] p-8 space-y-6 flex flex-col justify-between overflow-hidden">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-[#212E73]/10 rounded-lg text-[#212E73] border border-[#212E73]/20">
+                                            <div className="p-2 bg-[#315EFB]/10 rounded-lg text-[#315EFB] border border-[#315EFB]/20">
                                                 <DollarSign className="w-4 h-4" />
                                             </div>
                                             <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Pricing & Limits</span>
@@ -437,7 +437,7 @@ export default function SalesManagement() {
 
                                         <div className="space-y-1 min-w-0">
                                             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Token Quantity</p>
-                                            <p className="text-2xl sm:text-3xl font-bold text-[#212E73] tracking-tight font-space-grotesk break-all">
+                                            <p className="text-2xl sm:text-3xl font-bold text-[#315EFB] tracking-tight font-space-grotesk break-all">
                                                 {formatDecimal(activeSale.token_quantity, 5)}
                                             </p>
                                         </div>
@@ -461,7 +461,7 @@ export default function SalesManagement() {
                                     {/* Token Availability Card */}
                                     <div className="bg-zinc-50 border border-zinc-200 rounded-[28px] p-8 space-y-6 flex flex-col justify-between overflow-hidden">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-[#212E73]/10 rounded-lg text-[#212E73] border border-[#212E73]/20">
+                                            <div className="p-2 bg-[#315EFB]/10 rounded-lg text-[#315EFB] border border-[#315EFB]/20">
                                                 <Box className="w-4 h-4" />
                                             </div>
                                             <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Token Availability</span>
@@ -469,7 +469,7 @@ export default function SalesManagement() {
 
                                         <div className="space-y-1 min-w-0">
                                             <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Available Tokens</p>
-                                            <p className="text-2xl sm:text-3xl font-bold text-[#212E73] tracking-tight font-space-grotesk break-all">
+                                            <p className="text-2xl sm:text-3xl font-bold text-[#315EFB] tracking-tight font-space-grotesk break-all">
                                                 {formatDecimal(activeSale.available_tokens, 5)}
                                             </p>
                                         </div>
@@ -481,7 +481,7 @@ export default function SalesManagement() {
                                             </div>
                                             <div className="h-2 bg-zinc-200 rounded-full overflow-hidden">
                                                 <div
-                                                    className="h-full bg-[#212E73] transition-all duration-1000"
+                                                    className="h-full bg-[#315EFB] transition-all duration-1000"
                                                     style={{ width: `${progressPercent}%` }}
                                                 />
                                             </div>
@@ -493,7 +493,7 @@ export default function SalesManagement() {
                                 <div className="bg-zinc-50 border border-zinc-200 rounded-[28px] p-8">
                                     <div className="flex flex-col md:flex-row md:items-center gap-8 md:gap-16">
                                         <div className="flex items-center gap-3 shrink-0">
-                                            <div className="p-3 bg-[#212E73]/10 rounded-2xl text-[#212E73] border border-[#212E73]/20">
+                                            <div className="p-3 bg-[#315EFB]/10 rounded-2xl text-[#315EFB] border border-[#315EFB]/20">
                                                 <Calendar className="w-5 h-5" />
                                             </div>
                                             <span className="text-[10px] font-bold text-zinc-800 uppercase tracking-[0.2em] font-space-grotesk">Phase Schedule</span>
@@ -538,10 +538,10 @@ export default function SalesManagement() {
                 const isEnded = editingSale.computed_status === 'ended' || editingSale.status === 'ended';
                 return (
                     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-                        <form onSubmit={handleUpdate} className="bg-white w-full max-w-sm rounded-[32px] border border-zinc-200 overflow-hidden shadow-2xl">
+                        <form onSubmit={handleUpdate} className="bg-[#ECE9EA] w-full max-w-sm rounded-[32px] border border-zinc-200 overflow-hidden shadow-2xl">
                             <div className="p-6 border-b border-zinc-200 bg-zinc-50/50 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Edit Settings</h2>
+                                    <h2 className="text-xl font-bold text-[#001060] tracking-tight">Edit Settings</h2>
                                     {isEnded && (
                                         <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-zinc-100 text-zinc-600 border border-zinc-200">
                                             Ended
@@ -557,7 +557,7 @@ export default function SalesManagement() {
                                     <div className="flex items-center justify-between">
                                         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Token Allocation</label>
                                         {availableIcoBalance !== null && !isEnded && (
-                                            <span className="text-[9px] text-[#212E73] font-bold">
+                                            <span className="text-[9px] text-[#315EFB] font-bold">
                                                 Max: {formatDecimal(availableIcoBalance, 5)}
                                             </span>
                                         )}
@@ -573,7 +573,7 @@ export default function SalesManagement() {
                                             "w-full border rounded-xl px-4 py-3 text-zinc-900 font-mono transition-colors",
                                             isEnded
                                                 ? "bg-zinc-100 border-zinc-200 text-zinc-400 cursor-not-allowed"
-                                                : "bg-zinc-50 border-zinc-200 focus:outline-none focus:border-[#212E73]"
+                                                : "bg-zinc-50 border-zinc-200 focus:outline-none focus:border-[#315EFB]"
                                         )}
                                         placeholder="Enter total tokens"
                                     />
@@ -583,16 +583,26 @@ export default function SalesManagement() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4 pt-2">
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Start Date</label>
-                                        <p className="text-sm font-medium text-zinc-600 px-1">{formatDate(editingSale.start_at)}</p>
+                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Min Purchase</label>
+                                        <input
+                                            type="text"
+                                            disabled
+                                            value={formatDecimal(editingSale.minimum_purchase, 5)}
+                                            className="w-full bg-zinc-100/70 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-500 font-mono cursor-not-allowed text-sm"
+                                        />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block text-right">End Date</label>
-                                        <p className="text-sm font-medium text-zinc-600 px-1 text-right">{formatDate(editingSale.end_at)}</p>
+                                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest block">Max Purchase</label>
+                                        <input
+                                            type="text"
+                                            disabled
+                                            value={formatDecimal(editingSale.maximum_purchase, 5)}
+                                            className="w-full bg-zinc-100/70 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-500 font-mono cursor-not-allowed text-sm"
+                                        />
                                     </div>
                                 </div>
                             </div>
-                            <div className="p-6 bg-zinc-50/50 border-t border-zinc-200 flex flex-col gap-3">
+                            <div className="p-6 bg-zinc-50/50 border-t border-zinc-200 space-y-3">
                                 <div className="flex gap-3">
                                     <button
                                         type="button"
@@ -609,7 +619,7 @@ export default function SalesManagement() {
                                             "flex-1 px-4 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2",
                                             isEnded
                                                 ? "bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed opacity-50"
-                                                : "bg-[#212E73] hover:bg-[#1a255c] disabled:opacity-50 text-white cursor-pointer shadow-sm"
+                                                : "bg-[#315EFB] hover:bg-[#2548D0] disabled:opacity-50 text-white cursor-pointer shadow-sm"
                                         )}
                                         title={isEnded ? "Cannot update a completed sale phase" : "Update"}
                                     >
@@ -659,11 +669,11 @@ export default function SalesManagement() {
             {/* ── Initialize New Phase Modal ── */}
             {isNewPhaseOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-                    <form onSubmit={handleCreatePhase} className="bg-white w-full max-w-4xl rounded-[40px] border border-zinc-200 overflow-hidden shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
+                    <form onSubmit={handleCreatePhase} className="bg-[#ECE9EA] w-full max-w-4xl rounded-[40px] border border-zinc-200 overflow-hidden shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar">
                         <div className="p-8 border-b border-zinc-200 flex items-center justify-between bg-zinc-50/50">
                             <div className="flex items-center gap-3">
-                                <div className="w-2 h-8 bg-[#212E73] rounded-full" />
-                                <h2 className="text-2xl font-bold text-zinc-900 tracking-tight uppercase font-space-grotesk">Initialize New Phase</h2>
+                                <div className="w-2 h-8 bg-[#315EFB] rounded-full" />
+                                <h2 className="text-2xl font-bold text-[#001060] tracking-tight uppercase font-manrope">Initialize New Phase</h2>
                             </div>
                             <button
                                 type="button"
@@ -686,7 +696,7 @@ export default function SalesManagement() {
                                     placeholder="e.g. Presale Round 1"
                                     value={newPhaseForm.name}
                                     onChange={(e) => setNewPhaseForm(p => ({ ...p, name: e.target.value }))}
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none disabled:opacity-50"
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none disabled:opacity-50"
                                 />
                             </div>
 
@@ -703,7 +713,7 @@ export default function SalesManagement() {
                                         placeholder="e.g. 50000"
                                         value={newPhaseForm.quantity}
                                         onChange={(e) => setNewPhaseForm(p => ({ ...p, quantity: e.target.value }))}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none disabled:opacity-50 font-mono"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none disabled:opacity-50 font-mono"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -716,7 +726,7 @@ export default function SalesManagement() {
                                         placeholder="100"
                                         value={newPhaseForm.minimum}
                                         onChange={(e) => setNewPhaseForm(p => ({ ...p, minimum: e.target.value }))}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none disabled:opacity-50 font-mono"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none disabled:opacity-50 font-mono"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -729,7 +739,7 @@ export default function SalesManagement() {
                                         placeholder="5000"
                                         value={newPhaseForm.maximum}
                                         onChange={(e) => setNewPhaseForm(p => ({ ...p, maximum: e.target.value }))}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#212E73] focus:ring-1 focus:ring-[#212E73] outline-none disabled:opacity-50 font-mono"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-4 text-zinc-900 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none disabled:opacity-50 font-mono"
                                     />
                                 </div>
                             </div>
@@ -748,7 +758,7 @@ export default function SalesManagement() {
                                             value={newPhaseForm.start_at}
                                             onChange={(e) => setNewPhaseForm(p => ({ ...p, start_at: e.target.value }))}
                                             onClick={(e) => { try { (e.currentTarget as any).showPicker(); } catch (_) { } }}
-                                            className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl pl-5 pr-12 py-4 text-zinc-900 focus:border-[#212E73] outline-none disabled:opacity-50 cursor-pointer"
+                                            className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl pl-5 pr-12 py-4 text-zinc-900 focus:border-[#315EFB] outline-none disabled:opacity-50 cursor-pointer"
                                         />
                                         <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
                                             <Calendar className="w-5 h-5" />
@@ -768,7 +778,7 @@ export default function SalesManagement() {
                                             value={newPhaseForm.end_at}
                                             onChange={(e) => setNewPhaseForm(p => ({ ...p, end_at: e.target.value }))}
                                             onClick={(e) => { try { (e.currentTarget as any).showPicker(); } catch (_) { } }}
-                                            className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl pl-5 pr-12 py-4 text-zinc-900 focus:border-[#212E73] outline-none disabled:opacity-50 cursor-pointer"
+                                            className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl pl-5 pr-12 py-4 text-zinc-900 focus:border-[#315EFB] outline-none disabled:opacity-50 cursor-pointer"
                                         />
                                         <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
                                             <Calendar className="w-5 h-5" />
@@ -790,7 +800,7 @@ export default function SalesManagement() {
                             <button
                                 type="submit"
                                 disabled={isCreatingPhase}
-                                className="flex-1 px-8 py-4 bg-[#212E73] hover:bg-[#1a255c] disabled:opacity-50 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.1em] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                                className="flex-1 px-8 py-4 bg-[#315EFB] hover:bg-[#2548D0] disabled:opacity-50 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.1em] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 {isCreatingPhase && <Loader2 className="w-4 h-4 animate-spin" />}
                                 {isCreatingPhase ? "Deploying Phase..." : "Deploy Phase"}

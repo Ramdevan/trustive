@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Space_Grotesk } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import { Web3Provider } from "@/context/Web3Context";
 import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
@@ -21,9 +21,14 @@ import { Toaster, ToastBar, toast } from "react-hot-toast";
 import { LuX } from "react-icons/lu";
 import AuthGuard from "@/components/AuthGuard";
 
-const spaceGrotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-inter",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
 });
 
 const queryClient = new QueryClient();
@@ -84,8 +89,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   if (!mounted) {
     return (
-      <main className={`${spaceGrotesk.variable} font-sans`}>
-        <div className="min-h-screen bg-black" />
+      <main className={`${inter.variable} ${manrope.variable} font-sans`}>
+        <div className="min-h-screen bg-white" />
       </main>
     );
   }
@@ -95,7 +100,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={darkTheme()}>
           <Web3Provider>
-            <main className={`${spaceGrotesk.variable} font-sans`}>
+            <main className={`${inter.variable} ${manrope.variable} font-sans`}>
               <Head>
                 <title>Trustive</title>
               </Head>

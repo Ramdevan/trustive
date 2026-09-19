@@ -45,7 +45,7 @@ function AutoScalingText({ children }: { children: React.ReactNode }) {
         <div ref={wrapRef} className="w-full overflow-hidden flex items-center h-[34px] mb-3">
             <h3
                 ref={textRef}
-                className="text-[28px] font-bold text-zinc-900 tracking-tight whitespace-nowrap origin-left"
+                className="text-[28px] font-bold text-[#001060] tracking-tight whitespace-nowrap origin-left"
                 style={{ transform: `scale(${scale})` }}
             >
                 {children}
@@ -136,12 +136,12 @@ export default function Dashboard() {
         <div className="space-y-8 animate-in fade-in duration-200">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {statCards.map((stat, i) => (
-                    <Link key={i} href={stat.link} className="bg-white p-8 rounded-[24px] border border-zinc-200/90 hover:border-[#212E73]/40 cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group relative flex flex-col justify-between min-h-[160px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+                    <Link key={i} href={stat.link} className="bg-[#ECE9EA] p-8 rounded-[24px] border border-zinc-200/90 hover:border-[#315EFB]/40 cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group relative flex flex-col justify-between min-h-[160px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
                         <div className="flex justify-between items-start">
-                            <span className="text-[10px] font-extrabold text-zinc-400 tracking-[0.2em] uppercase border-b border-zinc-100 pb-1">
+                            <span className="text-[10px] font-extrabold text-zinc-500 tracking-[0.2em] uppercase border-b border-zinc-200/60 pb-1">
                                 {stat.topLabel}
                             </span>
-                            <div className="w-10 h-10 rounded-[12px] bg-blue-50/70 border border-blue-100 flex items-center justify-center text-[#212E73] group-hover:bg-[#212E73] group-hover:text-white transition-all">
+                            <div className="w-10 h-10 rounded-[12px] bg-white border border-zinc-200 flex items-center justify-center text-[#315EFB] group-hover:bg-[#315EFB] group-hover:text-white transition-all shadow-xs">
                                 <stat.icon className="w-4 h-4" />
                             </div>
                         </div>
@@ -150,10 +150,10 @@ export default function Dashboard() {
                             <AutoScalingText>{stat.value}</AutoScalingText>
                             <div className="flex items-center gap-2">
                                 <div className="flex -space-x-1">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#212E73]" />
-                                    <div className="w-2.5 h-2.5 rounded-full bg-[#212E73]/30" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-[#315EFB]" />
+                                    <div className="w-2.5 h-2.5 rounded-full bg-[#315EFB]/30" />
                                 </div>
-                                <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-[0.15em]">
+                                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.15em]">
                                     {stat.bottomLabel}
                                 </span>
                             </div>
@@ -163,10 +163,10 @@ export default function Dashboard() {
             </div>
 
             {/* Table Section */}
-            <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden flex flex-col shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                <div className="px-8 py-6 flex items-center justify-between border-b border-zinc-100">
-                    <h3 className="text-zinc-900 font-bold text-lg tracking-tight">Recent Transactions</h3>
-                    <a href="/admin/transactions" className="bg-zinc-100 hover:bg-zinc-200 px-4 py-2 rounded-xl text-[#212E73] text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2">
+            <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden flex flex-col shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                <div className="px-8 py-6 flex items-center justify-between border-b border-zinc-200/80 bg-zinc-100/50">
+                    <h3 className="text-[#001060] font-bold text-lg tracking-tight">Recent Transactions</h3>
+                    <a href="/admin/transactions" className="bg-white hover:bg-zinc-50 border border-zinc-200 px-4 py-2 rounded-xl text-[#315EFB] text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-xs">
                         View All <ArrowUpRight className="w-3 h-3" />
                     </a>
                 </div>
@@ -177,7 +177,7 @@ export default function Dashboard() {
                     ) : (
                         <table className="w-full">
                             <thead>
-                                <tr className="bg-[#212E73] text-white uppercase font-black text-xs tracking-widest">
+                                <tr className="bg-[#315EFB] text-white uppercase font-black text-xs tracking-widest">
                                     <th className="px-12 py-6 text-center first:rounded-tl-2xl">ID</th>
                                     <th className="px-10 py-6 text-center">User</th>
                                     <th className="px-10 py-6 text-center">Transaction Hash</th>
@@ -187,9 +187,9 @@ export default function Dashboard() {
                                     <th className="px-12 py-6 text-center last:rounded-tr-2xl">Date</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-zinc-100 bg-white">
+                            <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                                 {lastTx.map((tx: any, i: number) => (
-                                    <tr key={tx.id ?? i} className="hover:bg-zinc-50/70 transition-colors group">
+                                    <tr key={tx.id ?? i} className="hover:bg-zinc-200/50 transition-colors group">
                                         <td className="px-12 py-6 text-zinc-400 text-sm font-bold text-center">{i + 1}</td>
                                         <td className="px-10 py-6">
                                             <div className="flex flex-col items-center justify-center">
@@ -215,7 +215,7 @@ export default function Dashboard() {
                                         </td>
                                         <td className="px-10 py-6 text-center">
                                             <div className="flex flex-col items-center">
-                                                <span className="text-[#212E73] font-bold text-base tracking-tight">{formatDecimal(tx.ptc_tokens, 5)}</span>
+                                                <span className="text-[#315EFB] font-bold text-base tracking-tight">{formatDecimal(tx.ptc_tokens, 5)}</span>
                                                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">Trustive Tokens</span>
                                             </div>
                                         </td>

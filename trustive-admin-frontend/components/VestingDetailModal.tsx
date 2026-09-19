@@ -113,10 +113,10 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={e => { if (e.target === e.currentTarget) onClose(); }}
         >
-            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[32px] bg-white border border-zinc-200 p-8 space-y-8 shadow-2xl">
+            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[32px] bg-[#ECE9EA] border border-zinc-200 p-8 space-y-8 shadow-2xl">
 
                 <div className="flex items-start justify-between gap-4">
-                    <h2 className="text-xl font-bold text-zinc-900 uppercase tracking-tight font-space-grotesk">Vesting Details</h2>
+                    <h2 className="text-xl font-bold text-[#001060] uppercase tracking-tight font-manrope">Vesting Details</h2>
                     <button onClick={onClose} className="text-zinc-400 hover:text-zinc-700 transition-colors cursor-pointer">
                         <X className="w-5 h-5" />
                     </button>
@@ -134,7 +134,7 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                     </div>
                     <div>
                         <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Allocated Token</div>
-                        <div className="text-[#212E73] font-bold text-base">
+                        <div className="text-[#315EFB] font-bold text-base">
                             {totalAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })} TRSIV
                         </div>
                     </div>
@@ -167,7 +167,7 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                     <div className="overflow-x-auto">
                         <table className="w-full border-collapse min-w-[44rem]">
                             <thead>
-                                <tr className="bg-[#212E73] text-white">
+                                <tr className="bg-[#315EFB] text-white">
                                     <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em]">S.No</th>
                                     <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em]">Claimable Token</th>
                                     <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em]">Cliff Period</th>
@@ -175,11 +175,11 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                                     <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em]">Tx Hash</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-zinc-200 bg-white">
+                            <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                                 {rows.length === 0 ? (
                                     <tr><td colSpan={5} className="px-6 py-16 text-center text-zinc-500 font-medium italic">No vesting periods found</td></tr>
                                 ) : rows.map(row => (
-                                    <tr key={row.period} className="hover:bg-zinc-50/70 transition-colors">
+                                    <tr key={row.period} className="hover:bg-zinc-200/50 transition-colors">
                                         <td className="px-6 py-4 text-center text-zinc-900 font-bold">{row.period}</td>
                                         <td className="px-6 py-4 text-center text-emerald-600 font-bold">
                                             {row.amount.toLocaleString("en-US", { maximumFractionDigits: 2 })} TRSIV

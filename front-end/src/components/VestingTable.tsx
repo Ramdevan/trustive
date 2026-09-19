@@ -53,17 +53,17 @@ const VestingTable: React.FC<VestingTableProps> = ({ vestings, loading, onRefres
         />
       </div>
 
-      <div className="overflow-x-auto rounded-2xl bg-card border border-white/5">
+      <div className="overflow-x-auto rounded-2xl bg-[#ECE9EA] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
         <table className="w-full text-left border-collapse min-w-[40rem]">
           <thead>
-            <tr className="text-[#FAF7F2] text-[0.8rem] sm:text-[1rem] font-medium border-b border-white/5 align-middle whitespace-nowrap">
+            <tr className="text-zinc-500 text-[0.875rem] font-semibold bg-zinc-200/50 border-b border-zinc-200 align-middle whitespace-nowrap">
               <th className="px-6 py-5 w-[15%] min-w-[6rem]">S.No</th>
               <th className="px-6 py-5 w-[35%] min-w-[10rem]">ID</th>
               <th className="px-6 py-5 w-[30%] min-w-[10rem]">Status</th>
               <th className="px-6 py-5 w-[20%] min-w-[8rem]">Action</th>
             </tr>
           </thead>
-          <tbody className="text-[0.875rem] font-medium text-[#94A3B8]">
+          <tbody className="text-[0.875rem] font-medium text-zinc-600">
             {loading ? (
               <tr><td colSpan={4} className="px-6 py-12 text-center text-zinc-500">Loading vestings...</td></tr>
             ) : paginated.length === 0 ? (
@@ -71,9 +71,9 @@ const VestingTable: React.FC<VestingTableProps> = ({ vestings, loading, onRefres
             ) : paginated.map((v, index) => {
               const s = getStatusStyle(v.display_status);
               return (
-                <tr key={v.id} className="hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
-                  <td className="px-6 py-5 align-middle whitespace-nowrap text-[#FAF7F2]">{(page - 1) * PAGE_SIZE + index + 1}</td>
-                  <td className="px-6 py-5 align-middle whitespace-nowrap text-[#FAF7F2] font-mono">{formatVestId(v)}</td>
+                <tr key={v.id} className="hover:bg-zinc-200/40 transition-colors border-b border-zinc-200/70 last:border-0">
+                  <td className="px-6 py-5 align-middle whitespace-nowrap text-zinc-900 font-bold">{(page - 1) * PAGE_SIZE + index + 1}</td>
+                  <td className="px-6 py-5 align-middle whitespace-nowrap text-zinc-900 font-bold font-mono">{formatVestId(v)}</td>
                   <td className="px-6 py-5 align-middle whitespace-nowrap">
                     <span className={`inline-flex items-center justify-center gap-1.5 w-[7.5rem] px-4 py-1.5 rounded-full text-[0.75rem] font-bold ${s.wrapper}`}>
                       <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${s.dot}`} />
@@ -83,7 +83,7 @@ const VestingTable: React.FC<VestingTableProps> = ({ vestings, loading, onRefres
                   <td className="px-6 py-5 align-middle whitespace-nowrap">
                     <button
                       onClick={() => setSelectedId(v.id)}
-                      className="text-accent font-bold hover:underline cursor-pointer"
+                      className="text-[#315EFB] font-bold hover:underline cursor-pointer"
                     >
                       View
                     </button>
@@ -95,15 +95,15 @@ const VestingTable: React.FC<VestingTableProps> = ({ vestings, loading, onRefres
         </table>
 
         {totalPages > 1 && (
-          <div className="px-6 py-4 flex items-center justify-between border-t border-white/5">
-            <p className="text-[0.875rem] font-normal text-[#64748B]">
+          <div className="px-6 py-4 flex items-center justify-between border-t border-zinc-200/80">
+            <p className="text-[0.875rem] font-normal text-zinc-500">
               Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
             </p>
             <div className="flex items-center gap-2">
-              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg bg-black/40 border border-white/5 text-zinc-400 hover:text-white transition-all cursor-pointer disabled:opacity-40">
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-2 rounded-lg bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900 transition-all cursor-pointer disabled:opacity-40 shadow-xs">
                 <LuChevronLeft className="h-4 w-4" />
               </button>
-              <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-2 rounded-lg bg-black/40 border border-white/5 text-zinc-400 hover:text-white transition-all cursor-pointer disabled:opacity-40">
+              <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-2 rounded-lg bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900 transition-all cursor-pointer disabled:opacity-40 shadow-xs">
                 <LuChevronRight className="h-4 w-4" />
               </button>
             </div>

@@ -59,7 +59,7 @@ const MoonPayModal: React.FC<MoonPayModalProps> = ({
           } else {
             // Fallback to client sandbox URL if backend returns error
             const fallbackKey = process.env.NEXT_PUBLIC_MOONPAY_API_KEY || 'pk_test_123';
-            const fallbackUrl = `https://buy-sandbox.moonpay.com/?apiKey=${fallbackKey}&currencyCode=${defaultCurrency}&walletAddress=${walletAddress}&baseCurrencyCode=usd${initialAmountUSD ? `&baseCurrencyAmount=${initialAmountUSD}` : ''}&colorCode=%23212E73`;
+            const fallbackUrl = `https://buy-sandbox.moonpay.com/?apiKey=${fallbackKey}&currencyCode=${defaultCurrency}&walletAddress=${walletAddress}&baseCurrencyCode=usd${initialAmountUSD ? `&baseCurrencyAmount=${initialAmountUSD}` : ''}&colorCode=%23315EFB`;
             setWidgetUrl(fallbackUrl);
           }
           setLoading(false);
@@ -68,7 +68,7 @@ const MoonPayModal: React.FC<MoonPayModalProps> = ({
         if (isMounted) {
           console.warn('MoonPay URL generate error, using fallback:', err);
           const fallbackKey = process.env.NEXT_PUBLIC_MOONPAY_API_KEY || 'pk_test_123';
-          const fallbackUrl = `https://buy-sandbox.moonpay.com/?apiKey=${fallbackKey}&currencyCode=${defaultCurrency}&walletAddress=${walletAddress}&baseCurrencyCode=usd${initialAmountUSD ? `&baseCurrencyAmount=${initialAmountUSD}` : ''}&colorCode=%23212E73`;
+          const fallbackUrl = `https://buy-sandbox.moonpay.com/?apiKey=${fallbackKey}&currencyCode=${defaultCurrency}&walletAddress=${walletAddress}&baseCurrencyCode=usd${initialAmountUSD ? `&baseCurrencyAmount=${initialAmountUSD}` : ''}&colorCode=%23315EFB`;
           setWidgetUrl(fallbackUrl);
           setLoading(false);
         }
@@ -109,11 +109,11 @@ const MoonPayModal: React.FC<MoonPayModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
-        className="relative w-full max-w-[480px] h-[92vh] max-h-[720px] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-zinc-200"
+        className="relative w-full max-w-[480px] h-[92vh] max-h-[720px] bg-[#ECE9EA] rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-zinc-200/90"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-100 bg-zinc-50/80">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200/90 bg-[#ECE9EA]">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 relative rounded-full overflow-hidden shadow-xs flex-shrink-0">
               <Image src={moonpayIcon} alt="MoonPay" fill />
@@ -177,7 +177,7 @@ const MoonPayModal: React.FC<MoonPayModalProps> = ({
                 <p className="text-sm text-red-500 font-medium">Failed to initialize payment gateway.</p>
                 <button
                   onClick={() => setLoading(true)}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#212E73] text-white text-xs font-bold rounded-xl"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#315EFB] hover:bg-[#2548D0] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-sm"
                 >
                   <LuRefreshCw className="w-3.5 h-3.5" /> Retry
                 </button>

@@ -72,12 +72,12 @@ export default function Vesting() {
         <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
           <LuWallet className="h-16 w-16 text-zinc-600" />
           <div>
-            <h2 className="text-[1.5rem] font-medium text-white mb-2">Connect Your Wallet</h2>
+            <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
             <p className="text-zinc-500 text-[1rem]">Connect your wallet to view your vesting schedule</p>
           </div>
           <button
             onClick={connectWallet}
-            className="bg-accent hover:bg-accent/90 text-black font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer"
+            className="bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#315EFB]/20"
           >
             Connect Wallet
           </button>
@@ -95,17 +95,17 @@ export default function Vesting() {
           <VestingStatCard
             title="Allocated Tokens"
             value={totalAllocated.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            currency="$Trustive"
+            currency="TRSIV"
           />
           <VestingStatCard
             title="Locked Tokens"
             value={totalLocked.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            currency="$Trustive"
+            currency="TRSIV"
           />
           <VestingStatCard
             title="Claimable Tokens"
             value={totalClaimable.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            currency="$Trustive"
+            currency="TRSIV"
           />
         </div>
         <VestingTable vestings={vestings} loading={loading} onRefresh={fetchVestings} />

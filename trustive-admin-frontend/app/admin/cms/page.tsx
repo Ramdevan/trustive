@@ -302,11 +302,11 @@ export default function CmsManagement() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-zinc-900 tracking-tight flex items-center gap-3">
-                        <div className="p-2 bg-[#212E73]/10 rounded-lg">
-                            <Newspaper className="w-6 h-6 text-[#212E73]" />
+                    <h1 className="text-2xl font-bold text-[#001060] tracking-tight flex items-center gap-3">
+                        <div className="p-2 bg-[#315EFB]/10 rounded-lg">
+                            <Newspaper className="w-6 h-6 text-[#315EFB]" />
                         </div>
-                        Content Management
+                        Landing Page CMS
                     </h1>
                     <p className="text-zinc-500 text-sm mt-1">
                         Manage landing page sections — images, headers, and descriptions.
@@ -314,7 +314,7 @@ export default function CmsManagement() {
                 </div>
                 <button
                     onClick={openCreateModal}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#212E73] hover:bg-[#1a255c] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md cursor-pointer"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
                     New Section
@@ -329,24 +329,24 @@ export default function CmsManagement() {
                     placeholder="Search sections..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-xl pl-11 pr-4 py-3 text-zinc-900 text-sm focus:border-[#212E73] outline-none transition-colors"
+                    className="w-full bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-xl pl-11 pr-4 py-3 text-zinc-900 text-sm focus:border-[#315EFB] outline-none transition-colors"
                 />
             </div>
 
             {/* Sections Grid */}
             {filteredSections.length === 0 ? (
-                <div className="bg-white rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-16 text-center">
+                <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-16 text-center">
                     <div className="w-20 h-20 bg-zinc-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
                         <FileText className="w-10 h-10 text-zinc-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-zinc-900 mb-2">No Sections Found</h3>
+                    <h3 className="text-xl font-bold text-[#001060] mb-2">No Sections Found</h3>
                     <p className="text-zinc-500 text-sm mb-8">
                         {searchQuery ? "No sections match your search." : "Create your first CMS section to get started."}
                     </p>
                     {!searchQuery && (
                         <button
                             onClick={openCreateModal}
-                            className="inline-flex items-center gap-2 px-8 py-3 bg-[#212E73] hover:bg-[#1a255c] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md cursor-pointer"
+                            className="inline-flex items-center gap-2 px-8 py-3 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md cursor-pointer"
                         >
                             <Plus className="w-4 h-4" />
                             Create Section
@@ -359,7 +359,7 @@ export default function CmsManagement() {
                         <div
                             key={section.id}
                             className={cn(
-                                "bg-white rounded-[24px] border overflow-hidden transition-all hover:shadow-lg group shadow-[0_4px_20px_rgba(0,0,0,0.03)]",
+                                "bg-[#ECE9EA] rounded-[24px] border overflow-hidden transition-all hover:shadow-lg group shadow-[0_4px_20px_rgba(0,0,0,0.03)]",
                                 section.is_active ? "border-zinc-200/90" : "border-red-200 opacity-60"
                             )}
                         >
@@ -394,7 +394,7 @@ export default function CmsManagement() {
                                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                                     <button
                                         onClick={() => openEditModal(section)}
-                                        className="p-3 bg-[#212E73] rounded-xl text-white hover:scale-110 transition-transform cursor-pointer"
+                                        className="p-3 bg-[#315EFB] hover:bg-[#2548D0] rounded-xl text-white hover:scale-110 transition-transform cursor-pointer"
                                         title="Edit"
                                     >
                                         <Edit2 className="w-4 h-4" />
@@ -419,8 +419,8 @@ export default function CmsManagement() {
                             {/* Content */}
                             <div className="p-5 space-y-3">
                                 <div>
-                                    <p className="text-[10px] font-black text-[#212E73] uppercase tracking-widest mb-1">{section.section_key}</p>
-                                    <h3 className="text-zinc-900 font-bold text-sm truncate">{section.title || "Untitled"}</h3>
+                                    <p className="text-[10px] font-black text-[#315EFB] uppercase tracking-widest mb-1">{section.section_key}</p>
+                                    <h3 className="text-[#001060] font-bold text-sm truncate">{section.title || "Untitled"}</h3>
                                     {section.subtitle && (
                                         <p className="text-zinc-500 text-xs mt-0.5 truncate">{section.subtitle}</p>
                                     )}
@@ -429,7 +429,7 @@ export default function CmsManagement() {
                                     <p className="text-zinc-600 text-xs line-clamp-2 leading-relaxed">{section.description}</p>
                                 )}
                                 {section.button_text && (
-                                    <div className="flex items-center gap-2 text-xs text-[#212E73] font-medium">
+                                    <div className="flex items-center gap-2 text-xs text-[#315EFB] font-medium">
                                         <LinkIcon className="w-3 h-3" />
                                         <span className="truncate">{section.button_text}</span>
                                     </div>
@@ -444,15 +444,15 @@ export default function CmsManagement() {
             {previewSection && (
                 <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setPreviewSection(null)} />
-                    <div className="relative bg-white border border-zinc-200/90 rounded-[32px] w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
+                    <div className="relative bg-[#ECE9EA] border border-zinc-200/90 rounded-[32px] w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
                         {/* Preview Header */}
-                        <div className="shrink-0 bg-white border-b border-zinc-100 px-8 py-6 flex items-center justify-between rounded-t-[32px]">
+                        <div className="shrink-0 bg-zinc-100/50 border-b border-zinc-200/80 px-8 py-6 flex items-center justify-between rounded-t-[32px]">
                             <div>
-                                <h2 className="text-xl font-bold text-zinc-900 flex items-center gap-2">
-                                    <Eye className="w-5 h-5 text-[#212E73]" />
+                                <h2 className="text-xl font-bold text-[#001060] flex items-center gap-2">
+                                    <Eye className="w-5 h-5 text-[#315EFB]" />
                                     Section Preview
                                 </h2>
-                                <p className="text-[#212E73] text-xs font-mono mt-1 font-bold">{previewSection.section_key}</p>
+                                <p className="text-[#315EFB] text-xs font-mono mt-1 font-bold">{previewSection.section_key}</p>
                             </div>
                             <button
                                 onClick={() => setPreviewSection(null)}
@@ -468,7 +468,7 @@ export default function CmsManagement() {
                                 <img
                                     src={`${API_BASE}${previewSection.image_url}`}
                                     alt={previewSection.title || "Preview"}
-                                    className="w-48 h-48 rounded-full object-cover border-4 border-[#212E73]/20 shadow-md"
+                                    className="w-48 h-48 rounded-full object-cover border-4 border-[#315EFB]/20 shadow-md"
                                 />
                             </div>
                         )}
@@ -477,7 +477,7 @@ export default function CmsManagement() {
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-6">
                             {/* Title & Subtitle */}
                             {previewSection.title && (
-                                <h3 className="text-2xl font-bold text-zinc-900">{previewSection.title}</h3>
+                                <h3 className="text-2xl font-bold text-[#001060]">{previewSection.title}</h3>
                             )}
                             {previewSection.subtitle && (
                                 <p className="text-zinc-500 text-sm -mt-3">{previewSection.subtitle}</p>
@@ -499,7 +499,7 @@ export default function CmsManagement() {
                                         href={previewSection.button_link || "#"}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#212E73] hover:bg-[#1a255c] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md"
+                                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md"
                                     >
                                         <LinkIcon className="w-3.5 h-3.5" />
                                         {previewSection.button_text || "Visit Link"}
@@ -531,11 +531,11 @@ export default function CmsManagement() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeModal} />
-                    <div className="relative bg-white border border-zinc-200/90 rounded-[32px] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl custom-scrollbar">
+                    <div className="relative bg-[#ECE9EA] border border-zinc-200/90 rounded-[32px] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl custom-scrollbar">
                         {/* Modal Header */}
-                        <div className="sticky top-0 z-10 bg-white border-b border-zinc-100 px-8 py-6 flex items-center justify-between rounded-t-[32px]">
+                        <div className="sticky top-0 z-10 bg-zinc-100/50 border-b border-zinc-200/80 px-8 py-6 flex items-center justify-between rounded-t-[32px]">
                             <div>
-                                <h2 className="text-xl font-bold text-zinc-900">
+                                <h2 className="text-xl font-bold text-[#001060]">
                                     {editingId ? "Edit Section" : "Create New Section"}
                                 </h2>
                                 <p className="text-zinc-500 text-xs mt-1">
@@ -562,7 +562,7 @@ export default function CmsManagement() {
                                     value={form.section_key}
                                     onChange={(e) => setForm(prev => ({ ...prev, section_key: e.target.value.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() }))}
                                     placeholder="e.g. hero_banner, about_us, features"
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none font-mono text-sm"
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none font-mono text-sm"
                                 />
                                 <p className="text-zinc-500 text-[10px] px-1">Unique identifier for this section. Only lowercase letters, numbers, underscores.</p>
                             </div>
@@ -578,7 +578,7 @@ export default function CmsManagement() {
                                         value={form.title}
                                         onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
                                         placeholder="Section heading"
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none text-sm"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none text-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -588,7 +588,7 @@ export default function CmsManagement() {
                                         value={form.subtitle}
                                         onChange={(e) => setForm(prev => ({ ...prev, subtitle: e.target.value }))}
                                         placeholder="Optional subtitle"
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none text-sm"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none text-sm"
                                     />
                                 </div>
                             </div>
@@ -607,7 +607,7 @@ export default function CmsManagement() {
                                                 onChange={(e) => updateParagraph(index, e.target.value)}
                                                 placeholder={`Paragraph ${index + 1}...`}
                                                 rows={3}
-                                                className="flex-1 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none text-sm resize-none"
+                                                className="flex-1 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none text-sm resize-none"
                                             />
                                             {form.descriptions.length > 1 && (
                                                 <button
@@ -625,7 +625,7 @@ export default function CmsManagement() {
                                 <button
                                     type="button"
                                     onClick={addParagraph}
-                                    className="flex items-center gap-2 px-4 py-2.5 bg-zinc-100 border border-zinc-200 rounded-xl text-zinc-700 hover:text-[#212E73] hover:border-[#212E73]/30 transition-all text-xs font-bold cursor-pointer"
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-zinc-100 border border-zinc-200 rounded-xl text-zinc-700 hover:text-[#315EFB] hover:border-[#315EFB]/30 transition-all text-xs font-bold cursor-pointer"
                                 >
                                     <PlusCircle className="w-4 h-4" />
                                     Add Paragraph
@@ -646,7 +646,7 @@ export default function CmsManagement() {
                                     className={cn(
                                         "relative border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all",
                                         dragActive
-                                            ? "border-[#212E73] bg-[#212E73]/5"
+                                            ? "border-[#315EFB] bg-[#315EFB]/5"
                                             : "border-zinc-300 hover:border-zinc-400 bg-zinc-50"
                                     )}
                                 >
@@ -673,7 +673,7 @@ export default function CmsManagement() {
                                         <div className="py-4">
                                             <Upload className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
                                             <p className="text-sm text-zinc-600 font-medium">
-                                                Drop an image here or <span className="text-[#212E73] font-bold">browse</span>
+                                                Drop an image here or <span className="text-[#315EFB] font-bold">browse</span>
                                             </p>
                                             <p className="text-[10px] text-zinc-400 mt-1">PNG, JPG, WebP up to 10MB</p>
                                         </div>
@@ -701,7 +701,7 @@ export default function CmsManagement() {
                                         value={form.button_text}
                                         onChange={(e) => setForm(prev => ({ ...prev, button_text: e.target.value }))}
                                         placeholder="e.g. Learn More"
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none text-sm"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none text-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -711,7 +711,7 @@ export default function CmsManagement() {
                                         value={form.button_link}
                                         onChange={(e) => setForm(prev => ({ ...prev, button_link: e.target.value }))}
                                         placeholder="https://..."
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#212E73] focus:bg-white outline-none text-sm"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none text-sm"
                                     />
                                 </div>
                             </div>
@@ -746,7 +746,7 @@ export default function CmsManagement() {
                             <button
                                 onClick={handleSave}
                                 disabled={saving}
-                                className="px-10 py-3 bg-[#212E73] hover:bg-[#1a255c] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md flex items-center gap-3 cursor-pointer"
+                                className="px-10 py-3 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md flex items-center gap-3 cursor-pointer"
                             >
                                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                                 {editingId ? "Update Section" : "Create Section"}

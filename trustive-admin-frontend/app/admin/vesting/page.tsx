@@ -250,13 +250,13 @@ export default function VestingManagement() {
                         disabled={syncing}
                         className="px-6 py-3 bg-white text-zinc-700 rounded-2xl border border-zinc-200 hover:bg-zinc-50 transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest disabled:opacity-50 cursor-pointer shadow-sm"
                     >
-                        <TrendingUp className={cn("w-4 h-4 text-[#212E73]", syncing && "animate-bounce")} />
+                        <TrendingUp className={cn("w-4 h-4 text-[#315EFB]", syncing && "animate-bounce")} />
                         {syncing ? "Syncing..." : "Deep Sync"}
                     </button>
 
                     <button
                         onClick={() => setShowCreate(!showCreate)}
-                        className="px-8 py-3 bg-[#212E73] text-white rounded-2xl hover:bg-[#1a255c] transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest shadow-md cursor-pointer"
+                        className="px-8 py-3 bg-[#315EFB] text-white rounded-2xl hover:bg-[#2548D0] transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest shadow-md cursor-pointer"
                     >
                         {showCreate ? <XCircle className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                         {showCreate ? "Close" : "New Vesting"}
@@ -266,13 +266,13 @@ export default function VestingManagement() {
 
             {/* Create Vesting Card */}
             {showCreate && (
-                <div className="bg-white rounded-[32px] border border-zinc-200/90 p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] animate-in zoom-in-95 duration-200">
+                <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] animate-in zoom-in-95 duration-200">
                     <div className="flex items-center gap-4 mb-8">
-                        <div className="w-12 h-12 rounded-2xl bg-[#212E73]/10 border border-[#212E73]/20 flex items-center justify-center">
-                            <Plus className="w-6 h-6 text-[#212E73]" />
+                        <div className="w-12 h-12 rounded-2xl bg-[#315EFB]/10 border border-[#315EFB]/20 flex items-center justify-center">
+                            <Plus className="w-6 h-6 text-[#315EFB]" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-zinc-900 uppercase tracking-tight font-space-grotesk">Init New Trust</h3>
+                            <h3 className="text-xl font-bold text-[#001060] uppercase tracking-tight font-manrope">Init New Trust</h3>
                             <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Deploy institutional vesting schedule to blockchain</p>
                         </div>
                     </div>
@@ -287,7 +287,7 @@ export default function VestingManagement() {
                                 placeholder="0x..."
                                 className={cn(
                                     "w-full bg-zinc-50 border rounded-2xl px-6 py-4 text-zinc-900 focus:outline-none transition-all font-mono text-xs font-bold placeholder:text-zinc-400",
-                                    duplicateBlocked ? "border-red-400 focus:border-red-500" : "border-zinc-200 focus:border-[#212E73]"
+                                    duplicateBlocked ? "border-red-400 focus:border-red-500" : "border-zinc-200 focus:border-[#315EFB]"
                                 )}
                             />
                             {duplicateBlocked && (
@@ -301,7 +301,7 @@ export default function VestingManagement() {
                             )}
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Total Allocated (Trustive)</label>
+                            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Total Allocated (TRSIV)</label>
                             <input
                                 type="number"
                                 min="1"
@@ -317,12 +317,12 @@ export default function VestingManagement() {
                                     if (e.key === '.' || e.key === ',') e.preventDefault();
                                 }}
                                 placeholder="E.g. 10000"
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-6 py-4 text-zinc-900 focus:outline-none focus:border-[#212E73] transition-all font-bold placeholder:text-zinc-400"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-6 py-4 text-zinc-900 focus:outline-none focus:border-[#315EFB] transition-all font-bold placeholder:text-zinc-400"
                             />
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">
-                                Cliff Period (Units) <span className="text-[#212E73] normal-case font-semibold">— each unit = 2 mins</span>
+                                Cliff Period (Units) <span className="text-[#315EFB] normal-case font-semibold">— each unit = 2 mins</span>
                             </label>
                             <input
                                 type="number"
@@ -339,13 +339,13 @@ export default function VestingManagement() {
                                     if (e.key === '.' || e.key === ',') e.preventDefault();
                                 }}
                                 placeholder="E.g. 2 (= 4 minutes)"
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-6 py-4 text-zinc-900 focus:outline-none focus:border-[#212E73] transition-all font-bold placeholder:text-zinc-400"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-6 py-4 text-zinc-900 focus:outline-none focus:border-[#315EFB] transition-all font-bold placeholder:text-zinc-400"
                             />
-                            {newVesting.cliff && <p className="text-[10px] text-[#212E73] font-semibold px-1">→ Total cliff: {Number(newVesting.cliff) * 2} minutes</p>}
+                            {newVesting.cliff && <p className="text-[10px] text-[#315EFB] font-semibold px-1">→ Total cliff: {Number(newVesting.cliff) * 2} minutes</p>}
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">
-                                Vesting Duration (Units) <span className="text-[#212E73] normal-case font-semibold">— each unit = 2 mins</span>
+                                Vesting Duration (Units) <span className="text-[#315EFB] normal-case font-semibold">— each unit = 2 mins</span>
                             </label>
                             <input
                                 type="number"
@@ -362,9 +362,9 @@ export default function VestingManagement() {
                                     if (e.key === '.' || e.key === ',') e.preventDefault();
                                 }}
                                 placeholder="E.g. 6 (= 12 minutes)"
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-6 py-4 text-zinc-900 focus:outline-none focus:border-[#212E73] transition-all font-bold placeholder:text-zinc-400"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl px-6 py-4 text-zinc-900 focus:outline-none focus:border-[#315EFB] transition-all font-bold placeholder:text-zinc-400"
                             />
-                            {newVesting.duration && <p className="text-[10px] text-[#212E73] font-semibold px-1">→ Total vest: {Number(newVesting.duration) * 2} minutes</p>}
+                            {newVesting.duration && <p className="text-[10px] text-[#315EFB] font-semibold px-1">→ Total vest: {Number(newVesting.duration) * 2} minutes</p>}
                         </div>
                     </div>
 
@@ -374,10 +374,10 @@ export default function VestingManagement() {
                             disabled={duplicateBlocked}
                             title={duplicateBlocked ? "This address already has a vesting schedule" : undefined}
                             className={cn(
-                                "flex-1 bg-[#212E73] text-white font-bold uppercase text-xs tracking-widest py-4 rounded-2xl transition-all shadow-md cursor-pointer",
+                                "flex-1 bg-[#315EFB] text-white font-bold uppercase text-xs tracking-widest py-4 rounded-2xl transition-all shadow-md cursor-pointer",
                                 duplicateBlocked
                                     ? "opacity-40 cursor-not-allowed"
-                                    : "hover:bg-[#1a255c]"
+                                    : "hover:bg-[#2548D0]"
                             )}
                         >
                             VEST
@@ -399,7 +399,7 @@ export default function VestingManagement() {
                         onClick={() => setActiveTab("growth")}
                         className={cn(
                             "px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer",
-                            activeTab === "growth" ? "bg-[#212E73] text-white shadow-sm" : "text-zinc-600 hover:text-zinc-900"
+                            activeTab === "growth" ? "bg-[#315EFB] text-white shadow-sm" : "text-zinc-600 hover:text-zinc-900"
                         )}
                     >
                         Active Vesting
@@ -408,7 +408,7 @@ export default function VestingManagement() {
                         onClick={() => setActiveTab("history")}
                         className={cn(
                             "px-6 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer",
-                            activeTab === "history" ? "bg-[#212E73] text-white shadow-sm" : "text-zinc-600 hover:text-zinc-900"
+                            activeTab === "history" ? "bg-[#315EFB] text-white shadow-sm" : "text-zinc-600 hover:text-zinc-900"
                         )}
                     >
                         Claim History
@@ -421,7 +421,7 @@ export default function VestingManagement() {
 
             <div className="relative">
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-bold text-zinc-900 uppercase tracking-tight font-space-grotesk ml-2">Vesting Assets</h3>
+                    <h3 className="text-xl font-bold text-[#001060] uppercase tracking-tight font-manrope ml-2">Vesting Assets</h3>
                     <div className="relative max-w-sm w-full">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                         <input
@@ -429,16 +429,16 @@ export default function VestingManagement() {
                             placeholder="Search by address..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-6 py-3.5 outline-none text-zinc-900 text-xs font-bold transition-all placeholder:text-zinc-400 focus:border-[#212E73] shadow-sm"
+                            className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-6 py-3.5 outline-none text-zinc-900 text-xs font-bold transition-all placeholder:text-zinc-400 focus:border-[#315EFB] shadow-sm"
                         />
                     </div>
                 </div>
 
-                <div className="bg-white rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                     <div className="overflow-x-auto">
                         <table className="w-full border-collapse">
                             <thead>
-                                <tr className="bg-[#212E73]">
+                                <tr className="bg-[#315EFB]">
                                     <th className="px-12 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white w-28">S.No</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">ID</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">Beneficiary</th>
@@ -446,12 +446,12 @@ export default function VestingManagement() {
                                     <th className="px-12 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">Action</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-zinc-200 bg-white">
+                            <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                                 {loading ? (
-                                    <tr><td colSpan={5} className="px-8 py-20 text-center"><div className="animate-spin h-8 w-8 border-t-2 border-[#212E73] mx-auto rounded-full" /></td></tr>
+                                    <tr><td colSpan={5} className="px-8 py-20 text-center"><div className="animate-spin h-8 w-8 border-t-2 border-[#315EFB] mx-auto rounded-full" /></td></tr>
                                 ) : filtered.length > 0 ? (
                                     paginatedData.map((v, i) => (
-                                        <tr key={v.id} className="hover:bg-zinc-50/70 transition-colors group">
+                                        <tr key={v.id} className="hover:bg-zinc-200/50 transition-colors group">
                                             <td className="px-12 py-6 text-center">
                                                 <span className="text-zinc-500 font-bold text-base">{(currentPage - 1) * itemsPerPage + i + 1}</span>
                                             </td>
@@ -460,10 +460,10 @@ export default function VestingManagement() {
                                             </td>
                                             <td className="px-10 py-6 text-center">
                                                 <div className="flex flex-col items-center">
-                                                    <span className="text-zinc-900 font-bold text-base group-hover:text-[#212E73] transition-colors">{v.username || (v.beneficiary ? shortenAddress(v.beneficiary) : '—')}</span>
+                                                    <span className="text-zinc-900 font-bold text-base group-hover:text-[#315EFB] transition-colors">{v.username || (v.beneficiary ? shortenAddress(v.beneficiary) : '—')}</span>
                                                     {v.beneficiary && (
                                                         <div className="flex items-center gap-1 mt-1">
-                                                            <span className="text-xs text-zinc-500 font-mono">{shortenAddress(v.beneficiary)}</span>
+                                                             <span className="text-xs text-zinc-500 font-mono">{shortenAddress(v.beneficiary)}</span>
                                                             <CopyButton text={v.beneficiary} label="Copy Beneficiary" />
                                                         </div>
                                                     )}
@@ -475,7 +475,7 @@ export default function VestingManagement() {
                                             <td className="px-12 py-6 text-center">
                                                 <button
                                                     onClick={() => setSelectedId(v.id)}
-                                                    className="text-[#212E73] font-bold text-xs uppercase tracking-widest hover:underline cursor-pointer"
+                                                    className="text-[#315EFB] font-bold text-xs uppercase tracking-widest hover:underline cursor-pointer"
                                                 >
                                                     View
                                                 </button>
@@ -500,7 +500,7 @@ export default function VestingManagement() {
                         <button
                             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-xl bg-white border border-zinc-200 text-zinc-500 disabled:opacity-30 hover:text-[#212E73] transition-all cursor-pointer shadow-sm"
+                            className="p-2 rounded-xl bg-white border border-zinc-200 text-zinc-500 disabled:opacity-30 hover:text-[#315EFB] transition-all cursor-pointer shadow-sm"
                         >
                             <ArrowRight className="w-5 h-5 rotate-180" />
                         </button>
@@ -510,7 +510,7 @@ export default function VestingManagement() {
                                 onClick={() => setCurrentPage(i + 1)}
                                 className={cn(
                                     "w-10 h-10 rounded-xl text-xs font-bold transition-all cursor-pointer",
-                                    currentPage === i + 1 ? "bg-[#212E73] text-white shadow-sm" : "bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900 shadow-sm"
+                                    currentPage === i + 1 ? "bg-[#315EFB] text-white shadow-sm" : "bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-900 shadow-sm"
                                 )}
                             >
                                 {i + 1}
@@ -519,7 +519,7 @@ export default function VestingManagement() {
                         <button
                             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                             disabled={currentPage === totalPages}
-                            className="p-2 rounded-xl bg-white border border-zinc-200 text-zinc-500 disabled:opacity-30 hover:text-[#212E73] transition-all cursor-pointer shadow-sm"
+                            className="p-2 rounded-xl bg-white border border-zinc-200 text-zinc-500 disabled:opacity-30 hover:text-[#315EFB] transition-all cursor-pointer shadow-sm"
                         >
                             <ArrowRight className="w-5 h-5" />
                         </button>
