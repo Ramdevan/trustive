@@ -150,7 +150,7 @@ const LoginForm: React.FC = () => {
               />
             </div>
             <h1 className="text-[1.5rem] md:text-[2rem] font-bold text-[#001060]">Happy to see you again!</h1>
-            <p className="text-[0.875rem] font-medium text-zinc-500">Sign in to continue your journey</p>
+            <p className="text-[0.875rem] font-medium text-zinc-900">Sign in to continue your journey</p>
             {success && (
               <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-center">
                 {success}
@@ -220,7 +220,7 @@ const LoginForm: React.FC = () => {
                     <input type="checkbox" className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-zinc-300 rounded-md checked:bg-[#315EFB] checked:border-[#315EFB] transition-all cursor-pointer" />
                     <LuCheck className="absolute left-0.5 md:left-1 top-0.5 md:top-1 h-3.5 w-3.5 md:h-4 md:w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[3]" />
                   </div>
-                  <span className="text-[0.875rem] md:text-[1rem] font-medium text-zinc-600 select-none group-hover/check:text-zinc-900 transition-colors">Remember Password</span>
+                  <span className="text-[0.875rem] md:text-[1rem] font-medium text-zinc-900 select-none group-hover/check:text-zinc-900 transition-colors">Remember Password</span>
                 </label>
               </>
             ) : (
@@ -242,7 +242,7 @@ const LoginForm: React.FC = () => {
                 <button 
                     type="button" 
                     onClick={() => setRequire2FA(false)}
-                    className="w-full text-zinc-500 hover:text-zinc-900 transition-colors text-xs font-bold uppercase tracking-widest"
+                    className="w-full text-zinc-900 hover:text-zinc-900 transition-colors text-xs font-bold uppercase tracking-widest"
                 >
                     Back to Login
                 </button>
@@ -258,7 +258,7 @@ const LoginForm: React.FC = () => {
             </button>
           </form>
 
-          <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-zinc-600">
+          <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-zinc-900">
             Don't have an account? <Link href="/register" className="text-[#315EFB] font-bold hover:underline">Sign up</Link>
           </p>
         </div>

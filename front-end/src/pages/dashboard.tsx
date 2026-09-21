@@ -244,7 +244,7 @@ export default function Dashboard() {
             <LuWallet className="h-16 w-16 text-zinc-600" />
             <div>
               <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
-              <p className="text-zinc-500 text-[1rem]">Connect your wallet to view your dashboard</p>
+              <p className="text-zinc-900 text-[1rem]">Connect your wallet to view your dashboard</p>
             </div>
             <button
               onClick={connectWallet}
@@ -287,13 +287,13 @@ export default function Dashboard() {
             </div>
 
             {!isConnected ? (
-              <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">
+              <div className="px-6 py-12 text-center text-zinc-900 text-[0.875rem]">
                 Connect your wallet to see recent transactions
               </div>
             ) : txLoading ? (
-              <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">Loading...</div>
+              <div className="px-6 py-12 text-center text-zinc-900 text-[0.875rem]">Loading...</div>
             ) : recentTxs.length === 0 ? (
-              <div className="px-6 py-12 text-center text-zinc-500 text-[0.875rem]">No transactions yet</div>
+              <div className="px-6 py-12 text-center text-zinc-900 text-[0.875rem]">No transactions yet</div>
             ) : (
               <div className="overflow-x-auto -mx-3 sm:mx-0">
                 <table className="w-full text-left border-collapse min-w-[36rem]">

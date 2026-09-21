@@ -86,11 +86,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
           <tbody className="text-[0.875rem] font-medium text-zinc-600">
             {loading ? (
               <tr>
-                <td colSpan={8} className="px-6 py-12 text-center text-zinc-500">Loading transactions...</td>
+                <td colSpan={8} className="px-6 py-12 text-center text-zinc-900">Loading transactions...</td>
               </tr>
             ) : paginated.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-6 py-12 text-center text-zinc-500">No transactions found</td>
+                <td colSpan={8} className="px-6 py-12 text-center text-zinc-900">No transactions found</td>
               </tr>
             ) : paginated.map((tx, index) => {
               const s = getStatusStyle(tx.status);

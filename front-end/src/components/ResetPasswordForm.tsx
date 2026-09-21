@@ -171,7 +171,7 @@ const ResetPasswordForm: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <h1 className="text-[1.5rem] font-bold text-[#001060] uppercase tracking-tight">Invalid or Expired Link</h1>
-                <p className="text-[0.875rem] text-zinc-500 max-w-sm mx-auto">
+                <p className="text-[0.875rem] text-zinc-900 max-w-sm mx-auto">
                   {error || 'This password reset link is invalid or has already expired. Reset links are valid for 1 hour.'}
                 </p>
               </div>
@@ -250,7 +250,7 @@ const ResetPasswordForm: React.FC = () => {
                       )}
                     </button>
                   </div>
-                  <p className="text-[0.75rem] text-zinc-500 px-2 leading-relaxed font-medium">
+                  <p className="text-[0.75rem] text-zinc-900 px-2 leading-relaxed font-medium">
                     8–15 characters, at least 1 uppercase letter, 1 number, and 1 special character.
                   </p>
                 </div>

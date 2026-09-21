@@ -92,7 +92,7 @@ const ForgotPasswordForm: React.FC = () => {
               />
             </div>
             <h1 className="text-[1.5rem] md:text-[2rem] font-bold text-[#001060]">Forgot Password</h1>
-            <p className="text-[0.875rem] font-medium text-zinc-500 max-w-sm mx-auto">
+            <p className="text-[0.875rem] font-medium text-zinc-900 max-w-sm mx-auto">
               Enter your registered email address and we will send you a verification link to reset your password.
             </p>
 

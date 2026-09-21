@@ -125,7 +125,7 @@ const MoonPayModal: React.FC<MoonPayModalProps> = ({
                   Card / Fiat
                 </span>
               </div>
-              <div className="flex items-center gap-1 text-[11px] text-zinc-500 font-medium">
+              <div className="flex items-center gap-1 text-[11px] text-zinc-900 font-medium">
                 <LuShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
                 <span>256-Bit Encrypted Payment</span>
               </div>
@@ -187,7 +187,7 @@ const MoonPayModal: React.FC<MoonPayModalProps> = ({
         </div>
 
         {/* Footer info bar */}
-        <div className="px-5 py-2.5 bg-white border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-500">
+        <div className="px-5 py-2.5 bg-white border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-900">
           <span className="truncate max-w-[280px]">
             Delivery to: <span className="font-mono text-zinc-800 font-semibold">{walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'N/A'}</span>
           </span>

@@ -21,7 +21,7 @@ const getStatusStyle = (ds?: string) => {
     case 'claimable': return { wrapper: 'bg-[#10B9811A] text-[#10B981]', dot: 'bg-[#10B981]', label: 'Claimable' };
     case 'claimed': return { wrapper: 'bg-[#6366f11A] text-[#6366f1]', dot: 'bg-[#6366f1]', label: 'Completed' };
     case 'revoked': return { wrapper: 'bg-[#EF44441A] text-[#EF4444]', dot: 'bg-[#EF4444]', label: 'Revoked' };
-    case 'locked': return { wrapper: 'bg-white/5 text-zinc-500', dot: 'bg-zinc-500', label: 'Locked' };
+    case 'locked': return { wrapper: 'bg-white/5 text-zinc-900', dot: 'bg-zinc-500', label: 'Locked' };
     default: return { wrapper: 'bg-[#EAB3081A] text-[#EAB308]', dot: 'bg-[#EAB308]', label: 'In-Progress' };
   }
 };
@@ -65,9 +65,9 @@ const VestingTable: React.FC<VestingTableProps> = ({ vestings, loading, onRefres
           </thead>
           <tbody className="text-[0.875rem] font-medium text-zinc-600">
             {loading ? (
-              <tr><td colSpan={4} className="px-6 py-12 text-center text-zinc-500">Loading vestings...</td></tr>
+              <tr><td colSpan={4} className="px-6 py-12 text-center text-zinc-900">Loading vestings...</td></tr>
             ) : paginated.length === 0 ? (
-              <tr><td colSpan={4} className="px-6 py-12 text-center text-zinc-500">No vestings found</td></tr>
+              <tr><td colSpan={4} className="px-6 py-12 text-center text-zinc-900">No vestings found</td></tr>
             ) : paginated.map((v, index) => {
               const s = getStatusStyle(v.display_status);
               return (
@@ -96,7 +96,7 @@ const VestingTable: React.FC<VestingTableProps> = ({ vestings, loading, onRefres
 
         {totalPages > 1 && (
           <div className="px-6 py-4 flex items-center justify-between border-t border-zinc-200/80">
-            <p className="text-[0.875rem] font-normal text-zinc-500">
+            <p className="text-[0.875rem] font-normal text-zinc-900">
               Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
             </p>
             <div className="flex items-center gap-2">

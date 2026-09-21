@@ -91,7 +91,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
     <div className="flex flex-col justify-between items-center text-center rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] h-full min-h-[160px]">
       <div className="flex flex-col items-center gap-1">
         <h3 className="text-[0.875rem] font-bold text-[#001060] uppercase tracking-widest">Withdraw / Claim</h3>
-        <span className="text-[0.65rem] text-zinc-600 font-mono">INDEX: {vestingIndex}</span>
+        <span className="text-[0.65rem] text-zinc-900 font-mono">INDEX: {vestingIndex}</span>
       </div>
 
       <div className="flex flex-col items-center">

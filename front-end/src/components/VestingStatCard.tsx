@@ -12,7 +12,7 @@ const VestingStatCard: React.FC<VestingStatCardProps> = ({ title, value, currenc
       <span className="text-[0.875rem] font-bold text-zinc-500 uppercase tracking-widest">{title}</span>
       <div className="flex flex-col items-center">
         <span className="text-[2.25rem] font-bold text-zinc-900 leading-tight tracking-tighter">{value}</span>
-        <span className="text-[1rem] font-black text-[#315EFB] uppercase tracking-wider">{currency}</span>
+        <span className="text-[1rem] font-black text-[#1E1E1E] uppercase tracking-wider">{currency}</span>
       </div>
     </div>
   );

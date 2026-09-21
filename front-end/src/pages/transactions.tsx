@@ -44,7 +44,7 @@ export default function Transactions() {
           <LuWallet className="h-16 w-16 text-zinc-600" />
           <div>
             <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
-            <p className="text-zinc-500 text-[1rem]">Connect your wallet to view your transaction history</p>
+            <p className="text-zinc-700 text-[1rem]">Connect your wallet to view your transaction history</p>
           </div>
           <button
             onClick={connectWallet}

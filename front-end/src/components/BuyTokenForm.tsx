@@ -566,7 +566,7 @@ const BuyTokenForm: React.FC = () => {
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-[0.75rem]">
-                <span className="text-zinc-500 font-medium">Delivery:</span>
+                <span className="text-zinc-900 font-medium">Delivery:</span>
                 <div className="inline-flex rounded-lg bg-white p-0.5 border border-zinc-200 shadow-xs">
                   <button
                     type="button"
@@ -574,7 +574,7 @@ const BuyTokenForm: React.FC = () => {
                     className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${
                       moonpayTargetCrypto === 'bnb_bsc'
                         ? 'bg-[#315EFB] text-white shadow-xs'
-                        : 'text-zinc-600 hover:text-zinc-900'
+                        : 'text-zinc-900 hover:text-zinc-900'
                     }`}
                   >
                     BNB (BSC)
@@ -585,7 +585,7 @@ const BuyTokenForm: React.FC = () => {
                     className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${
                       moonpayTargetCrypto === 'usdt_bsc'
                         ? 'bg-[#315EFB] text-white shadow-xs'
-                        : 'text-zinc-600 hover:text-zinc-900'
+                        : 'text-zinc-900 hover:text-zinc-900'
                     }`}
                   >
                     USDT (BSC)
@@ -596,7 +596,7 @@ const BuyTokenForm: React.FC = () => {
 
             {/* Quick Amount presets */}
             <div className="flex items-center justify-between pt-1 border-t border-purple-100/70">
-              <span className="text-zinc-500 text-xs font-medium">Quick Amount:</span>
+              <span className="text-zinc-900 text-xs font-medium">Quick Amount:</span>
               <div className="flex items-center gap-1.5">
                 {[50, 100, 250, 500].map((preset) => (
                   <button
@@ -606,7 +606,7 @@ const BuyTokenForm: React.FC = () => {
                     className={`px-2.5 py-1 text-[0.75rem] font-bold rounded-lg border transition-all cursor-pointer ${
                       amount === preset.toString()
                         ? 'bg-[#315EFB] border-[#315EFB] text-white'
-                        : 'bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300'
+                        : 'bg-white border-zinc-200 text-zinc-900 hover:border-zinc-300'
                     }`}
                   >
                     ${preset}
@@ -627,7 +627,7 @@ const BuyTokenForm: React.FC = () => {
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#315EFB] animate-pulse"></div>
-                    <span className="text-zinc-500 text-[0.75rem] font-bold uppercase tracking-widest">
+                    <span className="text-zinc-900 text-[0.75rem] font-bold uppercase tracking-widest">
                       Available Balance
                     </span>
                   </div>
@@ -647,7 +647,7 @@ const BuyTokenForm: React.FC = () => {
                     <button
                       key={p}
                       onClick={() => handlePercentageClick(p)}
-                      className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-600 hover:text-[#315EFB] hover:bg-zinc-100 rounded-md transition-all cursor-pointer"
+                      className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-900 hover:text-[#315EFB] hover:bg-zinc-100 rounded-md transition-all cursor-pointer"
                     >
                       {p === 100 ? 'MAX' : `${p}%`}
                     </button>
@@ -686,7 +686,7 @@ const BuyTokenForm: React.FC = () => {
         </div>
 
         {method === 'CARD' && (
-          <div className="flex items-center justify-between px-3.5 py-2.5 bg-zinc-50 rounded-xl border border-zinc-100 text-[0.75rem] text-zinc-500">
+          <div className="flex items-center justify-between px-3.5 py-2.5 bg-zinc-50 rounded-xl border border-zinc-100 text-[0.75rem] text-zinc-900">
             <div className="flex items-center gap-1.5 font-medium">
               <LuShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>Supports Visa, Mastercard, Apple Pay, Google Pay</span>
@@ -701,7 +701,7 @@ const BuyTokenForm: React.FC = () => {
         <div className="flex items-center justify-between">
           <label className="text-[0.875rem] font-semibold text-zinc-700 block">Receive</label>
           {minLimit > 0 && (
-            <span className="text-[0.75rem] text-zinc-500 font-medium">
+            <span className="text-[0.75rem] text-zinc-900 font-medium">
               Min: {minLimit.toLocaleString('en-US')} TRSIV{maxLimit > 0 ? ` • Max: ${maxLimit.toLocaleString('en-US')} TRSIV` : ''}
             </span>
           )}

@@ -245,7 +245,7 @@ export default function ReferralPage() {
                 </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-[#001060] tracking-tight">Referral Rewards</h1>
               </div>
-              <p className="text-zinc-500 text-sm mt-1">
+              <p className="text-zinc-900 text-sm mt-1">
                 Share your referral link, invite friends, and earn instant {stats?.commission_rate ?? 5}% rewards in TRSIV tokens on every token purchase.
               </p>
             </div>
@@ -259,7 +259,7 @@ export default function ReferralPage() {
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECE9EA] border border-zinc-200 text-xs font-medium text-zinc-700 hover:text-zinc-900 hover:border-zinc-300 transition-colors"
               >
                 <span>Contract: {shortenAddress(stats?.referral_contract || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935')}</span>
-                <LuExternalLink className="h-3 w-3 text-zinc-500" />
+                <LuExternalLink className="h-3 w-3 text-zinc-900" />
               </a>
             </div>
           </div>
@@ -278,7 +278,7 @@ export default function ReferralPage() {
                 <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats ? `${stats.commission_rate}%` : '5%'}
                 </div>
-                <p className="text-xs text-zinc-500 mt-1">Of every TRSIV bought by referrals</p>
+                <p className="text-xs text-zinc-900 mt-1">Of every TRSIV bought by referrals</p>
               </div>
             </div>
 
@@ -294,7 +294,7 @@ export default function ReferralPage() {
                 <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats?.total_referred_users ?? 0}
                 </div>
-                <p className="text-xs text-zinc-500 mt-1">Registered with your invite link</p>
+                <p className="text-xs text-zinc-900 mt-1">Registered with your invite link</p>
               </div>
             </div>
 
@@ -310,7 +310,7 @@ export default function ReferralPage() {
                 <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats ? parseFloat(stats.total_earned).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : '0.00'}
                 </div>
-                <p className="text-xs text-[#315EFB] font-semibold mt-1 uppercase tracking-wider">
+                <p className="text-xs text-[#1E1E1E] font-semibold mt-1 uppercase tracking-wider">
                   {stats?.token_symbol || 'TRSIV'} Lifetime
                 </p>
               </div>
@@ -319,7 +319,7 @@ export default function ReferralPage() {
             {/* Claimable Balance & Button */}
             <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/40 transition-all relative overflow-hidden">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#315EFB] uppercase tracking-wider flex items-center gap-1">
+                <span className="text-xs font-semibold text-[#001060] uppercase tracking-wider flex items-center gap-1">
                   <LuSparkles className="h-3.5 w-3.5" /> Claimable Rewards
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#315EFB]/10 text-[#315EFB] border border-[#315EFB]/20">
@@ -330,7 +330,7 @@ export default function ReferralPage() {
                 <div className="text-3xl font-bold text-zinc-900 tracking-tight">
                   {stats ? parseFloat(stats.claimable_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 }) : '0.00'}
                 </div>
-                <div className="text-xs text-zinc-500 mt-0.5">
+                <div className="text-xs text-zinc-900 mt-0.5">
                   {stats?.token_symbol || 'TRSIV'} available now
                 </div>
               </div>
@@ -369,7 +369,7 @@ export default function ReferralPage() {
                 <h2 className="text-xl md:text-2xl font-bold text-[#001060] tracking-tight">
                   Your Personal Invitation Link
                 </h2>
-                <p className="text-sm text-zinc-600 leading-relaxed">
+                <p className="text-sm text-zinc-900 leading-relaxed">
                   Anyone who signs up using this link or code is automatically bound to your account. You will receive {stats?.commission_rate ?? 5}% of their TRSIV purchase amount directly into your claimable rewards balance.
                 </p>
               </div>
@@ -377,8 +377,8 @@ export default function ReferralPage() {
               <div className="w-full lg:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 {/* Code badge */}
                 <div className="flex items-center justify-between sm:justify-start gap-2 px-4 py-3 rounded-2xl bg-white border border-zinc-200">
-                  <span className="text-xs text-zinc-500 font-medium">CODE:</span>
-                  <span className="font-mono text-sm font-bold text-[#315EFB] tracking-wider">
+                  <span className="text-xs text-zinc-900 font-medium">CODE:</span>
+                  <span className="font-mono text-sm font-bold text-[#001060] tracking-wider">
                     {stats?.referral_code || '------'}
                   </span>
                   <CopyButton
@@ -484,9 +484,9 @@ export default function ReferralPage() {
                         <tr key={u.id} className="hover:bg-zinc-200/50 transition-colors">
                           <td className="py-4 px-6">
                             <div className="font-medium text-zinc-900">{u.name || 'Anonymous User'}</div>
-                            <div className="text-xs text-zinc-500">{maskEmail(u.email)}</div>
+                            <div className="text-xs text-zinc-900">{maskEmail(u.email)}</div>
                           </td>
-                          <td className="py-4 px-6 font-mono text-xs text-zinc-600">
+                          <td className="py-4 px-6 font-mono text-xs text-zinc-900">
                             {u.wallet_address ? (
                               <div className="flex items-center gap-1.5">
                                 <span>{shortenAddress(u.wallet_address)}</span>
@@ -496,7 +496,7 @@ export default function ReferralPage() {
                               <span className="text-zinc-400 italic">Not connected</span>
                             )}
                           </td>
-                          <td className="py-4 px-6 text-zinc-500 text-xs">
+                          <td className="py-4 px-6 text-zinc-900 text-xs">
                             {formatDate(u.created_at)}
                           </td>
                           <td className="py-4 px-6 text-right font-medium text-zinc-900">
@@ -515,7 +515,7 @@ export default function ReferralPage() {
                       <LuUsers className="h-8 w-8" />
                     </div>
                     <h3 className="text-lg font-semibold text-[#001060]">No Friends Referred Yet</h3>
-                    <p className="text-sm text-zinc-500 max-w-md mt-1">
+                    <p className="text-sm text-zinc-900 max-w-md mt-1">
                       Share your personal invitation link above with friends or on social media to start earning TRSIV bonus rewards.
                     </p>
                   </div>
@@ -539,13 +539,13 @@ export default function ReferralPage() {
                     <tbody className="divide-y divide-zinc-200/90 text-zinc-700 bg-[#ECE9EA]">
                       {stats.claims_history.map((c) => (
                         <tr key={c.id} className="hover:bg-zinc-200/50 transition-colors">
-                          <td className="py-4 px-6 text-xs text-zinc-500">
+                          <td className="py-4 px-6 text-xs text-zinc-900">
                             {formatDate(c.created_at)}
                           </td>
                           <td className="py-4 px-6 font-bold text-[#315EFB]">
                             {parseFloat(c.amount || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats.token_symbol}
                           </td>
-                          <td className="py-4 px-6 font-mono text-xs text-zinc-600">
+                          <td className="py-4 px-6 font-mono text-xs text-zinc-900">
                             <a
                               href={`${BSC_SCAN_BASE}/tx/${c.tx_hash}`}
                               target="_blank"
@@ -572,7 +572,7 @@ export default function ReferralPage() {
                       <LuClock className="h-8 w-8" />
                     </div>
                     <h3 className="text-lg font-semibold text-[#001060]">No Claim History</h3>
-                    <p className="text-sm text-zinc-500 max-w-md mt-1">
+                    <p className="text-sm text-zinc-900 max-w-md mt-1">
                       When your claimable balance is above 0, click &quot;Claim to Wallet&quot; to transfer your rewards on-chain.
                     </p>
                   </div>

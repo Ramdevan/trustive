@@ -56,7 +56,7 @@ export default function ICO() {
             <LuWallet className="h-16 w-16 text-zinc-600" />
             <div>
               <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
-              <p className="text-zinc-500 text-[1rem]">Connect your wallet to view and participate in the ICO</p>
+              <p className="text-zinc-900 text-[1rem]">Connect your wallet to view and participate in the ICO</p>
             </div>
             <button
               onClick={connectWallet}
@@ -94,7 +94,7 @@ export default function ICO() {
                 <h3 className="text-xl font-bold text-[#001060] uppercase tracking-wider">
                   Upcoming Phase Scheduled
                 </h3>
-                <p className="text-zinc-500 text-sm max-w-sm mx-auto">
+                <p className="text-zinc-900 text-sm max-w-sm mx-auto">
                   The upcoming token sale phase is scheduled. Token purchase will automatically become available once the countdown timer reaches zero.
                 </p>
               </div>
@@ -109,7 +109,7 @@ export default function ICO() {
               <h3 className="text-xl font-bold text-[#001060] uppercase tracking-wider">
                 No Active Sale
               </h3>
-              <p className="text-zinc-500 text-sm max-w-sm mx-auto">
+              <p className="text-zinc-900 text-sm max-w-sm mx-auto">
                 There is currently no active or scheduled token sale. Please check back later for upcoming sale phases.
               </p>
             </div>

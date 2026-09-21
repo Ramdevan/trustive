@@ -55,7 +55,7 @@ const CountdownTimer: React.FC = () => {
       <div className="text-[3.5rem] sm:text-[5.5rem] md:text-[6.5rem] font-medium leading-none font-sans tracking-tighter text-[#315EFB]">
         {value}
       </div>
-      <div className="text-[1rem] sm:text-[1.25rem] md:text-[1.5rem] font-normal text-zinc-500 mt-2">
+      <div className="text-[1rem] sm:text-[1.25rem] md:text-[1.5rem] font-normal text-zinc-900 mt-2">
         {blockLabel}
       </div>
     </div>

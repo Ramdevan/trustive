@@ -395,7 +395,7 @@ export default function Profile() {
             <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <header className="flex flex-col gap-2">
                     <h1 className="text-3xl font-bold text-[#001060] tracking-tight">Account Settings</h1>
-                    <p className="text-zinc-500">Manage your profile and security preferences</p>
+                    <p className="text-zinc-900">Manage your profile and security preferences</p>
                 </header>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -463,7 +463,7 @@ export default function Profile() {
                             </div>
                             <div className="p-8 space-y-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Full Name</label>
+                                    <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Full Name</label>
                                     <div className="flex flex-col md:flex-row gap-4">
                                         <input
                                             type="text"
@@ -483,20 +483,20 @@ export default function Profile() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Email Address</label>
+                                    <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Email Address</label>
                                     <div className="relative">
                                         <input
                                             type="text"
                                             disabled
                                             value={user.email}
-                                            className="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-500 cursor-not-allowed"
+                                            className="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 cursor-not-allowed"
                                         />
-                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-[10px] text-zinc-500 uppercase font-bold">
+                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-[10px] text-zinc-900 uppercase font-bold">
                                             <LuCircleCheck className="w-3 h-3 text-green-500" />
                                             Verified
                                         </div>
                                     </div>
-                                    <p className="mt-2 text-xs text-zinc-500 italic">Sign-in email cannot be changed for security reasons.</p>
+                                    <p className="mt-2 text-xs text-zinc-900 italic">Sign-in email cannot be changed for security reasons.</p>
                                 </div>
                             </div>
                         </section>
@@ -512,7 +512,7 @@ export default function Profile() {
                             <form onSubmit={handlePasswordChange} className="p-8 space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="md:col-span-2">
-                                        <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Current Password</label>
+                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Current Password</label>
                                         <div className="relative">
                                             <input
                                                 type={showCurrentPassword ? "text" : "password"}
@@ -525,7 +525,7 @@ export default function Profile() {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer p-1"
+                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
                                                 title={showCurrentPassword ? "Hide password" : "Show password"}
                                             >
                                                 {showCurrentPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -533,7 +533,7 @@ export default function Profile() {
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">New Password</label>
+                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">New Password</label>
                                         <div className="relative">
                                             <input
                                                 type={showNewPassword ? "text" : "password"}
@@ -546,7 +546,7 @@ export default function Profile() {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowNewPassword(!showNewPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer p-1"
+                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
                                                 title={showNewPassword ? "Hide password" : "Show password"}
                                             >
                                                 {showNewPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -554,7 +554,7 @@ export default function Profile() {
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Confirm New Password</label>
+                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Confirm New Password</label>
                                         <div className="relative">
                                             <input
                                                 type={showConfirmPassword ? "text" : "password"}
@@ -567,7 +567,7 @@ export default function Profile() {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer p-1"
+                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
                                                 title={showConfirmPassword ? "Hide password" : "Show password"}
                                             >
                                                 {showConfirmPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -611,7 +611,7 @@ export default function Profile() {
                                             <h4 className="text-[#001060] font-bold uppercase tracking-wider text-sm">
                                                 {twoFaEnabled ? "Encryption Active" : "Add extra layer of security"}
                                             </h4>
-                                            <p className="text-zinc-500 text-xs leading-relaxed max-w-[28rem]">
+                                            <p className="text-zinc-900 text-xs leading-relaxed max-w-[28rem]">
                                                 {twoFaEnabled 
                                                     ? "Your account is protected with TOTP. Every login will require a 6-digit code from your authenticator app."
                                                     : "Enable Google 2FA to protect your account and assets from unauthorized access by requiring a dynamic token on every login."
@@ -634,19 +634,19 @@ export default function Profile() {
                                             <div className="p-2 bg-white rounded-2xl border border-zinc-200">
                                                 <img src={qrCode} alt="Setup QR" className="w-32 h-32" />
                                             </div>
-                                            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-center">
+                                            <p className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest text-center">
                                                 Scan with Google <br /> Authenticator
                                             </p>
                                             {twoFaSecret && (
                                                 <div className="w-full max-w-[14rem] bg-white border border-zinc-200 rounded-xl p-2.5 text-center space-y-1">
-                                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider block">Manual Entry Key</span>
+                                                    <span className="text-[9px] text-zinc-900 font-bold uppercase tracking-wider block">Manual Entry Key</span>
                                                     <span className="font-mono text-[11px] text-[#315EFB] font-bold select-all tracking-wider break-all block">{twoFaSecret}</span>
                                                 </div>
                                             )}
                                         </div>
                                         <div className="space-y-6 flex flex-col justify-center">
                                             <div className="space-y-2">
-                                                <label className="block text-[10px] font-black text-zinc-500 uppercase tracking-[2px] ml-1">Verification Code</label>
+                                                <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Verification Code</label>
                                                 <div className="flex gap-2">
                                                     <input
                                                         type="text"
@@ -667,7 +667,7 @@ export default function Profile() {
                                             </div>
                                             <button 
                                                 onClick={() => setShow2FASetup(false)}
-                                                className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest hover:text-zinc-900 transition-colors"
+                                                className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest hover:text-zinc-900 transition-colors"
                                             >
                                                 Cancel Setup
                                             </button>
@@ -692,7 +692,7 @@ export default function Profile() {
                             </div>
                             <div className="space-y-1">
                                 <h3 className="text-[#001060] font-bold text-lg leading-tight">Disable two-factor auth?</h3>
-                                <p className="text-zinc-500 text-xs leading-relaxed">
+                                <p className="text-zinc-900 text-xs leading-relaxed">
                                     Your account will be protected by your password alone. Confirm it is you by
                                     entering your password and a current code from your authenticator app.
                                 </p>
@@ -701,7 +701,7 @@ export default function Profile() {
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-zinc-500 uppercase tracking-[2px] ml-1">Account Password</label>
+                                <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Account Password</label>
                                 <div className="relative">
                                     <input
                                         type={showDisablePassword ? 'text' : 'password'}
@@ -714,7 +714,7 @@ export default function Profile() {
                                     <button
                                         type="button"
                                         onClick={() => setShowDisablePassword(v => !v)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-800 transition-colors"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors"
                                         aria-label={showDisablePassword ? 'Hide password' : 'Show password'}
                                     >
                                         {showDisablePassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
@@ -723,7 +723,7 @@ export default function Profile() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-zinc-500 uppercase tracking-[2px] ml-1">Authenticator Code</label>
+                                <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Authenticator Code</label>
                                 <input
                                     type="text"
                                     inputMode="numeric"

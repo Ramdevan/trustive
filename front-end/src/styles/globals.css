@@ -25,8 +25,8 @@
   --color-zinc-900: #1E1E1E;
   --color-zinc-800: #1E1E1E;
   --color-zinc-700: #1E1E1E;
-  --color-zinc-600: #1E1E1E;
-  --color-zinc-500: #1E1E1E;
+  --color-zinc-600: #001060;
+  --color-zinc-500: #001060;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-manrope), sans-serif;
@@ -42,9 +42,11 @@ body {
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #001060;
-  font-family: var(--font-manrope), var(--font-heading), sans-serif;
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    color: #001060;
+    font-family: var(--font-manrope), var(--font-heading), sans-serif;
+  }
 }
 
 .font-manrope {

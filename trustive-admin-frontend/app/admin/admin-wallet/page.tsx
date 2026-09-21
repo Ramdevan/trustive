@@ -312,7 +312,7 @@ export default function AdminWallet() {
                                 history.map((record, i) => (
                                     <tr key={record.id || i} className="hover:bg-zinc-200/50 transition-colors group">
                                         <td className="px-10 py-8 text-center">
-                                            <span className="text-zinc-600 font-mono text-base">{record.id}</span>
+                                            <span className="text-zinc-700 font-mono text-base">{record.id}</span>
                                         </td>
                                         <td className="px-10 py-8 text-center">
                                             <div className="flex items-center justify-center gap-2">

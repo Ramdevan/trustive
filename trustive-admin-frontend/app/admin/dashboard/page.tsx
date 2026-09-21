@@ -19,9 +19,8 @@ import { CryptoIcon } from "@/components/CryptoIcon";
 import { CopyButton } from "@/components/CopyButton";
 
 function AutoScalingText({ children }: { children: React.ReactNode }) {
-    const containerRef = typeof window !== "undefined" ? window.document.createElement("div") : null;
     const [scale, setScale] = useState(1);
-    const textRef = useRef<HTMLHeadingElement>(null);
+    const textRef = useRef<HTMLDivElement>(null);
     const wrapRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -43,13 +42,13 @@ function AutoScalingText({ children }: { children: React.ReactNode }) {
 
     return (
         <div ref={wrapRef} className="w-full overflow-hidden flex items-center h-[34px] mb-3">
-            <h3
+            <div
                 ref={textRef}
-                className="text-[28px] font-bold text-[#001060] tracking-tight whitespace-nowrap origin-left"
+                className="text-[28px] font-bold text-[#1E1E1E] tracking-tight whitespace-nowrap origin-left"
                 style={{ transform: `scale(${scale})` }}
             >
                 {children}
-            </h3>
+            </div>
         </div>
     );
 }
@@ -138,7 +137,7 @@ export default function Dashboard() {
                 {statCards.map((stat, i) => (
                     <Link key={i} href={stat.link} className="bg-[#ECE9EA] p-8 rounded-[24px] border border-zinc-200/90 hover:border-[#315EFB]/40 cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group relative flex flex-col justify-between min-h-[160px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
                         <div className="flex justify-between items-start">
-                            <span className="text-[10px] font-extrabold text-zinc-500 tracking-[0.2em] uppercase border-b border-zinc-200/60 pb-1">
+                            <span className="text-[10px] font-extrabold text-[#001060] tracking-[0.2em] uppercase border-b border-zinc-200/60 pb-1">
                                 {stat.topLabel}
                             </span>
                             <div className="w-10 h-10 rounded-[12px] bg-white border border-zinc-200 flex items-center justify-center text-[#315EFB] group-hover:bg-[#315EFB] group-hover:text-white transition-all shadow-xs">

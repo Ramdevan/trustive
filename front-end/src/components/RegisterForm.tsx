@@ -179,7 +179,7 @@ const RegisterForm: React.FC = () => {
               />
             </div>
             <h1 className="text-[1.5rem] md:text-[2rem] font-bold text-[#001060]">Create New Account</h1>
-            <p className="text-[0.875rem] font-medium text-zinc-500">Sign up to explore, play, and earn</p>
+            <p className="text-[0.875rem] font-medium text-zinc-900">Sign up to explore, play, and earn</p>
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-center animate-pulse">
                 {error}
@@ -251,7 +251,7 @@ const RegisterForm: React.FC = () => {
                   )}
                 </button>
               </div>
-              <p className="text-[0.75rem] text-zinc-500 px-2 leading-relaxed font-medium">
+              <p className="text-[0.75rem] text-zinc-900 px-2 leading-relaxed font-medium">
                 8–15 characters, at least 1 uppercase letter, 1 number, and 1 special character.
               </p>
             </div>
@@ -318,7 +318,7 @@ const RegisterForm: React.FC = () => {
                 <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-zinc-300 rounded-md checked:bg-[#315EFB] checked:border-[#315EFB] transition-all cursor-pointer" />
                 <LuCheck className="absolute left-0.5 md:left-1 top-0.5 md:top-1 h-3.5 w-3.5 md:h-4 md:w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[3]" />
               </div>
-              <span className="text-[0.875rem] md:text-[1rem] font-medium text-zinc-600 select-none group-hover/check:text-zinc-900 transition-colors">
+              <span className="text-[0.875rem] md:text-[1rem] font-medium text-zinc-900 select-none group-hover/check:text-zinc-900 transition-colors">
                 Accept <span className="underline underline-offset-4 text-[#315EFB] hover:text-[#2548D0]">terms and conditions</span>
               </span>
             </label>
@@ -332,7 +332,7 @@ const RegisterForm: React.FC = () => {
             </button>
           </form>
 
-          <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-zinc-600">
+          <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-zinc-900">
             Already have an account? <Link href="/login" className="text-[#315EFB] font-bold hover:underline">Login</Link>
           </p>
         </div>

@@ -248,7 +248,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-800 hover:bg-zinc-100 transition-colors text-left group cursor-pointer"
                         >
-                          <LuUser className="h-5 w-5 text-zinc-500 group-hover:text-[#315EFB] transition-colors" />
+                          <LuUser className="h-5 w-5 text-zinc-900 group-hover:text-[#315EFB] transition-colors" />
                           Profile
                         </Link>
 
@@ -257,7 +257,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-800 hover:bg-zinc-100 transition-colors text-left group cursor-pointer"
                         >
-                          <LuHistory className="h-5 w-5 text-zinc-500 group-hover:text-[#315EFB] transition-colors" />
+                          <LuHistory className="h-5 w-5 text-zinc-900 group-hover:text-[#315EFB] transition-colors" />
                           Session History
                         </Link>
 
@@ -288,7 +288,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                             } catch (e) { }
                             window.location.replace("/login");
                           }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-colors text-left group cursor-pointer"
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-900 hover:bg-zinc-100 hover:text-zinc-900 transition-colors text-left group cursor-pointer"
                         >
                           <LuLogOut className="h-5 w-5 text-zinc-400 group-hover:text-red-500" />
                           Logout Account

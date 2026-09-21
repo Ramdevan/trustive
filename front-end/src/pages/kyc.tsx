@@ -288,7 +288,7 @@ export default function KycPage() {
               <h1 className="text-2xl md:text-3xl font-bold text-[#001060] tracking-tight">
                 Identity Verification
               </h1>
-              <p className="text-sm md:text-base text-zinc-500 max-w-md mx-auto mt-2 font-medium">
+              <p className="text-sm md:text-base text-zinc-900 max-w-md mx-auto mt-2 font-medium">
                 To comply with international regulations and ensure asset security, please verify your identity via Sumsub.
               </p>
             </div>
@@ -301,7 +301,7 @@ export default function KycPage() {
                     <LuCircleCheck className="w-10 h-10" />
                   </div>
                   <h2 className="text-xl font-bold text-[#001060]">Verification Approved!</h2>
-                  <p className="text-sm text-zinc-500 font-medium">
+                  <p className="text-sm text-zinc-900 font-medium">
                     Your KYC has been confirmed. Redirecting to your dashboard...
                   </p>
                 </div>
@@ -361,7 +361,7 @@ export default function KycPage() {
                   {loading && (
                     <div className="py-16 text-center space-y-3">
                       <div className="animate-spin w-10 h-10 border-4 border-[#315EFB] border-t-transparent rounded-full mx-auto" />
-                      <p className="text-sm font-bold uppercase tracking-wider text-zinc-500">
+                      <p className="text-sm font-bold uppercase tracking-wider text-zinc-900">
                         Initializing Sumsub Verification SDK...
                       </p>
                     </div>
@@ -373,14 +373,14 @@ export default function KycPage() {
             </div>
 
             {/* Footer Notice */}
-            <div className="px-8 py-4 bg-zinc-200/50 border-t border-zinc-200/90 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-500 font-medium">
+            <div className="px-8 py-4 bg-zinc-200/50 border-t border-zinc-200/90 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-900 font-medium">
               <span>Trustive Security & Regulatory Compliance</span>
               <span>Encrypted & Verified via Sumsub</span>
             </div>
           </div>
         </main>
 
-        <footer className="relative z-10 py-6 text-center text-xs text-zinc-500 font-medium">
+        <footer className="relative z-10 py-6 text-center text-xs text-zinc-900 font-medium">
           &copy; {new Date().getFullYear()} Trustive. All rights reserved.
         </footer>
       </div>

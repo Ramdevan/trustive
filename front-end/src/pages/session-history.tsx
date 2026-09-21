@@ -83,7 +83,7 @@ export default function SessionHistoryPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[#001060] tracking-tight">Recent Activity</h1>
-                <p className="text-xs text-zinc-500">Monitor active and previous login sessions for your account</p>
+                <p className="text-xs text-zinc-900">Monitor active and previous login sessions for your account</p>
               </div>
             </div>
 
@@ -118,10 +118,10 @@ export default function SessionHistoryPage() {
                     sessions.map((item, idx) => (
                       <tr key={item.id || idx} className="hover:bg-zinc-200/50 transition-colors">
                         <td className="px-6 py-4 font-medium text-zinc-900">{item.ip || '127.0.0.1'}</td>
-                        <td className="px-6 py-4 text-zinc-600">{item.country || ''}</td>
+                        <td className="px-6 py-4 text-zinc-700">{item.country || ''}</td>
                         <td className="px-6 py-4 text-zinc-700">{item.os || 'Linux x86_64'}</td>
                         <td className="px-6 py-4 text-zinc-700">{item.browser || 'Chrome'}</td>
-                        <td className="px-6 py-4 text-zinc-600 font-mono text-xs sm:text-sm">{item.login_time}</td>
+                        <td className="px-6 py-4 text-zinc-700 font-mono text-xs sm:text-sm">{item.login_time}</td>
                       </tr>
                     ))
                   )}

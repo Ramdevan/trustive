@@ -213,7 +213,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
 
         {/* Claim everything unlocked on this schedule in one transaction */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <span className="text-[0.75rem] text-zinc-500">
+          <span className="text-[0.75rem] text-zinc-900">
             {unlockedRows.length > 0
               ? `${unlockedRows.length} period${unlockedRows.length > 1 ? 's' : ''} unlocked · ${unlockedTotal.toLocaleString('en-US', { maximumFractionDigits: 2 })} TRSIV available`
               : claimedPeriods >= vestPeriods && vestPeriods > 0
@@ -244,7 +244,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
             </thead>
             <tbody className="text-[0.8rem] font-medium text-zinc-600">
               {rows.length === 0 ? (
-                <tr><td colSpan={5} className="px-5 py-10 text-center text-zinc-500">No vesting periods found</td></tr>
+                <tr><td colSpan={5} className="px-5 py-10 text-center text-zinc-900">No vesting periods found</td></tr>
               ) : rows.map(row => (
                 <tr key={row.period} className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50/80 transition-colors">
                   <td className="px-5 py-4 align-middle whitespace-nowrap text-zinc-900 font-bold">{row.period}</td>
@@ -254,7 +254,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
                   <td className="px-5 py-4 align-middle whitespace-nowrap">
                     <div className="flex flex-col">
                       <span className="text-zinc-900 font-bold">{row.unlockSeconds}s</span>
-                      <span className="text-[0.65rem] text-zinc-500">{formatDateTime(row.unlockAt)}</span>
+                      <span className="text-[0.65rem] text-zinc-900">{formatDateTime(row.unlockAt)}</span>
                     </div>
                   </td>
                   <td className="px-5 py-4 align-middle whitespace-nowrap">
@@ -272,7 +272,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
                         {claimingPeriod === row.period ? 'Claiming' : 'Claim'}
                       </button>
                     ) : (
-                      <span className="inline-flex items-center justify-center w-[5.5rem] px-3 py-1.5 rounded-full text-[0.7rem] font-bold bg-white/5 text-zinc-500">
+                      <span className="inline-flex items-center justify-center w-[5.5rem] px-3 py-1.5 rounded-full text-[0.7rem] font-bold bg-white/5 text-zinc-900">
                         Locked
                       </span>
                     )}
@@ -305,7 +305,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
           </table>
         </div>
 
-        <p className="text-[0.7rem] text-zinc-500">
+        <p className="text-[0.7rem] text-zinc-900">
           Periods unlock in order, so claiming a later row also releases the unclaimed ones before it. Claim All takes every unlocked period in one transaction.
         </p>
       </div>
