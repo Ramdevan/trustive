@@ -20,9 +20,11 @@ import {
     TriangleAlert,
     DollarSign,
     Lock,
-    Newspaper,
     Menu,
     X,
+    Gift,
+    ArrowDownToLine,
+    Coins,
 } from "lucide-react";
 import { cn, shortenAddress } from "@/lib/utils";
 import { apiRequest } from "@/lib/api-client";
@@ -177,10 +179,12 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
 
     const navItems = useMemo(() => [
         { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+        { name: "BaseCoins", href: "/admin/base-coins", icon: Coins },
         { name: "Sales", href: "/admin/sales", icon: TrendingUp },
         { name: "Users", href: "/admin/users", icon: Users },
         { name: "Transactions", href: "/admin/transactions", icon: CreditCard },
-        { name: "Admin Wallet", href: "/admin/admin-wallet", icon: Wallet },
+        { name: "Referrals", href: "/admin/referral", icon: Gift },
+        { name: "Withdraw", href: "/admin/withdraw", icon: ArrowDownToLine },
         { name: "Vesting", href: "/admin/vesting", icon: ShieldCheck },
         { name: "Security & Profile", href: "/admin/security-profile", icon: Lock },
         { name: "Payment Settings", href: "/admin/payment-settings", icon: Settings },

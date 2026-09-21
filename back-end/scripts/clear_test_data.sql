@@ -1,5 +1,5 @@
 -- Trustive Test Data Purge SQL Script
--- PRESERVES: users, settings, cms_sections
+-- PRESERVES: users, settings
 -- PURGES: token_sales, ico_purchases, vesting_schedules, admin_withdraw, payment_settings_history
 
 SET FOREIGN_KEY_CHECKS = 0;

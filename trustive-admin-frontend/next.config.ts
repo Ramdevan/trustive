@@ -15,6 +15,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/admin/basecoins",
+        destination: "/admin/base-coins",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

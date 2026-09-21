@@ -977,6 +977,9 @@ module.exports = async function (fastify, opts) {
       }
       delete user.password;
       delete user.verification_token;
+      delete user.two_fa_secret;
+      delete user.reset_token;
+      delete user.reset_token_expires;
       return reply.send({ status: true, user });
     } catch (err) {
       console.error('Error in /me:', err);
@@ -1490,7 +1493,7 @@ module.exports = async function (fastify, opts) {
   fastify.get('/getUserData', async (request, reply) => {
     const { address } = request.query;
     try {
-      let [checkData] = await fastify.mysql.query('SELECT * FROM users WHERE wallet_address = ?', [address]);
+      let [checkData] = await fastify.mysql.query('SELECT id, name, email, wallet_address, profile_pic, kyc_status, PTC_REF_ID, created_at FROM users WHERE wallet_address = ?', [address]);
       if (checkData && checkData.length > 0) {
         const [transactions] = await fastify.mysql.query('SELECT * FROM ico_purchases WHERE address = ?', [address]);
         const txNorm = Array.isArray(transactions) ? transactions.map((r) => ({ ...r, created_at_utc: toUtcISOString(r.created_at) })) : transactions;
@@ -2115,28 +2118,6 @@ module.exports = async function (fastify, opts) {
     }
   });
 
-  // ========================================
-  // CMS - Public API (no auth required)
-  // ========================================
-  fastify.get('/cms/sections', async (request, reply) => {
-    try {
-      const [rows] = await fastify.mysql.query(
-        'SELECT id, section_key, title, subtitle, description, image_url, button_text, button_link, display_order FROM cms_sections WHERE is_active = 1 ORDER BY display_order ASC, id ASC'
-      );
-
-      // Build full image URLs so they are directly clickable/usable
-      const baseUrl = `${request.protocol}://${request.host}`;
-      const sections = (rows || []).map(row => ({
-        ...row,
-        image_url: row.image_url ? `${baseUrl}${row.image_url}` : null
-      }));
-
-      return reply.send({ status: true, sections });
-    } catch (err) {
-      console.error('Public CMS fetch error:', err);
-      return reply.code(500).send({ status: false, msg: 'Failed to fetch CMS sections' });
-    }
-  });
 
   // ========================================
   // Referral Program Endpoints

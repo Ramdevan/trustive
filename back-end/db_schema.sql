@@ -178,25 +178,6 @@ CREATE TABLE IF NOT EXISTS `vesting_claims` (
   INDEX `idx_beneficiary` (`beneficiary`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- ========================================
--- CMS Sections Table
--- ========================================
-CREATE TABLE IF NOT EXISTS `cms_sections` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `section_key` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `subtitle` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `button_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `button_link` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `display_order` int DEFAULT 0,
-  `is_active` tinyint(1) DEFAULT 1,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `section_key_unique` (`section_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ========================================
 -- Referral Claims Table
@@ -233,4 +214,29 @@ CREATE TABLE IF NOT EXISTS `login_history` (
   INDEX `idx_user_id` (`user_id`),
   INDEX `idx_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ========================================
+-- Base Coins / Settlement Assets Table
+-- ========================================
+CREATE TABLE IF NOT EXISTS `base_coins` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user` varchar(100) DEFAULT 'admin',
+  `type` enum('BASE-COIN', 'BASE-TOKEN') NOT NULL DEFAULT 'BASE-COIN',
+  `name` varchar(100) NOT NULL,
+  `symbol` varchar(20) NOT NULL,
+  `status` enum('Enabled', 'Disabled') NOT NULL DEFAULT 'Enabled',
+  `contract_address` varchar(255) DEFAULT NULL,
+  `decimals` int DEFAULT 18,
+  `logo_url` varchar(500) DEFAULT NULL,
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Seed default base currencies
+INSERT INTO `base_coins` (`user`, `type`, `name`, `symbol`, `status`, `contract_address`, `decimals`, `logo_url`, `created_at`) VALUES
+('admin', 'BASE-COIN', 'BNB (Binance Coin)', 'BNB', 'Enabled', NULL, 18, '/images/bnb.svg', '2025-09-17 10:00:00'),
+('admin', 'BASE-TOKEN', 'Tether (USDT)', 'USDT', 'Enabled', '0x59e50cD6361b48eA9008c8f7cf19869d6F8862A6', 6, '/images/usdt.svg', '2025-09-17 10:00:00'),
+('admin', 'BASE-TOKEN', 'USD Coin (USDC)', 'USDC', 'Enabled', '0x4A4C672c0cEB4880Ff5429512768F9f6c5645715', 18, '/images/usdc.svg', '2025-09-17 10:00:00');
+
 

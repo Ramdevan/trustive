@@ -27,7 +27,7 @@ async function main() {
   ];
 
   // Preserved tables
-  const preservedTables = ['users', 'settings', 'cms_sections'];
+  const preservedTables = ['users', 'settings'];
 
   console.log('Checking current row counts:');
   for (const table of [...preservedTables, ...tablesToClear]) {

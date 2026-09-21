@@ -99,7 +99,7 @@ export default function AdminLogin() {
                                 <>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">
-                                            Admin Identifier
+                                            Email
                                         </label>
                                         <input
                                             type="email"
@@ -113,7 +113,7 @@ export default function AdminLogin() {
 
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">
-                                            Security Token
+                                            Password
                                         </label>
                                         <div className="relative">
                                             <input
@@ -181,7 +181,7 @@ export default function AdminLogin() {
                                     VERIFYING...
                                 </span>
                             ) : (
-                                require2FA ? "VERIFY & PROCEED" : "INITIATE SESSION"
+                                require2FA ? "VERIFY & PROCEED" : "Login"
                             )}
                         </button>
                     </form>
@@ -189,7 +189,7 @@ export default function AdminLogin() {
 
                 {/* Footer Notes */}
                 <p className="text-center text-[9px] text-zinc-500 uppercase tracking-[4px] font-medium">
-                    Prop Defi Management • 2026 Internal Control
+                    Trustive Management • {new Date().getFullYear()} Internal Control
                 </p>
             </div>
         </div>

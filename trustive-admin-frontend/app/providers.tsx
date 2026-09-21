@@ -23,6 +23,24 @@ export default function Providers({
     React.useEffect(() => {
         setWagmiConfig(getConfig());
         setMounted(true);
+
+        const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+            const reason = event?.reason;
+            const message = typeof reason === 'string' ? reason : (reason?.message || reason?.shortMessage || '');
+            if (
+                message.includes('Failed to connect to MetaMask') ||
+                message.includes('User rejected the request') ||
+                message.includes('User denied transaction signature') ||
+                message.includes('ConnectorNotFoundError') ||
+                message.includes('ResourceUnavailableRpcError')
+            ) {
+                event.preventDefault();
+                console.warn('[Wallet] Handled extension rejection:', message);
+            }
+        };
+
+        window.addEventListener('unhandledrejection', handleUnhandledRejection);
+        return () => window.removeEventListener('unhandledrejection', handleUnhandledRejection);
     }, []);
 
     if (!mounted || !wagmiConfig) {

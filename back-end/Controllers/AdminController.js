@@ -672,9 +672,18 @@ module.exports = async function (fastify, opts) {
 
             const statsObj = (statsRows && statsRows[0]) ? statsRows[0] : {};
 
+            // Strip sensitive credentials, passwords and secrets before sending to client
+            const {
+                admin_password,
+                admin_two_fa_secret,
+                admin_two_fa_enabled,
+                moonpay_secret_key,
+                ...safeSettings
+            } = currentSettings;
+
             return reply.send({
                 status: true,
-                settings: currentSettings,
+                settings: safeSettings,
                 stats: {
                     ...statsObj,
                     total_ico_remaining: statsObj.total_ico_remaining !== undefined && statsObj.total_ico_remaining !== null
@@ -1333,9 +1342,8 @@ module.exports = async function (fastify, opts) {
     fastify.get("/settings", async (request, reply) => {
         const [rows] = await fastify.mysql.query("SELECT * FROM settings LIMIT 1");
         if (!rows || rows.length === 0) return reply.send({ status: false, msg: "No settings found" });
-        // The password hash and the TOTP secret have no business in a settings
-        // payload: handing the secret out would let a reader mint valid codes.
-        const { admin_password, admin_two_fa_secret, ...safe } = rows[0];
+        // The password hash, TOTP secret, and payment API secret keys have no business in a settings payload
+        const { admin_password, admin_two_fa_secret, moonpay_secret_key, ...safe } = rows[0];
         return reply.send({ status: true, data: safe });
     });
 
@@ -1453,7 +1461,7 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get("/payment-settings", async (request, reply) => {
         try {
-            const [rows] = await fastify.mysql.query("SELECT ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, referral_contract, referral_level1, moonpay_enabled, moonpay_api_key, moonpay_secret_key, moonpay_environment FROM settings LIMIT 1");
+            const [rows] = await fastify.mysql.query("SELECT contract_address, ico_contract, usdt_address, usdc_address, bnb_address, vesting_contract, referral_contract, referral_level1, moonpay_enabled, moonpay_api_key, moonpay_environment FROM settings LIMIT 1");
             const settings = rows[0] || {};
 
             // Fetch live Referral Contract balance
@@ -1558,6 +1566,149 @@ module.exports = async function (fastify, opts) {
             const [records] = await fastify.mysql.query('SELECT * FROM payment_settings_history ORDER BY timestamp DESC LIMIT 20');
             return reply.send({ status: true, data: records });
         } catch (err) {
+            return reply.code(500).send({ status: false, msg: "Internal Server Error" });
+        }
+    });
+
+    // ========================================
+    // Referral Program Admin Endpoints
+    // ========================================
+    fastify.get('/referral-stats', async (request, reply) => {
+        try {
+            // Ensure referral_claims table exists
+            await fastify.mysql.query(`
+                CREATE TABLE IF NOT EXISTS referral_claims (
+                    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                    user_id INT UNSIGNED DEFAULT NULL,
+                    wallet_address VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                    amount DECIMAL(30,8) NOT NULL DEFAULT 0,
+                    nonce BIGINT UNSIGNED NOT NULL,
+                    tx_hash VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                    status VARCHAR(50) COLLATE utf8mb4_unicode_ci DEFAULT 'success',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id),
+                    UNIQUE KEY unique_nonce (nonce),
+                    UNIQUE KEY unique_tx_hash (tx_hash),
+                    INDEX idx_wallet (wallet_address),
+                    INDEX idx_user_id (user_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            `);
+
+            const [rows] = await fastify.mysql.query("SELECT referral_contract, referral_level1 FROM settings LIMIT 1");
+            const settings = rows[0] || {};
+            const refContractAddr = settings.referral_contract || '0x66ae3C6846C0a340936B127BBBec4f3FC2C08935';
+            const commissionRate = parseFloat(settings.referral_level1 || 5.0).toFixed(2);
+
+            // Fetch live Referral Contract balance
+            let referralContractBalance = '0';
+            try {
+                const tokenAddr = process.env.TRUSTIVE_TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
+                const provider = await getWorkingProvider();
+                const tokenContract = new ethers.Contract(tokenAddr, ['function balanceOf(address) view returns (uint256)'], provider);
+                const bal = await tokenContract.balanceOf(refContractAddr);
+                referralContractBalance = ethers.formatEther(bal);
+            } catch (balErr) {
+                console.warn('Error fetching referral contract balance:', balErr.message);
+            }
+
+            // Aggregated Claims Statistics
+            const [claimSummary] = await fastify.mysql.query(`
+                SELECT 
+                    COUNT(*) as total_claims_count,
+                    COALESCE(SUM(CAST(amount AS DECIMAL(30,8))), 0) as total_claimed_tokens
+                FROM referral_claims
+                WHERE status = 'success'
+            `);
+
+            // Total rewards generated in ico_purchases
+            const [rewardSummary] = await fastify.mysql.query(`
+                SELECT 
+                    COALESCE(SUM(CAST(referrer_bonus AS DECIMAL(36,18))), 0) as total_rewards_generated
+                FROM ico_purchases
+                WHERE status = 'success'
+            `);
+
+            // Total users who referred and total users referred
+            const [referrersSummary] = await fastify.mysql.query(`
+                SELECT 
+                    COUNT(DISTINCT referred_by) as total_referrers,
+                    COUNT(*) as total_referred_users
+                FROM users 
+                WHERE referred_by IS NOT NULL AND referred_by != ''
+            `);
+
+            // Recent Claims History
+            const [recentClaims] = await fastify.mysql.query(`
+                SELECT 
+                    rc.id, rc.wallet_address, rc.amount, rc.nonce, rc.tx_hash, rc.status, rc.created_at,
+                    u.name, u.email
+                FROM referral_claims rc
+                LEFT JOIN users u ON rc.user_id = u.id
+                ORDER BY rc.created_at DESC
+                LIMIT 50
+            `);
+
+            return reply.send({
+                status: true,
+                settings: {
+                    referral_contract: refContractAddr,
+                    referral_level1: commissionRate
+                },
+                referral_contract_balance: referralContractBalance,
+                stats: {
+                    commission_rate: commissionRate,
+                    total_claims_count: claimSummary[0]?.total_claims_count || 0,
+                    total_claimed_tokens: parseFloat(claimSummary[0]?.total_claimed_tokens || 0).toFixed(4),
+                    total_rewards_generated: parseFloat(rewardSummary[0]?.total_rewards_generated || 0).toFixed(4),
+                    total_referrers: referrersSummary[0]?.total_referrers || 0,
+                    total_referred_users: referrersSummary[0]?.total_referred_users || 0,
+                },
+                recent_claims: recentClaims || []
+            });
+        } catch (err) {
+            console.error("Referral stats error:", err);
+            return reply.code(500).send({ status: false, msg: "Internal Server Error" });
+        }
+    });
+
+    fastify.post('/referral-settings', async (request, reply) => {
+        try {
+            const data = request.body || {};
+            const [rows] = await fastify.mysql.query("SELECT * FROM settings LIMIT 1");
+            const existing = rows[0] || {};
+
+            const referralContract = data.referral_contract !== undefined ? data.referral_contract.trim() : existing.referral_contract;
+            const referralLevel1 = data.referral_level1 !== undefined ? parseFloat(data.referral_level1) || 5.0 : existing.referral_level1;
+
+            if (existing && existing.id) {
+                await fastify.mysql.query(
+                    "UPDATE settings SET referral_contract = ?, referral_level1 = ? WHERE id = ?",
+                    [referralContract, referralLevel1, existing.id]
+                );
+            } else {
+                await fastify.mysql.query(
+                    "INSERT INTO settings (referral_contract, referral_level1) VALUES (?, ?)",
+                    [referralContract, referralLevel1]
+                );
+            }
+
+            // Log history
+            if (referralContract !== existing.referral_contract) {
+                await fastify.mysql.query(
+                    `INSERT INTO payment_settings_history (setting_key, old_value, new_value, changed_by) VALUES (?, ?, ?, ?)`,
+                    ['referral_contract', String(existing.referral_contract || 'NULL'), String(referralContract), 'Admin']
+                );
+            }
+            if (referralLevel1 !== existing.referral_level1) {
+                await fastify.mysql.query(
+                    `INSERT INTO payment_settings_history (setting_key, old_value, new_value, changed_by) VALUES (?, ?, ?, ?)`,
+                    ['referral_level1', String(existing.referral_level1 || 'NULL'), String(referralLevel1), 'Admin']
+                );
+            }
+
+            return reply.send({ status: true, msg: "Referral settings successfully updated" });
+        } catch (err) {
+            console.error("Referral settings update error:", err);
             return reply.code(500).send({ status: false, msg: "Internal Server Error" });
         }
     });
@@ -1995,175 +2146,121 @@ module.exports = async function (fastify, opts) {
         }
     });
 
-    // ========================================
-    // CMS Section Management
-    // ========================================
 
-    // Helper: Save base64 image to disk
-    const saveCmsImage = (base64DataUrl, filenamePrefix) => {
-        if (!base64DataUrl || typeof base64DataUrl !== 'string') return null;
-        const matches = base64DataUrl.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-        if (!matches) return null;
-        const b64 = matches[2];
-        const mime = matches[1];
-        const ext = mime.split('/')[1]?.replace('jpeg', 'jpg') || 'png';
-        const filename = `${filenamePrefix}_${Date.now()}.${ext}`;
-        const absDir = path.resolve(__dirname, '../public/uploads/cms');
-        fs.mkdirSync(absDir, { recursive: true });
-        const absPath = path.join(absDir, filename);
-        fs.writeFileSync(absPath, Buffer.from(b64, 'base64'));
-        return `/uploads/cms/${filename}`;
-    };
-
-    // GET /cms/sections - List all CMS sections (admin: includes inactive)
-    fastify.get('/cms/sections', async (request, reply) => {
+    // ========================================
+    // Base Coins & Base Tokens Management
+    // ========================================
+    fastify.get('/base-coins', async (request, reply) => {
         try {
-            const [rows] = await fastify.mysql.query(
-                'SELECT * FROM cms_sections ORDER BY display_order ASC, id ASC'
-            );
-            return reply.send({ status: true, sections: rows || [] });
+            await fastify.mysql.query(`
+                CREATE TABLE IF NOT EXISTS base_coins (
+                    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                    user VARCHAR(100) DEFAULT 'admin',
+                    type ENUM('BASE-COIN', 'BASE-TOKEN') NOT NULL DEFAULT 'BASE-COIN',
+                    name VARCHAR(100) NOT NULL,
+                    symbol VARCHAR(20) NOT NULL,
+                    status ENUM('Enabled', 'Disabled') NOT NULL DEFAULT 'Enabled',
+                    contract_address VARCHAR(255) DEFAULT NULL,
+                    decimals INT DEFAULT 18,
+                    logo_url VARCHAR(500) DEFAULT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    PRIMARY KEY (id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            `);
+
+            const [countRows] = await fastify.mysql.query('SELECT COUNT(*) as cnt FROM base_coins');
+            if (countRows[0].cnt === 0) {
+                await fastify.mysql.query(`
+                    INSERT INTO base_coins (user, type, name, symbol, status, contract_address, decimals, logo_url, created_at) VALUES
+                    ('admin', 'BASE-COIN', 'BNB (Binance Coin)', 'BNB', 'Enabled', NULL, 18, '/images/bnb.svg', '2025-09-17 10:00:00'),
+                    ('admin', 'BASE-TOKEN', 'Tether (USDT)', 'USDT', 'Enabled', '0x59e50cD6361b48eA9008c8f7cf19869d6F8862A6', 6, '/images/usdt.svg', '2025-09-17 10:00:00'),
+                    ('admin', 'BASE-TOKEN', 'USD Coin (USDC)', 'USDC', 'Enabled', '0x4A4C672c0cEB4880Ff5429512768F9f6c5645715', 18, '/images/usdc.svg', '2025-09-17 10:00:00');
+                `);
+            }
+
+            const [rows] = await fastify.mysql.query('SELECT * FROM base_coins ORDER BY id ASC');
+            return reply.send({ status: true, coins: rows });
         } catch (err) {
-            console.error('CMS list error:', err);
-            return reply.code(500).send({ status: false, msg: 'Failed to fetch CMS sections' });
+            console.error('Error fetching base coins:', err);
+            return reply.code(500).send({ status: false, msg: 'Failed to fetch base coins' });
         }
     });
 
-    // POST /cms/sections - Create a new CMS section
-    fastify.post('/cms/sections', async (request, reply) => {
+    fastify.post('/base-coins/toggle-status', async (request, reply) => {
         try {
-            const data = request.body || {};
-
-            if (!data.section_key) {
-                return reply.code(400).send({ status: false, msg: 'section_key is required' });
+            const { id } = request.body || {};
+            if (!id) {
+                return reply.code(400).send({ status: false, msg: 'Coin ID is required' });
             }
 
-            // Check for duplicate section_key
-            const [existing] = await fastify.mysql.query(
-                'SELECT id FROM cms_sections WHERE section_key = ?', [data.section_key]
-            );
-            if (existing && existing.length > 0) {
-                return reply.code(400).send({ status: false, msg: 'A section with this key already exists' });
+            const [rows] = await fastify.mysql.query('SELECT * FROM base_coins WHERE id = ?', [id]);
+            if (!rows || rows.length === 0) {
+                return reply.code(404).send({ status: false, msg: 'Coin not found' });
             }
 
-            // Handle image upload (base64)
-            let imageUrl = null;
-            if (data.image && data.image.startsWith('data:')) {
-                imageUrl = saveCmsImage(data.image, data.section_key);
-            }
+            const newStatus = rows[0].status === 'Enabled' ? 'Disabled' : 'Enabled';
+            await fastify.mysql.query('UPDATE base_coins SET status = ? WHERE id = ?', [newStatus, id]);
 
-            await fastify.mysql.query(
-                `INSERT INTO cms_sections (section_key, title, subtitle, description, image_url, button_text, button_link, display_order, is_active)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [
-                    data.section_key,
-                    data.title || null,
-                    data.subtitle || null,
-                    data.description || null,
-                    imageUrl,
-                    data.button_text || null,
-                    data.button_link || null,
-                    data.display_order || 0,
-                    data.is_active !== undefined ? data.is_active : 1
-                ]
-            );
-
-            return reply.send({ status: true, msg: 'CMS section created successfully' });
+            return reply.send({ status: true, msg: `Coin status changed to ${newStatus}`, newStatus });
         } catch (err) {
-            console.error('CMS create error:', err);
-            return reply.code(500).send({ status: false, msg: 'Failed to create CMS section' });
+            console.error('Error toggling coin status:', err);
+            return reply.code(500).send({ status: false, msg: 'Failed to update coin status' });
         }
     });
 
-    // POST /cms/sections/update/:id - Update a CMS section
-    fastify.post('/cms/sections/update/:id', async (request, reply) => {
+    fastify.post('/base-coins', async (request, reply) => {
+        try {
+            const { name, symbol, type, status, contract_address, decimals, logo_url } = request.body || {};
+            if (!name || !symbol) {
+                return reply.code(400).send({ status: false, msg: 'Name and Symbol are required' });
+            }
+
+            const coinType = (type === 'BASE-TOKEN') ? 'BASE-TOKEN' : 'BASE-COIN';
+            const coinStatus = (status === 'Disabled') ? 'Disabled' : 'Enabled';
+
+            await fastify.mysql.query(`
+                INSERT INTO base_coins (user, type, name, symbol, status, contract_address, decimals, logo_url)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `, [
+                'admin',
+                coinType,
+                name.trim(),
+                symbol.trim().toUpperCase(),
+                coinStatus,
+                contract_address || null,
+                decimals ? parseInt(decimals, 10) : 18,
+                logo_url || null
+            ]);
+
+            return reply.send({ status: true, msg: 'Base coin added successfully' });
+        } catch (err) {
+            console.error('Error adding base coin:', err);
+            return reply.code(500).send({ status: false, msg: 'Failed to add base coin' });
+        }
+    });
+
+    fastify.delete('/base-coins/:id', async (request, reply) => {
         try {
             const { id } = request.params;
-            const data = request.body || {};
-
-            const [existing] = await fastify.mysql.query('SELECT * FROM cms_sections WHERE id = ?', [id]);
-            if (!existing || existing.length === 0) {
-                return reply.code(404).send({ status: false, msg: 'Section not found' });
+            const [rows] = await fastify.mysql.query('SELECT status, symbol FROM base_coins WHERE id = ?', [id]);
+            if (!rows || rows.length === 0) {
+                return reply.code(404).send({ status: false, msg: 'Base coin not found' });
             }
 
-            // If section_key is being changed, check for duplicates
-            if (data.section_key && data.section_key !== existing[0].section_key) {
-                const [dup] = await fastify.mysql.query(
-                    'SELECT id FROM cms_sections WHERE section_key = ? AND id != ?', [data.section_key, id]
-                );
-                if (dup && dup.length > 0) {
-                    return reply.code(400).send({ status: false, msg: 'A section with this key already exists' });
-                }
+            if (rows[0].status === 'Enabled') {
+                return reply.code(400).send({
+                    status: false,
+                    msg: 'Cannot delete an enabled coin. Please disable it first.'
+                });
             }
 
-            // Handle image update
-            let imageUrl = existing[0].image_url;
-            if (data.image && data.image.startsWith('data:')) {
-                // Delete old image if it exists
-                if (existing[0].image_url) {
-                    const oldPath = path.resolve(__dirname, '..', 'public', existing[0].image_url.replace(/^\//, ''));
-                    if (fs.existsSync(oldPath)) {
-                        try { fs.unlinkSync(oldPath); } catch (e) { /* ignore */ }
-                    }
-                }
-                imageUrl = saveCmsImage(data.image, data.section_key || existing[0].section_key);
-            } else if (data.image === null || data.image === '') {
-                // Clear image
-                if (existing[0].image_url) {
-                    const oldPath = path.resolve(__dirname, '..', 'public', existing[0].image_url.replace(/^\//, ''));
-                    if (fs.existsSync(oldPath)) {
-                        try { fs.unlinkSync(oldPath); } catch (e) { /* ignore */ }
-                    }
-                }
-                imageUrl = null;
-            }
-
-            const updateFields = {
-                section_key: data.section_key || existing[0].section_key,
-                title: data.title !== undefined ? data.title : existing[0].title,
-                subtitle: data.subtitle !== undefined ? data.subtitle : existing[0].subtitle,
-                description: data.description !== undefined ? data.description : existing[0].description,
-                image_url: imageUrl,
-                button_text: data.button_text !== undefined ? data.button_text : existing[0].button_text,
-                button_link: data.button_link !== undefined ? data.button_link : existing[0].button_link,
-                display_order: data.display_order !== undefined ? data.display_order : existing[0].display_order,
-                is_active: data.is_active !== undefined ? data.is_active : existing[0].is_active
-            };
-
-            const keys = Object.keys(updateFields);
-            const sql = `UPDATE cms_sections SET ${keys.map(k => `\`${k}\` = ?`).join(', ')} WHERE id = ?`;
-            const params = [...keys.map(k => updateFields[k]), id];
-            await fastify.mysql.query(sql, params);
-
-            return reply.send({ status: true, msg: 'CMS section updated successfully' });
+            await fastify.mysql.query('DELETE FROM base_coins WHERE id = ?', [id]);
+            return reply.send({ status: true, msg: `${rows[0].symbol} deleted successfully` });
         } catch (err) {
-            console.error('CMS update error:', err);
-            return reply.code(500).send({ status: false, msg: 'Failed to update CMS section' });
-        }
-    });
-
-    // POST /cms/sections/delete/:id - Delete a CMS section
-    fastify.post('/cms/sections/delete/:id', async (request, reply) => {
-        try {
-            const { id } = request.params;
-
-            const [existing] = await fastify.mysql.query('SELECT * FROM cms_sections WHERE id = ?', [id]);
-            if (!existing || existing.length === 0) {
-                return reply.code(404).send({ status: false, msg: 'Section not found' });
-            }
-
-            // Delete associated image file
-            if (existing[0].image_url) {
-                const imgPath = path.resolve(__dirname, '..', 'public', existing[0].image_url.replace(/^\//, ''));
-                if (fs.existsSync(imgPath)) {
-                    try { fs.unlinkSync(imgPath); } catch (e) { /* ignore */ }
-                }
-            }
-
-            await fastify.mysql.query('DELETE FROM cms_sections WHERE id = ?', [id]);
-            return reply.send({ status: true, msg: 'CMS section deleted successfully' });
-        } catch (err) {
-            console.error('CMS delete error:', err);
-            return reply.code(500).send({ status: false, msg: 'Failed to delete CMS section' });
+            console.error('Error deleting base coin:', err);
+            return reply.code(500).send({ status: false, msg: 'Failed to delete base coin' });
         }
     });
 };
+
