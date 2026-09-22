@@ -3,45 +3,239 @@ const fs = require('fs');
 const { ethers } = require('ethers');
 const { getProvider, withFailover, invalidateProvider } = require('../Utils/rpcProvider');
 const bcrypt = require('bcrypt');
+const { initAdminAccounts } = require('../models/AdminAccountsInit');
 
 module.exports = async function (fastify, opts) {
     const { toUtcISOString, formatForMySQL, updateSaleStatuses } = require('./timeUtils');
+
+    // Auto-init admin accounts table
+    initAdminAccounts(fastify.mysql);
 
     // JWT authentication hook.
     // The public list is matched against the resolved route, not a substring of
     // the request URL: `url.includes('/verify')` also matched /verify-2fa and
     // left it open to anyone.
-    const PUBLIC_ROUTES = new Set(['/login', '/get-owner-address', '/verify']);
+    const KNOWN_OWNERS = [
+        '0x861b38d9E97ebE86883A55eB4b2b70cca795785E',
+        '0xb01507c1661C22404D2371Ae9043Dc715663EB22',
+        '0x0bAaaD913DE9567dEb71368296d56a84a22C949d'
+    ].map(a => a.toLowerCase());
+
+    const KNOWN_ADMINS = [
+        '0x3300f29508D7D04c75C55BeF8F56bC822E30A2D3',
+        '0x88A4f903D778Eee639fE1987fBD89c2892594471',
+        '0x61c3810A04AdeabeE2ABdCa465Af5BB389C979Df',
+        '0x55451A3f10D392BEa6A19DD9Fb366c17d462A5d2',
+        '0x724318431F8ce8a22e464c7057dECB474d603EeD'
+    ].map(a => a.toLowerCase());
+
+    let _cachedContractRoles = null;
+    let _cachedContractRolesTime = 0;
+
+    async function getContractRoles() {
+        if (_cachedContractRoles && Date.now() - _cachedContractRolesTime < 60000) {
+            return _cachedContractRoles;
+        }
+        try {
+            const [rows] = await fastify.mysql.query("SELECT ico_contract FROM settings LIMIT 1");
+            const icoAddr = rows[0]?.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
+            const roleAbi = [
+                { "inputs": [], "name": "getOwners", "outputs": [{ "internalType": "address[3]", "name": "", "type": "address[3]" }], "stateMutability": "view", "type": "function" },
+                { "inputs": [], "name": "getAdmins", "outputs": [{ "internalType": "address[5]", "name": "", "type": "address[5]" }], "stateMutability": "view", "type": "function" },
+                { "inputs": [], "name": "OWNER_THRESHOLD", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+                { "inputs": [], "name": "ADMIN_THRESHOLD", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }
+            ];
+            const res = await withFailover(async (provider) => {
+                const contract = new ethers.Contract(icoAddr, roleAbi, provider);
+                const [owners, admins, ownerThresh, adminThresh] = await Promise.all([
+                    contract.getOwners().catch(() => KNOWN_OWNERS),
+                    contract.getAdmins().catch(() => KNOWN_ADMINS),
+                    contract.OWNER_THRESHOLD().catch(() => 2n),
+                    contract.ADMIN_THRESHOLD().catch(() => 3n)
+                ]);
+                return {
+                    owners: (owners || []).map(o => o.toLowerCase()),
+                    admins: (admins || []).map(a => a.toLowerCase()),
+                    ownerThreshold: Number(ownerThresh || 2),
+                    adminThreshold: Number(adminThresh || 3)
+                };
+            });
+            if (res && res.owners && res.owners.length > 0) {
+                _cachedContractRoles = res;
+                _cachedContractRolesTime = Date.now();
+                return res;
+            }
+        } catch (e) {
+            // Fallback to constants
+        }
+        return {
+            owners: KNOWN_OWNERS,
+            admins: KNOWN_ADMINS,
+            ownerThreshold: 2,
+            adminThreshold: 3
+        };
+    }
+
+    const PUBLIC_ROUTES = new Set(['/login', '/wallet-login', '/roles-info', '/proposals', '/get-owner-address', '/verify', '/admin-accounts-list']);
+    const OWNER_ONLY_ROUTES = new Set([
+        '/createWithdraw',
+        '/change-password',
+        '/setup-2fa',
+        '/verify-2fa',
+        '/disable-2fa',
+        '/reset-password-owner'
+    ]);
 
     const adminRouteOf = (request) => {
-        const url = request.routeOptions?.url || request.url.split('?')[0];
-        return url.replace(/^\/api\/admin/, '') || '/';
+        const raw = request.url.split('?')[0];
+        return raw.replace(/^\/api\/admin/, '') || '/';
     };
 
     fastify.addHook('preHandler', async (request, reply) => {
-        if (request.method === 'OPTIONS') return;
-        if (PUBLIC_ROUTES.has(adminRouteOf(request))) return;
+        const resolvedRoute = adminRouteOf(request);
+        if (request.method === 'OPTIONS' || PUBLIC_ROUTES.has(resolvedRoute)) {
+            return;
+        }
 
         try {
             await request.jwtVerify();
-        } catch (err) {
-            return reply.code(401).send({ status: false, msg: 'Unauthorized: Invalid or missing token' });
-        }
+            const decoded = request.user;
+            request.adminRole = decoded?.role || 'owner';
 
-        // Every token is signed with the same secret, so without this check a
-        // plain user's login token opened the whole admin API.
-        if (!request.user?.isAdmin) {
-            return reply.code(403).send({ status: false, msg: 'Forbidden: admin access required' });
+            // Owner-only route guard: Block admins from accessing Owner-restricted operations
+            if (OWNER_ONLY_ROUTES.has(resolvedRoute) && request.adminRole !== 'owner') {
+                return reply.code(403).send({
+                    status: false,
+                    msg: 'Forbidden: Owner permissions required for this action',
+                    code: 'OWNER_ROLE_REQUIRED'
+                });
+            }
+        } catch (err) {
+            return reply.code(401).send({
+                status: false,
+                msg: 'Unauthorized: Valid admin token required',
+                code: 'UNAUTHORIZED'
+            });
         }
     });
 
     fastify.get('/verify', async (req, reply) => {
         try {
             await req.jwtVerify();
-            if (!req.user?.isAdmin) return reply.code(403).send({ status: false, msg: 'Forbidden' });
-            return { status: true, msg: 'Authorized' };
+            const role = req.user?.role || 'owner';
+            const address = req.user?.assignedWallet || req.user?.address || null;
+            const email = req.user?.email || null;
+            const name = req.user?.name || null;
+            return {
+                status: true,
+                valid: true,
+                role,
+                address,
+                email,
+                name,
+                data: { role, address, email, name }
+            };
         } catch (err) {
             return reply.code(401).send({ status: false, msg: 'Unauthorized' });
+        }
+    });
+
+    fastify.get('/admin-accounts-list', async (req, reply) => {
+        try {
+            const [rows] = await fastify.mysql.query(
+                "SELECT id, name, email, role, assigned_wallet FROM admin_accounts WHERE status = 1 ORDER BY role DESC, id ASC"
+            );
+            return reply.send({
+                status: true,
+                accounts: rows
+            });
+        } catch (err) {
+            return reply.send({ status: false, accounts: [] });
+        }
+    });
+
+    fastify.get('/roles-info', async (req, reply) => {
+        try {
+            const roles = await getContractRoles();
+            return reply.send({
+                status: true,
+                contract: process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC',
+                ...roles
+            });
+        } catch (err) {
+            return reply.code(500).send({ status: false, msg: 'Failed to fetch roles info' });
+        }
+    });
+
+    fastify.get('/proposals', async (req, reply) => {
+        try {
+            const [rows] = await fastify.mysql.query("SELECT ico_contract FROM settings LIMIT 1");
+            const icoAddr = rows[0]?.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
+            const icoAbi = [
+                { "inputs": [], "name": "proposalCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+                { "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }], "name": "getProposalMeta", "outputs": [{ "components": [{ "internalType": "enum TrisivICO.Role", "name": "role", "type": "uint8" }, { "internalType": "uint8", "name": "confirmations", "type": "uint8" }, { "internalType": "bool", "name": "executed", "type": "bool" }, { "internalType": "bool", "name": "cancelled", "type": "bool" }, { "internalType": "uint64", "name": "expiresAt", "type": "uint64" }, { "internalType": "uint32", "name": "epoch", "type": "uint32" }, { "internalType": "address", "name": "proposer", "type": "address" }], "internalType": "struct TrisivICO.ProposalMeta", "name": "", "type": "tuple" }], "stateMutability": "view", "type": "function" },
+                { "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }], "name": "isExecutable", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+                { "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }], "name": "getOwnerProposal", "outputs": [{ "components": [{ "internalType": "enum TrisivICO.OwnerOpType", "name": "opType", "type": "uint8" }, { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "address", "name": "oldMember", "type": "address" }, { "internalType": "address", "name": "token", "type": "address" }], "internalType": "struct TrisivICO.OwnerProposal", "name": "payload", "type": "tuple" }, { "components": [{ "internalType": "enum TrisivICO.Role", "name": "role", "type": "uint8" }, { "internalType": "uint8", "name": "confirmations", "type": "uint8" }, { "internalType": "bool", "name": "executed", "type": "bool" }, { "internalType": "bool", "name": "cancelled", "type": "bool" }, { "internalType": "uint64", "name": "expiresAt", "type": "uint64" }, { "internalType": "uint32", "name": "epoch", "type": "uint32" }, { "internalType": "address", "name": "proposer", "type": "address" }], "internalType": "struct TrisivICO.ProposalMeta", "name": "meta", "type": "tuple" }], "stateMutability": "view", "type": "function" },
+                { "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }], "name": "getAdminProposal", "outputs": [{ "components": [{ "internalType": "enum TrisivICO.AdminOpType", "name": "opType", "type": "uint8" }, { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "address", "name": "oldMember", "type": "address" }, { "internalType": "uint256", "name": "paymentType", "type": "uint256" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }, { "internalType": "uint256", "name": "amount2", "type": "uint256" }, { "internalType": "bool", "name": "boolValue", "type": "bool" }, { "components": [{ "internalType": "string", "name": "paymentName", "type": "string" }, { "internalType": "address", "name": "priceFetchContract", "type": "address" }, { "internalType": "address", "name": "paymentTokenAddress", "type": "address" }, { "internalType": "uint256", "name": "decimal", "type": "uint256" }, { "internalType": "bool", "name": "status", "type": "bool" }, { "internalType": "uint256", "name": "minPrice", "type": "uint256" }, { "internalType": "uint256", "name": "maxPrice", "type": "uint256" }, { "internalType": "uint256", "name": "staleThreshold", "type": "uint256" }], "internalType": "struct TrisivICO.tokenDetail", "name": "detail", "type": "tuple" }], "internalType": "struct TrisivICO.AdminProposal", "name": "payload", "type": "tuple" }, { "components": [{ "internalType": "enum TrisivICO.Role", "name": "role", "type": "uint8" }, { "internalType": "uint8", "name": "confirmations", "type": "uint8" }, { "internalType": "bool", "name": "executed", "type": "bool" }, { "internalType": "bool", "name": "cancelled", "type": "bool" }, { "internalType": "uint64", "name": "expiresAt", "type": "uint64" }, { "internalType": "uint32", "name": "epoch", "type": "uint32" }, { "internalType": "address", "name": "proposer", "type": "address" }], "internalType": "struct TrisivICO.ProposalMeta", "name": "meta", "type": "tuple" }], "stateMutability": "view", "type": "function" }
+            ];
+
+            const proposals = await withFailover(async (provider) => {
+                const contract = new ethers.Contract(icoAddr, icoAbi, provider);
+                const count = Number(await contract.proposalCount().catch(() => 0n));
+                const list = [];
+                const start = Math.max(1, count - 29);
+                for (let id = count; id >= start; id--) {
+                    try {
+                        const [meta, isExec] = await Promise.all([
+                            contract.getProposalMeta(id),
+                            contract.isExecutable(id).catch(() => false)
+                        ]);
+                        const isOwnerProp = Number(meta.role) === 0;
+                        let payload = null;
+                        if (isOwnerProp) {
+                            const p = await contract.getOwnerProposal(id);
+                            payload = {
+                                type: 'owner',
+                                opType: Number(p[0].opType),
+                                account: p[0].account,
+                                oldMember: p[0].oldMember,
+                                token: p[0].token
+                            };
+                        } else {
+                            const p = await contract.getAdminProposal(id);
+                            payload = {
+                                type: 'admin',
+                                opType: Number(p[0].opType),
+                                account: p[0].account,
+                                oldMember: p[0].oldMember,
+                                paymentType: Number(p[0].paymentType),
+                                amount: p[0].amount.toString(),
+                                amount2: p[0].amount2.toString(),
+                                boolValue: p[0].boolValue
+                            };
+                        }
+                        list.push({
+                            id,
+                            role: isOwnerProp ? 'owner' : 'admin',
+                            confirmations: Number(meta.confirmations),
+                            executed: meta.executed,
+                            cancelled: meta.cancelled,
+                            expiresAt: Number(meta.expiresAt),
+                            proposer: meta.proposer,
+                            isExecutable: isExec,
+                            payload
+                        });
+                    } catch (err) {
+                        console.error(`Proposal #${id} read error:`, err.message);
+                    }
+                }
+                return list;
+            });
+
+            return reply.send({ status: true, contract: icoAddr, count: proposals.length, data: proposals });
+        } catch (err) {
+            console.error('/api/admin/proposals error:', err);
+            return reply.code(500).send({ status: false, msg: 'Failed to load proposals', error: err.message });
         }
     });
 
@@ -85,7 +279,7 @@ module.exports = async function (fastify, opts) {
             const [settingsRows] = await fastify.mysql.query("SELECT contract_address, ico_contract, ico_remaining_tokens FROM settings LIMIT 1");
             const currentSettings = settingsRows[0] || {};
             const tokenAddr = currentSettings.contract_address || process.env.TRUSTIVE_TOKEN_ADDRESS || process.env.TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
-            const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
+            const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
 
             if (tokenAddr && icoAddr) {
                 try {
@@ -173,6 +367,7 @@ module.exports = async function (fastify, opts) {
     };
 
     // ========================================
+    // ========================================
     // Login
     // ========================================
     fastify.post('/login', {
@@ -183,17 +378,88 @@ module.exports = async function (fastify, opts) {
                 properties: {
                     email: { type: 'string', format: 'email' },
                     password: { type: 'string' },
-                    twoFaCode: { type: 'string' }
+                    twoFaCode: { type: 'string' },
+                    role: { type: 'string', enum: ['owner', 'admin'] }
                 }
             }
         }
     }, async (req, reply) => {
         try {
-            const { email, password, twoFaCode } = req.body;
+            const { email, password, twoFaCode, role: requestedRole } = req.body;
+            const normalizedEmail = (email || '').trim().toLowerCase();
+
+            // 1. Check dedicated admin_accounts table
+            let account = null;
+            try {
+                const [accounts] = await fastify.mysql.query(
+                    "SELECT * FROM admin_accounts WHERE LOWER(email) = ? AND status = 1 LIMIT 1",
+                    [normalizedEmail]
+                );
+                if (accounts && accounts.length > 0) {
+                    account = accounts[0];
+                }
+            } catch (e) {
+                console.warn('admin_accounts query fallback:', e.message);
+            }
+
+            if (account) {
+                const passwordOk = await bcrypt.compare(password, account.password);
+                if (!passwordOk) {
+                    return reply.send({ status: false, msg: 'Invalid email or password' });
+                }
+
+                // Check 2FA if enabled
+                if (account.two_fa_enabled) {
+                    if (!twoFaCode) {
+                        return reply.send({ status: true, require2FA: true, msg: '2FA code required' });
+                    }
+                    const speakeasy = require('speakeasy');
+                    const verified = speakeasy.totp.verify({
+                        secret: account.two_fa_secret,
+                        encoding: 'base32',
+                        token: twoFaCode
+                    });
+                    if (!verified) {
+                        return reply.send({ status: false, msg: 'Invalid 2FA code' });
+                    }
+                }
+
+                // Check role restrictions: Owner panel requires owner role
+                if (requestedRole === 'owner' && account.role !== 'owner') {
+                    return reply.send({
+                        status: false,
+                        msg: 'Access Denied: This account is an Admin account and does not have Owner privileges.'
+                    });
+                }
+
+                const assignedRole = account.role;
+                const token = fastify.jwt.sign({
+                    id: account.id,
+                    email: account.email,
+                    name: account.name,
+                    role: assignedRole,
+                    assignedWallet: account.assigned_wallet,
+                    isAdmin: true
+                }, { expiresIn: '24h' });
+
+                return reply.send({
+                    status: true,
+                    data: {
+                        id: account.id,
+                        email: account.email,
+                        name: account.name,
+                        role: assignedRole,
+                        assignedWallet: account.assigned_wallet,
+                        token
+                    }
+                });
+            }
+
+            // 2. Fallback to settings table (for legacy credentials)
             const [rows] = await fastify.mysql.query("SELECT admin_email, admin_password, admin_two_fa_secret, admin_two_fa_enabled FROM settings LIMIT 1");
             const settings = rows[0];
 
-            if (!settings || email !== settings.admin_email) {
+            if (!settings || normalizedEmail !== settings.admin_email?.toLowerCase()) {
                 return reply.send({ status: false, msg: 'Invalid email or password' });
             }
             const passwordOk = settings.admin_password
@@ -219,10 +485,78 @@ module.exports = async function (fastify, opts) {
                 }
             }
 
-            const token = fastify.jwt.sign({ email, isAdmin: true }, { expiresIn: '24h' });
-            return reply.send({ status: true, data: { email, name: 'ADMIN', token } });
+            const assignedRole = requestedRole === 'admin' ? 'admin' : 'owner';
+            const token = fastify.jwt.sign({ email: settings.admin_email, role: assignedRole, isAdmin: true }, { expiresIn: '24h' });
+            return reply.send({
+                status: true,
+                data: {
+                    email: settings.admin_email,
+                    name: assignedRole.toUpperCase(),
+                    role: assignedRole,
+                    token
+                }
+            });
         } catch (err) {
             console.error('Admin login error:', err);
+            return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
+        }
+    });
+
+    // ========================================
+    // Web3 Wallet Login (Owner or Admin)
+    // ========================================
+    fastify.post('/wallet-login', async (req, reply) => {
+        try {
+            const { address, signature, message } = req.body || {};
+            if (!address || typeof address !== 'string') {
+                return reply.code(400).send({ status: false, msg: 'Wallet address is required' });
+            }
+
+            const roles = await getContractRoles();
+            const normalizedAddr = address.trim().toLowerCase();
+
+            const isOwner = roles.owners.map(a => a.toLowerCase()).includes(normalizedAddr);
+            const isAdmin = roles.admins.map(a => a.toLowerCase()).includes(normalizedAddr);
+
+            if (!isOwner && !isAdmin) {
+                return reply.code(403).send({
+                    status: false,
+                    msg: `Wallet ${address.slice(0, 6)}...${address.slice(-4)} is not registered as an Owner or Admin on ICO contract 0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC`
+                });
+            }
+
+            // If signature provided, verify it cryptographically
+            if (signature && message) {
+                try {
+                    const recovered = ethers.verifyMessage(message, signature);
+                    if (recovered.toLowerCase() !== normalizedAddr) {
+                        return reply.code(401).send({ status: false, msg: 'Invalid wallet signature' });
+                    }
+                } catch (sigErr) {
+                    return reply.code(401).send({ status: false, msg: 'Signature verification failed' });
+                }
+            }
+
+            const role = isOwner ? 'owner' : 'admin';
+            const token = fastify.jwt.sign({
+                address: normalizedAddr,
+                role,
+                isAdmin: true,
+                email: `${role}@trustive.com`
+            }, { expiresIn: '24h' });
+
+            return reply.send({
+                status: true,
+                data: {
+                    token,
+                    role,
+                    address: normalizedAddr,
+                    name: role.toUpperCase()
+                },
+                msg: `Authenticated successfully as ${role.toUpperCase()}`
+            });
+        } catch (err) {
+            console.error('Wallet login error:', err);
             return reply.code(500).send({ status: false, msg: 'Internal Server Error' });
         }
     });
@@ -471,7 +805,7 @@ module.exports = async function (fastify, opts) {
         try {
             const provider = await getWorkingProvider();
             const [settingsRows] = await mysql.query("SELECT ico_contract FROM settings LIMIT 1");
-            const icoAddr = settingsRows[0]?.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
+            const icoAddr = settingsRows[0]?.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
             const icoContract = new ethers.Contract(icoAddr, ICO_ABI, provider);
 
             const currentBlock = await provider.getBlockNumber();
@@ -535,8 +869,8 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get('/dashboard', async (request, reply) => {
         try {
-            updateSaleStatuses(fastify.mysql).catch(() => {});
-            syncIcoPurchasesFromChain(fastify.mysql).catch(() => {});
+            updateSaleStatuses(fastify.mysql).catch(() => { });
+            syncIcoPurchasesFromChain(fastify.mysql).catch(() => { });
 
             const [
                 [statsRows],
@@ -634,7 +968,7 @@ module.exports = async function (fastify, opts) {
                 const [settingsRows] = await fastify.mysql.query("SELECT * FROM settings LIMIT 1");
                 currentSettings = settingsRows[0] || {};
                 const tokenAddr = currentSettings.contract_address || process.env.TRUSTIVE_TOKEN_ADDRESS || process.env.TOKEN_ADDRESS || '0xe12F60d7c0bc493b033c789Aa533E772541041eA';
-                const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
+                const icoAddr = currentSettings.ico_contract || process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
 
                 if (tokenAddr && icoAddr) {
                     try {
@@ -659,7 +993,7 @@ module.exports = async function (fastify, opts) {
 
                     if (contractBal !== null && statsRows && statsRows[0]) {
                         statsRows[0].total_ico_remaining = contractBal;
-                        await fastify.mysql.query("UPDATE settings SET ico_remaining_tokens = ? WHERE id = ?", [contractBal.toString(), currentSettings.id || 1]).catch(() => {});
+                        await fastify.mysql.query("UPDATE settings SET ico_remaining_tokens = ? WHERE id = ?", [contractBal.toString(), currentSettings.id || 1]).catch(() => { });
                     } else if (currentSettings.ico_remaining_tokens !== undefined && currentSettings.ico_remaining_tokens !== null && parseFloat(currentSettings.ico_remaining_tokens) > 0) {
                         if (statsRows && statsRows[0]) {
                             statsRows[0].total_ico_remaining = parseFloat(currentSettings.ico_remaining_tokens) || 0;
@@ -1302,7 +1636,7 @@ module.exports = async function (fastify, opts) {
     // ========================================
     fastify.get('/getTransactionDetails', async (request, reply) => {
         try {
-            syncIcoPurchasesFromChain(fastify.mysql).catch(() => {});
+            syncIcoPurchasesFromChain(fastify.mysql).catch(() => { });
             const [rows] = await fastify.mysql.query(`
                 SELECT ip.id, ip.address, ip.crypto_value, ip.payment_type, ip.ptc_tokens, ip.trans_hash, ip.usd_value_of_crypto, ip.sale_type, ip.status, ip.created_at, u.name as username
                 FROM ico_purchases ip
@@ -1804,7 +2138,7 @@ module.exports = async function (fastify, opts) {
     }
 
     async function getVestingContract() {
-        const addr = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+        const addr = process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
         const abi = JSON.parse(vestingFs.readFileSync(vestingPath.join(__dirname, "../abi's/vesting.json"), 'utf8'));
         const provider = await getProvider();
         return new ethers.Contract(addr, abi, provider);
@@ -1992,7 +2326,7 @@ module.exports = async function (fastify, opts) {
 
     fastify.get('/vesting/settings', async (request, reply) => {
         try {
-            const vestingAddr = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+            const vestingAddr = process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
             const VESTING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/vesting.json"), 'utf8'));
             const provider = await getWorkingProvider();
             const contract = new ethers.Contract(vestingAddr, VESTING_ABI, provider);
@@ -2018,7 +2352,7 @@ module.exports = async function (fastify, opts) {
             const calldata = iface.encodeFunctionData('setMultipleVesting', [enabled]);
             return reply.send({
                 status: true,
-                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4',
+                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8',
                 calldata
             });
         } catch (err) {
@@ -2081,7 +2415,7 @@ module.exports = async function (fastify, opts) {
             ]);
             return reply.send({
                 status: true,
-                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4',
+                contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8',
                 calldata,
                 params: { beneficiary, amount, cliffMonths, vestingMonths }
             });

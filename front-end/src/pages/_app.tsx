@@ -7,6 +7,7 @@ if (typeof global !== "undefined" && global.localStorage && typeof global.localS
 
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import "react-toastify/dist/ReactToastify.css";
 import { useState, useEffect } from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -18,6 +19,7 @@ import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/config/wagmi";
 import { Toaster, ToastBar, toast } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
 import { LuX } from "react-icons/lu";
 import AuthGuard from "@/components/AuthGuard";
 
@@ -68,9 +70,15 @@ const TOAST_OPTIONS = {
   },
 };
 
+import AdminLayout from "@/components/AdminLayout";
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+
+  const pathname = router.pathname || router.asPath.split("?")[0];
+  const isOwnerOrAdmin = pathname.startsWith("/owner") || pathname.startsWith("/admin");
+  const isPortal = pathname === "/portal";
 
   useEffect(() => {
     setMounted(true);
@@ -122,9 +130,17 @@ export default function App({ Component, pageProps }: AppProps) {
               <Head>
                 <title>Trustive</title>
               </Head>
-              <AuthGuard>
+              {isOwnerOrAdmin ? (
+                <AdminLayout>
+                  <Component {...pageProps} />
+                </AdminLayout>
+              ) : isPortal ? (
                 <Component {...pageProps} />
-              </AuthGuard>
+              ) : (
+                <AuthGuard>
+                  <Component {...pageProps} />
+                </AuthGuard>
+              )}
               <Toaster
                 position="top-right"
                 toastOptions={TOAST_OPTIONS}
@@ -154,6 +170,15 @@ export default function App({ Component, pageProps }: AppProps) {
                   </ToastBar>
                 )}
               </Toaster>
+              <ToastContainer
+                position="top-right"
+                autoClose={4000}
+                hideProgressBar={false}
+                newestOnTop={true}
+                closeOnClick={true}
+                pauseOnHover={true}
+                theme="dark"
+              />
             </main>
           </Web3Provider>
         </RainbowKitProvider>

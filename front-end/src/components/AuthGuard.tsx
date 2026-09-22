@@ -134,6 +134,13 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
       if (typeof window === 'undefined') return;
 
       const path = cleanPath(urlPath ?? (router.isReady ? router.asPath : window.location.pathname));
+
+      // Allow Owner, Admin, and Portal routes to bypass user auth
+      if (path.startsWith('/owner') || path.startsWith('/admin') || path === '/portal') {
+        setAuthorized(true);
+        return;
+      }
+
       const token = readToken();
 
       if (token) {
@@ -176,8 +183,12 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     };
 
     const handlePopState = () => {
-      const token = readToken();
       const path = cleanPath(window.location.pathname);
+      if (path.startsWith('/owner') || path.startsWith('/admin') || path === '/portal') {
+        evaluateAuth(path);
+        return;
+      }
+      const token = readToken();
       const poppedToBase = window.history.state?.__trustivePin === PIN_BASE;
 
       if (!token) {
