@@ -13,7 +13,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 // silently did nothing while only the shorter name was checked.
 const VESTING_CONTRACT = process.env.NEXT_PUBLIC_VESTING_CONTRACT_ADDRESS
   || process.env.NEXT_PUBLIC_VESTING_CONTRACT
-  || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+  || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
 const VESTING_ABI = [
   'function claim(uint256 index) external',
   'function claimPeriods(uint256 index, uint256 periods) external',

@@ -37,7 +37,7 @@ const RPC_URLS = [
     'https://bsc-testnet.drpc.org',
 ].filter(Boolean);
 
-const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
 
 async function getContract() {
     const abi = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/vesting.json"), 'utf8'));

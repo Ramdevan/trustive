@@ -14,7 +14,7 @@ async function syncPurchases() {
         });
         const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://bsc-testnet-rpc.publicnode.com');
         const icoAbi = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/ico.json"), 'utf8'));
-        const icoAddress = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
+        const icoAddress = process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
         const icoContract = new ethers.Contract(icoAddress, icoAbi, provider);
 
         const currentBlock = await provider.getBlockNumber();

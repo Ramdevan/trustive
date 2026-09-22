@@ -1002,7 +1002,7 @@ module.exports = async function (fastify, opts) {
           try {
             const decoded = fastify.jwt.decode(token);
             if (decoded && decoded.id) userId = decoded.id;
-          } catch {}
+          } catch { }
         }
       }
 
@@ -1222,7 +1222,7 @@ module.exports = async function (fastify, opts) {
       const nonce = Math.floor(Date.now() / 1000);
       const deadline = Math.floor(Date.now() / 1000) + 3600;
 
-      const ICO_ADDRESS = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
+      const ICO_ADDRESS = process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
 
       // Validation: Enforce dynamic Trustive purchase limits from active sale
       try {
@@ -1748,7 +1748,7 @@ module.exports = async function (fastify, opts) {
     return vestingAbiCache;
   }
 
-  const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+  const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
   async function getVestingContract() {
     return new ethers.Contract(VESTING_ADDRESS, getVestingAbi(), await getVestingProvider());
   }

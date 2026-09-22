@@ -24,7 +24,7 @@ const APPLY = process.argv.includes('--apply');
 const ONLY_ADDRESS = process.argv.slice(2).find(a => a.startsWith('0x'));
 
 const PERIOD_SECONDS = 120; // 1 contract unit = 2 real minutes
-const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+const VESTING_ADDRESS = process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
 const BSCSCAN_KEY = process.env.BSCSCAN_API_KEY;
 
 const dbConfig = {

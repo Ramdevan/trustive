@@ -32,8 +32,8 @@ async function initProvider() {
     throw new Error("No working RPC found");
 }
 
-const ICO_ADDR = process.env.ICO_CONTRACT_ADDRESS || '0x300C8EEB80Af24FF831015cF667f670077Fe1564';
-const VESTING_ADDR = process.env.VESTING_CONTRACT_ADDRESS || '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+const ICO_ADDR = process.env.ICO_CONTRACT_ADDRESS || '0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC';
+const VESTING_ADDR = process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
 
 const ICO_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, '../abi\'s/ico.json'), 'utf8'));
 const VESTING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, '../abi\'s/vesting.json'), 'utf8'));

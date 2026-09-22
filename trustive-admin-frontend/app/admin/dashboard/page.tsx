@@ -74,7 +74,7 @@ export default function Dashboard() {
     const errorMsg = null;
 
     const tokenAddress = (dashboardData?.settings?.contract_address || "0xe12F60d7c0bc493b033c789Aa533E772541041eA") as `0x${string}`;
-    const icoAddress = (dashboardData?.settings?.ico_contract || "0x300C8EEB80Af24FF831015cF667f670077Fe1564") as `0x${string}`;
+    const icoAddress = (dashboardData?.settings?.ico_contract || "0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC") as `0x${string}`;
 
     // Read live on-chain token balance of the ICO smart contract
     const { data: onChainICOBalanceWei } = useReadContract({

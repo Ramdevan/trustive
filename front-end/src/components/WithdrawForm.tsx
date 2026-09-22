@@ -15,7 +15,7 @@ interface WithdrawFormProps {
   onClaim?: () => void;
 }
 
-const VESTING_CONTRACT = '0x393858957f0193b6aC9781f8b033E9196e37bdd4';
+const VESTING_CONTRACT = '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8';
 const VESTING_ABI = [
   'function claim(uint256 index) external',
   'function claimAll() external'
