@@ -122,8 +122,13 @@ export default function BaseCoinsPage() {
     });
 
     const coinsList: BaseCoin[] = useMemo(() => {
-        if (data && data.length > 0) return data;
-        return localCoins;
+        const list = (data && data.length > 0) ? data : localCoins;
+        return [...list].sort((a: any, b: any) => {
+            const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+            const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+            if (timeB !== timeA) return timeB - timeA;
+            return (b.id ?? 0) - (a.id ?? 0);
+        });
     }, [data, localCoins]);
 
     // Filtered items
@@ -399,7 +404,7 @@ export default function BaseCoinsPage() {
                         <table className="w-full text-base">
                             <thead>
                                 <tr className="bg-[#36A886] text-white text-xs font-black uppercase tracking-[0.2em]">
-                                    <th className="px-8 py-6 text-center w-24 rounded-tl-[32px]">S No</th>
+                                    <th className="px-8 py-6 text-center w-24 rounded-tl-[32px]">ID</th>
                                     <th className="px-8 py-6 text-center">Timestamp</th>
                                     <th className="px-8 py-6 text-center">User</th>
                                     <th className="px-8 py-6 text-center">Type</th>
@@ -433,10 +438,10 @@ export default function BaseCoinsPage() {
 
                                         return (
                                             <tr key={coin.id || index} className="hover:bg-zinc-200/50 transition-colors group">
-                                                {/* S.NO */}
+                                                {/* ID */}
                                                 <td className="px-8 py-6 text-center">
-                                                    <span className="text-zinc-400 font-mono text-base font-semibold">
-                                                        {String(index + 1).padStart(2, "0")}
+                                                    <span className="text-zinc-600 font-mono text-base font-bold">
+                                                        #{coin.id}
                                                     </span>
                                                 </td>
 

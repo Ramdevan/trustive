@@ -76,9 +76,9 @@ export default function ICO() {
         {saleStatus === 'loading' ? (
           <div className="min-h-[70vh] flex items-center justify-center" />
         ) : saleStatus === 'active' ? (
-          <div className="w-full max-w-[45rem] mx-auto space-y-6 sm:space-y-8">
+          <div className="w-full max-w-6xl mx-auto space-y-6 sm:space-y-8">
             <CountdownTimer />
-            <div className="w-full max-w-[35rem] mx-auto space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch w-full">
               <BuyTokenForm />
               <ICOStats />
             </div>

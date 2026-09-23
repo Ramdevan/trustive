@@ -9,6 +9,7 @@ const RPC_URLS = [
 ];
 
 const ICO_ABI = [
+  'function tokenAmountPerUSD() view returns (uint256)',
   'function getToken(uint256 paymentType, uint256 tokenAmount) view returns (uint256)',
 ];
 
@@ -25,7 +26,8 @@ const StatItem: React.FC<StatItemProps> = ({ label, value }) => (
 );
 
 interface SaleData {
-  token_price?: number;
+  price?: number | string;
+  token_price?: number | string;
   end_at_utc?: string;
   token_quantity?: number;
   total_tokens_sold?: number;
@@ -40,7 +42,15 @@ const ICOStats: React.FC = () => {
   const fetchSale = () => {
     fetch(`${API_URL}/api/user/getActiveSale`)
       .then(r => r.json())
-      .then(d => { if (d.status && d.sale) setSale(d.sale); })
+      .then(d => {
+        if (d.status && d.sale) {
+          setSale(d.sale);
+          const p = d.sale.price ?? d.sale.token_price;
+          if (p != null && !isNaN(Number(p))) {
+            setTokenPrice(`$${Number(p).toFixed(2)}`);
+          }
+        }
+      })
       .catch(err => console.error('ICOStats fetch error:', err));
   };
 
@@ -62,19 +72,32 @@ const ICOStats: React.FC = () => {
     };
   }, []);
 
-  // Fetch token price from contract: how many TRSIV for 1 USDT (index 1, 6 decimals)
+  // Fetch token price from contract fallback if not yet set by active sale
   useEffect(() => {
     const fetchPrice = async () => {
       const settingsRes = await fetch(`${API_URL}/api/user/getSettings`).then(r => r.json()).catch(() => null);
       const icoContract = settingsRes?.data?.ico_contract;
       if (!icoContract) return;
 
-      const oneUsdt = ethers.parseUnits('1', 8); // 1 USDT (contract uses 8 decimals)
       for (const rpc of RPC_URLS) {
         try {
           const provider = new ethers.JsonRpcProvider(rpc);
           const contract = new ethers.Contract(icoContract, ICO_ABI, provider);
-          const tokenWei: bigint = await contract.getToken(1, oneUsdt); // paymentType 1 = USDT
+
+          // 1. Direct tokenAmountPerUSD on-chain view function
+          try {
+            const rawAmount = await contract.tokenAmountPerUSD();
+            const tokensPerUSD = parseFloat(ethers.formatUnits(rawAmount, 18));
+            if (tokensPerUSD > 0) {
+              const priceUSD = 1 / tokensPerUSD;
+              setTokenPrice(`$${priceUSD.toFixed(2)}`);
+              return;
+            }
+          } catch {}
+
+          // 2. Fallback using 1 USDT (index 1, 6 decimals)
+          const oneUsdt = ethers.parseUnits('1', 6);
+          const tokenWei: bigint = await contract.getToken(1, oneUsdt);
           const tokensPer1USD = parseFloat(ethers.formatUnits(tokenWei, 18));
           if (tokensPer1USD > 0) {
             const priceUSD = 1 / tokensPer1USD;
@@ -108,15 +131,25 @@ const ICOStats: React.FC = () => {
   const maxPurchase = formatTokens(sale?.maximum_purchase);
 
   return (
-    <div className="rounded-3xl bg-[#ECE9EA] p-6 sm:p-10 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] grid grid-cols-1 sm:grid-cols-2 gap-y-8 sm:gap-y-12 gap-x-8">
-      <div className="text-left"><StatItem label="Token Price" value={tokenPrice} /></div>
-      <div className="text-right"><StatItem label="Ends-On" value={endsOn} /></div>
+    <div className="rounded-3xl bg-[#ECE9EA] p-6 md:p-8 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] h-full flex flex-col justify-between">
+      <h2 className="text-[1.5rem] font-bold text-[#001060] px-1 mb-2">Sales Details</h2>
 
-      <div className="text-left"><StatItem label="Minimum" value={minPurchase} /></div>
-      <div className="text-right"><StatItem label="Maximum" value={maxPurchase} /></div>
+      <div className="flex-1 flex flex-col justify-evenly py-2 gap-y-6">
+        <div className="grid grid-cols-2 gap-4 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-3.5">
+          <div className="text-left"><StatItem label="Token Price" value={tokenPrice} /></div>
+          <div className="text-right"><StatItem label="Ends-On" value={endsOn} /></div>
+        </div>
 
-      <div className="text-left"><StatItem label="Allocation" value={allocation} /></div>
-      <div className="text-right"><StatItem label="Sold" value={sold} /></div>
+        <div className="grid grid-cols-2 gap-4 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-3.5">
+          <div className="text-left"><StatItem label="Minimum" value={minPurchase} /></div>
+          <div className="text-right"><StatItem label="Maximum" value={maxPurchase} /></div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 bg-zinc-50 border border-zinc-200 rounded-2xl px-5 py-3.5">
+          <div className="text-left"><StatItem label="Allocation" value={allocation} /></div>
+          <div className="text-right"><StatItem label="Sold" value={sold} /></div>
+        </div>
+      </div>
     </div>
   );
 };

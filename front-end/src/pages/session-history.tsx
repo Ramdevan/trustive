@@ -36,7 +36,13 @@ export default function SessionHistoryPage() {
       });
       const data = await res.json();
       if (data.status && Array.isArray(data.history)) {
-        setSessions(data.history);
+        const sorted = [...data.history].sort((a: any, b: any) => {
+          const timeA = a.login_time ? new Date(a.login_time).getTime() : 0;
+          const timeB = b.login_time ? new Date(b.login_time).getTime() : 0;
+          if (timeB !== timeA) return timeB - timeA;
+          return (b.id ?? 0) - (a.id ?? 0);
+        });
+        setSessions(sorted);
       }
     } catch (err) {
       console.error('Session history fetch error:', err);
@@ -91,6 +97,7 @@ export default function SessionHistoryPage() {
               <table className="w-full text-left border-collapse min-w-[38rem]">
                 <thead>
                   <tr className="bg-zinc-200/50 text-zinc-500 text-xs uppercase tracking-wider font-semibold border-b border-zinc-200/90">
+                    <th className="px-6 py-4 text-center w-16">S.No</th>
                     <th className="px-6 py-4 text-left">IP Address</th>
                     <th className="px-6 py-4 text-left">Country</th>
                     <th className="px-6 py-4 text-left">OS</th>
@@ -101,7 +108,7 @@ export default function SessionHistoryPage() {
                 <tbody className="text-sm text-zinc-700 divide-y divide-zinc-200/90 bg-[#ECE9EA]">
                   {loading ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-zinc-400">
+                      <td colSpan={6} className="px-6 py-12 text-center text-zinc-400">
                         <div className="inline-flex items-center gap-2">
                           <div className="w-4 h-4 rounded-full border-2 border-amber-500 border-t-transparent animate-spin" />
                           <span>Loading session history...</span>
@@ -110,13 +117,14 @@ export default function SessionHistoryPage() {
                     </tr>
                   ) : sessions.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-zinc-400">
+                      <td colSpan={6} className="px-6 py-12 text-center text-zinc-400">
                         No login history found
                       </td>
                     </tr>
                   ) : (
                     sessions.map((item, idx) => (
                       <tr key={item.id || idx} className="hover:bg-zinc-200/50 transition-colors">
+                        <td className="px-6 py-4 text-center font-bold text-zinc-900">{idx + 1}</td>
                         <td className="px-6 py-4 font-medium text-zinc-900">{item.ip || '127.0.0.1'}</td>
                         <td className="px-6 py-4 text-zinc-700">{item.country || ''}</td>
                         <td className="px-6 py-4 text-zinc-700">{item.os || 'Linux x86_64'}</td>

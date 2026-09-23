@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
 import SearchBar from './SearchBar';
@@ -41,7 +41,18 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredTransactions = transactions.filter(tx =>
+  const sortedTransactions = useMemo(() => {
+    return [...transactions].sort((a, b) => {
+      const valA = a.created_at || a.created_at_utc;
+      const valB = b.created_at || b.created_at_utc;
+      const timeA = valA ? new Date(valA).getTime() : 0;
+      const timeB = valB ? new Date(valB).getTime() : 0;
+      if (timeB !== timeA) return timeB - timeA;
+      return (b.id ?? 0) - (a.id ?? 0);
+    });
+  }, [transactions]);
+
+  const filteredTransactions = sortedTransactions.filter(tx =>
     !searchQuery ||
     (tx.trans_hash && tx.trans_hash.toLowerCase().includes(searchQuery.toLowerCase())) ||
     (tx.address && tx.address.toLowerCase().includes(searchQuery.toLowerCase())) ||

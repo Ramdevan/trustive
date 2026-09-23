@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
     Search,
     Users,
@@ -86,7 +86,11 @@ export default function UsersPage() {
 
     const users: User[] = usersData?.users || [];
 
-    const filteredUsers = users.filter((u) => {
+    const sortedUsers = useMemo(() => {
+        return [...users].sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+    }, [users]);
+
+    const filteredUsers = sortedUsers.filter((u) => {
         const query = searchTerm.toLowerCase();
         return (
             (u.name && u.name.toLowerCase().includes(query)) ||
@@ -128,7 +132,7 @@ export default function UsersPage() {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="bg-[#36A886] text-white uppercase font-bold text-xs tracking-widest">
-                                <th className="px-10 py-6 text-center rounded-tl-[32px]">S/No</th>
+                                <th className="px-10 py-6 text-center rounded-tl-[32px]">ID</th>
                                 <th className="px-10 py-6 text-center">WALLET ADDRESS</th>
                                 <th className="px-10 py-6 text-center">TRUSTIVE BALANCE</th>
                                 <th className="px-10 py-6 text-center">STATUS</th>
@@ -153,8 +157,8 @@ export default function UsersPage() {
                                 filteredUsers.map((u, i) => (
                                     <tr key={u.id} className="hover:bg-zinc-200/50 transition-colors group">
                                         <td className="px-10 py-6 text-center">
-                                            <span className="text-zinc-400 font-mono text-base">
-                                                {(i + 1).toString().padStart(2, '0')}
+                                            <span className="text-zinc-600 font-mono text-base font-bold">
+                                                #{u.id}
                                             </span>
                                         </td>
                                         <td className="px-10 py-6 text-center">

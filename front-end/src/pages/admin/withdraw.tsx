@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import {
     ArrowUpRight,
     RotateCw,
@@ -100,7 +98,15 @@ export default function WithdrawPage() {
         queryFn: () => apiRequest("/getWithdrawHistory"),
         refetchInterval: 15000,
     });
-    const history: WithdrawRecord[] = historyData?.data || [];
+    const rawHistory: WithdrawRecord[] = historyData?.data || [];
+    const history: WithdrawRecord[] = useMemo(() => {
+        return [...rawHistory].sort((a: any, b: any) => {
+            const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+            const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+            if (timeB !== timeA) return timeB - timeA;
+            return (b.id ?? 0) - (a.id ?? 0);
+        });
+    }, [rawHistory]);
 
     // Fetch On-chain Proposals
     const { data: proposalsData, isLoading: loadingProposals, refetch: refetchProposals } = useQuery({
@@ -109,7 +115,11 @@ export default function WithdrawPage() {
         refetchInterval: 5000,
     });
     const allProposals: ProposalItem[] = proposalsData?.data || [];
-    const ownerProposals = allProposals.filter((p) => p.role === "owner");
+    const ownerProposals: ProposalItem[] = useMemo(() => {
+        return allProposals
+            .filter((p) => p.role === "owner")
+            .sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+    }, [allProposals]);
 
     const fetchOnChainBalances = useCallback(async () => {
         if (!icoContract) return;

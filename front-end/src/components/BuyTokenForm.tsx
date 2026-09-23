@@ -514,7 +514,7 @@ const BuyTokenForm: React.FC = () => {
   };
 
   return (
-    <div className="rounded-3xl bg-[#ECE9EA] p-6 md:p-8 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] space-y-8">
+    <div className="rounded-3xl bg-[#ECE9EA] p-6 md:p-8 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] space-y-8 h-full flex flex-col justify-between">
       <h2 className="text-[1.5rem] font-bold text-[#001060] px-1">Buy Token</h2>
 
       {/* Payment method selector */}

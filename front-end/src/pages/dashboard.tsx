@@ -204,7 +204,17 @@ export default function Dashboard() {
           totalAllocated: totalAllocatedNum.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TRSIV",
           balanceInSale,
         }));
-        setRecentTxs(transactions.slice(0, 5));
+
+        // Sort latest transactions first (newest date and highest ID first)
+        const sortedTxs = [...transactions].sort((a, b) => {
+          const valA = a.created_at || a.created_at_utc;
+          const valB = b.created_at || b.created_at_utc;
+          const timeA = valA ? new Date(valA).getTime() : 0;
+          const timeB = valB ? new Date(valB).getTime() : 0;
+          if (timeB !== timeA) return timeB - timeA;
+          return (b.id ?? 0) - (a.id ?? 0);
+        });
+        setRecentTxs(sortedTxs.slice(0, 5));
       })
       .catch(err => console.error("Dashboard fetch error:", err))
       .finally(() => setTxLoading(false));
@@ -266,19 +276,10 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard title="Current Token Price" value={stats.tokenPrice} icon={<div />} />
             <StatCard title="Tokens Purchased" value={isConnected ? stats.tokensPurchased : "—"} icon={<div />} />
-            <StatCard title="Total Transactions" value={isConnected ? stats.totalTransactions : "—"} icon={<div />} />
             <StatCard title="Tokens Available" value={isConnected ? stats.tokensAvailable : "—"} icon={<div />} />
+            <StatCard title="Total Transactions" value={isConnected ? stats.totalTransactions : "—"} icon={<div />} />
           </div>
 
-          {/* Second Row Stats - Only shown during Active Sale */}
-          {stats.saleName !== "—" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <StatCard title="Active Sale" value={stats.saleName} icon={<div />} />
-              <StatCard title="Sale End Date" value={stats.saleEndDate} icon={<div />} />
-              <StatCard title="Total Allocated" value={isConnected ? stats.totalAllocated : "—"} icon={<div />} />
-              <StatCard title="Balance in the sale" value={isConnected ? stats.balanceInSale : "—"} icon={<div />} />
-            </div>
-          )}
 
           {/* Recent Transactions */}
           <div className="rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden">

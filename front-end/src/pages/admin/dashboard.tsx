@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import Link from "next/link";
 import {
     Users,
@@ -75,7 +75,15 @@ export default function Dashboard() {
 
     const stats = dashboardData?.stats || null;
     const activeSale = dashboardData?.activeSale || null;
-    const lastTx = dashboardData?.lastTransactions || [];
+    const rawLastTx = dashboardData?.lastTransactions || [];
+    const lastTx = useMemo(() => {
+        return [...rawLastTx].sort((a: any, b: any) => {
+            const timeA = a.created_at || a.created_at_utc ? new Date(a.created_at || a.created_at_utc).getTime() : 0;
+            const timeB = b.created_at || b.created_at_utc ? new Date(b.created_at || b.created_at_utc).getTime() : 0;
+            if (timeB !== timeA) return timeB - timeA;
+            return (b.id ?? 0) - (a.id ?? 0);
+        });
+    }, [rawLastTx]);
     const errorMsg = null;
 
     const tokenAddress = (dashboardData?.settings?.contract_address || "0xe12F60d7c0bc493b033c789Aa533E772541041eA") as `0x${string}`;
@@ -194,7 +202,7 @@ export default function Dashboard() {
                             <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                                 {lastTx.map((tx: any, i: number) => (
                                     <tr key={tx.id ?? i} className="hover:bg-zinc-200/50 transition-colors group">
-                                        <td className="px-12 py-6 text-zinc-400 text-sm font-bold text-center">{i + 1}</td>
+                                        <td className="px-12 py-6 text-zinc-600 text-sm font-bold font-mono text-center">#{tx.id ?? i + 1}</td>
                                         <td className="px-10 py-6">
                                             <div className="flex flex-col items-center justify-center">
                                                 <span className="text-zinc-900 font-bold text-sm">{tx.username || (tx.address ? shortenAddress(tx.address) : "Anonymous")}</span>

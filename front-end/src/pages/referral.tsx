@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import Head from 'next/head';
 import Layout from '@/components/Layout';
 import AuthGuard from '@/components/AuthGuard';
@@ -70,6 +70,24 @@ export default function ReferralPage() {
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const [activeTab, setActiveTab] = useState<'friends' | 'history'>('friends');
+
+  const referredUsers = useMemo(() => {
+    return [...(stats?.referred_users || [])].sort((a, b) => {
+      const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      if (timeB !== timeA) return timeB - timeA;
+      return (b.id ?? 0) - (a.id ?? 0);
+    });
+  }, [stats?.referred_users]);
+
+  const claimsHistory = useMemo(() => {
+    return [...(stats?.claims_history || [])].sort((a, b) => {
+      const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      if (timeB !== timeA) return timeB - timeA;
+      return (b.id ?? 0) - (a.id ?? 0);
+    });
+  }, [stats?.claims_history]);
 
   const fetchStats = useCallback(async (silent = false) => {
     try {
@@ -470,20 +488,24 @@ export default function ReferralPage() {
             {/* Tab Content: Referred Friends */}
             {activeTab === 'friends' && (
               <div className="overflow-x-auto">
-                {stats?.referred_users && stats.referred_users.length > 0 ? (
+                {referredUsers.length > 0 ? (
                   <table className="w-full text-left border-collapse text-sm">
                     <thead>
                       <tr className="border-b border-zinc-200/90 text-zinc-500 text-xs uppercase tracking-wider font-semibold bg-zinc-200/50">
+                        <th className="py-4 px-6 text-center w-16">S.No</th>
                         <th className="py-4 px-6">User / Friend</th>
                         <th className="py-4 px-6">Wallet Address</th>
                         <th className="py-4 px-6">Date Joined</th>
                         <th className="py-4 px-6 text-right">Tokens Purchased</th>
-                        <th className="py-4 px-6 text-right">Bonus Earned ({stats.commission_rate}%)</th>
+                        <th className="py-4 px-6 text-right">Bonus Earned ({stats?.commission_rate}%)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-200/90 text-zinc-700 bg-[#ECE9EA]">
-                      {stats.referred_users.map((u) => (
+                      {referredUsers.map((u, i) => (
                         <tr key={u.id} className="hover:bg-zinc-200/50 transition-colors">
+                          <td className="py-4 px-6 text-center font-bold text-zinc-900">
+                            {i + 1}
+                          </td>
                           <td className="py-4 px-6">
                             <div className="font-medium text-zinc-900">{u.name || 'Anonymous User'}</div>
                             <div className="text-xs text-zinc-900">{maskEmail(u.email)}</div>
@@ -502,10 +524,10 @@ export default function ReferralPage() {
                             {formatDate(u.created_at)}
                           </td>
                           <td className="py-4 px-6 text-right font-medium text-zinc-900">
-                            {parseFloat(u.total_purchased || '0').toLocaleString('en-US', { minimumFractionDigits: 2 })} {stats.token_symbol}
+                            {parseFloat(u.total_purchased || '0').toLocaleString('en-US', { minimumFractionDigits: 2 })} {stats?.token_symbol}
                           </td>
                           <td className="py-4 px-6 text-right font-bold text-emerald-600">
-                            +{parseFloat(u.bonus_generated || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats.token_symbol}
+                            +{parseFloat(u.bonus_generated || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats?.token_symbol}
                           </td>
                         </tr>
                       ))}
@@ -528,10 +550,11 @@ export default function ReferralPage() {
             {/* Tab Content: Claim History */}
             {activeTab === 'history' && (
               <div className="overflow-x-auto">
-                {stats?.claims_history && stats.claims_history.length > 0 ? (
+                {claimsHistory.length > 0 ? (
                   <table className="w-full text-left border-collapse text-sm">
                     <thead>
                       <tr className="border-b border-zinc-200/90 text-zinc-500 text-xs uppercase tracking-wider font-semibold bg-zinc-200/50">
+                        <th className="py-4 px-6 text-center w-16">S.No</th>
                         <th className="py-4 px-6">Claim Date</th>
                         <th className="py-4 px-6">Claimed Amount</th>
                         <th className="py-4 px-6">Transaction Hash</th>
@@ -539,13 +562,16 @@ export default function ReferralPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-200/90 text-zinc-700 bg-[#ECE9EA]">
-                      {stats.claims_history.map((c) => (
+                      {claimsHistory.map((c, i) => (
                         <tr key={c.id} className="hover:bg-zinc-200/50 transition-colors">
+                          <td className="py-4 px-6 text-center font-bold text-zinc-900">
+                            {i + 1}
+                          </td>
                           <td className="py-4 px-6 text-xs text-zinc-900">
                             {formatDate(c.created_at)}
                           </td>
                           <td className="py-4 px-6 font-bold text-[#36A886]">
-                            {parseFloat(c.amount || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats.token_symbol}
+                            {parseFloat(c.amount || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats?.token_symbol || 'TRSIV'}
                           </td>
                           <td className="py-4 px-6 font-mono text-xs text-zinc-900">
                             <a

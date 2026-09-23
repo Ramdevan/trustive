@@ -34,7 +34,11 @@ export function getFriendlyErrorMessage(error: any): string {
         return "Transaction nonce too low. Please reset your account or wait for previous transactions.";
     }
 
-    // Return reason if available (common in ers)
+    if (error.reason === "Invalid index" || error.message?.toLowerCase().includes("invalid index")) {
+        return "No active vesting schedule found on the current contract for this wallet.";
+    }
+
+    // Return reason if available (common in ethers)
     if (error.reason) return error.reason;
 
     // Clean up long ers strings

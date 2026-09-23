@@ -1453,7 +1453,10 @@ module.exports = async function (fastify, opts) {
         return reply.code(400).send({ status: false, msg: 'Address parameter is required' });
       }
 
-      const [transactions] = await fastify.mysql.query('SELECT * FROM ico_purchases WHERE address = ?', [address]);
+      const [transactions] = await fastify.mysql.query(
+        'SELECT * FROM ico_purchases WHERE address = ? ORDER BY created_at DESC, id DESC',
+        [address]
+      );
       return reply.send({ status: true, transactions });
     } catch (err) {
       console.error('Error in /getPurchaseHistory:', err);
@@ -1476,7 +1479,7 @@ module.exports = async function (fastify, opts) {
          FROM ico_purchases ip
          LEFT JOIN token_sales ts ON (LOWER(ip.sale_type) = LOWER(ts.type) OR LOWER(ip.sale_type) = LOWER(ts.name))
          WHERE ip.address = ?
-         ORDER BY ip.id DESC`,
+         ORDER BY ip.created_at DESC, ip.id DESC`,
         [address]
       );
 
@@ -1495,7 +1498,10 @@ module.exports = async function (fastify, opts) {
     try {
       let [checkData] = await fastify.mysql.query('SELECT id, name, email, wallet_address, profile_pic, kyc_status, PTC_REF_ID, created_at FROM users WHERE wallet_address = ?', [address]);
       if (checkData && checkData.length > 0) {
-        const [transactions] = await fastify.mysql.query('SELECT * FROM ico_purchases WHERE address = ?', [address]);
+        const [transactions] = await fastify.mysql.query(
+          'SELECT * FROM ico_purchases WHERE address = ? ORDER BY created_at DESC, id DESC',
+          [address]
+        );
         const txNorm = Array.isArray(transactions) ? transactions.map((r) => ({ ...r, created_at_utc: toUtcISOString(r.created_at) })) : transactions;
         return reply.code(200).send({
           status: true,
@@ -1531,7 +1537,7 @@ module.exports = async function (fastify, opts) {
          FROM ico_purchases ip
          LEFT JOIN users u ON LOWER(ip.address) = LOWER(u.wallet_address COLLATE utf8mb4_unicode_ci)
          WHERE ip.address = ? AND ip.status IN ('success', 'paid') 
-         ORDER BY ip.created_at DESC`,
+         ORDER BY ip.created_at DESC, ip.id DESC`,
         [address]
       );
       const normalized = Array.isArray(results) ? results.map(r => ({ ...r, created_at_utc: toUtcISOString(r.created_at) })) : (results ? [{ ...results, created_at_utc: toUtcISOString(results.created_at) }] : []);
@@ -1924,21 +1930,27 @@ module.exports = async function (fastify, opts) {
   fastify.get('/vesting/:address', async (request, reply) => {
     try {
       const { address } = request.params;
+      const vestingContract = await getVestingContract();
+      const onChainCount = Number(await vestingContract.getVestingCount(address).catch(() => 0));
+
+      // If user has no schedules on the active contract, return empty immediately
+      if (onChainCount === 0) {
+        return reply.send({ status: true, vestings: [] });
+      }
 
       const listQuery = "SELECT * FROM vesting_schedules WHERE LOWER(beneficiary) = LOWER(?) AND status = 'active' ORDER BY start_at DESC, id DESC";
       let [rows] = await fastify.mysql.query(listQuery, [address]);
 
       if (!Array.isArray(rows) || rows.length === 0) {
-        // Nothing stored yet — this is the one case worth waiting on the chain for
+        // Nothing stored yet — sync from chain
         await syncVestingFromChain(address).catch(() => { });
         [rows] = await fastify.mysql.query(listQuery, [address]);
       } else {
-        // Already known: refresh in the background so the page isn't held up.
-        // Amounts and claimable balances below are still read live from chain.
         syncVestingFromChain(address).catch(() => { });
       }
 
-      const vestings = Array.isArray(rows) ? rows : [];
+      // Filter out any stale schedules whose vesting_index exceeds current on-chain count
+      const vestings = (Array.isArray(rows) ? rows : []).filter(r => (r.vesting_index !== null ? r.vesting_index : 0) < onChainCount);
       if (vestings.length === 0) return reply.send({ status: true, vestings: [] });
 
       // Per-period claim receipts, grouped by vesting index
@@ -1957,8 +1969,6 @@ module.exports = async function (fastify, opts) {
         });
         claimsByIndex.set(c.vesting_index, list);
       }
-
-      const vestingContract = await getVestingContract();
 
       const formatted = await Promise.all(vestings.map(async (v) => {
         const index = v.vesting_index !== null ? v.vesting_index : 0;
@@ -2067,7 +2077,7 @@ module.exports = async function (fastify, opts) {
       const index = Number(vesting_index) || 0;
 
       const [dupe] = await fastify.mysql.query(
-        "SELECT id FROM vesting_claims WHERE tx_hash = ? LIMIT 1", [tx_hash]
+        "SELECT id FROM vesting_claims WHERE tx_hash = ? AND vesting_index = ? LIMIT 1", [tx_hash, index]
       );
       if (dupe && dupe.length > 0) return reply.send({ status: true, msg: 'Claim already recorded' });
 

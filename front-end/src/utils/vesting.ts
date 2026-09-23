@@ -12,6 +12,7 @@ export interface VestingRecord {
   cliff_months: number; // Contract units (1 unit = 2 minutes)
   vesting_months: number; // Contract units (1 unit = 2 minutes)
   start_at: string;
+  created_at?: string;
   status: string;
   display_status?: string;
   vesting_index: number;

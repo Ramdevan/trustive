@@ -100,7 +100,14 @@ export default function PaymentSettings() {
         try {
             const data = await apiRequest("/getPaymentSettingsHistory");
             if (data.status) {
-                setHistory(data.data || []);
+                const list = data.data || [];
+                const sorted = [...list].sort((a: any, b: any) => {
+                    const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+                    const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+                    if (timeB !== timeA) return timeB - timeA;
+                    return (b.id ?? 0) - (a.id ?? 0);
+                });
+                setHistory(sorted);
             }
         } catch (err) {
             console.error("Failed to fetch history:", err);

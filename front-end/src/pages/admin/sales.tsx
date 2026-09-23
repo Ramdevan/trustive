@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
     Plus,
     Trash2,
@@ -109,7 +109,15 @@ export default function SalesManagement() {
             ? Number(salesData.ico_balance)
             : (onChainICOBalance !== null && !isNaN(onChainICOBalance) ? onChainICOBalance : null));
 
-    const sales: Sale[] = salesData?.sales || [];
+    const rawSales: Sale[] = salesData?.sales || [];
+    const sales: Sale[] = useMemo(() => {
+        return [...rawSales].sort((a: any, b: any) => {
+            const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
+            const timeB = b.created_at ? new Date(b.created_at).getTime() : 0;
+            if (timeB !== timeA) return timeB - timeA;
+            return (b.id ?? 0) - (a.id ?? 0);
+        });
+    }, [rawSales]);
 
     const handleDelete = async (id: number) => {
         if (isDeletingPhase) return;
@@ -295,7 +303,8 @@ export default function SalesManagement() {
                         <table className="w-full">
                             <thead>
                                 <tr className="bg-[#36A886] text-white">
-                                    <th className="px-12 py-6 text-center text-xs font-bold uppercase tracking-widest rounded-tl-[32px]">Phase</th>
+                                    <th className="px-8 py-6 text-center text-xs font-bold uppercase tracking-widest rounded-tl-[32px]">ID</th>
+                                    <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-widest">Phase</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-widest">Allocation</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-widest">Purchased</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-widest">Available</th>
@@ -306,11 +315,14 @@ export default function SalesManagement() {
                             <tbody className="divide-y divide-zinc-200 bg-[#ECE9EA]">
                                 {sales.length === 0 ? (
                                     <tr>
-                                        <td colSpan={6} className="px-10 py-24 text-center text-zinc-500 font-medium italic">No phases found in system ledger.</td>
+                                        <td colSpan={7} className="px-10 py-24 text-center text-zinc-500 font-medium italic">No phases found in system ledger.</td>
                                     </tr>
                                 ) : sales.map((sale) => (
                                     <tr key={sale.id} className="hover:bg-zinc-200/50 transition-colors group">
-                                        <td className="px-12 py-6 text-center">
+                                        <td className="px-8 py-6 text-center font-mono font-bold text-zinc-600 text-sm">
+                                            #{sale.id}
+                                        </td>
+                                        <td className="px-10 py-6 text-center">
                                             <span className="text-zinc-900 font-bold text-xl tracking-tight uppercase font-space-grotesk">{sale.name}</span>
                                         </td>
                                         <td className="px-10 py-6 text-center">

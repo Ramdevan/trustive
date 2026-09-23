@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
     ShieldCheck,
     Plus,
@@ -123,7 +123,7 @@ export default function VestingManagement() {
                     // Clear polling after 30s as fallback
                     setTimeout(() => clearInterval(pollInterval), 30000);
 
-                    toast.update(tid, { render: "Status update triggered!", type: "success", isLoading: false, autoClose: 3000 });
+                    toast.update(tid, { render: data.isProposal ? "Multiple Vesting proposal submitted!" : "Status update triggered!", type: "success", isLoading: false, autoClose: 3000 });
                 }
             } else {
                 toast.update(tid, { render: data.msg || "Failed to prepare transaction", type: "error", isLoading: false, autoClose: 3000 });
@@ -180,7 +180,7 @@ export default function VestingManagement() {
                             tx_hash: hash
                         })
                     });
-                    toast.success("Vesting created! Tx: " + hash.slice(0, 10) + "...");
+                    toast.success(data.isProposal ? "Vesting proposal submitted! Tx: " + hash.slice(0, 10) + "..." : "Vesting created! Tx: " + hash.slice(0, 10) + "...");
                     setShowCreate(false);
                     setNewVesting({ beneficiary: "", amount: "", cliff: "", duration: "" });
                     queryClient.invalidateQueries({ queryKey: ["vestings"] });
@@ -193,7 +193,16 @@ export default function VestingManagement() {
         }
     };
 
-    const filtered = vestings.filter(v => {
+    const sortedVestings = useMemo(() => {
+        return [...vestings].sort((a, b) => {
+            const timeA = a.start_at ? new Date(a.start_at).getTime() : 0;
+            const timeB = b.start_at ? new Date(b.start_at).getTime() : 0;
+            if (timeB !== timeA) return timeB - timeA;
+            return (b.id ?? 0) - (a.id ?? 0);
+        });
+    }, [vestings]);
+
+    const filtered = sortedVestings.filter(v => {
         const search = searchTerm.toLowerCase();
         const matchesSearch = v.beneficiary.toLowerCase().includes(search) ||
             (v.tx_hash && v.tx_hash.toLowerCase().includes(search));
@@ -439,8 +448,8 @@ export default function VestingManagement() {
                         <table className="w-full border-collapse">
                             <thead>
                                 <tr className="bg-[#36A886]">
-                                    <th className="px-12 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white w-28">S.No</th>
-                                    <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">ID</th>
+                                    <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white w-24">ID</th>
+                                    <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">Vest ID</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">Beneficiary</th>
                                     <th className="px-10 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">Status</th>
                                     <th className="px-12 py-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-white">Action</th>
@@ -452,8 +461,8 @@ export default function VestingManagement() {
                                 ) : filtered.length > 0 ? (
                                     paginatedData.map((v, i) => (
                                         <tr key={v.id} className="hover:bg-zinc-200/50 transition-colors group">
-                                            <td className="px-12 py-6 text-center">
-                                                <span className="text-zinc-500 font-bold text-base">{(currentPage - 1) * itemsPerPage + i + 1}</span>
+                                            <td className="px-10 py-6 text-center">
+                                                <span className="text-zinc-600 font-mono font-bold text-base">#{v.id}</span>
                                             </td>
                                             <td className="px-10 py-6 text-center">
                                                 <span className="text-zinc-900 font-bold text-base font-mono">{formatVestId(v)}</span>

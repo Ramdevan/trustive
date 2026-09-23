@@ -906,7 +906,7 @@ module.exports = async function (fastify, opts) {
                     FROM ico_purchases ip
                     LEFT JOIN users u ON ip.address = u.wallet_address
                     WHERE ip.status IN ('success', 'paid')
-                    ORDER BY ip.created_at DESC
+                    ORDER BY ip.created_at DESC, ip.id DESC
                     LIMIT 5;
                 `),
                 fastify.mysql.query(`
@@ -1052,7 +1052,7 @@ module.exports = async function (fastify, opts) {
                 FROM users u
                 LEFT JOIN ico_purchases ip ON LOWER(u.wallet_address) = LOWER(ip.address COLLATE utf8mb4_unicode_ci) AND LOWER(ip.status) = 'success'
                 GROUP BY u.id
-                ORDER BY total_usd_invested DESC;
+                ORDER BY u.id DESC;
             `);
 
             const [globalVestingStats] = await fastify.mysql.query(`
@@ -1641,7 +1641,7 @@ module.exports = async function (fastify, opts) {
                 SELECT ip.id, ip.address, ip.crypto_value, ip.payment_type, ip.ptc_tokens, ip.trans_hash, ip.usd_value_of_crypto, ip.sale_type, ip.status, ip.created_at, u.name as username
                 FROM ico_purchases ip
                 LEFT JOIN users u ON LOWER(ip.address) = LOWER(u.wallet_address COLLATE utf8mb4_unicode_ci)
-                ORDER BY ip.created_at DESC
+                ORDER BY ip.created_at DESC, ip.id DESC
             `);
             return reply.send({ status: true, transactions: rows });
         } catch (err) {
@@ -2169,7 +2169,7 @@ module.exports = async function (fastify, opts) {
                 countQuery += combined;
                 dataQuery += combined;
             }
-            dataQuery += " ORDER BY vs.start_at DESC LIMIT ? OFFSET ?";
+            dataQuery += " ORDER BY vs.start_at DESC, vs.id DESC LIMIT ? OFFSET ?";
             const countParams = [...queryParams];
             queryParams.push(limit, offset);
             const [countResult] = await fastify.mysql.query(countQuery, countParams);
@@ -2349,11 +2349,13 @@ module.exports = async function (fastify, opts) {
                 return reply.send({ status: false, msg: "enabled must be boolean" });
             const VESTING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/vesting.json"), 'utf8'));
             const iface = new ethers.Interface(VESTING_ABI);
-            const calldata = iface.encodeFunctionData('setMultipleVesting', [enabled]);
+            const fnName = iface.hasFunction('proposeSetMultipleVesting') ? 'proposeSetMultipleVesting' : 'setMultipleVesting';
+            const calldata = iface.encodeFunctionData(fnName, [enabled]);
             return reply.send({
                 status: true,
                 contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8',
-                calldata
+                calldata,
+                isProposal: fnName === 'proposeSetMultipleVesting'
             });
         } catch (err) {
             return reply.code(500).send({ status: false, msg: 'Failed to encode: ' + err.message });
@@ -2362,9 +2364,7 @@ module.exports = async function (fastify, opts) {
     fastify.post('/vesting/toggle-multiple', _vestingToggleHandler);
     fastify.post('/vesting/settings/toggle', _vestingToggleHandler);
 
-    // POST /vesting/add-on-chain — encode `vest(beneficiary, amount, cliffMonths, vestingMonths)` calldata
-    // Admin frontend sends minutes; conversion to periods (÷2) is done on the frontend before calling this.
-    // cliffMonths and vestingMonths here are already in CONTRACT UNITS (1 unit = 2 real minutes).
+    // POST /vesting/add-on-chain — encode `vest` or `proposeVest` calldata
     fastify.post('/vesting/add-on-chain', async (request, reply) => {
         try {
             const { beneficiary, amount, cliffMonths, vestingMonths } = request.body;
@@ -2373,9 +2373,7 @@ module.exports = async function (fastify, opts) {
             if (!ethers.isAddress(beneficiary))
                 return reply.send({ status: false, msg: "Beneficiary is not a valid wallet address" });
 
-            // The contract reverts a second vest() for an address while multiple vesting
-            // is off, and it reverts past maxVestingLimit while it is on. Check both here
-            // so the admin never gets as far as signing a doomed tx in MetaMask.
+            // Enforce limits and check existing schedules
             try {
                 const vestingContract = await getVestingContract();
                 const [multipleEnabled, existingCount, maxLimit] = await Promise.all([
@@ -2399,15 +2397,14 @@ module.exports = async function (fastify, opts) {
                     });
                 }
             } catch (e) {
-                // A failed RPC read must not block vesting; the contract still enforces the rule.
                 console.warn('add-on-chain: vesting pre-check failed:', e.message);
             }
 
             const VESTING_ABI = JSON.parse(fs.readFileSync(path.join(__dirname, "../abi's/vesting.json"), 'utf8'));
             const iface = new ethers.Interface(VESTING_ABI);
-            // amount is in Trustive tokens → convert to 18-decimal wei
             const amountWei = ethers.parseEther(String(amount));
-            const calldata = iface.encodeFunctionData('vest', [
+            const fnName = iface.hasFunction('proposeVest') ? 'proposeVest' : 'vest';
+            const calldata = iface.encodeFunctionData(fnName, [
                 beneficiary,
                 amountWei,
                 BigInt(cliffMonths || 0),
@@ -2417,6 +2414,7 @@ module.exports = async function (fastify, opts) {
                 status: true,
                 contractAddress: process.env.VESTING_CONTRACT_ADDRESS || '0xbd0a737599462974aD054c958Fce5bbfaaEDeFb8',
                 calldata,
+                isProposal: fnName === 'proposeVest',
                 params: { beneficiary, amount, cliffMonths, vestingMonths }
             });
         } catch (err) {

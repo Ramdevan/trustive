@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
     CreditCard,
     Search,
@@ -106,7 +106,16 @@ export default function TransactionsLedger() {
         document.body.removeChild(link);
     };
 
-    const filtered = transactions.filter(tx => {
+    const sortedTransactions = useMemo(() => {
+        return [...transactions].sort((a, b) => {
+            const timeA = a.created_at || a.created_at_utc ? new Date(a.created_at || a.created_at_utc).getTime() : 0;
+            const timeB = b.created_at || b.created_at_utc ? new Date(b.created_at || b.created_at_utc).getTime() : 0;
+            if (timeB !== timeA) return timeB - timeA;
+            return (b.id ?? 0) - (a.id ?? 0);
+        });
+    }, [transactions]);
+
+    const filtered = sortedTransactions.filter(tx => {
         const matchesSearch = tx.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
             tx.trans_hash?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesPhase = filterPhase === "all" || tx.sale_type === filterPhase;
@@ -197,7 +206,7 @@ export default function TransactionsLedger() {
                     <table className="w-full text-base">
                         <thead>
                             <tr className="bg-[#36A886] text-white text-xs font-black uppercase tracking-[0.2em]">
-                                <th className="px-12 py-6 text-center w-28 uppercase">S No</th>
+                                <th className="px-12 py-6 text-center w-28 uppercase">ID</th>
                                 <th className="px-10 py-6 text-center uppercase">Users</th>
                                 <th className="px-10 py-6 text-center uppercase">Payment Type</th>
                                 <th className="px-10 py-6 text-center uppercase">Amount Paid</th>
@@ -218,7 +227,7 @@ export default function TransactionsLedger() {
                                 paginatedData.map((tx, i) => (
                                     <tr key={tx.id} className="hover:bg-zinc-200/50 transition-colors group">
                                         <td className="px-12 py-6 text-center">
-                                            <span className="text-zinc-500 font-bold">{(currentPage - 1) * itemsPerPage + i + 1}</span>
+                                            <span className="text-zinc-600 font-bold font-mono">#{tx.id}</span>
                                         </td>
                                         <td className="px-10 py-6 text-center">
                                             <div className="flex flex-col items-center">
