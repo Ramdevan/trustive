@@ -288,7 +288,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                             "w-full py-4 text-white font-bold text-sm uppercase rounded-2xl transition-all shadow-md active:scale-95 cursor-pointer",
                             isOwnerPanel
                                 ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                                : "bg-[#36A886] hover:bg-[#2548D0] shadow-[#36A886]/20"
+                                : "bg-[#36A886] hover:bg-[#36A886] shadow-[#36A886]/20"
                         )}
                     >
                         Log In to {isOwnerPanel ? "Owner" : "Admin"} Panel
@@ -387,7 +387,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                                             "cursor-pointer flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-md transition-all active:scale-95",
                                                             effectiveRole === "owner"
                                                                 ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                                                                : "bg-[#36A886] hover:bg-[#2548D0] shadow-[#36A886]/20"
+                                                                : "bg-[#36A886] hover:bg-[#36A886] shadow-[#36A886]/20"
                                                         )}
                                                     >
                                                         <Wallet className="h-4 w-4" />
@@ -650,7 +650,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                     </Link>
                                     <Link
                                         href="/admin/dashboard"
-                                        className="flex-1 py-3 px-4 rounded-2xl bg-[#36A886] text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#2548D0] transition-all text-center"
+                                        className="flex-1 py-3 px-4 rounded-2xl bg-[#36A886] text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#36A886] transition-all text-center"
                                     >
                                         Return to Admin Dashboard
                                     </Link>

@@ -75,7 +75,7 @@ const ModalContent = ({ t, resolve, message }: { t: any; resolve: (val: boolean)
               toast.dismiss(t.id);
               resolve(true);
             }}
-            className="flex-1 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-white bg-[#36A886] hover:bg-[#2548D0] transition-all cursor-pointer shadow-[0_10px_20px_rgba(49,94,251,0.25)]"
+            className="flex-1 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-white bg-[#36A886] hover:bg-[#36A886] transition-all cursor-pointer shadow-[0_10px_20px_rgba(49,94,251,0.25)]"
           >
             Confirm
           </button>

@@ -256,7 +256,7 @@ export default function VestingManagement() {
 
                     <button
                         onClick={() => setShowCreate(!showCreate)}
-                        className="px-8 py-3 bg-[#36A886] text-white rounded-2xl hover:bg-[#2548D0] transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest shadow-md cursor-pointer"
+                        className="px-8 py-3 bg-[#36A886] text-white rounded-2xl hover:bg-[#36A886] transition-all flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest shadow-md cursor-pointer"
                     >
                         {showCreate ? <XCircle className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                         {showCreate ? "Close" : "New Vesting"}
@@ -377,7 +377,7 @@ export default function VestingManagement() {
                                 "flex-1 bg-[#36A886] text-white font-bold uppercase text-xs tracking-widest py-4 rounded-2xl transition-all shadow-md cursor-pointer",
                                 duplicateBlocked
                                     ? "opacity-40 cursor-not-allowed"
-                                    : "hover:bg-[#2548D0]"
+                                    : "hover:bg-[#36A886]"
                             )}
                         >
                             VEST

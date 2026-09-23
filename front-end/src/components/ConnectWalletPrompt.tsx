@@ -17,7 +17,7 @@ const ConnectWalletPrompt: React.FC = () => {
         </p>
       </div>
 
-      <button className="mt-4 px-10 py-4 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold rounded-2xl transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] cursor-pointer relative z-10">
+      <button className="mt-4 px-10 py-4 bg-[#36A886] hover:bg-[#36A886] text-white font-bold rounded-2xl transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] cursor-pointer relative z-10">
         Connect Wallet
       </button>
     </div>

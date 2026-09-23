@@ -340,7 +340,7 @@ export default function ReferralPage() {
                   type="button"
                   onClick={handleClaim}
                   disabled={claiming || !stats || parseFloat(stats.claimable_balance || '0') <= 0}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm bg-[#36A886] hover:bg-[#2548D0] text-white transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm bg-[#36A886] hover:bg-[#36A886] text-white transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {claiming ? (
                     <>

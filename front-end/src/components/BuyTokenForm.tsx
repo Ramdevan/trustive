@@ -741,7 +741,7 @@ const BuyTokenForm: React.FC = () => {
                   setMoonpayTargetCrypto(method === 'BNB' ? 'bnb_bsc' : 'usdt_bsc');
                   setMethod('CARD');
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#36A886] hover:bg-[#2548D0] text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#36A886] hover:bg-[#36A886] text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
               >
                 <LuCreditCard className="w-3.5 h-3.5" />
                 <span>Top up with Card</span>
@@ -777,12 +777,12 @@ const BuyTokenForm: React.FC = () => {
           const connected = rbMounted && rbAccount && chain;
 
           let btnLabel = 'Buy Now';
-          let btnClass = 'bg-[#36A886] hover:bg-[#2548D0] text-white shadow-lg shadow-[#36A886]/25 cursor-pointer';
+          let btnClass = 'bg-[#36A886] hover:bg-[#36A886] text-white shadow-lg shadow-[#36A886]/25 cursor-pointer';
           let isDisabled = false;
 
           if (!connected) {
             btnLabel = 'Connect Wallet';
-            btnClass = 'bg-[#36A886] hover:bg-[#2548D0] text-white shadow-md shadow-[#36A886]/20 cursor-pointer';
+            btnClass = 'bg-[#36A886] hover:bg-[#36A886] text-white shadow-md shadow-[#36A886]/20 cursor-pointer';
             isDisabled = false;
           } else if (method === 'CARD') {
             if (saleLoaded && !isSaleActive) {

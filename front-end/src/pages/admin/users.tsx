@@ -217,7 +217,7 @@ export default function UsersPage() {
                                         <td className="px-12 py-6 text-center">
                                             <button
                                                 onClick={() => setSelectedUser({ id: u.id, wallet_address: u.wallet_address || null })}
-                                                className="px-6 py-2.5 bg-[#36A886] hover:bg-[#2548D0] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer"
+                                                className="px-6 py-2.5 bg-[#36A886] hover:bg-[#36A886] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer"
                                             >
                                                 View Profile
                                             </button>

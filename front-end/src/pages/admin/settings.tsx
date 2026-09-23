@@ -169,7 +169,7 @@ export default function AdminSettings() {
                     <button
                         type="submit"
                         disabled={saving}
-                        className="px-10 py-3 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-[#36A886]/20 flex items-center gap-3 cursor-pointer"
+                        className="px-10 py-3 bg-[#36A886] hover:bg-[#36A886] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-[#36A886]/20 flex items-center gap-3 cursor-pointer"
                     >
                         {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                         Commit Configuration

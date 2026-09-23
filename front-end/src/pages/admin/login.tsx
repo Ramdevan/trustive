@@ -248,7 +248,7 @@ export default function AdminLogin() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-4 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md bg-[#36A886] hover:bg-[#2548D0] text-white active:scale-[0.98] disabled:opacity-50 mt-2"
+                                className="w-full py-4 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md bg-[#36A886] hover:bg-[#36A886] text-white active:scale-[0.98] disabled:opacity-50 mt-2"
                             >
                                 {loading ? (
                                     <>

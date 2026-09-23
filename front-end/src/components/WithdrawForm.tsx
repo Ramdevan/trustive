@@ -114,7 +114,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
         <button
           onClick={handleClaim}
           disabled={loading || Number(claimableAmount) <= 0}
-          className="w-full flex items-center justify-center gap-2 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+          className="w-full flex items-center justify-center gap-2 bg-[#36A886] hover:bg-[#36A886] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
           {loading && <LuLoader className="h-4 w-4 animate-spin" />}
           Claim Tokens

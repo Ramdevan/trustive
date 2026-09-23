@@ -177,7 +177,7 @@ const MoonPayModal: React.FC<MoonPayModalProps> = ({
                 <p className="text-sm text-red-500 font-medium">Failed to initialize payment gateway.</p>
                 <button
                   onClick={() => setLoading(true)}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#36A886] hover:bg-[#2548D0] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#36A886] hover:bg-[#36A886] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer shadow-sm"
                 >
                   <LuRefreshCw className="w-3.5 h-3.5" /> Retry
                 </button>

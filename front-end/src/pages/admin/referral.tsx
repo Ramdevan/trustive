@@ -346,7 +346,7 @@ export default function ReferralAdminPage() {
                         <button
                             type="submit"
                             disabled={isSaving}
-                            className="bg-[#36A886] hover:bg-[#2548D0] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                            className="bg-[#36A886] hover:bg-[#36A886] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
                         >
                             {isSaving ? (
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />

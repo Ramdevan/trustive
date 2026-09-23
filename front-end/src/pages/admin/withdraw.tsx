@@ -444,7 +444,7 @@ export default function WithdrawPage() {
                     </div>
                     <button
                         onClick={() => handleProposeWithdraw('USDC', balances.usdc)}
-                        className="w-full py-3.5 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold uppercase tracking-wider text-xs rounded-xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#36A886]/20"
+                        className="w-full py-3.5 bg-[#36A886] hover:bg-[#36A886] text-white font-bold uppercase tracking-wider text-xs rounded-xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#36A886]/20"
                     >
                         <ArrowUpRight className="w-4 h-4" /> Propose USDC Withdraw
                     </button>
@@ -568,7 +568,7 @@ export default function WithdrawPage() {
                                             <button
                                                 onClick={() => handleConfirmProposal(prop.id)}
                                                 disabled={actionLoadingId === prop.id}
-                                                className="px-4 py-2 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
+                                                className="px-4 py-2 bg-[#36A886] hover:bg-[#36A886] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
                                             >
                                                 {actionLoadingId === prop.id ? (
                                                     <Loader2 className="w-3.5 h-3.5 animate-spin" />

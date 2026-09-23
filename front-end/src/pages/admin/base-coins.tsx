@@ -311,7 +311,7 @@ export default function BaseCoinsPage() {
             <div className="flex items-center justify-between">
                 <button
                     onClick={() => setIsAddModalOpen(true)}
-                    className="bg-[#36A886] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2.5 font-bold text-sm transition-all shadow-md shadow-[#36A886]/20 hover:scale-105 active:scale-95 cursor-pointer"
+                    className="bg-[#36A886] hover:bg-[#36A886] text-white px-6 py-3 rounded-xl flex items-center gap-2.5 font-bold text-sm transition-all shadow-md shadow-[#36A886]/20 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
                     Add Base Coin
@@ -698,7 +698,7 @@ export default function BaseCoinsPage() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="px-6 py-2.5 rounded-xl bg-[#36A886] hover:bg-[#2548D0] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#36A886]/20 cursor-pointer disabled:opacity-50"
+                                    className="px-6 py-2.5 rounded-xl bg-[#36A886] hover:bg-[#36A886] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#36A886]/20 cursor-pointer disabled:opacity-50"
                                 >
                                     {isSubmitting ? "Adding..." : "Add Coin"}
                                 </button>

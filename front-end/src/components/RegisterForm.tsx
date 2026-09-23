@@ -325,7 +325,7 @@ const RegisterForm: React.FC = () => {
             <button
               type="submit"
               disabled={loading || !acceptedTerms || isPasswordMismatch}
-              className={`w-full font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] ${acceptedTerms && !isPasswordMismatch ? 'bg-[#36A886] hover:bg-[#2548D0] text-white cursor-pointer' : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'} disabled:opacity-50`}
+              className={`w-full font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] ${acceptedTerms && !isPasswordMismatch ? 'bg-[#36A886] hover:bg-[#36A886] text-white cursor-pointer' : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'} disabled:opacity-50`}
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>

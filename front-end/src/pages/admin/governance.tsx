@@ -600,7 +600,7 @@ export default function GovernancePage() {
                                             <button
                                                 onClick={() => handleConfirm(prop.id)}
                                                 disabled={actionLoadingId === prop.id}
-                                                className="px-4 py-2.5 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
+                                                className="px-4 py-2.5 bg-[#36A886] hover:bg-[#36A886] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
                                             >
                                                 {actionLoadingId === prop.id ? (
                                                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -759,7 +759,7 @@ export default function GovernancePage() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="px-6 py-2.5 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-sm disabled:opacity-50"
+                                    className="px-6 py-2.5 bg-[#36A886] hover:bg-[#36A886] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-sm disabled:opacity-50"
                                 >
                                     {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                                     Submit Proposal

@@ -246,7 +246,7 @@ export default function PaymentSettings() {
                 <div className="flex flex-wrap items-center gap-3">
                     <button
                         onClick={() => setShowModal(true)}
-                        className="bg-[#36A886] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                        className="bg-[#36A886] hover:bg-[#36A886] text-white px-6 py-3 rounded-xl flex items-center gap-2 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                     >
                         <DollarSign className="w-4 h-4 text-white/90" />
                         Propose New Price
@@ -412,7 +412,7 @@ export default function PaymentSettings() {
                                             <button
                                                 onClick={() => handleConfirm(prop.id)}
                                                 disabled={actionLoadingId === prop.id}
-                                                className="px-4 py-2 bg-[#36A886] text-white rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-[#2548D0]"
+                                                className="px-4 py-2 bg-[#36A886] text-white rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-[#36A886]"
                                             >
                                                 Confirm (Vote)
                                             </button>
@@ -585,7 +585,7 @@ export default function PaymentSettings() {
                             <button
                                 onClick={handleUpdate}
                                 disabled={isWriting}
-                                className="bg-[#36A886] hover:bg-[#2548D0] text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                                className="bg-[#36A886] hover:bg-[#36A886] text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-2"
                             >
                                 {isWriting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
                                 Submit Multi-Sig Proposal

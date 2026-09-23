@@ -279,7 +279,7 @@ export default function SalesManagement() {
             <div className="flex items-center justify-between">
                 <button
                     onClick={() => setIsNewPhaseOpen(true)}
-                    className="bg-[#36A886] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2.5 font-bold text-sm transition-all shadow-md shadow-[#36A886]/20 hover:scale-105 active:scale-95 cursor-pointer"
+                    className="bg-[#36A886] hover:bg-[#36A886] text-white px-6 py-3 rounded-xl flex items-center gap-2.5 font-bold text-sm transition-all shadow-md shadow-[#36A886]/20 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
                     New Phase
@@ -619,7 +619,7 @@ export default function SalesManagement() {
                                             "flex-1 px-4 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2",
                                             isEnded
                                                 ? "bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed opacity-50"
-                                                : "bg-[#36A886] hover:bg-[#2548D0] disabled:opacity-50 text-white cursor-pointer shadow-sm"
+                                                : "bg-[#36A886] hover:bg-[#36A886] disabled:opacity-50 text-white cursor-pointer shadow-sm"
                                         )}
                                         title={isEnded ? "Cannot update a completed sale phase" : "Update"}
                                     >
@@ -800,7 +800,7 @@ export default function SalesManagement() {
                             <button
                                 type="submit"
                                 disabled={isCreatingPhase}
-                                className="flex-1 px-8 py-4 bg-[#36A886] hover:bg-[#2548D0] disabled:opacity-50 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.1em] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                                className="flex-1 px-8 py-4 bg-[#36A886] hover:bg-[#36A886] disabled:opacity-50 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.1em] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 {isCreatingPhase && <Loader2 className="w-4 h-4 animate-spin" />}
                                 {isCreatingPhase ? "Deploying Phase..." : "Deploy Phase"}

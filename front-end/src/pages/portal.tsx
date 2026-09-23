@@ -143,7 +143,7 @@ export default function PortalGatewayPage() {
                             <div className="pt-8">
                                 <Link
                                     href="/admin/dashboard"
-                                    className="w-full py-4 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-2xl font-bold uppercase tracking-wider text-xs shadow-lg shadow-[#36A886]/20 transition-all flex items-center justify-center gap-2 group-hover:gap-3 cursor-pointer"
+                                    className="w-full py-4 bg-[#36A886] hover:bg-[#36A886] text-white rounded-2xl font-bold uppercase tracking-wider text-xs shadow-lg shadow-[#36A886]/20 transition-all flex items-center justify-center gap-2 group-hover:gap-3 cursor-pointer"
                                 >
                                     <span>Launch Admin Panel</span>
                                     <ArrowRight className="w-4 h-4" />

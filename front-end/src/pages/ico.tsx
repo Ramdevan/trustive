@@ -60,7 +60,7 @@ export default function ICO() {
             </div>
             <button
               onClick={connectWallet}
-              className="bg-[#36A886] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#36A886]/20"
+              className="bg-[#36A886] hover:bg-[#36A886] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#36A886]/20"
             >
               Connect Wallet
             </button>

@@ -178,7 +178,7 @@ const ResetPasswordForm: React.FC = () => {
               <div className="space-y-3 pt-2">
                 <Link
                   href="/forgot-password"
-                  className="block w-full py-4 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold text-sm uppercase rounded-xl transition-all shadow-lg text-center"
+                  className="block w-full py-4 bg-[#36A886] hover:bg-[#36A886] text-white font-bold text-sm uppercase rounded-xl transition-all shadow-lg text-center"
                 >
                   Request New Reset Link
                 </Link>
@@ -292,7 +292,7 @@ const ResetPasswordForm: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading || Boolean(success)}
-                  className="w-full bg-[#36A886] hover:bg-[#2548D0] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50 mt-2"
+                  className="w-full bg-[#36A886] hover:bg-[#36A886] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50 mt-2"
                 >
                   {loading ? 'Updating Password...' : 'Save New Password'}
                 </button>

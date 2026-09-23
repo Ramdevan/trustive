@@ -223,7 +223,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
           <button
             onClick={handleClaimAll}
             disabled={claimingPeriod !== null || unlockedRows.length === 0}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#36A886] hover:bg-[#2548D0] text-white text-[0.8rem] font-bold transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#36A886] hover:bg-[#36A886] text-white text-[0.8rem] font-bold transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
           >
             {claimingPeriod === 'all' && <LuLoader className="h-4 w-4 animate-spin" />}
             {claimingPeriod === 'all' ? 'Claiming All' : 'Claim All'}
@@ -266,7 +266,7 @@ const VestingDetailModal: React.FC<VestingDetailModalProps> = ({ vesting, onClos
                       <button
                         onClick={() => handleClaim(row)}
                         disabled={claimingPeriod !== null}
-                        className="inline-flex items-center justify-center gap-1.5 w-[5.5rem] px-4 py-1.5 rounded-lg bg-[#36A886] hover:bg-[#2548D0] text-white text-[0.7rem] font-bold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                        className="inline-flex items-center justify-center gap-1.5 w-[5.5rem] px-4 py-1.5 rounded-lg bg-[#36A886] hover:bg-[#36A886] text-white text-[0.7rem] font-bold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                       >
                         {claimingPeriod === row.period && <LuLoader className="h-3 w-3 animate-spin" />}
                         {claimingPeriod === row.period ? 'Claiming' : 'Claim'}

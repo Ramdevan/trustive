@@ -317,7 +317,7 @@ export default function KycPage() {
                       sdkInitialized.current = false;
                       window.location.reload();
                     }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-md shadow-[#36A886]/20"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#36A886] hover:bg-[#36A886] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-md shadow-[#36A886]/20"
                   >
                     <LuRefreshCw className="w-4 h-4" />
                     Retry Verification

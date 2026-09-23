@@ -144,7 +144,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                       <button
                         onClick={openConnectModal}
                         type="button"
-                        className="hidden lg:flex items-center gap-2 rounded-xl bg-[#36A886] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 cursor-pointer"
+                        className="hidden lg:flex items-center gap-2 rounded-xl bg-[#36A886] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#36A886] shadow-md shadow-[#36A886]/20 cursor-pointer"
                       >
                         <LuWallet className="h-4 w-4" />
                         Connect Wallet
@@ -169,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                     <button
                       onClick={openAccountModal}
                       type="button"
-                      className="hidden lg:flex items-center gap-2 rounded-xl bg-[#36A886] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 cursor-pointer"
+                      className="hidden lg:flex items-center gap-2 rounded-xl bg-[#36A886] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#36A886] shadow-md shadow-[#36A886]/20 cursor-pointer"
                     >
                       <LuWallet className="h-4 w-4" />
                       {rbAccount.displayName}
@@ -204,7 +204,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           Connect
                         </div>
                         {!connected ? (
-                          <button onClick={openConnectModal} className="w-full flex items-center gap-2 rounded-xl bg-[#36A886] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 transition-colors cursor-pointer">
+                          <button onClick={openConnectModal} className="w-full flex items-center gap-2 rounded-xl bg-[#36A886] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#36A886] shadow-md shadow-[#36A886]/20 transition-colors cursor-pointer">
                             <LuWallet className="h-4 w-4" />
                             Connect Wallet
                           </button>
@@ -214,7 +214,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                             Wrong Network
                           </button>
                         ) : (
-                          <button onClick={openAccountModal} className="w-full flex items-center gap-2 rounded-xl bg-[#36A886] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 transition-colors cursor-pointer">
+                          <button onClick={openAccountModal} className="w-full flex items-center gap-2 rounded-xl bg-[#36A886] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#36A886] shadow-md shadow-[#36A886]/20 transition-colors cursor-pointer">
                             <LuWallet className="h-4 w-4" />
                             {rbAccount.displayName}
                           </button>

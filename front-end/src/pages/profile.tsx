@@ -410,7 +410,7 @@ export default function Profile() {
                                             <LuUser className="w-12 h-12 text-[#36A886]/40" />
                                         )}
                                     </div>
-                                    <label className="absolute bottom-0 right-0 w-10 h-10 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform border-4 border-[#ECE9EA]">
+                                    <label className="absolute bottom-0 right-0 w-10 h-10 bg-[#36A886] hover:bg-[#36A886] text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform border-4 border-[#ECE9EA]">
                                         <LuCamera className="w-4 h-4 text-white" />
                                         <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                                     </label>
@@ -475,7 +475,7 @@ export default function Profile() {
                                             <button
                                                 onClick={handleUpdateName}
                                                 disabled={saving || !newName || newName === user.name}
-                                                className="px-8 py-3 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#36A886]/20"
+                                                className="px-8 py-3 bg-[#36A886] hover:bg-[#36A886] text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#36A886]/20"
                                             >
                                                 Update Name
                                             </button>
@@ -578,7 +578,7 @@ export default function Profile() {
                                     <button
                                         type="submit"
                                         disabled={saving}
-                                        className="w-full md:w-auto px-12 py-4 bg-[#36A886] hover:bg-[#2548D0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-[#36A886]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                        className="w-full md:w-auto px-12 py-4 bg-[#36A886] hover:bg-[#36A886] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-[#36A886]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                                     >
                                         {saving ? 'Saving...' : 'Update Password'}
                                     </button>
@@ -620,7 +620,7 @@ export default function Profile() {
                                             <button
                                                 onClick={twoFaEnabled ? () => setShowDisable2FA(true) : initiate2FASetup}
                                                 disabled={saving}
-                                                className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[2px] transition-all active:scale-95 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed ${twoFaEnabled ? "bg-zinc-800 text-white hover:bg-zinc-700" : "bg-[#36A886] text-white hover:bg-[#2548D0] shadow-lg shadow-[#36A886]/20"
+                                                className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[2px] transition-all active:scale-95 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed ${twoFaEnabled ? "bg-zinc-800 text-white hover:bg-zinc-700" : "bg-[#36A886] text-white hover:bg-[#36A886] shadow-lg shadow-[#36A886]/20"
                                                     }`}
                                             >
                                                 {saving ? "Please wait..." : twoFaEnabled ? "Disable 2FA" : "Set Up 2FA"}
@@ -657,7 +657,7 @@ export default function Profile() {
                                                         <button
                                                             onClick={verifyAndEnable2FA}
                                                             disabled={twoFaCodeInput.length !== 6 || saving}
-                                                            className="shrink-0 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 shadow-md shadow-[#36A886]/20"
+                                                            className="shrink-0 bg-[#36A886] hover:bg-[#36A886] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 shadow-md shadow-[#36A886]/20"
                                                         >
                                                             {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify"}
                                                         </button>

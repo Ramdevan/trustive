@@ -244,7 +244,7 @@ export default function AdminProfile() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#36A886] hover:bg-[#2548D0] text-white py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md shadow-[#36A886]/20"
+                            className="w-full bg-[#36A886] hover:bg-[#36A886] text-white py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md shadow-[#36A886]/20"
                         >
                             {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Update Credentials"}
                         </button>
@@ -292,7 +292,7 @@ export default function AdminProfile() {
                                 disabled={verifying}
                                 className={`w-full py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] cursor-pointer ${twoFaStatus
                                     ? "bg-zinc-100 text-zinc-800 hover:bg-zinc-200 border border-zinc-200"
-                                    : "bg-[#36A886] text-white hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20"
+                                    : "bg-[#36A886] text-white hover:bg-[#36A886] shadow-md shadow-[#36A886]/20"
                                     }`}
                             >
                                 {verifying ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (twoFaStatus ? "Disable 2FA" : "Enable Multi-Factor")}
@@ -328,7 +328,7 @@ export default function AdminProfile() {
                                     <button
                                         onClick={verifyAndEnable2FA}
                                         disabled={verificationCode.length !== 6 || verifying}
-                                        className="bg-[#36A886] text-white p-4 rounded-2xl hover:bg-[#2548D0] transition-all disabled:opacity-50 active:scale-95 cursor-pointer shadow-md shadow-[#36A886]/20"
+                                        className="bg-[#36A886] text-white p-4 rounded-2xl hover:bg-[#36A886] transition-all disabled:opacity-50 active:scale-95 cursor-pointer shadow-md shadow-[#36A886]/20"
                                     >
                                         {verifying ? <Loader2 className="w-6 h-6 animate-spin" /> : <ArrowRight className="w-6 h-6" />}
                                     </button>
