@@ -168,7 +168,7 @@ export default function PaymentSettings() {
             await apiRequest("/updateTokenPrice", {
                 method: 'POST',
                 body: JSON.stringify({ price: priceNum.toString(), tx_hash: hash })
-            }).catch(() => {});
+            }).catch(() => { });
 
             setShowModal(false);
             setNewPriceUSD("");
@@ -246,7 +246,7 @@ export default function PaymentSettings() {
                 <div className="flex flex-wrap items-center gap-3">
                     <button
                         onClick={() => setShowModal(true)}
-                        className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                        className="bg-[#36A886] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                     >
                         <DollarSign className="w-4 h-4 text-white/90" />
                         Propose New Price
@@ -299,7 +299,7 @@ export default function PaymentSettings() {
                             <span className="text-[10px] font-extrabold text-[#001060] tracking-[0.2em] uppercase">
                                 Unit Price
                             </span>
-                            <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#315EFB] border border-blue-200 flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#36A886] border border-blue-200 flex items-center justify-center">
                                 <DollarSign className="w-4 h-4" />
                             </div>
                         </div>
@@ -319,7 +319,7 @@ export default function PaymentSettings() {
                             <span className="text-[10px] font-extrabold text-[#001060] tracking-[0.2em] uppercase">
                                 Exchange Rate
                             </span>
-                            <div className="w-9 h-9 rounded-xl bg-[#315EFB]/10 text-[#315EFB] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-xl bg-[#36A886]/10 text-[#36A886] flex items-center justify-center">
                                 <Coins className="w-4 h-4" />
                             </div>
                         </div>
@@ -366,7 +366,7 @@ export default function PaymentSettings() {
                             <h3 className="text-lg font-bold text-[#001060]">Active Price Proposals (3/5 Quorum)</h3>
                             <p className="text-xs text-zinc-500">Requires 3 Admin confirmations to execute price changes.</p>
                         </div>
-                        <span className="px-2.5 py-1 bg-blue-100 text-[#315EFB] text-[10px] font-bold rounded-lg uppercase">
+                        <span className="px-2.5 py-1 bg-blue-100 text-[#36A886] text-[10px] font-bold rounded-lg uppercase">
                             {priceProposals.length} Pending
                         </span>
                     </div>
@@ -385,7 +385,7 @@ export default function PaymentSettings() {
                                         newPrice = `$${(1 / raw).toFixed(4)}`;
                                     }
                                 }
-                            } catch {}
+                            } catch { }
 
                             return (
                                 <div key={prop.id} className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -412,7 +412,7 @@ export default function PaymentSettings() {
                                             <button
                                                 onClick={() => handleConfirm(prop.id)}
                                                 disabled={actionLoadingId === prop.id}
-                                                className="px-4 py-2 bg-[#315EFB] text-white rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-[#2548D0]"
+                                                className="px-4 py-2 bg-[#36A886] text-white rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-[#2548D0]"
                                             >
                                                 Confirm (Vote)
                                             </button>
@@ -453,7 +453,7 @@ export default function PaymentSettings() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-[#315EFB] text-white uppercase font-bold text-xs tracking-widest">
+                            <tr className="bg-[#36A886] text-white uppercase font-bold text-xs tracking-widest">
                                 <th className="px-10 py-5">ID</th>
                                 <th className="px-8 py-5">BEFORE</th>
                                 <th className="px-8 py-5">AFTER</th>
@@ -465,7 +465,7 @@ export default function PaymentSettings() {
                             {loading ? (
                                 <tr>
                                     <td colSpan={5} className="px-10 py-24 text-center">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#315EFB] mx-auto"></div>
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#36A886] mx-auto"></div>
                                     </td>
                                 </tr>
                             ) : history.length === 0 ? (
@@ -512,7 +512,7 @@ export default function PaymentSettings() {
                     <div className="bg-[#ECE9EA] w-full max-w-lg rounded-[32px] border border-zinc-200/90 p-8 shadow-2xl relative space-y-6">
                         <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-[#315EFB]/10 text-[#315EFB] flex items-center justify-center border border-[#315EFB]/20">
+                                <div className="w-10 h-10 rounded-xl bg-[#36A886]/10 text-[#36A886] flex items-center justify-center border border-[#36A886]/20">
                                     <DollarSign className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -545,7 +545,7 @@ export default function PaymentSettings() {
                                         placeholder="0.01"
                                         value={newPriceUSD}
                                         onChange={(e) => setNewPriceUSD(e.target.value)}
-                                        className="w-full bg-white border border-zinc-200 rounded-xl pl-8 pr-4 py-3.5 text-zinc-900 font-mono text-sm focus:outline-none focus:border-[#315EFB] transition-colors"
+                                        className="w-full bg-white border border-zinc-200 rounded-xl pl-8 pr-4 py-3.5 text-zinc-900 font-mono text-sm focus:outline-none focus:border-[#36A886] transition-colors"
                                     />
                                 </div>
                             </div>
@@ -566,7 +566,7 @@ export default function PaymentSettings() {
 
                             <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-200/80 text-[11px] text-blue-900 space-y-1">
                                 <p className="font-bold flex items-center gap-1.5">
-                                    <ShieldCheck className="w-3.5 h-3.5 text-[#315EFB]" />
+                                    <ShieldCheck className="w-3.5 h-3.5 text-[#36A886]" />
                                     Multi-Signature Consensus Process:
                                 </p>
                                 <p className="leading-relaxed text-blue-800">
@@ -585,7 +585,7 @@ export default function PaymentSettings() {
                             <button
                                 onClick={handleUpdate}
                                 disabled={isWriting}
-                                className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                                className="bg-[#36A886] hover:bg-[#2548D0] text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-2"
                             >
                                 {isWriting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
                                 Submit Multi-Sig Proposal

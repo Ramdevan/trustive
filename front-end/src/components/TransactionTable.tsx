@@ -108,7 +108,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-[#315EFB] uppercase font-bold text-center">{tx.payment_type}</td>
+                  <td className="px-6 py-4 text-[#36A886] uppercase font-bold text-center">{tx.payment_type}</td>
                   <td className="px-6 py-4 text-zinc-900 font-medium whitespace-nowrap text-center">{Number(tx.crypto_value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</td>
                   <td className="px-6 py-4 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} TRSIV</td>
                   <td className="px-6 py-4 text-zinc-900 font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -120,7 +120,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                   </td>
                   <td className="px-6 py-4 font-mono text-center">
                     {tx.trans_hash && tx.trans_hash.startsWith('0x') && tx.trans_hash.length >= 64 ? (
-                      <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#315EFB] font-semibold hover:underline inline-block" title={tx.trans_hash}>
+                      <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#36A886] font-semibold hover:underline inline-block" title={tx.trans_hash}>
                         {shortenHash(tx.trans_hash)}
                       </a>
                     ) : (
@@ -152,7 +152,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions = [], 
                   key={p}
                   onClick={() => setPage(p)}
                   className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold transition-all cursor-pointer ${p === page
-                    ? 'bg-[#315EFB] text-white shadow-md shadow-[#315EFB]/20'
+                    ? 'bg-[#36A886] text-white shadow-md shadow-[#36A886]/20'
                     : 'bg-white border border-zinc-200 text-zinc-700 hover:bg-zinc-100 shadow-sm'
                     }`}
                 >

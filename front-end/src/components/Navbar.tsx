@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           const parsed = JSON.parse(cached);
           return parsed.profile_pic || null;
         }
-      } catch {}
+      } catch { }
     }
     return null;
   });
@@ -39,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
       try {
         const cached = localStorage.getItem('user_data');
         return cached ? JSON.parse(cached) : null;
-      } catch {}
+      } catch { }
     }
     return null;
   });
@@ -77,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
               ? 'verified'
               : (data.user.kyc_status || 'unverified');
             localStorage.setItem('user_data', JSON.stringify({ ...existing, ...data.user, kyc_status: finalKyc }));
-          } catch {}
+          } catch { }
         }
       } catch (err) {
         console.error('Navbar profile fetch error:', err);
@@ -144,7 +144,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                       <button
                         onClick={openConnectModal}
                         type="button"
-                        className="hidden lg:flex items-center gap-2 rounded-xl bg-[#315EFB] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 cursor-pointer"
+                        className="hidden lg:flex items-center gap-2 rounded-xl bg-[#36A886] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 cursor-pointer"
                       >
                         <LuWallet className="h-4 w-4" />
                         Connect Wallet
@@ -169,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                     <button
                       onClick={openAccountModal}
                       type="button"
-                      className="hidden lg:flex items-center gap-2 rounded-xl bg-[#315EFB] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 cursor-pointer"
+                      className="hidden lg:flex items-center gap-2 rounded-xl bg-[#36A886] px-5 py-3 text-[1rem] font-bold text-white transition-colors hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 cursor-pointer"
                     >
                       <LuWallet className="h-4 w-4" />
                       {rbAccount.displayName}
@@ -179,22 +179,22 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
 
                 {/* Profile Dropdown */}
                 <div className="relative" ref={dropdownRef}>
-                    <div
-                      className="h-12 w-12 overflow-hidden rounded-lg border border-white/10 cursor-pointer hover:border-accent/40 transition-all active:scale-95 bg-black/20 flex items-center justify-center p-1"
-                      onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    >
-                      {profilePic ? (
-                        <img src={profilePic} alt="User Profile" className="w-full h-full object-cover rounded-md" />
-                      ) : connected ? (
-                        walletIcon ? (
-                          <img src={walletIcon} alt="Wallet Logo" className="object-contain w-full h-full" />
-                        ) : (
-                          <div className="w-full h-full rounded-md bg-gradient-to-br from-accent via-yellow-500 to-amber-700 opacity-80" />
-                        )
+                  <div
+                    className="h-12 w-12 overflow-hidden rounded-lg border border-white/10 cursor-pointer hover:border-accent/40 transition-all active:scale-95 bg-black/20 flex items-center justify-center p-1"
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  >
+                    {profilePic ? (
+                      <img src={profilePic} alt="User Profile" className="w-full h-full object-cover rounded-md" />
+                    ) : connected ? (
+                      walletIcon ? (
+                        <img src={walletIcon} alt="Wallet Logo" className="object-contain w-full h-full" />
                       ) : (
-                        <Image src={userProfile} alt="Default User" className="object-contain w-full h-full" priority />
-                      )}
-                    </div>
+                        <div className="w-full h-full rounded-md bg-gradient-to-br from-accent via-yellow-500 to-amber-700 opacity-80" />
+                      )
+                    ) : (
+                      <Image src={userProfile} alt="Default User" className="object-contain w-full h-full" priority />
+                    )}
+                  </div>
 
                   {isProfileOpen && (
                     <div className="absolute right-0 mt-3 w-64 rounded-2xl bg-white border border-zinc-200/90 py-4 shadow-xl">
@@ -204,7 +204,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           Connect
                         </div>
                         {!connected ? (
-                          <button onClick={openConnectModal} className="w-full flex items-center gap-2 rounded-xl bg-[#315EFB] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 transition-colors cursor-pointer">
+                          <button onClick={openConnectModal} className="w-full flex items-center gap-2 rounded-xl bg-[#36A886] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 transition-colors cursor-pointer">
                             <LuWallet className="h-4 w-4" />
                             Connect Wallet
                           </button>
@@ -214,7 +214,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                             Wrong Network
                           </button>
                         ) : (
-                          <button onClick={openAccountModal} className="w-full flex items-center gap-2 rounded-xl bg-[#315EFB] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20 transition-colors cursor-pointer">
+                          <button onClick={openAccountModal} className="w-full flex items-center gap-2 rounded-xl bg-[#36A886] px-4 py-2.5 text-[0.875rem] font-bold text-white hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20 transition-colors cursor-pointer">
                             <LuWallet className="h-4 w-4" />
                             {rbAccount.displayName}
                           </button>
@@ -248,7 +248,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-800 hover:bg-zinc-100 transition-colors text-left group cursor-pointer"
                         >
-                          <LuUser className="h-5 w-5 text-zinc-900 group-hover:text-[#315EFB] transition-colors" />
+                          <LuUser className="h-5 w-5 text-zinc-900 group-hover:text-[#36A886] transition-colors" />
                           Profile
                         </Link>
 
@@ -257,7 +257,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                           onClick={() => setIsProfileOpen(false)}
                           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[1rem] text-zinc-800 hover:bg-zinc-100 transition-colors text-left group cursor-pointer"
                         >
-                          <LuHistory className="h-5 w-5 text-zinc-900 group-hover:text-[#315EFB] transition-colors" />
+                          <LuHistory className="h-5 w-5 text-zinc-900 group-hover:text-[#36A886] transition-colors" />
                           Session History
                         </Link>
 

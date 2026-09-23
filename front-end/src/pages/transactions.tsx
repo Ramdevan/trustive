@@ -39,32 +39,32 @@ export default function Transactions() {
   if (!isConnected) {
     return (
       <AuthGuard>
-      <Layout>
-        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
-          <LuWallet className="h-16 w-16 text-zinc-600" />
-          <div>
-            <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
-            <p className="text-zinc-700 text-[1rem]">Connect your wallet to view your transaction history</p>
+        <Layout>
+          <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
+            <LuWallet className="h-16 w-16 text-zinc-600" />
+            <div>
+              <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
+              <p className="text-zinc-700 text-[1rem]">Connect your wallet to view your transaction history</p>
+            </div>
+            <button
+              onClick={connectWallet}
+              className="bg-[#36A886] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#36A886]/20"
+            >
+              Connect Wallet
+            </button>
           </div>
-          <button
-            onClick={connectWallet}
-            className="bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#315EFB]/20"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      </Layout>
+        </Layout>
       </AuthGuard>
     );
   }
 
   return (
     <AuthGuard>
-    <Layout>
-      <div className="mx-auto">
-        <TransactionTable transactions={transactions} loading={loading} />
-      </div>
-    </Layout>
+      <Layout>
+        <div className="mx-auto">
+          <TransactionTable transactions={transactions} loading={loading} />
+        </div>
+      </Layout>
     </AuthGuard>
   );
 }

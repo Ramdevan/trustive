@@ -99,7 +99,7 @@ const DashboardChart: React.FC = () => {
                 <button
                   key={year}
                   onClick={() => handleYearChange(year)}
-                  className={`w-full text-left px-4 py-2.5 text-[0.875rem] transition-colors hover:bg-zinc-100 ${selectedYear === year ? 'text-[#315EFB] font-bold bg-blue-50/50' : 'text-zinc-700'}`}
+                  className={`w-full text-left px-4 py-2.5 text-[0.875rem] transition-colors hover:bg-zinc-100 ${selectedYear === year ? 'text-[#36A886] font-bold bg-blue-50/50' : 'text-zinc-700'}`}
                 >
                   {year}
                 </button>
@@ -129,7 +129,7 @@ const DashboardChart: React.FC = () => {
             <Tooltip
               cursor={{ fill: 'rgba(49,94,251,0.04)' }}
               contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', padding: '12px 16px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)' }}
-              itemStyle={{ color: '#315EFB', fontWeight: 'bold' }}
+              itemStyle={{ color: '#36A886', fontWeight: 'bold' }}
               labelStyle={{ color: '#64748B', marginBottom: '4px' }}
               formatter={(v) => [
                 `${Number(v ?? 0).toLocaleString()} TRSIV`,
@@ -140,7 +140,7 @@ const DashboardChart: React.FC = () => {
               {chartData.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={chartData[index].value > 0 && index === chartData.reduce((best, d, i) => d.value > chartData[best].value ? i : best, 0) ? '#315EFB' : chartData[index].value > 0 ? '#5D80FC' : '#E2E4E9'}
+                  fill={chartData[index].value > 0 && index === chartData.reduce((best, d, i) => d.value > chartData[best].value ? i : best, 0) ? '#36A886' : chartData[index].value > 0 ? '#5D80FC' : '#E2E4E9'}
                 />
               ))}
             </Bar>

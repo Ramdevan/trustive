@@ -86,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               href={item.path}
               onClick={onClose}
               className={`cursor-pointer flex items-center gap-3 rounded-xl px-4 py-3 text-[1.125rem] font-medium transition-all ${isActive
-                ? 'bg-[#315EFB] text-white shadow-md shadow-[#315EFB]/20'
+                ? 'bg-[#36A886] text-white shadow-md shadow-[#36A886]/20'
                 : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}`}
             >
               <item.icon className="h-5 w-5" />

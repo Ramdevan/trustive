@@ -1689,7 +1689,7 @@ module.exports = async function (fastify, opts) {
       if (baseCurrencyAmount && parseFloat(baseCurrencyAmount) > 0) {
         urlObj.searchParams.set('baseCurrencyAmount', parseFloat(baseCurrencyAmount).toString());
       }
-      urlObj.searchParams.set('colorCode', '#315EFB');
+      urlObj.searchParams.set('colorCode', '#36A886');
       if (redirectURL) {
         urlObj.searchParams.set('redirectURL', redirectURL);
       }

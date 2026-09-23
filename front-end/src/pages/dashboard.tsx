@@ -248,7 +248,7 @@ export default function Dashboard() {
             </div>
             <button
               onClick={connectWallet}
-              className="bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#315EFB]/20"
+              className="bg-[#36A886] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#36A886]/20"
             >
               Connect Wallet
             </button>
@@ -321,7 +321,7 @@ export default function Dashboard() {
                               {account && <CopyButton text={account} label="Copy Address" />}
                             </div>
                           </td>
-                          <td className="px-4 sm:px-6 py-3.5 text-[#315EFB] font-bold whitespace-nowrap text-center">{tx.payment_type}</td>
+                          <td className="px-4 sm:px-6 py-3.5 text-[#36A886] font-bold whitespace-nowrap text-center">{tx.payment_type}</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-medium whitespace-nowrap text-center">{tx.crypto_value}</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-semibold whitespace-nowrap text-center">{parseFloat(tx.ptc_tokens || '0').toLocaleString()} TRSIV</td>
                           <td className="px-4 sm:px-6 py-3.5 text-zinc-900 font-bold whitespace-nowrap text-center">${Number(tx.usd_value_of_crypto || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -333,7 +333,7 @@ export default function Dashboard() {
                           </td>
                           <td className="px-4 sm:px-6 py-3.5 font-mono text-center">
                             {tx.trans_hash ? (
-                              <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#315EFB] font-semibold hover:underline" title={tx.trans_hash}>
+                              <a href={`https://testnet.bscscan.com/tx/${tx.trans_hash}`} target="_blank" rel="noopener noreferrer" className="text-[#36A886] font-semibold hover:underline" title={tx.trans_hash}>
                                 {shortenHash(tx.trans_hash)}
                               </a>
                             ) : '—'}
@@ -349,7 +349,7 @@ export default function Dashboard() {
             <div className="px-6 py-4 border-t border-zinc-100 flex justify-center bg-zinc-50/30">
               <Link
                 href="/transactions"
-                className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-[#315EFB] hover:text-[#2548D0] transition-colors"
+                className="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-[#36A886] hover:text-[#2548D0] transition-colors"
               >
                 Show all transactions
                 <LuArrowRight className="h-4 w-4" />

@@ -60,7 +60,7 @@ export default function ICO() {
             </div>
             <button
               onClick={connectWallet}
-              className="bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#315EFB]/20"
+              className="bg-[#36A886] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#36A886]/20"
             >
               Connect Wallet
             </button>
@@ -88,7 +88,7 @@ export default function ICO() {
             <CountdownTimer />
             <div className="w-full max-w-[35rem] mx-auto space-y-4">
               <div className="rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-8 text-center space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] animate-in fade-in duration-500">
-                <div className="w-12 h-12 rounded-full bg-[#315EFB]/10 border border-[#315EFB]/20 flex items-center justify-center mx-auto text-[#315EFB]">
+                <div className="w-12 h-12 rounded-full bg-[#36A886]/10 border border-[#36A886]/20 flex items-center justify-center mx-auto text-[#36A886]">
                   <LuTriangleAlert className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold text-[#001060] uppercase tracking-wider">
@@ -103,7 +103,7 @@ export default function ICO() {
         ) : (
           <div className="min-h-[70vh] flex items-center justify-center p-4">
             <div className="w-full max-w-[35rem] rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-8 text-center space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] animate-in fade-in duration-500">
-              <div className="w-12 h-12 rounded-full bg-[#315EFB]/10 border border-[#315EFB]/20 flex items-center justify-center mx-auto text-[#315EFB]">
+              <div className="w-12 h-12 rounded-full bg-[#36A886]/10 border border-[#36A886]/20 flex items-center justify-center mx-auto text-[#36A886]">
                 <LuTriangleAlert className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-[#001060] uppercase tracking-wider">

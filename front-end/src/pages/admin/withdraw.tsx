@@ -332,7 +332,7 @@ export default function WithdrawPage() {
                         </span>
                     </div>
                     <p className="text-sm text-zinc-500 mt-1 font-normal">
-                        Initiate, confirm, and execute multi-signature recovery proposals to withdraw collected ICO revenues from contract <span className="font-mono text-xs text-[#315EFB] font-semibold">{shortenAddress(icoContract)}</span>.
+                        Initiate, confirm, and execute multi-signature recovery proposals to withdraw collected ICO revenues from contract <span className="font-mono text-xs text-[#36A886] font-semibold">{shortenAddress(icoContract)}</span>.
                     </p>
                 </div>
 
@@ -350,7 +350,7 @@ export default function WithdrawPage() {
                         className="bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 px-4 py-2.5 rounded-xl flex items-center gap-2 font-bold text-xs uppercase tracking-widest transition-all cursor-pointer shadow-xs disabled:opacity-50"
                         title="Refresh live balances and ledger"
                     >
-                        <RotateCw className={`w-3.5 h-3.5 text-zinc-500 ${isRefreshing ? "animate-spin text-[#315EFB]" : ""}`} />
+                        <RotateCw className={`w-3.5 h-3.5 text-zinc-500 ${isRefreshing ? "animate-spin text-[#36A886]" : ""}`} />
                         <span>{isRefreshing ? "Refreshing..." : "Refresh"}</span>
                     </button>
                 </div>
@@ -444,7 +444,7 @@ export default function WithdrawPage() {
                     </div>
                     <button
                         onClick={() => handleProposeWithdraw('USDC', balances.usdc)}
-                        className="w-full py-3.5 bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold uppercase tracking-wider text-xs rounded-xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#315EFB]/20"
+                        className="w-full py-3.5 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold uppercase tracking-wider text-xs rounded-xl flex justify-center items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-md shadow-[#36A886]/20"
                     >
                         <ArrowUpRight className="w-4 h-4" /> Propose USDC Withdraw
                     </button>
@@ -493,7 +493,7 @@ export default function WithdrawPage() {
                     </div>
                     <button
                         onClick={() => refetchProposals()}
-                        className="text-xs font-bold text-[#315EFB] uppercase tracking-wider hover:underline self-start sm:self-auto cursor-pointer"
+                        className="text-xs font-bold text-[#36A886] uppercase tracking-wider hover:underline self-start sm:self-auto cursor-pointer"
                     >
                         Refresh Proposals
                     </button>
@@ -568,7 +568,7 @@ export default function WithdrawPage() {
                                             <button
                                                 onClick={() => handleConfirmProposal(prop.id)}
                                                 disabled={actionLoadingId === prop.id}
-                                                className="px-4 py-2 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
+                                                className="px-4 py-2 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
                                             >
                                                 {actionLoadingId === prop.id ? (
                                                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -633,7 +633,7 @@ export default function WithdrawPage() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-[#315EFB] text-white uppercase font-bold text-xs tracking-widest">
+                            <tr className="bg-[#36A886] text-white uppercase font-bold text-xs tracking-widest">
                                 <th className="px-8 py-5 text-center">ID</th>
                                 <th className="px-8 py-5 text-center">Destination Address</th>
                                 <th className="px-8 py-5 text-center">Transaction Hash</th>
@@ -646,7 +646,7 @@ export default function WithdrawPage() {
                             {loadingHistory ? (
                                 <tr>
                                     <td colSpan={6} className="px-10 py-24 text-center">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#315EFB] mx-auto"></div>
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#36A886] mx-auto"></div>
                                     </td>
                                 </tr>
                             ) : history.length === 0 ? (
@@ -685,11 +685,10 @@ export default function WithdrawPage() {
                                             </span>
                                         </td>
                                         <td className="px-8 py-5 text-center">
-                                            <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                                                record.tx_hash
-                                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                                    : 'bg-red-50 text-red-700 border-red-200'
-                                            }`}>
+                                            <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${record.tx_hash
+                                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                                : 'bg-red-50 text-red-700 border-red-200'
+                                                }`}>
                                                 {record.tx_hash ? "SUCCESS" : "FAILED"}
                                             </span>
                                         </td>

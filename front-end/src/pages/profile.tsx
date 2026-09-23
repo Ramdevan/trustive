@@ -30,7 +30,7 @@ export default function Profile() {
                         profile_pic: parsed.profile_pic || null
                     };
                 }
-            } catch {}
+            } catch { }
         }
         return {
             name: '',
@@ -56,7 +56,7 @@ export default function Profile() {
                     const parsed = JSON.parse(cached);
                     return parsed.name || '';
                 }
-            } catch {}
+            } catch { }
         }
         return '';
     });
@@ -135,7 +135,7 @@ export default function Profile() {
             const token = localStorage.getItem('user_token');
             const res = await fetch(`${API_URL}/api/user/verify-2fa`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
@@ -209,7 +209,7 @@ export default function Profile() {
                     const cached = localStorage.getItem('user_data');
                     const existing = cached ? JSON.parse(cached) : {};
                     localStorage.setItem('user_data', JSON.stringify({ ...existing, ...data.user }));
-                } catch {}
+                } catch { }
             } else {
                 toast.error(data.msg || 'Failed to fetch profile');
             }
@@ -223,7 +223,7 @@ export default function Profile() {
 
     const handleUpdateName = async () => {
         if (!newName || newName.trim() === '') return toast.error('Name is required');
-        
+
         const confirmed = await confirmAction(`Update your username to "${newName.trim()}"?`);
         if (!confirmed) return;
 
@@ -247,7 +247,7 @@ export default function Profile() {
                         const cached = localStorage.getItem('user_data');
                         const existing = cached ? JSON.parse(cached) : {};
                         localStorage.setItem('user_data', JSON.stringify({ ...existing, name: newName }));
-                    } catch {}
+                    } catch { }
                     return updated;
                 });
             } else {
@@ -281,7 +281,7 @@ export default function Profile() {
                         const cached = localStorage.getItem('user_data');
                         const existing = cached ? JSON.parse(cached) : {};
                         localStorage.setItem('user_data', JSON.stringify({ ...existing, wallet_address: account }));
-                    } catch {}
+                    } catch { }
                     return updated;
                 });
             } else {
@@ -363,7 +363,7 @@ export default function Profile() {
                             const cached = localStorage.getItem('user_data');
                             const existing = cached ? JSON.parse(cached) : {};
                             localStorage.setItem('user_data', JSON.stringify({ ...existing, profile_pic: base64 }));
-                        } catch {}
+                        } catch { }
                         return updated;
                     });
                     toast.success('Profile picture updated');
@@ -380,399 +380,397 @@ export default function Profile() {
     if (loading) {
         return (
             <AuthGuard>
-            <Layout>
-                <div className="flex items-center justify-center min-h-[60vh]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
-                </div>
-            </Layout>
+                <Layout>
+                    <div className="flex items-center justify-center min-h-[60vh]">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+                    </div>
+                </Layout>
             </AuthGuard>
         );
     }
 
     return (
         <AuthGuard>
-        <Layout>
-            <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <header className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-bold text-[#001060] tracking-tight">Account Settings</h1>
-                    <p className="text-zinc-900">Manage your profile and security preferences</p>
-                </header>
+            <Layout>
+                <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <header className="flex flex-col gap-2">
+                        <h1 className="text-3xl font-bold text-[#001060] tracking-tight">Account Settings</h1>
+                        <p className="text-zinc-900">Manage your profile and security preferences</p>
+                    </header>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left Column: Avatar & Basic Info */}
-                    <div className="lg:col-span-1 space-y-6">
-                        <div className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl p-8 flex flex-col items-center text-center shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                            <div className="relative group">
-                                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-zinc-300 bg-white flex items-center justify-center">
-                                    {user.profile_pic ? (
-                                        <img src={user.profile_pic} alt="Avatar" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <LuUser className="w-12 h-12 text-[#315EFB]/40" />
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Left Column: Avatar & Basic Info */}
+                        <div className="lg:col-span-1 space-y-6">
+                            <div className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl p-8 flex flex-col items-center text-center shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                                <div className="relative group">
+                                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-zinc-300 bg-white flex items-center justify-center">
+                                        {user.profile_pic ? (
+                                            <img src={user.profile_pic} alt="Avatar" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <LuUser className="w-12 h-12 text-[#36A886]/40" />
+                                        )}
+                                    </div>
+                                    <label className="absolute bottom-0 right-0 w-10 h-10 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform border-4 border-[#ECE9EA]">
+                                        <LuCamera className="w-4 h-4 text-white" />
+                                        <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                                    </label>
+                                </div>
+                                <h2 className="mt-6 text-xl font-bold text-[#001060] uppercase tracking-tight">{user.name}</h2>
+
+                                <div className="mt-4 w-full space-y-3">
+                                    <div className="flex flex-col items-center gap-1">
+                                        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Account Wallet</p>
+                                        <p className="text-sm text-zinc-700 font-mono break-all px-2">
+                                            {user.wallet_address || 'No wallet linked'}
+                                        </p>
+                                    </div>
+
+                                    {/* Link Wallet Action */}
+                                    {!user.wallet_address && isConnected && account && (
+                                        <button
+                                            onClick={handleLinkWallet}
+                                            disabled={saving}
+                                            className="w-full flex items-center justify-center gap-2 py-3 bg-[#36A886]/10 hover:bg-[#36A886]/20 text-[#36A886] border border-[#36A886]/30 rounded-xl text-xs font-bold transition-all"
+                                        >
+                                            <LuWallet className="w-4 h-4" />
+                                            {saving ? 'Linking...' : 'Link Current Wallet'}
+                                        </button>
+                                    )}
+
+                                    {/* Wallet Mismatch Warning */}
+                                    {user.wallet_address && isConnected && account && user.wallet_address.toLowerCase() !== account.toLowerCase() && (
+                                        <div className="flex flex-col items-center gap-1 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-[10px] font-medium text-center">
+                                            <div className="flex items-center gap-2">
+                                                <LuTriangleAlert className="w-4 h-4" />
+                                                <span>Wallet Mismatch</span>
+                                            </div>
+                                            <p className="opacity-70">Connected: {account.slice(0, 6)}...{account.slice(-4)}</p>
+                                        </div>
                                     )}
                                 </div>
-                                <label className="absolute bottom-0 right-0 w-10 h-10 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform border-4 border-[#ECE9EA]">
-                                    <LuCamera className="w-4 h-4 text-white" />
-                                    <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                                </label>
                             </div>
-                            <h2 className="mt-6 text-xl font-bold text-[#001060] uppercase tracking-tight">{user.name}</h2>
-                            
-                            <div className="mt-4 w-full space-y-3">
-                                <div className="flex flex-col items-center gap-1">
-                                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Account Wallet</p>
-                                    <p className="text-sm text-zinc-700 font-mono break-all px-2">
-                                        {user.wallet_address || 'No wallet linked'}
+                        </div>
+
+                        {/* Right Column: Settings Forms */}
+                        <div className="lg:col-span-2 space-y-8">
+                            {/* Personal Details */}
+                            <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                                <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-[#36A886]/10 flex items-center justify-center">
+                                        <LuMail className="w-4 h-4 text-[#36A886]" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-[#001060]">Personal Information</h3>
+                                </div>
+                                <div className="p-8 space-y-6">
+                                    <div>
+                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Full Name</label>
+                                        <div className="flex flex-col md:flex-row gap-4">
+                                            <input
+                                                type="text"
+                                                value={newName}
+                                                onChange={(e) => setNewName(e.target.value)}
+                                                placeholder="Enter your full name"
+                                                className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#36A886] focus:ring-0 transition-colors"
+                                            />
+                                            <button
+                                                onClick={handleUpdateName}
+                                                disabled={saving || !newName || newName === user.name}
+                                                className="px-8 py-3 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#36A886]/20"
+                                            >
+                                                Update Name
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Email Address</label>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                disabled
+                                                value={user.email}
+                                                className="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 cursor-not-allowed"
+                                            />
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-[10px] text-zinc-900 uppercase font-bold">
+                                                <LuCircleCheck className="w-3 h-3 text-green-500" />
+                                                Verified
+                                            </div>
+                                        </div>
+                                        <p className="mt-2 text-xs text-zinc-900 italic">Sign-in email cannot be changed for security reasons.</p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Change Password */}
+                            <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                                <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-[#36A886]/10 flex items-center justify-center">
+                                        <LuLock className="w-4 h-4 text-[#36A886]" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-[#001060]">Security & Password</h3>
+                                </div>
+                                <form onSubmit={handlePasswordChange} className="p-8 space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="md:col-span-2">
+                                            <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Current Password</label>
+                                            <div className="relative">
+                                                <input
+                                                    type={showCurrentPassword ? "text" : "password"}
+                                                    required
+                                                    value={passwords.currentPassword}
+                                                    onChange={(e) => setPasswords(p => ({ ...p, currentPassword: e.target.value }))}
+                                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#36A886] focus:ring-0 transition-colors"
+                                                    placeholder="••••••••"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
+                                                    title={showCurrentPassword ? "Hide password" : "Show password"}
+                                                >
+                                                    {showCurrentPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">New Password</label>
+                                            <div className="relative">
+                                                <input
+                                                    type={showNewPassword ? "text" : "password"}
+                                                    required
+                                                    value={passwords.newPassword}
+                                                    onChange={(e) => setPasswords(p => ({ ...p, newPassword: e.target.value }))}
+                                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#36A886] focus:ring-0 transition-colors"
+                                                    placeholder="••••••••"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
+                                                    title={showNewPassword ? "Hide password" : "Show password"}
+                                                >
+                                                    {showNewPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Confirm New Password</label>
+                                            <div className="relative">
+                                                <input
+                                                    type={showConfirmPassword ? "text" : "password"}
+                                                    required
+                                                    value={passwords.confirmPassword}
+                                                    onChange={(e) => setPasswords(p => ({ ...p, confirmPassword: e.target.value }))}
+                                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10 transition-colors"
+                                                    placeholder="••••••••"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
+                                                    title={showConfirmPassword ? "Hide password" : "Show password"}
+                                                >
+                                                    {showConfirmPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={saving}
+                                        className="w-full md:w-auto px-12 py-4 bg-[#36A886] hover:bg-[#2548D0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-[#36A886]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                    >
+                                        {saving ? 'Saving...' : 'Update Password'}
+                                    </button>
+                                </form>
+                            </section>
+
+                            {/* Multi-Factor Authentication */}
+                            <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                                <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                            <Shield className="w-4 h-4 text-blue-500" />
+                                        </div>
+                                        <h3 className="text-lg font-bold text-[#001060]">Multi-Factor Auth</h3>
+                                    </div>
+                                    <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${twoFaEnabled ? "bg-green-500/10 border-green-500/20 text-green-600" : "bg-red-500/10 border-red-500/20 text-red-500"
+                                        }`}>
+                                        {twoFaEnabled ? "Active" : "Inactive"}
+                                    </div>
+                                </div>
+
+                                <div className="p-8">
+                                    {!show2FASetup ? (
+                                        <div className="flex flex-col md:flex-row items-center gap-8">
+                                            <div className="w-20 h-20 bg-white border border-zinc-200 rounded-3xl flex items-center justify-center shrink-0">
+                                                <Smartphone className={`w-10 h-10 ${twoFaEnabled ? "text-green-500" : "text-zinc-400"}`} />
+                                            </div>
+                                            <div className="space-y-2 flex-1 text-center md:text-left">
+                                                <h4 className="text-[#001060] font-bold uppercase tracking-wider text-sm">
+                                                    {twoFaEnabled ? "Encryption Active" : "Add extra layer of security"}
+                                                </h4>
+                                                <p className="text-zinc-900 text-xs leading-relaxed max-w-[28rem]">
+                                                    {twoFaEnabled
+                                                        ? "Your account is protected with TOTP. Every login will require a 6-digit code from your authenticator app."
+                                                        : "Enable Google 2FA to protect your account and assets from unauthorized access by requiring a dynamic token on every login."
+                                                    }
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={twoFaEnabled ? () => setShowDisable2FA(true) : initiate2FASetup}
+                                                disabled={saving}
+                                                className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[2px] transition-all active:scale-95 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed ${twoFaEnabled ? "bg-zinc-800 text-white hover:bg-zinc-700" : "bg-[#36A886] text-white hover:bg-[#2548D0] shadow-lg shadow-[#36A886]/20"
+                                                    }`}
+                                            >
+                                                {saving ? "Please wait..." : twoFaEnabled ? "Disable 2FA" : "Set Up 2FA"}
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in zoom-in-95 duration-500">
+                                            <div className="flex flex-col items-center justify-center space-y-3">
+                                                <div className="p-2 bg-white rounded-2xl border border-zinc-200">
+                                                    <img src={qrCode} alt="Setup QR" className="w-32 h-32" />
+                                                </div>
+                                                <p className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest text-center">
+                                                    Scan with Google <br /> Authenticator
+                                                </p>
+                                                {twoFaSecret && (
+                                                    <div className="w-full max-w-[14rem] bg-white border border-zinc-200 rounded-xl p-2.5 text-center space-y-1">
+                                                        <span className="text-[9px] text-zinc-900 font-bold uppercase tracking-wider block">Manual Entry Key</span>
+                                                        <span className="font-mono text-[11px] text-[#36A886] font-bold select-all tracking-wider break-all block">{twoFaSecret}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="space-y-6 flex flex-col justify-center">
+                                                <div className="space-y-2">
+                                                    <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Verification Code</label>
+                                                    <div className="flex gap-2">
+                                                        <input
+                                                            type="text"
+                                                            maxLength={6}
+                                                            value={twoFaCodeInput}
+                                                            onChange={(e) => setTwoFaCodeInput(e.target.value.replace(/\D/g, ""))}
+                                                            className="flex-1 min-w-0 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4rem] focus:border-[#36A886] outline-none"
+                                                            placeholder="000000"
+                                                        />
+                                                        <button
+                                                            onClick={verifyAndEnable2FA}
+                                                            disabled={twoFaCodeInput.length !== 6 || saving}
+                                                            className="shrink-0 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 shadow-md shadow-[#36A886]/20"
+                                                        >
+                                                            {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify"}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => setShow2FASetup(false)}
+                                                    className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest hover:text-zinc-900 transition-colors"
+                                                >
+                                                    Cancel Setup
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+                {showDisable2FA && (
+                    <div
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+                        onClick={e => { if (e.target === e.currentTarget && !saving) closeDisable2FA(); }}
+                    >
+                        <div className="w-full max-w-md rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-6 space-y-6 shadow-xl">
+                            <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
+                                    <LuTriangleAlert className="w-5 h-5 text-red-500" />
+                                </div>
+                                <div className="space-y-1">
+                                    <h3 className="text-[#001060] font-bold text-lg leading-tight">Disable two-factor auth?</h3>
+                                    <p className="text-zinc-900 text-xs leading-relaxed">
+                                        Your account will be protected by your password alone. Confirm it is you by
+                                        entering your password and a current code from your authenticator app.
                                     </p>
                                 </div>
-
-                                {/* Link Wallet Action */}
-                                {!user.wallet_address && isConnected && account && (
-                                    <button
-                                        onClick={handleLinkWallet}
-                                        disabled={saving}
-                                        className="w-full flex items-center justify-center gap-2 py-3 bg-[#315EFB]/10 hover:bg-[#315EFB]/20 text-[#315EFB] border border-[#315EFB]/30 rounded-xl text-xs font-bold transition-all"
-                                    >
-                                        <LuWallet className="w-4 h-4" />
-                                        {saving ? 'Linking...' : 'Link Current Wallet'}
-                                    </button>
-                                )}
-
-                                {/* Wallet Mismatch Warning */}
-                                {user.wallet_address && isConnected && account && user.wallet_address.toLowerCase() !== account.toLowerCase() && (
-                                    <div className="flex flex-col items-center gap-1 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-[10px] font-medium text-center">
-                                        <div className="flex items-center gap-2">
-                                            <LuTriangleAlert className="w-4 h-4" />
-                                            <span>Wallet Mismatch</span>
-                                        </div>
-                                        <p className="opacity-70">Connected: {account.slice(0,6)}...{account.slice(-4)}</p>
-                                    </div>
-                                )}
                             </div>
-                        </div>
-                    </div>
 
-                    {/* Right Column: Settings Forms */}
-                    <div className="lg:col-span-2 space-y-8">
-                        {/* Personal Details */}
-                        <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                            <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#315EFB]/10 flex items-center justify-center">
-                                    <LuMail className="w-4 h-4 text-[#315EFB]" />
-                                </div>
-                                <h3 className="text-lg font-bold text-[#001060]">Personal Information</h3>
-                            </div>
-                            <div className="p-8 space-y-6">
-                                <div>
-                                    <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Full Name</label>
-                                    <div className="flex flex-col md:flex-row gap-4">
-                                        <input
-                                            type="text"
-                                            value={newName}
-                                            onChange={(e) => setNewName(e.target.value)}
-                                            placeholder="Enter your full name"
-                                            className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:ring-0 transition-colors"
-                                        />
-                                        <button
-                                            onClick={handleUpdateName}
-                                            disabled={saving || !newName || newName === user.name}
-                                            className="px-8 py-3 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#315EFB]/20"
-                                        >
-                                            Update Name
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Email Address</label>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Account Password</label>
                                     <div className="relative">
                                         <input
-                                            type="text"
-                                            disabled
-                                            value={user.email}
-                                            className="w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 cursor-not-allowed"
+                                            type={showDisablePassword ? 'text' : 'password'}
+                                            value={disablePassword}
+                                            onChange={e => setDisablePassword(e.target.value)}
+                                            autoComplete="current-password"
+                                            placeholder="Enter your password"
+                                            className="w-full bg-white border border-zinc-200 rounded-xl pl-4 pr-11 py-3 text-zinc-900 text-sm focus:border-[#36A886] outline-none placeholder:text-zinc-400"
                                         />
-                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-[10px] text-zinc-900 uppercase font-bold">
-                                            <LuCircleCheck className="w-3 h-3 text-green-500" />
-                                            Verified
-                                        </div>
-                                    </div>
-                                    <p className="mt-2 text-xs text-zinc-900 italic">Sign-in email cannot be changed for security reasons.</p>
-                                </div>
-                            </div>
-                        </section>
-
-                        {/* Change Password */}
-                        <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                            <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#315EFB]/10 flex items-center justify-center">
-                                    <LuLock className="w-4 h-4 text-[#315EFB]" />
-                                </div>
-                                <h3 className="text-lg font-bold text-[#001060]">Security & Password</h3>
-                            </div>
-                            <form onSubmit={handlePasswordChange} className="p-8 space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="md:col-span-2">
-                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Current Password</label>
-                                        <div className="relative">
-                                            <input
-                                                type={showCurrentPassword ? "text" : "password"}
-                                                required
-                                                value={passwords.currentPassword}
-                                                onChange={(e) => setPasswords(p => ({ ...p, currentPassword: e.target.value }))}
-                                                className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#315EFB] focus:ring-0 transition-colors"
-                                                placeholder="••••••••"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
-                                                title={showCurrentPassword ? "Hide password" : "Show password"}
-                                            >
-                                                {showCurrentPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">New Password</label>
-                                        <div className="relative">
-                                            <input
-                                                type={showNewPassword ? "text" : "password"}
-                                                required
-                                                value={passwords.newPassword}
-                                                onChange={(e) => setPasswords(p => ({ ...p, newPassword: e.target.value }))}
-                                                className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#315EFB] focus:ring-0 transition-colors"
-                                                placeholder="••••••••"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowNewPassword(!showNewPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
-                                                title={showNewPassword ? "Hide password" : "Show password"}
-                                            >
-                                                {showNewPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-zinc-900 uppercase tracking-widest mb-2">Confirm New Password</label>
-                                        <div className="relative">
-                                            <input
-                                                type={showConfirmPassword ? "text" : "password"}
-                                                required
-                                                value={passwords.confirmPassword}
-                                                onChange={(e) => setPasswords(p => ({ ...p, confirmPassword: e.target.value }))}
-                                                className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-11 text-zinc-900 focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-colors"
-                                                placeholder="••••••••"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors cursor-pointer p-1"
-                                                title={showConfirmPassword ? "Hide password" : "Show password"}
-                                            >
-                                                {showConfirmPassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button
-                                    type="submit"
-                                    disabled={saving}
-                                    className="w-full md:w-auto px-12 py-4 bg-[#315EFB] hover:bg-[#2548D0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg shadow-[#315EFB]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                                >
-                                    {saving ? 'Saving...' : 'Update Password'}
-                                </button>
-                            </form>
-                        </section>
-
-                        {/* Multi-Factor Authentication */}
-                        <section className="bg-[#ECE9EA] border border-zinc-200/90 rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                            <div className="px-6 py-5 border-b border-zinc-200/90 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                                        <Shield className="w-4 h-4 text-blue-500" />
-                                    </div>
-                                    <h3 className="text-lg font-bold text-[#001060]">Multi-Factor Auth</h3>
-                                </div>
-                                <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
-                                    twoFaEnabled ? "bg-green-500/10 border-green-500/20 text-green-600" : "bg-red-500/10 border-red-500/20 text-red-500"
-                                }`}>
-                                    {twoFaEnabled ? "Active" : "Inactive"}
-                                </div>
-                            </div>
-                            
-                            <div className="p-8">
-                                {!show2FASetup ? (
-                                    <div className="flex flex-col md:flex-row items-center gap-8">
-                                        <div className="w-20 h-20 bg-white border border-zinc-200 rounded-3xl flex items-center justify-center shrink-0">
-                                            <Smartphone className={`w-10 h-10 ${twoFaEnabled ? "text-green-500" : "text-zinc-400"}`} />
-                                        </div>
-                                        <div className="space-y-2 flex-1 text-center md:text-left">
-                                            <h4 className="text-[#001060] font-bold uppercase tracking-wider text-sm">
-                                                {twoFaEnabled ? "Encryption Active" : "Add extra layer of security"}
-                                            </h4>
-                                            <p className="text-zinc-900 text-xs leading-relaxed max-w-[28rem]">
-                                                {twoFaEnabled 
-                                                    ? "Your account is protected with TOTP. Every login will require a 6-digit code from your authenticator app."
-                                                    : "Enable Google 2FA to protect your account and assets from unauthorized access by requiring a dynamic token on every login."
-                                                }
-                                            </p>
-                                        </div>
                                         <button
-                                            onClick={twoFaEnabled ? () => setShowDisable2FA(true) : initiate2FASetup}
-                                            disabled={saving}
-                                            className={`px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-[2px] transition-all active:scale-95 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed ${
-                                                twoFaEnabled ? "bg-zinc-800 text-white hover:bg-zinc-700" : "bg-[#315EFB] text-white hover:bg-[#2548D0] shadow-lg shadow-[#315EFB]/20"
-                                            }`}
+                                            type="button"
+                                            onClick={() => setShowDisablePassword(v => !v)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors"
+                                            aria-label={showDisablePassword ? 'Hide password' : 'Show password'}
                                         >
-                                            {saving ? "Please wait..." : twoFaEnabled ? "Disable 2FA" : "Set Up 2FA"}
+                                            {showDisablePassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
                                         </button>
                                     </div>
-                                ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in zoom-in-95 duration-500">
-                                        <div className="flex flex-col items-center justify-center space-y-3">
-                                            <div className="p-2 bg-white rounded-2xl border border-zinc-200">
-                                                <img src={qrCode} alt="Setup QR" className="w-32 h-32" />
-                                            </div>
-                                            <p className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest text-center">
-                                                Scan with Google <br /> Authenticator
-                                            </p>
-                                            {twoFaSecret && (
-                                                <div className="w-full max-w-[14rem] bg-white border border-zinc-200 rounded-xl p-2.5 text-center space-y-1">
-                                                    <span className="text-[9px] text-zinc-900 font-bold uppercase tracking-wider block">Manual Entry Key</span>
-                                                    <span className="font-mono text-[11px] text-[#315EFB] font-bold select-all tracking-wider break-all block">{twoFaSecret}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="space-y-6 flex flex-col justify-center">
-                                            <div className="space-y-2">
-                                                <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Verification Code</label>
-                                                <div className="flex gap-2">
-                                                    <input
-                                                        type="text"
-                                                        maxLength={6}
-                                                        value={twoFaCodeInput}
-                                                        onChange={(e) => setTwoFaCodeInput(e.target.value.replace(/\D/g, ""))}
-                                                        className="flex-1 min-w-0 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4rem] focus:border-[#315EFB] outline-none"
-                                                        placeholder="000000"
-                                                    />
-                                                    <button
-                                                        onClick={verifyAndEnable2FA}
-                                                        disabled={twoFaCodeInput.length !== 6 || saving}
-                                                        className="shrink-0 bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 shadow-md shadow-[#315EFB]/20"
-                                                    >
-                                                        {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify"}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <button 
-                                                onClick={() => setShow2FASetup(false)}
-                                                className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest hover:text-zinc-900 transition-colors"
-                                            >
-                                                Cancel Setup
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
+                                </div>
 
-            {showDisable2FA && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-                    onClick={e => { if (e.target === e.currentTarget && !saving) closeDisable2FA(); }}
-                >
-                    <div className="w-full max-w-md rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-6 space-y-6 shadow-xl">
-                        <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
-                                <LuTriangleAlert className="w-5 h-5 text-red-500" />
-                            </div>
-                            <div className="space-y-1">
-                                <h3 className="text-[#001060] font-bold text-lg leading-tight">Disable two-factor auth?</h3>
-                                <p className="text-zinc-900 text-xs leading-relaxed">
-                                    Your account will be protected by your password alone. Confirm it is you by
-                                    entering your password and a current code from your authenticator app.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Account Password</label>
-                                <div className="relative">
+                                <div className="space-y-2">
+                                    <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Authenticator Code</label>
                                     <input
-                                        type={showDisablePassword ? 'text' : 'password'}
-                                        value={disablePassword}
-                                        onChange={e => setDisablePassword(e.target.value)}
-                                        autoComplete="current-password"
-                                        placeholder="Enter your password"
-                                        className="w-full bg-white border border-zinc-200 rounded-xl pl-4 pr-11 py-3 text-zinc-900 text-sm focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
+                                        type="text"
+                                        inputMode="numeric"
+                                        maxLength={6}
+                                        value={disableCode}
+                                        onChange={e => setDisableCode(e.target.value.replace(/\D/g, ''))}
+                                        onKeyDown={e => { if (e.key === 'Enter') disable2FA(); }}
+                                        placeholder="000000"
+                                        className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4rem] focus:border-[#36A886] outline-none placeholder:text-zinc-400"
                                     />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowDisablePassword(v => !v)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-900 hover:text-zinc-800 transition-colors"
-                                        aria-label={showDisablePassword ? 'Hide password' : 'Show password'}
-                                    >
-                                        {showDisablePassword ? <LuEyeOff className="w-4 h-4" /> : <LuEye className="w-4 h-4" />}
-                                    </button>
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="block text-[10px] font-black text-zinc-900 uppercase tracking-[2px] ml-1">Authenticator Code</label>
-                                <input
-                                    type="text"
-                                    inputMode="numeric"
-                                    maxLength={6}
-                                    value={disableCode}
-                                    onChange={e => setDisableCode(e.target.value.replace(/\D/g, ''))}
-                                    onKeyDown={e => { if (e.key === 'Enter') disable2FA(); }}
-                                    placeholder="000000"
-                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4rem] focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
-                                />
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={closeDisable2FA}
+                                    disabled={saving}
+                                    className="flex-1 py-3.5 rounded-xl bg-zinc-200/70 border border-zinc-300/80 text-zinc-700 hover:text-zinc-900 hover:bg-zinc-200 font-bold text-[0.8rem] transition-all disabled:opacity-40 cursor-pointer"
+                                >
+                                    Keep 2FA On
+                                </button>
+                                <button
+                                    onClick={disable2FA}
+                                    disabled={saving || !disablePassword || disableCode.length !== 6}
+                                    className="flex-1 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-[0.8rem] transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                                >
+                                    {saving ? 'Verifying...' : 'Disable 2FA'}
+                                </button>
                             </div>
                         </div>
-
-                        <div className="flex gap-3">
-                            <button
-                                onClick={closeDisable2FA}
-                                disabled={saving}
-                                className="flex-1 py-3.5 rounded-xl bg-zinc-200/70 border border-zinc-300/80 text-zinc-700 hover:text-zinc-900 hover:bg-zinc-200 font-bold text-[0.8rem] transition-all disabled:opacity-40 cursor-pointer"
-                            >
-                                Keep 2FA On
-                            </button>
-                            <button
-                                onClick={disable2FA}
-                                disabled={saving || !disablePassword || disableCode.length !== 6}
-                                className="flex-1 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-[0.8rem] transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                            >
-                                {saving ? 'Verifying...' : 'Disable 2FA'}
-                            </button>
-                        </div>
                     </div>
-                </div>
-            )}
-        </Layout>
+                )}
+            </Layout>
         </AuthGuard>
     );
 }
 
 function Shield(props: any) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
-  )
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></svg>
+    )
 }
 function Smartphone(props: any) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
-  )
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>
+    )
 }
 function Loader2(props: any) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`animate-spin ${props.className}`}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-  )
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`animate-spin ${props.className}`}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+    )
 }

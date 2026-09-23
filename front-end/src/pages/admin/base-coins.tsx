@@ -271,7 +271,7 @@ export default function BaseCoinsPage() {
                         <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Total Assets</p>
                         <h4 className="text-3xl font-extrabold text-[#001060] font-manrope mt-1 tracking-tight">{totalCount}</h4>
                     </div>
-                    <div className="w-12 h-12 rounded-2xl bg-[#315EFB]/10 text-[#315EFB] flex items-center justify-center border border-[#315EFB]/20">
+                    <div className="w-12 h-12 rounded-2xl bg-[#36A886]/10 text-[#36A886] flex items-center justify-center border border-[#36A886]/20">
                         <Coins className="w-6 h-6" />
                     </div>
                 </div>
@@ -289,9 +289,9 @@ export default function BaseCoinsPage() {
                 <div className="bg-[#ECE9EA] rounded-[24px] border border-zinc-200/90 p-6 shadow-xs flex items-center justify-between">
                     <div>
                         <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Base Tokens</p>
-                        <h4 className="text-3xl font-extrabold text-[#315EFB] font-manrope mt-1 tracking-tight">{baseTokenCount}</h4>
+                        <h4 className="text-3xl font-extrabold text-[#36A886] font-manrope mt-1 tracking-tight">{baseTokenCount}</h4>
                     </div>
-                    <div className="w-12 h-12 rounded-2xl bg-[#315EFB]/10 text-[#315EFB] flex items-center justify-center border border-[#315EFB]/20">
+                    <div className="w-12 h-12 rounded-2xl bg-[#36A886]/10 text-[#36A886] flex items-center justify-center border border-[#36A886]/20">
                         <Shield className="w-6 h-6" />
                     </div>
                 </div>
@@ -311,7 +311,7 @@ export default function BaseCoinsPage() {
             <div className="flex items-center justify-between">
                 <button
                     onClick={() => setIsAddModalOpen(true)}
-                    className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2.5 font-bold text-sm transition-all shadow-md shadow-[#315EFB]/20 hover:scale-105 active:scale-95 cursor-pointer"
+                    className="bg-[#36A886] hover:bg-[#2548D0] text-white px-6 py-3 rounded-xl flex items-center gap-2.5 font-bold text-sm transition-all shadow-md shadow-[#36A886]/20 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                     <Plus className="w-4 h-4" />
                     Add Base Coin
@@ -333,7 +333,7 @@ export default function BaseCoinsPage() {
                                 placeholder="Search by coin name, symbol, or address..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-10 py-3 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none text-zinc-900 text-sm transition-all placeholder:text-zinc-400 shadow-sm"
+                                className="w-full bg-white border border-zinc-200 rounded-2xl pl-12 pr-10 py-3 focus:border-[#36A886] focus:ring-1 focus:ring-[#36A886] outline-none text-zinc-900 text-sm transition-all placeholder:text-zinc-400 shadow-sm"
                             />
                             {searchTerm && (
                                 <button
@@ -353,7 +353,7 @@ export default function BaseCoinsPage() {
                                     className={cn(
                                         "px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer",
                                         typeFilter === "ALL"
-                                            ? "bg-[#315EFB] text-white shadow-xs"
+                                            ? "bg-[#36A886] text-white shadow-xs"
                                             : "text-zinc-600 hover:text-zinc-900"
                                     )}
                                 >
@@ -364,7 +364,7 @@ export default function BaseCoinsPage() {
                                     className={cn(
                                         "px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer",
                                         typeFilter === "BASE-COIN"
-                                            ? "bg-[#315EFB] text-white shadow-xs"
+                                            ? "bg-[#36A886] text-white shadow-xs"
                                             : "text-zinc-600 hover:text-zinc-900"
                                     )}
                                 >
@@ -375,7 +375,7 @@ export default function BaseCoinsPage() {
                                     className={cn(
                                         "px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer",
                                         typeFilter === "BASE-TOKEN"
-                                            ? "bg-[#315EFB] text-white shadow-xs"
+                                            ? "bg-[#36A886] text-white shadow-xs"
                                             : "text-zinc-600 hover:text-zinc-900"
                                     )}
                                 >
@@ -389,7 +389,7 @@ export default function BaseCoinsPage() {
                                 title="Refresh Ledger"
                                 className="p-2.5 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-600 rounded-xl transition-all shadow-sm cursor-pointer active:scale-95 disabled:opacity-50"
                             >
-                                <RefreshCw className={cn("w-4 h-4", isFetching && "animate-spin text-[#315EFB]")} />
+                                <RefreshCw className={cn("w-4 h-4", isFetching && "animate-spin text-[#36A886]")} />
                             </button>
                         </div>
                     </div>
@@ -398,7 +398,7 @@ export default function BaseCoinsPage() {
                     <div className="overflow-x-auto">
                         <table className="w-full text-base">
                             <thead>
-                                <tr className="bg-[#315EFB] text-white text-xs font-black uppercase tracking-[0.2em]">
+                                <tr className="bg-[#36A886] text-white text-xs font-black uppercase tracking-[0.2em]">
                                     <th className="px-8 py-6 text-center w-24 rounded-tl-[32px]">S No</th>
                                     <th className="px-8 py-6 text-center">Timestamp</th>
                                     <th className="px-8 py-6 text-center">User</th>
@@ -414,7 +414,7 @@ export default function BaseCoinsPage() {
                                 {isLoading ? (
                                     <tr>
                                         <td colSpan={9} className="px-8 py-20 text-center">
-                                            <div className="animate-spin h-7 w-7 border-b-2 border-[#315EFB] mx-auto"></div>
+                                            <div className="animate-spin h-7 w-7 border-b-2 border-[#36A886] mx-auto"></div>
                                         </td>
                                     </tr>
                                 ) : filteredCoins.length === 0 ? (
@@ -459,7 +459,7 @@ export default function BaseCoinsPage() {
                                                             "inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border",
                                                             isCoin
                                                                 ? "bg-amber-100 text-amber-800 border-amber-300"
-                                                                : "bg-blue-100 text-[#315EFB] border-blue-200"
+                                                                : "bg-blue-100 text-[#36A886] border-blue-200"
                                                         )}
                                                     >
                                                         {coin.type}
@@ -585,7 +585,7 @@ export default function BaseCoinsPage() {
                         {/* Modal Header */}
                         <div className="p-8 flex items-center justify-between border-b border-zinc-200 bg-zinc-50/50">
                             <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-8 bg-[#315EFB] rounded-full shrink-0" />
+                                <div className="w-1.5 h-8 bg-[#36A886] rounded-full shrink-0" />
                                 <h3 className="text-2xl font-extrabold text-[#001060] tracking-tight uppercase font-manrope">
                                     Add Base Coin
                                 </h3>
@@ -610,7 +610,7 @@ export default function BaseCoinsPage() {
                                     placeholder="e.g. Tether (USDT)"
                                     value={formName}
                                     onChange={(e) => setFormName(e.target.value)}
-                                    className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-medium text-zinc-900 placeholder:text-zinc-400 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none shadow-sm transition-all"
+                                    className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-medium text-zinc-900 placeholder:text-zinc-400 focus:border-[#36A886] focus:ring-1 focus:ring-[#36A886] outline-none shadow-sm transition-all"
                                 />
                             </div>
 
@@ -625,7 +625,7 @@ export default function BaseCoinsPage() {
                                         placeholder="e.g. USDT"
                                         value={formSymbol}
                                         onChange={(e) => setFormSymbol(e.target.value.toUpperCase())}
-                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-bold font-mono text-zinc-900 placeholder:text-zinc-400 uppercase focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none shadow-sm transition-all"
+                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-bold font-mono text-zinc-900 placeholder:text-zinc-400 uppercase focus:border-[#36A886] focus:ring-1 focus:ring-[#36A886] outline-none shadow-sm transition-all"
                                     />
                                 </div>
 
@@ -636,7 +636,7 @@ export default function BaseCoinsPage() {
                                     <select
                                         value={formType}
                                         onChange={(e) => setFormType(e.target.value as "BASE-COIN" | "BASE-TOKEN")}
-                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-medium text-zinc-900 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none shadow-sm transition-all"
+                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-medium text-zinc-900 focus:border-[#36A886] focus:ring-1 focus:ring-[#36A886] outline-none shadow-sm transition-all"
                                     >
                                         <option value="BASE-COIN">BASE-COIN (Native L1)</option>
                                         <option value="BASE-TOKEN">BASE-TOKEN (BEP-20)</option>
@@ -653,7 +653,7 @@ export default function BaseCoinsPage() {
                                     placeholder="0x..."
                                     value={formContract}
                                     onChange={(e) => setFormContract(e.target.value)}
-                                    className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-mono text-zinc-900 placeholder:text-zinc-400 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none shadow-sm transition-all"
+                                    className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-mono text-zinc-900 placeholder:text-zinc-400 focus:border-[#36A886] focus:ring-1 focus:ring-[#36A886] outline-none shadow-sm transition-all"
                                 />
                             </div>
 
@@ -668,7 +668,7 @@ export default function BaseCoinsPage() {
                                         max="36"
                                         value={formDecimals}
                                         onChange={(e) => setFormDecimals(e.target.value)}
-                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-mono text-zinc-900 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none shadow-sm transition-all"
+                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-mono text-zinc-900 focus:border-[#36A886] focus:ring-1 focus:ring-[#36A886] outline-none shadow-sm transition-all"
                                     />
                                 </div>
 
@@ -679,7 +679,7 @@ export default function BaseCoinsPage() {
                                     <select
                                         value={formStatus}
                                         onChange={(e) => setFormStatus(e.target.value as "Enabled" | "Disabled")}
-                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-medium text-zinc-900 focus:border-[#315EFB] focus:ring-1 focus:ring-[#315EFB] outline-none shadow-sm transition-all"
+                                        className="w-full px-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm font-medium text-zinc-900 focus:border-[#36A886] focus:ring-1 focus:ring-[#36A886] outline-none shadow-sm transition-all"
                                     >
                                         <option value="Enabled">Enabled</option>
                                         <option value="Disabled">Disabled</option>
@@ -698,7 +698,7 @@ export default function BaseCoinsPage() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="px-6 py-2.5 rounded-xl bg-[#315EFB] hover:bg-[#2548D0] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#315EFB]/20 cursor-pointer disabled:opacity-50"
+                                    className="px-6 py-2.5 rounded-xl bg-[#36A886] hover:bg-[#2548D0] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#36A886]/20 cursor-pointer disabled:opacity-50"
                                 >
                                     {isSubmitting ? "Adding..." : "Add Coin"}
                                 </button>

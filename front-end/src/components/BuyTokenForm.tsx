@@ -222,7 +222,7 @@ const BuyTokenForm: React.FC = () => {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ wallet_address: account })
-      }).catch(() => {});
+      }).catch(() => { });
     } else {
       fetch(`${API_URL}/api/user/RegisterNewUser?wallet_address=${account}`)
         .catch(err => console.error('RegisterNewUser error:', err));
@@ -336,7 +336,7 @@ const BuyTokenForm: React.FC = () => {
 
     if (!isConnected || !signer || !account || !settings?.ico_contract) return;
     if (!isCorrectChain) { switchToCorrectChain(); return; }
-    
+
     if (saleLoaded && !isSaleActive) {
       toast.error('Sale is not currently active');
       return;
@@ -526,7 +526,7 @@ const BuyTokenForm: React.FC = () => {
               key={m}
               onClick={() => { setMethod(m); setAmount(''); setTrustiveTokens(''); setTxStatus(''); setIsError(false); setIsSuccess(false); }}
               className={`flex items-center justify-center gap-2 py-3.5 px-3 rounded-xl transition-all cursor-pointer border ${method === m
-                ? 'bg-[#315EFB] border-[#315EFB] text-white font-bold shadow-md shadow-[#315EFB]/20'
+                ? 'bg-[#36A886] border-[#36A886] text-white font-bold shadow-md shadow-[#36A886]/20'
                 : 'bg-zinc-50 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
                 }`}
             >
@@ -557,7 +557,7 @@ const BuyTokenForm: React.FC = () => {
 
         {/* Balance Display or MoonPay Card Banner */}
         {method === 'CARD' ? (
-          <div className="bg-gradient-to-r from-[#315EFB]/5 via-purple-500/5 to-[#7D00FF]/5 rounded-2xl border border-purple-200/60 p-4 space-y-3">
+          <div className="bg-gradient-to-r from-[#36A886]/5 via-purple-500/5 to-[#7D00FF]/5 rounded-2xl border border-purple-200/60 p-4 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-[#7D00FF] animate-pulse"></div>
@@ -571,22 +571,20 @@ const BuyTokenForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setMoonpayTargetCrypto('bnb_bsc')}
-                    className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${
-                      moonpayTargetCrypto === 'bnb_bsc'
-                        ? 'bg-[#315EFB] text-white shadow-xs'
-                        : 'text-zinc-900 hover:text-zinc-900'
-                    }`}
+                    className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${moonpayTargetCrypto === 'bnb_bsc'
+                      ? 'bg-[#36A886] text-white shadow-xs'
+                      : 'text-zinc-900 hover:text-zinc-900'
+                      }`}
                   >
                     BNB (BSC)
                   </button>
                   <button
                     type="button"
                     onClick={() => setMoonpayTargetCrypto('usdt_bsc')}
-                    className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${
-                      moonpayTargetCrypto === 'usdt_bsc'
-                        ? 'bg-[#315EFB] text-white shadow-xs'
-                        : 'text-zinc-900 hover:text-zinc-900'
-                    }`}
+                    className={`px-2.5 py-0.5 rounded-md text-[0.7rem] font-bold transition-all cursor-pointer ${moonpayTargetCrypto === 'usdt_bsc'
+                      ? 'bg-[#36A886] text-white shadow-xs'
+                      : 'text-zinc-900 hover:text-zinc-900'
+                      }`}
                   >
                     USDT (BSC)
                   </button>
@@ -603,11 +601,10 @@ const BuyTokenForm: React.FC = () => {
                     key={preset}
                     type="button"
                     onClick={() => handleAmountChange(preset.toString())}
-                    className={`px-2.5 py-1 text-[0.75rem] font-bold rounded-lg border transition-all cursor-pointer ${
-                      amount === preset.toString()
-                        ? 'bg-[#315EFB] border-[#315EFB] text-white'
-                        : 'bg-white border-zinc-200 text-zinc-900 hover:border-zinc-300'
-                    }`}
+                    className={`px-2.5 py-1 text-[0.75rem] font-bold rounded-lg border transition-all cursor-pointer ${amount === preset.toString()
+                      ? 'bg-[#36A886] border-[#36A886] text-white'
+                      : 'bg-white border-zinc-200 text-zinc-900 hover:border-zinc-300'
+                      }`}
                   >
                     ${preset}
                   </button>
@@ -626,7 +623,7 @@ const BuyTokenForm: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#315EFB] animate-pulse"></div>
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#36A886] animate-pulse"></div>
                     <span className="text-zinc-900 text-[0.75rem] font-bold uppercase tracking-widest">
                       Available Balance
                     </span>
@@ -635,7 +632,7 @@ const BuyTokenForm: React.FC = () => {
                     <span className="text-zinc-900 text-[1rem] font-bold tracking-tight">
                       {currentBalance}
                     </span>
-                    <span className="text-[#315EFB] text-[0.75rem] font-bold uppercase tracking-wider px-2 py-0.5 bg-blue-50 rounded-lg border border-blue-200">
+                    <span className="text-[#36A886] text-[0.75rem] font-bold uppercase tracking-wider px-2 py-0.5 bg-blue-50 rounded-lg border border-blue-200">
                       {method}
                     </span>
                   </div>
@@ -647,7 +644,7 @@ const BuyTokenForm: React.FC = () => {
                     <button
                       key={p}
                       onClick={() => handlePercentageClick(p)}
-                      className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-900 hover:text-[#315EFB] hover:bg-zinc-100 rounded-md transition-all cursor-pointer"
+                      className="px-2.5 py-1 text-[0.7rem] font-bold text-zinc-900 hover:text-[#36A886] hover:bg-zinc-100 rounded-md transition-all cursor-pointer"
                     >
                       {p === 100 ? 'MAX' : `${p}%`}
                     </button>
@@ -666,7 +663,7 @@ const BuyTokenForm: React.FC = () => {
             value={amount}
             onChange={e => handleAmountChange(e.target.value)}
             disabled={loading}
-            className="w-full bg-white border border-zinc-200 rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all font-medium disabled:opacity-50"
+            className="w-full bg-white border border-zinc-200 rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10 transition-all font-medium disabled:opacity-50"
           />
           <div className="absolute min-w-[8rem] right-4 top-1/2 -translate-y-1/2 flex items-center justify-center gap-2 px-3 py-2 border-l border-zinc-200 pointer-events-none">
             {method === 'CARD' ? (
@@ -712,15 +709,14 @@ const BuyTokenForm: React.FC = () => {
             placeholder="0.00"
             value={isCalculating ? 'Calculating...' : trustiveTokens}
             readOnly
-            className={`w-full bg-zinc-50 border rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] placeholder:text-zinc-400 focus:outline-none font-bold transition-colors ${
-              isBelowMin || isAboveMax
-                ? 'border-amber-400 text-amber-600'
-                : 'border-zinc-200 text-zinc-900'
-            }`}
+            className={`w-full bg-zinc-50 border rounded-2xl py-5 pl-6 pr-[9.5rem] text-[1.25rem] placeholder:text-zinc-400 focus:outline-none font-bold transition-colors ${isBelowMin || isAboveMax
+              ? 'border-amber-400 text-amber-600'
+              : 'border-zinc-200 text-zinc-900'
+              }`}
           />
           <div className="absolute min-w-[8rem] right-4 top-1/2 -translate-y-1/2 flex items-center justify-center gap-2 px-3 py-2 border-l border-zinc-200 pointer-events-none">
             {isCalculating ? (
-              <LuLoader className="h-5 w-5 text-[#315EFB] animate-spin" />
+              <LuLoader className="h-5 w-5 text-[#36A886] animate-spin" />
             ) : (
               <div className="w-16 h-8 relative">
                 <Image src="/assets/images/logo.svg" alt="Trustive" fill priority />
@@ -745,7 +741,7 @@ const BuyTokenForm: React.FC = () => {
                   setMoonpayTargetCrypto(method === 'BNB' ? 'bnb_bsc' : 'usdt_bsc');
                   setMethod('CARD');
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#315EFB] hover:bg-[#2548D0] text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#36A886] hover:bg-[#2548D0] text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0 self-start sm:self-auto"
               >
                 <LuCreditCard className="w-3.5 h-3.5" />
                 <span>Top up with Card</span>
@@ -781,12 +777,12 @@ const BuyTokenForm: React.FC = () => {
           const connected = rbMounted && rbAccount && chain;
 
           let btnLabel = 'Buy Now';
-          let btnClass = 'bg-[#315EFB] hover:bg-[#2548D0] text-white shadow-lg shadow-[#315EFB]/25 cursor-pointer';
+          let btnClass = 'bg-[#36A886] hover:bg-[#2548D0] text-white shadow-lg shadow-[#36A886]/25 cursor-pointer';
           let isDisabled = false;
 
           if (!connected) {
             btnLabel = 'Connect Wallet';
-            btnClass = 'bg-[#315EFB] hover:bg-[#2548D0] text-white shadow-md shadow-[#315EFB]/20 cursor-pointer';
+            btnClass = 'bg-[#36A886] hover:bg-[#2548D0] text-white shadow-md shadow-[#36A886]/20 cursor-pointer';
             isDisabled = false;
           } else if (method === 'CARD') {
             if (saleLoaded && !isSaleActive) {
@@ -824,7 +820,7 @@ const BuyTokenForm: React.FC = () => {
             isDisabled = true;
           } else if (loading) {
             btnLabel = 'Processing...';
-            btnClass = 'bg-[#315EFB]/60 text-white opacity-75 cursor-not-allowed';
+            btnClass = 'bg-[#36A886]/60 text-white opacity-75 cursor-not-allowed';
             isDisabled = true;
           } else if (!hasAmount) {
             btnLabel = 'Enter Amount';

@@ -161,8 +161,8 @@ const ResetPasswordForm: React.FC = () => {
         <div className="flex flex-col justify-center p-8 md:p-16 space-y-6 bg-[#ECE9EA] shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-zinc-200/90 rounded-[1.25rem]">
           {verifyingToken ? (
             <div className="text-center py-12 space-y-4">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#315EFB] mx-auto" />
-              <p className="text-sm font-medium text-[#315EFB] uppercase tracking-widest">Verifying reset link...</p>
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#36A886] mx-auto" />
+              <p className="text-sm font-medium text-[#36A886] uppercase tracking-widest">Verifying reset link...</p>
             </div>
           ) : !tokenValid ? (
             <div className="space-y-6 text-center py-6">
@@ -178,13 +178,13 @@ const ResetPasswordForm: React.FC = () => {
               <div className="space-y-3 pt-2">
                 <Link
                   href="/forgot-password"
-                  className="block w-full py-4 bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold text-sm uppercase rounded-xl transition-all shadow-lg text-center"
+                  className="block w-full py-4 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold text-sm uppercase rounded-xl transition-all shadow-lg text-center"
                 >
                   Request New Reset Link
                 </Link>
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-[#315EFB] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-[#36A886] transition-colors"
                 >
                   <LuArrowLeft className="w-4 h-4" />
                   <span>Back to Login</span>
@@ -228,14 +228,14 @@ const ResetPasswordForm: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-[1rem] font-medium text-zinc-700 ml-1">New Password</label>
                   <div className="relative group">
-                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
+                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#36A886] transition-colors" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       required
                       placeholder="Enter new password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all placeholder:text-zinc-400 font-medium"
+                      className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10 transition-all placeholder:text-zinc-400 font-medium"
                     />
                     <button
                       type="button"
@@ -259,18 +259,17 @@ const ResetPasswordForm: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Confirm New Password</label>
                   <div className="relative group">
-                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
+                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#36A886] transition-colors" />
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       required
                       placeholder="Confirm new password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className={`w-full bg-white border rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none transition-all placeholder:text-zinc-400 font-medium ${
-                        isPasswordMismatch
-                          ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/10'
-                          : 'border-zinc-200 focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10'
-                      }`}
+                      className={`w-full bg-white border rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none transition-all placeholder:text-zinc-400 font-medium ${isPasswordMismatch
+                        ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/10'
+                        : 'border-zinc-200 focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10'
+                        }`}
                     />
                     <button
                       type="button"
@@ -293,7 +292,7 @@ const ResetPasswordForm: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading || Boolean(success)}
-                  className="w-full bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#315EFB]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50 mt-2"
+                  className="w-full bg-[#36A886] hover:bg-[#2548D0] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50 mt-2"
                 >
                   {loading ? 'Updating Password...' : 'Save New Password'}
                 </button>
@@ -302,7 +301,7 @@ const ResetPasswordForm: React.FC = () => {
               <div className="pt-2 text-center">
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 text-[0.875rem] md:text-[1rem] font-medium text-zinc-600 hover:text-[#315EFB] transition-colors"
+                  className="inline-flex items-center gap-2 text-[0.875rem] md:text-[1rem] font-medium text-zinc-600 hover:text-[#36A886] transition-colors"
                 >
                   <LuArrowLeft className="w-4 h-4" />
                   <span>Back to Login</span>

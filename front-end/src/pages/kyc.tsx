@@ -189,38 +189,38 @@ export default function KycPage() {
             return freshToken || token;
           }
         )
-        .withConf({
-          lang: 'en',
-          email: cachedUser.email || '',
-          externalUserId: cachedUser.id?.toString() || 'user'
-        })
-        .on('idCheck.onApplicantStatusChanged', (payload: any) => {
-          const isApproved =
-            (payload?.reviewStatus === 'completed' && payload?.reviewResult?.reviewAnswer === 'GREEN') ||
-            payload?.reviewAnswer === 'GREEN' ||
-            payload?.reviewResult?.reviewAnswer === 'GREEN';
-          if (isApproved) {
-            handleKycSuccess();
-          }
-        })
-        .on('idCheck.onApplicantSubmitted', async () => {
-          // Check with backend if applicant was approved
-          try {
-            const token = localStorage.getItem('user_token');
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3007';
-            const res = await fetch(`${apiUrl}/api/user/kyc-status`, {
-              headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const st = await res.json();
-            if (st.kyc_status === 'verified') {
+          .withConf({
+            lang: 'en',
+            email: cachedUser.email || '',
+            externalUserId: cachedUser.id?.toString() || 'user'
+          })
+          .on('idCheck.onApplicantStatusChanged', (payload: any) => {
+            const isApproved =
+              (payload?.reviewStatus === 'completed' && payload?.reviewResult?.reviewAnswer === 'GREEN') ||
+              payload?.reviewAnswer === 'GREEN' ||
+              payload?.reviewResult?.reviewAnswer === 'GREEN';
+            if (isApproved) {
               handleKycSuccess();
             }
-          } catch { }
-        })
-        .on('idCheck.onError', (error: any) => {
-          console.warn('Sumsub SDK error:', error);
-        })
-        .build();
+          })
+          .on('idCheck.onApplicantSubmitted', async () => {
+            // Check with backend if applicant was approved
+            try {
+              const token = localStorage.getItem('user_token');
+              const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3007';
+              const res = await fetch(`${apiUrl}/api/user/kyc-status`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+              });
+              const st = await res.json();
+              if (st.kyc_status === 'verified') {
+                handleKycSuccess();
+              }
+            } catch { }
+          })
+          .on('idCheck.onError', (error: any) => {
+            console.warn('Sumsub SDK error:', error);
+          })
+          .build();
 
         snsWebSdkInstance.launch('#sumsub-websdk-container');
         setLoading(false);
@@ -279,10 +279,10 @@ export default function KycPage() {
         {/* Main Content Area */}
         <main className="relative z-10 w-full max-w-4xl mx-auto px-4 py-8 flex-1 flex flex-col items-center justify-center">
           <div className="w-full bg-[#ECE9EA] rounded-[2rem] border border-zinc-200/90 shadow-[0_20px_60px_rgba(0,0,0,0.05)] overflow-hidden">
-            
+
             {/* Banner / Title Header */}
             <div className="p-8 md:p-10 border-b border-zinc-200/90 bg-[#ECE9EA] text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#315EFB]/10 text-[#315EFB] mb-4 shadow-sm">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#36A886]/10 text-[#36A886] mb-4 shadow-sm">
                 <LuShieldCheck className="w-8 h-8" />
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-[#001060] tracking-tight">
@@ -317,7 +317,7 @@ export default function KycPage() {
                       sdkInitialized.current = false;
                       window.location.reload();
                     }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-md shadow-[#315EFB]/20"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-md shadow-[#36A886]/20"
                   >
                     <LuRefreshCw className="w-4 h-4" />
                     Retry Verification
@@ -360,7 +360,7 @@ export default function KycPage() {
                 <div>
                   {loading && (
                     <div className="py-16 text-center space-y-3">
-                      <div className="animate-spin w-10 h-10 border-4 border-[#315EFB] border-t-transparent rounded-full mx-auto" />
+                      <div className="animate-spin w-10 h-10 border-4 border-[#36A886] border-t-transparent rounded-full mx-auto" />
                       <p className="text-sm font-bold uppercase tracking-wider text-zinc-900">
                         Initializing Sumsub Verification SDK...
                       </p>

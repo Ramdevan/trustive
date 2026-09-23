@@ -240,7 +240,7 @@ export default function ReferralPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200/90 pb-6">
             <div>
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-[#315EFB]/10 border border-[#315EFB]/20 text-[#315EFB]">
+                <div className="p-2.5 rounded-xl bg-[#36A886]/10 border border-[#36A886]/20 text-[#36A886]">
                   <LuGift className="h-6 w-6" />
                 </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-[#001060] tracking-tight">Referral Rewards</h1>
@@ -267,7 +267,7 @@ export default function ReferralPage() {
           {/* 4 Stat Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Commission Rate */}
-            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/30 transition-all">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#36A886]/30 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Commission Rate</span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
@@ -283,10 +283,10 @@ export default function ReferralPage() {
             </div>
 
             {/* Total Referred Users */}
-            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/30 transition-all">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#36A886]/30 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Referred Friends</span>
-                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600">
+                <div className="p-2 rounded-lg bg-[#36A886]/10 text-[#36A886]">
                   <LuUsers className="h-4 w-4" />
                 </div>
               </div>
@@ -299,10 +299,10 @@ export default function ReferralPage() {
             </div>
 
             {/* Total Earned */}
-            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/30 transition-all">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#36A886]/30 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Total Earned</span>
-                <div className="p-2 rounded-lg bg-[#315EFB]/10 text-[#315EFB]">
+                <div className="p-2 rounded-lg bg-[#36A886]/10 text-[#36A886]">
                   <LuCoins className="h-4 w-4" />
                 </div>
               </div>
@@ -317,12 +317,12 @@ export default function ReferralPage() {
             </div>
 
             {/* Claimable Balance & Button */}
-            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#315EFB]/40 transition-all relative overflow-hidden">
+            <div className="flex flex-col justify-between rounded-2xl bg-[#ECE9EA] p-6 border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:border-[#36A886]/40 transition-all relative overflow-hidden">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-[#001060] uppercase tracking-wider flex items-center gap-1">
                   <LuSparkles className="h-3.5 w-3.5" /> Claimable Rewards
                 </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#315EFB]/10 text-[#315EFB] border border-[#315EFB]/20">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#36A886]/10 text-[#36A886] border border-[#36A886]/20">
                   On-Chain
                 </span>
               </div>
@@ -340,7 +340,7 @@ export default function ReferralPage() {
                   type="button"
                   onClick={handleClaim}
                   disabled={claiming || !stats || parseFloat(stats.claimable_balance || '0') <= 0}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm bg-[#315EFB] hover:bg-[#2548D0] text-white transition-all shadow-lg shadow-[#315EFB]/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm bg-[#36A886] hover:bg-[#2548D0] text-white transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {claiming ? (
                     <>
@@ -362,7 +362,7 @@ export default function ReferralPage() {
           <div className="rounded-3xl bg-[#ECE9EA] border border-zinc-200/90 p-6 md:p-8 relative overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
               <div className="space-y-2 max-w-xl">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#315EFB]/10 border border-[#315EFB]/20 text-[#315EFB] text-xs font-semibold">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#36A886]/10 border border-[#36A886]/20 text-[#36A886] text-xs font-semibold">
                   <LuSparkles className="h-3.5 w-3.5" />
                   <span>Instant 5% Commission Pool</span>
                 </div>
@@ -423,11 +423,15 @@ export default function ReferralPage() {
                     type="button"
                     onClick={handleShareTelegram}
                     disabled={!stats?.referral_link}
-                    className="p-3 rounded-2xl bg-[#229ED9]/10 hover:bg-[#229ED9]/20 border border-[#229ED9]/30 text-[#229ED9] transition-all hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-40"
+                    className="p-3 rounded-2xl bg-white hover:bg-zinc-100 border border-zinc-200 text-zinc-800 transition-all hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-40"
                     title="Share on Telegram"
                   >
-                    <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
-                      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                    <svg
+                      className="h-4 w-4 fill-current"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M21.5 3.5L2.9 10.7c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.7c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.3-2.2 4.8 3.5c.9.5 1.5.3 1.7-.8l3.1-15.2c.3-1.4-.5-2-1.4-1.5zM8.2 13.4l10.8-6.8c.5-.3 1-.1.6.2l-8.8 8-0.3 3.3-1.7-4.7-0.6-.2z" />
                     </svg>
                   </button>
                 </div>
@@ -442,11 +446,10 @@ export default function ReferralPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab('friends')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                  activeTab === 'friends'
-                    ? 'bg-[#315EFB] text-white shadow-lg shadow-[#315EFB]/20'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
-                }`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${activeTab === 'friends'
+                  ? 'bg-[#36A886] text-white shadow-lg shadow-[#36A886]/20'
+                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
+                  }`}
               >
                 <LuUsers className="h-4 w-4" />
                 <span>Referred Friends ({stats?.referred_users?.length ?? 0})</span>
@@ -454,11 +457,10 @@ export default function ReferralPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab('history')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                  activeTab === 'history'
-                    ? 'bg-[#315EFB] text-white shadow-lg shadow-[#315EFB]/20'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
-                }`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${activeTab === 'history'
+                  ? 'bg-[#36A886] text-white shadow-lg shadow-[#36A886]/20'
+                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
+                  }`}
               >
                 <LuClock className="h-4 w-4" />
                 <span>Claim History ({stats?.claims_history?.length ?? 0})</span>
@@ -542,7 +544,7 @@ export default function ReferralPage() {
                           <td className="py-4 px-6 text-xs text-zinc-900">
                             {formatDate(c.created_at)}
                           </td>
-                          <td className="py-4 px-6 font-bold text-[#315EFB]">
+                          <td className="py-4 px-6 font-bold text-[#36A886]">
                             {parseFloat(c.amount || '0').toLocaleString('en-US', { minimumFractionDigits: 4 })} {stats.token_symbol}
                           </td>
                           <td className="py-4 px-6 font-mono text-xs text-zinc-900">
@@ -553,7 +555,7 @@ export default function ReferralPage() {
                               className="inline-flex items-center gap-1.5 hover:text-zinc-900 transition-colors group"
                             >
                               <span>{shortenAddress(c.tx_hash)}</span>
-                              <LuArrowUpRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-[#315EFB] transition-colors" />
+                              <LuArrowUpRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-[#36A886] transition-colors" />
                             </a>
                           </td>
                           <td className="py-4 px-6 text-right">

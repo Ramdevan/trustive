@@ -60,7 +60,7 @@ export default function AdminSettings() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#315EFB]"></div>
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#36A886]"></div>
             </div>
         );
     }
@@ -76,7 +76,7 @@ export default function AdminSettings() {
                 {/* Network Infrastructure Section */}
                 <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                     <div className="p-8 border-b border-zinc-200/80 bg-zinc-100/50 flex items-center gap-3">
-                        <div className="p-2 bg-[#315EFB]/10 rounded-lg text-[#315EFB]">
+                        <div className="p-2 bg-[#36A886]/10 rounded-lg text-[#36A886]">
                             <Globe className="w-5 h-5" />
                         </div>
                         <h3 className="text-[#001060] font-bold">Network Infrastructure</h3>
@@ -87,7 +87,7 @@ export default function AdminSettings() {
                             <input
                                 value={settings?.chain || ""}
                                 onChange={(e) => setLocalSettings({ ...settings, chain: e.target.value })}
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none font-medium"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none font-medium"
                             />
                         </div>
                         <div className="space-y-2">
@@ -95,7 +95,7 @@ export default function AdminSettings() {
                             <input
                                 value={settings?.contract_address || ""}
                                 onChange={(e) => setLocalSettings({ ...settings, contract_address: e.target.value })}
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none font-mono text-xs"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none font-mono text-xs"
                             />
                         </div>
                         <div className="space-y-2">
@@ -103,7 +103,7 @@ export default function AdminSettings() {
                             <input
                                 value={settings?.ico_contract || ""}
                                 onChange={(e) => setLocalSettings({ ...settings, ico_contract: e.target.value })}
-                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none font-mono text-xs"
+                                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none font-mono text-xs"
                             />
                         </div>
                     </div>
@@ -127,7 +127,7 @@ export default function AdminSettings() {
                                     type="email"
                                     value={settings?.admin_email || ""}
                                     onChange={(e) => setLocalSettings({ ...settings, admin_email: e.target.value })}
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none font-medium"
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none font-medium"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -138,7 +138,7 @@ export default function AdminSettings() {
                                     type="password"
                                     value={settings?.admin_password || ""}
                                     onChange={(e) => setLocalSettings({ ...settings, admin_password: e.target.value })}
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none font-mono tracking-[0.4em]"
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none font-mono tracking-[0.4em]"
                                     placeholder="Leave blank to keep current"
                                     autoComplete="new-password"
                                 />
@@ -169,7 +169,7 @@ export default function AdminSettings() {
                     <button
                         type="submit"
                         disabled={saving}
-                        className="px-10 py-3 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-[#315EFB]/20 flex items-center gap-3 cursor-pointer"
+                        className="px-10 py-3 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-md shadow-[#36A886]/20 flex items-center gap-3 cursor-pointer"
                     >
                         {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                         Commit Configuration

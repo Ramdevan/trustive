@@ -262,8 +262,8 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-background text-zinc-900">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#315EFB] mx-auto"></div>
-                    <p className="mt-4 text-[#315EFB] font-semibold tracking-widest text-sm uppercase">Verifying Authorization...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#36A886] mx-auto"></div>
+                    <p className="mt-4 text-[#36A886] font-semibold tracking-widest text-sm uppercase">Verifying Authorization...</p>
                 </div>
             </div>
         );
@@ -274,7 +274,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-300">
                 <div className="bg-white w-full max-w-md rounded-3xl border border-zinc-200 p-8 text-center space-y-6 shadow-2xl">
                     <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto border border-blue-200">
-                        <Lock className="w-8 h-8 text-[#315EFB]" />
+                        <Lock className="w-8 h-8 text-[#36A886]" />
                     </div>
                     <div className="space-y-2">
                         <h3 className="text-xl font-bold text-zinc-900 uppercase tracking-wider">Authentication Required</h3>
@@ -288,7 +288,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                             "w-full py-4 text-white font-bold text-sm uppercase rounded-2xl transition-all shadow-md active:scale-95 cursor-pointer",
                             isOwnerPanel
                                 ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                                : "bg-[#315EFB] hover:bg-[#2548D0] shadow-[#315EFB]/20"
+                                : "bg-[#36A886] hover:bg-[#2548D0] shadow-[#36A886]/20"
                         )}
                     >
                         Log In to {isOwnerPanel ? "Owner" : "Admin"} Panel
@@ -325,7 +325,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                 "hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border shadow-xs",
                                 effectiveRole === "owner"
                                     ? "bg-amber-50 text-amber-700 border-amber-300/80"
-                                    : "bg-blue-50 text-[#315EFB] border-blue-200/80"
+                                    : "bg-blue-50 text-[#36A886] border-blue-200/80"
                             )}
                         >
                             {effectiveRole === "owner" ? (
@@ -335,7 +335,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                 </>
                             ) : (
                                 <>
-                                    <ShieldCheck className="w-3.5 h-3.5 text-[#315EFB]" />
+                                    <ShieldCheck className="w-3.5 h-3.5 text-[#36A886]" />
                                     Admin Panel (3/5 Quorum)
                                 </>
                             )}
@@ -387,7 +387,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                                             "cursor-pointer flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-bold uppercase tracking-wider text-white shadow-md transition-all active:scale-95",
                                                             effectiveRole === "owner"
                                                                 ? "bg-amber-600 hover:bg-amber-700 shadow-amber-600/20"
-                                                                : "bg-[#315EFB] hover:bg-[#2548D0] shadow-[#315EFB]/20"
+                                                                : "bg-[#36A886] hover:bg-[#2548D0] shadow-[#36A886]/20"
                                                         )}
                                                     >
                                                         <Wallet className="h-4 w-4" />
@@ -450,7 +450,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                     "flex h-8 w-8 items-center justify-center rounded-xl font-black text-xs uppercase shadow-xs",
                                     effectiveRole === "owner"
                                         ? "bg-amber-100 text-amber-800"
-                                        : "bg-blue-100 text-[#315EFB]"
+                                        : "bg-blue-100 text-[#36A886]"
                                 )}
                             >
                                 {effectiveRole === "owner" ? <Crown className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4" />}
@@ -473,7 +473,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                                 "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border shrink-0",
                                                 effectiveRole === "owner"
                                                     ? "bg-amber-100 text-amber-800 border-amber-300"
-                                                    : "bg-blue-100 text-[#315EFB] border-blue-200"
+                                                    : "bg-blue-100 text-[#36A886] border-blue-200"
                                             )}
                                         >
                                             {effectiveRole === "owner" ? "2/3 Owner" : "3/5 Admin"}
@@ -499,9 +499,9 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                         <Link
                                             href="/admin/dashboard"
                                             onClick={() => setIsProfileOpen(false)}
-                                            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs text-[#315EFB] hover:bg-blue-50 transition-colors font-bold uppercase tracking-wider"
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs text-[#36A886] hover:bg-blue-50 transition-colors font-bold uppercase tracking-wider"
                                         >
-                                            <ShieldCheck className="h-4 w-4 text-[#315EFB]" />
+                                            <ShieldCheck className="h-4 w-4 text-[#36A886]" />
                                             Switch to Admin Panel
                                         </Link>
                                     ) : (
@@ -574,7 +574,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                         isActive
                                             ? effectiveRole === "owner"
                                                 ? "bg-amber-600 text-white shadow-md shadow-amber-600/20"
-                                                : "bg-[#315EFB] text-white shadow-md shadow-[#315EFB]/20"
+                                                : "bg-[#36A886] text-white shadow-md shadow-[#36A886]/20"
                                             : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
                                     )}
                                 >
@@ -597,7 +597,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                     "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border",
                                     effectiveRole === "owner"
                                         ? "bg-amber-100 text-amber-800 border-amber-200"
-                                        : "bg-blue-100 text-[#315EFB] border-blue-200"
+                                        : "bg-blue-100 text-[#36A886] border-blue-200"
                                 )}
                             >
                                 {effectiveRole === "owner" ? "👑 Owner Panel" : "🛡️ Admin Panel"}
@@ -637,7 +637,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                         Restricted to Owner Panel
                                     </h2>
                                     <p className="text-zinc-600 text-sm mt-2 leading-relaxed">
-                                        Treasury withdrawals and master credentials are strictly restricted to the <strong>Owner Panel</strong> (requires 2 of 3 Owner signatures on ICO contract <span className="font-mono text-xs text-[#315EFB]">0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC</span>).
+                                        Treasury withdrawals and master credentials are strictly restricted to the <strong>Owner Panel</strong> (requires 2 of 3 Owner signatures on ICO contract <span className="font-mono text-xs text-[#36A886]">0xeFE1D53E66d344A22719189C8c15A3Bda8434DbC</span>).
                                     </p>
                                 </div>
 
@@ -650,7 +650,7 @@ function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
                                     </Link>
                                     <Link
                                         href="/admin/dashboard"
-                                        className="flex-1 py-3 px-4 rounded-2xl bg-[#315EFB] text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#2548D0] transition-all text-center"
+                                        className="flex-1 py-3 px-4 rounded-2xl bg-[#36A886] text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#2548D0] transition-all text-center"
                                     >
                                         Return to Admin Dashboard
                                     </Link>

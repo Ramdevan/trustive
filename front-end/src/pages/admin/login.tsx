@@ -158,15 +158,15 @@ export default function AdminLogin() {
                 <div className="w-full max-w-[460px] relative z-10 space-y-6">
                     {/* Header */}
                     <div className="text-center space-y-3">
-                        <div className="relative inline-flex items-center justify-center w-16 h-16 bg-blue-500/10 border-2 border-blue-500/30 rounded-2xl shadow-xl shadow-[#315EFB]/15">
-                            <ShieldCheck className="w-8 h-8 text-[#315EFB]" />
+                        <div className="relative inline-flex items-center justify-center w-16 h-16 bg-blue-500/10 border-2 border-blue-500/30 rounded-2xl shadow-xl shadow-[#36A886]/15">
+                            <ShieldCheck className="w-8 h-8 text-[#36A886]" />
                         </div>
                         <div className="space-y-1">
                             <h1 className="text-3xl font-manrope font-extrabold text-[#001060] tracking-tight uppercase">
                                 TRUSTIVE
                             </h1>
-                            <p className="text-[#315EFB] font-bold text-[11px] uppercase tracking-[3px] flex items-center justify-center gap-1.5">
-                                <ShieldCheck className="w-3.5 h-3.5 text-[#315EFB]" />
+                            <p className="text-[#36A886] font-bold text-[11px] uppercase tracking-[3px] flex items-center justify-center gap-1.5">
+                                <ShieldCheck className="w-3.5 h-3.5 text-[#36A886]" />
                                 🛡️ Admin Operations Portal (3/5 Quorum)
                             </p>
                         </div>
@@ -197,7 +197,7 @@ export default function AdminLogin() {
                                     value={credentials.email}
                                     onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
                                     placeholder="admin1@trustive.com"
-                                    className="w-full px-4 py-3.5 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#315EFB] text-zinc-900 font-medium text-sm transition-all bg-zinc-50/50 hover:bg-white focus:bg-white"
+                                    className="w-full px-4 py-3.5 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#36A886] text-zinc-900 font-medium text-sm transition-all bg-zinc-50/50 hover:bg-white focus:bg-white"
                                 />
                             </div>
 
@@ -213,7 +213,7 @@ export default function AdminLogin() {
                                         value={credentials.password}
                                         onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
                                         placeholder="••••••••••••"
-                                        className="w-full px-4 py-3.5 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#315EFB] text-zinc-900 font-medium text-sm transition-all bg-zinc-50/50 hover:bg-white focus:bg-white pr-10"
+                                        className="w-full px-4 py-3.5 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#36A886] text-zinc-900 font-medium text-sm transition-all bg-zinc-50/50 hover:bg-white focus:bg-white pr-10"
                                     />
                                     <button
                                         type="button"
@@ -228,7 +228,7 @@ export default function AdminLogin() {
                             {/* 2FA Input (Conditional) */}
                             {require2FA && (
                                 <div className="space-y-1.5 animate-in fade-in slide-in-from-top-2">
-                                    <label className="text-[11px] font-bold text-[#315EFB] uppercase tracking-wider block flex items-center justify-between">
+                                    <label className="text-[11px] font-bold text-[#36A886] uppercase tracking-wider block flex items-center justify-between">
                                         <span>Two-Factor Authentication Code</span>
                                         <span className="text-[10px] text-zinc-400 font-normal">6 digits</span>
                                     </label>
@@ -239,7 +239,7 @@ export default function AdminLogin() {
                                         value={twoFaCode}
                                         onChange={(e) => setTwoFaCode(e.target.value.replace(/\D/g, ""))}
                                         placeholder="123456"
-                                        className="w-full px-4 py-3.5 rounded-xl border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#315EFB] text-zinc-900 font-mono text-center tracking-[8px] text-lg font-bold bg-blue-50/30"
+                                        className="w-full px-4 py-3.5 rounded-xl border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#36A886] text-zinc-900 font-mono text-center tracking-[8px] text-lg font-bold bg-blue-50/30"
                                     />
                                 </div>
                             )}
@@ -248,7 +248,7 @@ export default function AdminLogin() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-4 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md bg-[#315EFB] hover:bg-[#2548D0] text-white active:scale-[0.98] disabled:opacity-50 mt-2"
+                                className="w-full py-4 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md bg-[#36A886] hover:bg-[#2548D0] text-white active:scale-[0.98] disabled:opacity-50 mt-2"
                             >
                                 {loading ? (
                                     <>
@@ -272,7 +272,7 @@ export default function AdminLogin() {
                                 className="w-full flex items-center justify-between py-2 text-xs font-bold text-blue-800 uppercase tracking-wider hover:text-blue-900 transition-colors cursor-pointer"
                             >
                                 <span className="flex items-center gap-1.5">
-                                    <ShieldCheck className="w-3.5 h-3.5 text-[#315EFB]" />
+                                    <ShieldCheck className="w-3.5 h-3.5 text-[#36A886]" />
                                     5 Authorized Admins (3/5 Quorum)
                                 </span>
                                 <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", showAccountsHelper && "rotate-180")} />
@@ -298,7 +298,7 @@ export default function AdminLogin() {
                                                     <div className="text-[11px] text-zinc-600 font-mono truncate">{a.email}</div>
                                                     <div className="text-[10px] text-zinc-400 font-mono truncate">Wallet: {shortenAddress(a.wallet)}</div>
                                                 </div>
-                                                <span className="text-[10px] font-bold text-[#315EFB] uppercase tracking-wider bg-white px-2 py-1 rounded-lg border border-blue-200 shrink-0 group-hover:bg-[#315EFB] group-hover:text-white transition-colors">
+                                                <span className="text-[10px] font-bold text-[#36A886] uppercase tracking-wider bg-white px-2 py-1 rounded-lg border border-blue-200 shrink-0 group-hover:bg-[#36A886] group-hover:text-white transition-colors">
                                                     Select
                                                 </span>
                                             </button>

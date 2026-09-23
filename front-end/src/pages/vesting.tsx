@@ -68,49 +68,49 @@ export default function Vesting() {
   if (!isConnected) {
     return (
       <AuthGuard>
-      <Layout>
-        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
-          <LuWallet className="h-16 w-16 text-zinc-600" />
-          <div>
-            <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
-            <p className="text-zinc-900 text-[1rem]">Connect your wallet to view your vesting schedule</p>
+        <Layout>
+          <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
+            <LuWallet className="h-16 w-16 text-zinc-600" />
+            <div>
+              <h2 className="text-[1.5rem] font-medium text-[#001060] mb-2">Connect Your Wallet</h2>
+              <p className="text-zinc-900 text-[1rem]">Connect your wallet to view your vesting schedule</p>
+            </div>
+            <button
+              onClick={connectWallet}
+              className="bg-[#36A886] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#36A886]/20"
+            >
+              Connect Wallet
+            </button>
           </div>
-          <button
-            onClick={connectWallet}
-            className="bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold px-8 py-4 rounded-2xl transition-all cursor-pointer shadow-lg shadow-[#315EFB]/20"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      </Layout>
+        </Layout>
       </AuthGuard>
     );
   }
 
   return (
     <AuthGuard>
-    <Layout>
-      <div className="flex flex-col gap-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <VestingStatCard
-            title="Allocated Tokens"
-            value={totalAllocated.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            currency="TRSIV"
-          />
-          <VestingStatCard
-            title="Locked Tokens"
-            value={totalLocked.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            currency="TRSIV"
-          />
-          <VestingStatCard
-            title="Claimable Tokens"
-            value={totalClaimable.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            currency="TRSIV"
-          />
+      <Layout>
+        <div className="flex flex-col gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <VestingStatCard
+              title="Allocated Tokens"
+              value={totalAllocated.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+              currency="TRSIV"
+            />
+            <VestingStatCard
+              title="Locked Tokens"
+              value={totalLocked.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+              currency="TRSIV"
+            />
+            <VestingStatCard
+              title="Claimable Tokens"
+              value={totalClaimable.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+              currency="TRSIV"
+            />
+          </div>
+          <VestingTable vestings={vestings} loading={loading} onRefresh={fetchVestings} />
         </div>
-        <VestingTable vestings={vestings} loading={loading} onRefresh={fetchVestings} />
-      </div>
-    </Layout>
+      </Layout>
     </AuthGuard>
   );
 }

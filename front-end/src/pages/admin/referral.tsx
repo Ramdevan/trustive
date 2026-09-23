@@ -178,7 +178,7 @@ export default function ReferralAdminPage() {
                         <span className="text-[10px] font-extrabold text-[#001060] tracking-[0.2em] uppercase">
                             Commission Rate
                         </span>
-                        <div className="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-[#315EFB] shadow-xs">
+                        <div className="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-[#36A886] shadow-xs">
                             <Percent className="w-4 h-4" />
                         </div>
                     </div>
@@ -218,7 +218,7 @@ export default function ReferralAdminPage() {
                         <span className="text-[10px] font-extrabold text-[#001060] tracking-[0.2em] uppercase">
                             Total Claimed
                         </span>
-                        <div className="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-[#315EFB] shadow-xs">
+                        <div className="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-[#36A886] shadow-xs">
                             <CheckCircle2 className="w-4 h-4" />
                         </div>
                     </div>
@@ -238,7 +238,7 @@ export default function ReferralAdminPage() {
                         <span className="text-[10px] font-extrabold text-[#001060] tracking-[0.2em] uppercase">
                             Active Referrers
                         </span>
-                        <div className="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-[#315EFB] shadow-xs">
+                        <div className="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-[#36A886] shadow-xs">
                             <Users className="w-4 h-4" />
                         </div>
                     </div>
@@ -274,7 +274,7 @@ export default function ReferralAdminPage() {
             <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
                 <div className="p-8 border-b border-zinc-200/60 bg-white/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-3.5">
-                        <div className="p-3 bg-[#315EFB]/10 rounded-2xl text-[#315EFB] border border-[#315EFB]/20">
+                        <div className="p-3 bg-[#36A886]/10 rounded-2xl text-[#36A886] border border-[#36A886]/20">
                             <Gift className="w-6 h-6" />
                         </div>
                         <div>
@@ -303,7 +303,7 @@ export default function ReferralAdminPage() {
                                     value={referralContract}
                                     onChange={(e) => setReferralContract(e.target.value.trim())}
                                     placeholder="0x..."
-                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 outline-none pr-12 transition-all"
+                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 font-mono text-xs focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10 outline-none pr-12 transition-all"
                                 />
                                 <div className="absolute right-3">
                                     <CopyButton text={referralContract} />
@@ -329,7 +329,7 @@ export default function ReferralAdminPage() {
                                     value={referralCommission}
                                     onChange={(e) => setReferralCommission(e.target.value)}
                                     placeholder="5.00"
-                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-10 text-zinc-900 font-mono text-sm focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 outline-none transition-all"
+                                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 pr-10 text-zinc-900 font-mono text-sm focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10 outline-none transition-all"
                                 />
                                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold text-zinc-400">
                                     %
@@ -346,7 +346,7 @@ export default function ReferralAdminPage() {
                         <button
                             type="submit"
                             disabled={isSaving}
-                            className="bg-[#315EFB] hover:bg-[#2548D0] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                            className="bg-[#36A886] hover:bg-[#2548D0] text-white px-8 py-3.5 rounded-xl flex items-center gap-3 font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-50"
                         >
                             {isSaving ? (
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
@@ -378,7 +378,7 @@ export default function ReferralAdminPage() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-[#315EFB] text-white uppercase font-bold text-xs tracking-widest">
+                            <tr className="bg-[#36A886] text-white uppercase font-bold text-xs tracking-widest">
                                 <th className="px-8 py-5">ID</th>
                                 <th className="px-6 py-5">Beneficiary Wallet</th>
                                 <th className="px-6 py-5">Amount (TRSIV)</th>

@@ -278,13 +278,13 @@ export default function GovernancePage() {
                         <h1 className="text-2xl sm:text-3xl font-bold text-[#001060] tracking-tight">
                             Multi-Sig Governance & Operations
                         </h1>
-                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-[#315EFB] border border-blue-200 flex items-center gap-1.5 shadow-xs">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-[#36A886] border border-blue-200 flex items-center gap-1.5 shadow-xs">
                             <Vote className="w-3.5 h-3.5" />
                             Admin & Owner Governance
                         </span>
                     </div>
                     <p className="text-sm text-zinc-500 mt-1">
-                        Consensus proposals for contract <span className="font-mono text-xs font-semibold text-[#315EFB]">{shortenAddress(ICO_CONTRACT_ADDRESS)}</span>. Admin operations require 3/5 quorum; Owner actions require 2/3 quorum.
+                        Consensus proposals for contract <span className="font-mono text-xs font-semibold text-[#36A886]">{shortenAddress(ICO_CONTRACT_ADDRESS)}</span>. Admin operations require 3/5 quorum; Owner actions require 2/3 quorum.
                     </p>
                 </div>
 
@@ -327,7 +327,7 @@ export default function GovernancePage() {
                         <span className="text-[10px] font-extrabold text-[#001060] tracking-widest uppercase">
                             EIP-712 Signer
                         </span>
-                        <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#315EFB] flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#36A886] flex items-center justify-center">
                             <Key className="w-4 h-4" />
                         </div>
                     </div>
@@ -394,7 +394,7 @@ export default function GovernancePage() {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-blue-100 text-[#315EFB] border border-blue-200">
+                        <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-blue-100 text-[#36A886] border border-blue-200">
                             🛡️ 3/5 Admin Quorum
                         </span>
                         <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-100 text-amber-800 border border-amber-300">
@@ -434,7 +434,7 @@ export default function GovernancePage() {
                         }}
                         className="p-5 rounded-2xl border border-zinc-200 bg-white hover:bg-zinc-50 text-left transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer space-y-2"
                     >
-                        <div className="flex items-center justify-between text-[#315EFB]">
+                        <div className="flex items-center justify-between text-[#36A886]">
                             <span className="text-[10px] font-black uppercase tracking-wider text-zinc-500">Security</span>
                             <Key className="w-4 h-4" />
                         </div>
@@ -467,7 +467,7 @@ export default function GovernancePage() {
                         onClick={() => setModalType("replaceAdmin")}
                         className="p-5 rounded-2xl border border-zinc-200 bg-white hover:bg-zinc-50 text-left transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer space-y-2"
                     >
-                        <div className="flex items-center justify-between text-[#315EFB]">
+                        <div className="flex items-center justify-between text-[#36A886]">
                             <span className="text-[10px] font-black uppercase tracking-wider text-zinc-500">Governance</span>
                             <UserPlus className="w-4 h-4" />
                         </div>
@@ -501,7 +501,7 @@ export default function GovernancePage() {
                         </button>
                         <button
                             onClick={() => setActiveTab("admin")}
-                            className={cn("px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer", activeTab === "admin" ? "bg-[#315EFB] text-white shadow-xs" : "text-zinc-500 hover:text-zinc-800")}
+                            className={cn("px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer", activeTab === "admin" ? "bg-[#36A886] text-white shadow-xs" : "text-zinc-500 hover:text-zinc-800")}
                         >
                             Admin (3/5)
                         </button>
@@ -516,7 +516,7 @@ export default function GovernancePage() {
 
                 {loadingProposals ? (
                     <div className="py-16 text-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#315EFB] mx-auto"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#36A886] mx-auto"></div>
                         <p className="mt-3 text-xs font-bold text-zinc-400 uppercase tracking-widest">Reading on-chain proposals...</p>
                     </div>
                 ) : filteredProposals.length === 0 ? (
@@ -547,7 +547,7 @@ export default function GovernancePage() {
                                             </span>
                                             <span className={cn(
                                                 "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border",
-                                                isOwnerProp ? "bg-amber-100 text-amber-800 border-amber-300" : "bg-blue-100 text-[#315EFB] border-blue-300"
+                                                isOwnerProp ? "bg-amber-100 text-amber-800 border-amber-300" : "bg-blue-100 text-[#36A886] border-blue-300"
                                             )}>
                                                 {isOwnerProp ? "👑 Owner Proposal" : "🛡️ Admin Proposal"}
                                             </span>
@@ -600,7 +600,7 @@ export default function GovernancePage() {
                                             <button
                                                 onClick={() => handleConfirm(prop.id)}
                                                 disabled={actionLoadingId === prop.id}
-                                                className="px-4 py-2.5 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
+                                                className="px-4 py-2.5 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
                                             >
                                                 {actionLoadingId === prop.id ? (
                                                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -759,7 +759,7 @@ export default function GovernancePage() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="px-6 py-2.5 bg-[#315EFB] hover:bg-[#2548D0] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-sm disabled:opacity-50"
+                                    className="px-6 py-2.5 bg-[#36A886] hover:bg-[#2548D0] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-sm disabled:opacity-50"
                                 >
                                     {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                                     Submit Proposal

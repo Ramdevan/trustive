@@ -134,7 +134,7 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                     </div>
                     <div>
                         <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Allocated Token</div>
-                        <div className="text-[#315EFB] font-bold text-base">
+                        <div className="text-[#36A886] font-bold text-base">
                             {totalAmount.toLocaleString("en-US", { maximumFractionDigits: 2 })} TRSIV
                         </div>
                     </div>
@@ -167,7 +167,7 @@ export default function VestingDetailModal({ vesting, onClose }: Props) {
                     <div className="overflow-x-auto">
                         <table className="w-full border-collapse min-w-[44rem]">
                             <thead>
-                                <tr className="bg-[#315EFB] text-white">
+                                <tr className="bg-[#36A886] text-white">
                                     <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em]">S.No</th>
                                     <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em]">Claimable Token</th>
                                     <th className="px-6 py-4 text-center text-[10px] font-bold uppercase tracking-[0.2em]">Cliff Period</th>

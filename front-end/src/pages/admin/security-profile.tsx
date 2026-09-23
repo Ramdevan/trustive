@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-    Shield, 
-    Lock, 
-    Smartphone, 
+import {
+    Shield,
+    Lock,
+    Smartphone,
     AlertCircle,
     Loader2,
     ArrowRight,
@@ -25,7 +25,7 @@ export default function AdminProfile() {
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [loading, setLoading] = useState(false);
-    
+
     // 2FA State
     const [twoFaStatus, setTwoFaStatus] = useState(false);
     const [showSetup, setShowSetup] = useState(false);
@@ -55,7 +55,7 @@ export default function AdminProfile() {
         if (passwords.new !== passwords.confirm) {
             return toast.error("New passwords do not match");
         }
-        
+
         setLoading(true);
         try {
             const data = await apiRequest("/change-password", {
@@ -165,8 +165,8 @@ export default function AdminProfile() {
                 {/* Password Management */}
                 <div className="bg-[#ECE9EA] rounded-[32px] border border-zinc-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-8 space-y-8">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-[#315EFB]/10 rounded-2xl flex items-center justify-center border border-[#315EFB]/20">
-                            <Lock className="w-6 h-6 text-[#315EFB]" />
+                        <div className="w-12 h-12 bg-[#36A886]/10 rounded-2xl flex items-center justify-center border border-[#36A886]/20">
+                            <Lock className="w-6 h-6 text-[#36A886]" />
                         </div>
                         <div>
                             <h3 className="text-lg font-bold text-[#001060] uppercase tracking-wider">Change Password</h3>
@@ -183,8 +183,8 @@ export default function AdminProfile() {
                                         type={showCurrent ? "text" : "password"}
                                         required
                                         value={passwords.current}
-                                        onChange={(e) => setPasswords({...passwords, current: e.target.value})}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                                        onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                                         placeholder="••••••••••••"
                                     />
                                     <button
@@ -204,8 +204,8 @@ export default function AdminProfile() {
                                         type={showNew ? "text" : "password"}
                                         required
                                         value={passwords.new}
-                                        onChange={(e) => setPasswords({...passwords, new: e.target.value})}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                                        onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                                         placeholder="Enter new password"
                                     />
                                     <button
@@ -225,8 +225,8 @@ export default function AdminProfile() {
                                         type={showConfirm ? "text" : "password"}
                                         required
                                         value={passwords.confirm}
-                                        onChange={(e) => setPasswords({...passwords, confirm: e.target.value})}
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#315EFB] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
+                                        onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl p-4 pr-12 text-zinc-900 focus:border-[#36A886] focus:bg-white outline-none transition-all placeholder:text-zinc-400"
                                         placeholder="Confirm new password"
                                     />
                                     <button
@@ -244,7 +244,7 @@ export default function AdminProfile() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#315EFB] hover:bg-[#2548D0] text-white py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md shadow-[#315EFB]/20"
+                            className="w-full bg-[#36A886] hover:bg-[#2548D0] text-white py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-md shadow-[#36A886]/20"
                         >
                             {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Update Credentials"}
                         </button>
@@ -263,11 +263,10 @@ export default function AdminProfile() {
                                 <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest">Enhanced Identity Verification</p>
                             </div>
                         </div>
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all ${
-                            twoFaStatus 
-                                ? "bg-green-50 border-green-200 text-green-700" 
-                                : "bg-red-50 border-red-200 text-red-700"
-                        }`}>
+                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all ${twoFaStatus
+                            ? "bg-green-50 border-green-200 text-green-700"
+                            : "bg-red-50 border-red-200 text-red-700"
+                            }`}>
                             {twoFaStatus ? "Secured" : "Unsecured"}
                         </div>
                     </div>
@@ -282,8 +281,8 @@ export default function AdminProfile() {
                                     {twoFaStatus ? "Verification Active" : "Level Up Security"}
                                 </h4>
                                 <p className="text-zinc-500 text-xs leading-relaxed uppercase tracking-widest font-medium">
-                                    {twoFaStatus 
-                                        ? "Your account is protected by an algorithm-based 6-digit dynamic token." 
+                                    {twoFaStatus
+                                        ? "Your account is protected by an algorithm-based 6-digit dynamic token."
                                         : "Protect your administrative panel by requiring a digital token from Google Authenticator."
                                     }
                                 </p>
@@ -291,11 +290,10 @@ export default function AdminProfile() {
                             <button
                                 onClick={twoFaStatus ? () => setShowDisable(true) : initiate2FASetup}
                                 disabled={verifying}
-                                className={`w-full py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] cursor-pointer ${
-                                    twoFaStatus 
-                                        ? "bg-zinc-100 text-zinc-800 hover:bg-zinc-200 border border-zinc-200" 
-                                        : "bg-[#315EFB] text-white hover:bg-[#2548D0] shadow-md shadow-[#315EFB]/20"
-                                }`}
+                                className={`w-full py-4 rounded-2xl font-paytone text-sm uppercase transition-all active:scale-[0.98] cursor-pointer ${twoFaStatus
+                                    ? "bg-zinc-100 text-zinc-800 hover:bg-zinc-200 border border-zinc-200"
+                                    : "bg-[#36A886] text-white hover:bg-[#2548D0] shadow-md shadow-[#36A886]/20"
+                                    }`}
                             >
                                 {verifying ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (twoFaStatus ? "Disable 2FA" : "Enable Multi-Factor")}
                             </button>
@@ -307,7 +305,7 @@ export default function AdminProfile() {
                                     <img src={setupData?.qrCode} alt="Setup QR" className="w-40 h-40" />
                                 </div>
                                 <div className="text-center space-y-2">
-                                    <p className="text-[10px] font-black text-[#315EFB] uppercase tracking-[4px]">Backup Secret</p>
+                                    <p className="text-[10px] font-black text-[#36A886] uppercase tracking-[4px]">Backup Secret</p>
                                     <code className="bg-zinc-100 px-4 py-2 rounded-xl text-zinc-900 font-mono text-xs border border-zinc-200 inline-block select-all">
                                         {setupData?.secret}
                                     </code>
@@ -324,18 +322,18 @@ export default function AdminProfile() {
                                         maxLength={6}
                                         value={verificationCode}
                                         onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ""))}
-                                        className="flex-1 bg-zinc-50 border border-zinc-200 rounded-2xl p-4 text-zinc-900 text-center text-xl font-black tracking-widest focus:border-[#315EFB] outline-none transition-all"
+                                        className="flex-1 bg-zinc-50 border border-zinc-200 rounded-2xl p-4 text-zinc-900 text-center text-xl font-black tracking-widest focus:border-[#36A886] outline-none transition-all"
                                         placeholder="000 000"
                                     />
                                     <button
                                         onClick={verifyAndEnable2FA}
                                         disabled={verificationCode.length !== 6 || verifying}
-                                        className="bg-[#315EFB] text-white p-4 rounded-2xl hover:bg-[#2548D0] transition-all disabled:opacity-50 active:scale-95 cursor-pointer shadow-md shadow-[#315EFB]/20"
+                                        className="bg-[#36A886] text-white p-4 rounded-2xl hover:bg-[#2548D0] transition-all disabled:opacity-50 active:scale-95 cursor-pointer shadow-md shadow-[#36A886]/20"
                                     >
                                         {verifying ? <Loader2 className="w-6 h-6 animate-spin" /> : <ArrowRight className="w-6 h-6" />}
                                     </button>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => setShowSetup(false)}
                                     className="w-full text-[10px] font-bold text-zinc-500 uppercase tracking-widest hover:text-zinc-900 transition-colors py-2 cursor-pointer"
                                 >
@@ -353,8 +351,8 @@ export default function AdminProfile() {
                 <div className="space-y-1">
                     <p className="text-amber-700 text-[10px] font-black uppercase tracking-[3px]">Identity Policy Notice</p>
                     <p className="text-zinc-600 text-[11px] leading-relaxed">
-                        Changes to your security credentials will invalidate your current session and require re-authentication. 
-                        Always keep your 2FA backup secret in a safe offline location. Loss of your authenticator device without a backup 
+                        Changes to your security credentials will invalidate your current session and require re-authentication.
+                        Always keep your 2FA backup secret in a safe offline location. Loss of your authenticator device without a backup
                         may lead to permanent administrative lockout.
                     </p>
                 </div>
@@ -389,7 +387,7 @@ export default function AdminProfile() {
                                         onChange={e => setDisablePassword(e.target.value)}
                                         autoComplete="current-password"
                                         placeholder="Enter your password"
-                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl pl-4 pr-11 py-3 text-zinc-900 text-sm focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
+                                        className="w-full bg-zinc-50 border border-zinc-200 rounded-xl pl-4 pr-11 py-3 text-zinc-900 text-sm focus:border-[#36A886] outline-none placeholder:text-zinc-400"
                                     />
                                     <button
                                         type="button"
@@ -412,7 +410,7 @@ export default function AdminProfile() {
                                     onChange={e => setDisableCode(e.target.value.replace(/\D/g, ""))}
                                     onKeyDown={e => { if (e.key === "Enter") disable2FA(); }}
                                     placeholder="000000"
-                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4em] focus:border-[#315EFB] outline-none placeholder:text-zinc-400"
+                                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-center font-bold tracking-[0.4em] focus:border-[#36A886] outline-none placeholder:text-zinc-400"
                                 />
                             </div>
                         </div>

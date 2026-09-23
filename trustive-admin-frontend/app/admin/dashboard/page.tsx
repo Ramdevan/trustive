@@ -59,11 +59,10 @@ import { bscTestnet } from "wagmi/chains";
 import { formatUnits } from "viem";
 import { apiRequest } from "@/lib/api-client";
 import TxHashLink from "@/components/TxHashLink";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 
 export default function Dashboard() {
-    const router = useRouter();
-    const pathname = router.pathname || router.asPath.split("?")[0];
+    const pathname = usePathname();
     const basePath = pathname?.startsWith("/owner") ? "/owner" : "/admin";
 
     // Fetch Dashboard Data

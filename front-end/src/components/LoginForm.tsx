@@ -59,8 +59,8 @@ const LoginForm: React.FC = () => {
       const res = await fetch(`${API_URL}/api/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          email, 
+        body: JSON.stringify({
+          email,
           password,
           twoFaCode: require2FA ? twoFaCode : undefined
         })
@@ -170,14 +170,14 @@ const LoginForm: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Email</label>
                   <div className="relative group">
-                    <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
+                    <LuMail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#36A886] transition-colors" />
                     <input
                       type="email"
                       required
                       placeholder="Enter your email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all placeholder:text-zinc-400 font-medium"
+                      className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-6 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10 transition-all placeholder:text-zinc-400 font-medium"
                     />
                   </div>
                 </div>
@@ -186,14 +186,14 @@ const LoginForm: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-[1rem] font-medium text-zinc-700 ml-1">Password</label>
                   <div className="relative group">
-                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#315EFB] transition-colors" />
+                    <LuLock className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-zinc-400 group-focus-within:text-[#36A886] transition-colors" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#315EFB] focus:ring-2 focus:ring-[#315EFB]/10 transition-all placeholder:text-zinc-400 font-medium"
+                      className="w-full bg-white border border-zinc-200 rounded-[1.25rem] py-4 md:py-5 pl-14 pr-14 text-[1.125rem] md:text-[1.25rem] text-zinc-900 focus:outline-none focus:border-[#36A886] focus:ring-2 focus:ring-[#36A886]/10 transition-all placeholder:text-zinc-400 font-medium"
                     />
                     <button
                       type="button"
@@ -209,7 +209,7 @@ const LoginForm: React.FC = () => {
                     </button>
                   </div>
                   <div className="flex justify-end pr-1">
-                    <Link href="/forgot-password" className="text-[0.875rem] md:text-[1rem] font-medium text-[#315EFB] hover:underline transition-colors cursor-pointer">
+                    <Link href="/forgot-password" className="text-[0.875rem] md:text-[1rem] font-medium text-[#36A886] hover:underline transition-colors cursor-pointer">
                       Forget Password?
                     </Link>
                   </div>
@@ -217,7 +217,7 @@ const LoginForm: React.FC = () => {
 
                 <label className="flex items-center gap-3 ml-1 mt-6 md:mt-10 cursor-pointer group/check w-fit">
                   <div className="relative flex items-center">
-                    <input type="checkbox" className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-zinc-300 rounded-md checked:bg-[#315EFB] checked:border-[#315EFB] transition-all cursor-pointer" />
+                    <input type="checkbox" className="peer appearance-none w-5 h-5 md:w-6 md:h-6 border border-zinc-300 rounded-md checked:bg-[#36A886] checked:border-[#36A886] transition-all cursor-pointer" />
                     <LuCheck className="absolute left-0.5 md:left-1 top-0.5 md:top-1 h-3.5 w-3.5 md:h-4 md:w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none stroke-[3]" />
                   </div>
                   <span className="text-[0.875rem] md:text-[1rem] font-medium text-zinc-900 select-none group-hover/check:text-zinc-900 transition-colors">Remember Password</span>
@@ -226,7 +226,7 @@ const LoginForm: React.FC = () => {
             ) : (
               <div className="space-y-6 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="space-y-4">
-                  <label className="block text-center text-[1.25rem] font-bold text-[#315EFB] uppercase tracking-[4px]">Verification Code</label>
+                  <label className="block text-center text-[1.25rem] font-bold text-[#36A886] uppercase tracking-[4px]">Verification Code</label>
                   <p className="text-center text-zinc-500 text-sm font-medium uppercase tracking-widest">Enter the 6-digit code from your app</p>
                   <input
                     type="text"
@@ -236,15 +236,15 @@ const LoginForm: React.FC = () => {
                     placeholder="000000"
                     value={twoFaCode}
                     onChange={(e) => setTwoFaCode(e.target.value.replace(/\D/g, ""))}
-                    className="w-full bg-white border-2 border-zinc-300 rounded-[1.25rem] py-6 text-zinc-900 text-center text-3xl font-black tracking-[1.5rem] focus:outline-none focus:border-[#315EFB] transition-all placeholder:text-zinc-300"
+                    className="w-full bg-white border-2 border-zinc-300 rounded-[1.25rem] py-6 text-zinc-900 text-center text-3xl font-black tracking-[1.5rem] focus:outline-none focus:border-[#36A886] transition-all placeholder:text-zinc-300"
                   />
                 </div>
-                <button 
-                    type="button" 
-                    onClick={() => setRequire2FA(false)}
-                    className="w-full text-zinc-900 hover:text-zinc-900 transition-colors text-xs font-bold uppercase tracking-widest"
+                <button
+                  type="button"
+                  onClick={() => setRequire2FA(false)}
+                  className="w-full text-zinc-900 hover:text-zinc-900 transition-colors text-xs font-bold uppercase tracking-widest"
                 >
-                    Back to Login
+                  Back to Login
                 </button>
               </div>
             )}
@@ -252,14 +252,14 @@ const LoginForm: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#315EFB]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50"
+              className="w-full bg-[#36A886] hover:bg-[#2548D0] text-white font-bold py-4 md:py-5 rounded-[0.75rem] transition-all shadow-xl shadow-[#36A886]/20 active:scale-[0.98] text-[1.125rem] md:text-[1.25rem] cursor-pointer disabled:opacity-50"
             >
               {loading ? "Authenticating..." : "Login"}
             </button>
           </form>
 
           <p className="text-center text-[0.875rem] md:text-[1rem] font-normal text-zinc-900">
-            Don&apos;t have an account? <Link href="/register" className="text-[#315EFB] font-bold hover:underline">Sign up</Link>
+            Don&apos;t have an account? <Link href="/register" className="text-[#36A886] font-bold hover:underline">Sign up</Link>
           </p>
         </div>
       </div>

@@ -83,7 +83,7 @@ const VestingTable: React.FC<VestingTableProps> = ({ vestings, loading, onRefres
                   <td className="px-6 py-5 align-middle whitespace-nowrap">
                     <button
                       onClick={() => setSelectedId(v.id)}
-                      className="text-[#315EFB] font-bold hover:underline cursor-pointer"
+                      className="text-[#36A886] font-bold hover:underline cursor-pointer"
                     >
                       View
                     </button>

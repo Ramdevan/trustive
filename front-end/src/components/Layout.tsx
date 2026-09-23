@@ -63,7 +63,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     setUserProfile(prev => prev ? { ...prev, wallet_address: account } : { wallet_address: account });
                   }
                 })
-                .catch(() => {});
+                .catch(() => { });
             }
           }
         }
@@ -98,7 +98,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
                 <h1 className="text-2xl font-black text-[#001060] uppercase tracking-tight mb-4">Wallet Mismatch</h1>
                 <p className="text-zinc-600 text-sm font-medium leading-relaxed mb-8">
-                  Your account is linked to <span className="text-zinc-900 font-mono text-xs">{userProfile.wallet_address.slice(0, 10)}...{userProfile.wallet_address.slice(-8)}</span>. 
+                  Your account is linked to <span className="text-zinc-900 font-mono text-xs">{userProfile.wallet_address.slice(0, 10)}...{userProfile.wallet_address.slice(-8)}</span>.
                   Please connect the correct wallet to use the dashboard.
                 </p>
                 <div className="space-y-4">

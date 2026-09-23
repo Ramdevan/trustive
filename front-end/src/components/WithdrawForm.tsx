@@ -97,7 +97,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
       <div className="flex flex-col items-center">
         <span className="text-[0.75rem] text-zinc-500 uppercase tracking-wider">Claimable Now</span>
         <div className="flex items-baseline justify-center gap-2">
-          <span className="text-[2.25rem] font-bold text-[#315EFB] leading-tight tracking-tighter">
+          <span className="text-[2.25rem] font-bold text-[#36A886] leading-tight tracking-tighter">
             {Number(claimableAmount).toLocaleString('en-US', { maximumFractionDigits: 2 })}
           </span>
           <span className="text-[1.125rem] font-black text-zinc-900 uppercase tracking-wider">Trustive</span>
@@ -114,7 +114,7 @@ const WithdrawForm: React.FC<WithdrawFormProps> = ({ claimableAmount, vestingInd
         <button
           onClick={handleClaim}
           disabled={loading || Number(claimableAmount) <= 0}
-          className="w-full flex items-center justify-center gap-2 bg-[#315EFB] hover:bg-[#2548D0] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#315EFB]/20 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+          className="w-full flex items-center justify-center gap-2 bg-[#36A886] hover:bg-[#2548D0] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-[#36A886]/20 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
           {loading && <LuLoader className="h-4 w-4 animate-spin" />}
           Claim Tokens

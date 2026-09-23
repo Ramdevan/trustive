@@ -21,8 +21,8 @@ import { toast } from "react-toastify";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/api-client";
-import VestingDetailModal, { formatVestId, statusClasses, statusLabel } from "@/components/AdminVestingDetailModal";
-import type { VestingRecord as Vesting } from "@/components/AdminVestingDetailModal";
+import VestingDetailModal, { formatVestId, statusClasses, statusLabel } from "@/components/VestingDetailModal";
+import type { VestingRecord as Vesting } from "@/components/VestingDetailModal";
 
 export default function VestingManagement() {
     const queryClient = useQueryClient();

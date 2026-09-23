@@ -302,7 +302,7 @@ export default function OwnerLogin() {
                     <div className="text-center space-y-2">
                         <Link
                             href="/admin/login"
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#315EFB] hover:text-[#2548D0] uppercase tracking-wider transition-colors hover:underline"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#36A886] hover:text-[#2548D0] uppercase tracking-wider transition-colors hover:underline"
                         >
                             <Shield className="w-3.5 h-3.5" />
                             <span>Switch to Admin Operations Portal (/admin/login)</span>

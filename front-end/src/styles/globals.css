@@ -8,7 +8,7 @@
   --accent: #E5B258;
   --accent-foreground: #1E1E1E;
   --muted: #6B7280;
-  --brand-navy: #315EFB;
+  --brand-navy: #36A886;
   --heading: #001060;
 }
 
@@ -43,7 +43,13 @@ body {
 }
 
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: #001060;
     font-family: var(--font-manrope), var(--font-heading), sans-serif;
   }
@@ -71,12 +77,25 @@ body {
  * is therefore constant across the whole zoom range on any given monitor, and
  * zooming out always shrinks the page.
  */
-html { font-size: 14px; }
+html {
+  font-size: 14px;
+}
 
-html[data-display="fhd"] { font-size: 16px; }
-html[data-display="qhd"] { font-size: 18px; }
-html[data-display="4k"] { font-size: 24px; }
-html[data-display="5k"] { font-size: 28px; }
+html[data-display="fhd"] {
+  font-size: 16px;
+}
+
+html[data-display="qhd"] {
+  font-size: 18px;
+}
+
+html[data-display="4k"] {
+  font-size: 24px;
+}
+
+html[data-display="5k"] {
+  font-size: 28px;
+}
 
 /* Hide number input spinners */
 input::-webkit-outer-spin-button,
@@ -93,8 +112,8 @@ input[type=number] {
 
 /* Prevent browser autofill from turning inputs dark or unreadable */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-background-clip: text;
   -webkit-text-fill-color: #1E1E1E !important;

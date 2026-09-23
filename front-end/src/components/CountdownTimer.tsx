@@ -52,7 +52,7 @@ const CountdownTimer: React.FC = () => {
 
   const TimeBlock = ({ value, label: blockLabel }: { value: string; label: string }) => (
     <div className="flex flex-col items-center">
-      <div className="text-[3.5rem] sm:text-[5.5rem] md:text-[6.5rem] font-medium leading-none font-sans tracking-tighter text-[#315EFB]">
+      <div className="text-[3.5rem] sm:text-[5.5rem] md:text-[6.5rem] font-medium leading-none font-sans tracking-tighter text-[#36A886]">
         {value}
       </div>
       <div className="text-[1rem] sm:text-[1.25rem] md:text-[1.5rem] font-normal text-zinc-900 mt-2">
@@ -62,7 +62,7 @@ const CountdownTimer: React.FC = () => {
   );
 
   const Divider = () => (
-    <div className="text-[2rem] sm:text-[4rem] md:text-[5rem] font-medium leading-none text-[#315EFB]/40 pt-4">
+    <div className="text-[2rem] sm:text-[4rem] md:text-[5rem] font-medium leading-none text-[#36A886]/40 pt-4">
       :
     </div>
   );
@@ -86,7 +86,7 @@ const CountdownTimer: React.FC = () => {
       if (saleStatus === 'scheduled') {
         // Transition from scheduled to active
         setTimeout(fetchSaleData, 1000);
-        return <div className="animate-pulse py-8 text-center text-[#315EFB] font-bold uppercase tracking-widest text-2xl">Sale Opening...</div>;
+        return <div className="animate-pulse py-8 text-center text-[#36A886] font-bold uppercase tracking-widest text-2xl">Sale Opening...</div>;
       }
       return <ZeroState />;
     }
